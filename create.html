@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEMS - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+    .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 500px; } /* Adjust as needed */
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+    <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
+      <span class="material-icons text-primary text-3xl mr-2">diamond</span>
+      <h1 class="text-xl font-bold">JEMS</h1>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <!-- Home -->
+      <a href="#" data-page="home" class="menu-link flex items-center p-3 rounded-lg hover:bg-primary/10 transition-colors">
+        <span class="material-icons mr-3">home</span>Home
+      </a>
+
+      <!-- Dashboard -->
+      <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
+        <span class="material-icons mr-3">dashboard</span>Dashboard
+      </a>
+
+      <!-- ORDER - Collapsible Parent Menu -->
+      <div class="space-y-1">
+        <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium" id="order-toggle">
+          <div class="flex items-center">
+            <span class="material-icons mr-3">inventory_2</span>
+            <span>Order</span>
+          </div>
+          <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
+        </button>
+
+        <!-- Submenu Items -->
+        <div class="submenu" id="order-submenu">
+          <a href="#" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            New Order
+          </a>
+          <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update Order
+          </a>
+          <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update with Design Details
+          </a> -->
+          <a href="#" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Search
+          </a>
+          <a href="#" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Detailed View
+          </a>
+          <a href="#" data-page="print" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Order Printout
+          </a>
+        </div>
+      </div>
+      <div class="space-y-1">
+  <!-- MASTER TOGGLE -->
+<button id="master-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">settings</span>
+    <span>Master Settings</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="master-chevron">
+    expand_more
+  </span>
+</button>
+
+  <!-- Submenu Items -->
+  <div class="submenu" id="master-submenu">
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
+    <a 
+  href="create.html"
+  class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors"
+>
+  Diamond
+</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone Master</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
+  </div>
+</div>
+    </nav>
+
+    <!-- User Profile -->
+    <div class="p-4 border-t border-border-light dark:border-border-dark">
+      <div class="flex items-center">
+        <img alt="CEO avatar" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85BNgmf1Td4nfDBnjZ7kE6EWbKzql7w8mx9ds3lpVNq5aOf5EPrU1ea_OJ0m_E1si1TlR6dCGvGx_NnGCN6uArhFHr9uy_8Na-dlzZSUPz7VbBwNPpFNtyjxDg4t_Ps3g-4ggM-ET5pq4p-yAEe0o1xX04OQT24DADvpV9rIDkMJVCLAKBdCEaYYsmHCpRTnWgEIa2hXEDzqNXrcoTKC1ZzwA6aP63DSUln1hNP5rMBFABCJc4wkmK42F5fZnd8TT876Agrsr19ds"/>
+        <div class="ml-3">
+          <p class="font-semibold text-sm">John Doe (CEO)</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Super User</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+        <div class="flex-1 flex flex-col">
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
+                <div class="flex items-center gap-4">
+                    <a href="list.html" class="flex items-center gap-2 text-jems-charcoal hover:text-jems-gold transition-colors">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                    <h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Create Diamond Master</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
+                        <span class="material-symbols-outlined text-jems-charcoal">notifications</span>
+                        <span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
+                    </button>
+                </div>
+            </header>
+            <main class="flex-1 p-6 bg-jems-background">
+                <div class="max-w-5xl mx-auto space-y-6">
+                    <form id="diamond-form" class="space-y-6">
+                        <!-- Diamond Code Preview -->
+                        <div class="bg-jems-gold-light p-6 rounded-xl shadow-lifted border border-jems-gold">
+                            <h2 class="text-lg font-semibold text-jems-charcoal mb-4">Diamond Code (Auto-Generated)</h2>
+                            <div class="flex items-center gap-3">
+                                <input 
+                                    class="form-input flex-1 rounded-lg border-gray-300 bg-white font-mono font-semibold text-jems-charcoal" 
+                                    id="diamond-code" 
+                                    type="text" 
+                                    readonly
+                                    disabled
+                                    placeholder="Code will be generated when all required fields are selected"
+                                />
+                                <button type="button" id="copy-code-btn" class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2 transition-colors">
+                                    <span class="material-symbols-outlined text-base">content_copy</span>
+                                    <span>Copy</span>
+                                </button>
+                            </div>
+                            <p class="mt-2 text-xs text-gray-600">Format: {ShapeCode}{MMSize}-{QualityCode}-{ColourCode}-{ClarityCode}</p>
+                        </div>
+
+                        <!-- Diamond Specifications Section -->
+                        <div class="bg-white p-6 rounded-xl shadow-lifted">
+                            <h2 class="text-xl font-semibold text-jems-charcoal mb-6">Diamond Specifications</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="shape-id">
+                                        Shape <span class="text-red-500">*</span>
+                                    </label>
+                                    <select 
+                                        class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="shape-id" 
+                                        name="shape-id" 
+                                        required
+                                    >
+                                        <option value="">Select Shape</option>
+                                        <!-- Options will be populated dynamically -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="size-id">
+                                        Size <span class="text-red-500">*</span>
+                                    </label>
+                                    <select 
+                                        class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="size-id" 
+                                        name="size-id" 
+                                        required
+                                    >
+                                        <option value="">Select Size</option>
+                                        <!-- Options will be populated dynamically -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="colour-id">
+                                        Colour <span class="text-red-500">*</span>
+                                    </label>
+                                    <select 
+                                        class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="colour-id" 
+                                        name="colour-id" 
+                                        required
+                                    >
+                                        <option value="">Select Colour</option>
+                                        <!-- Options will be populated dynamically -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="clarity-id">
+                                        Clarity <span class="text-red-500">*</span>
+                                    </label>
+                                    <select 
+                                        class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="clarity-id" 
+                                        name="clarity-id" 
+                                        required
+                                    >
+                                        <option value="">Select Clarity</option>
+                                        <!-- Options will be populated dynamically -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="quality-id">
+                                        Quality <span class="text-red-500">*</span>
+                                    </label>
+                                    <select 
+                                        class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="quality-id" 
+                                        name="quality-id" 
+                                        required
+                                    >
+                                        <option value="">Select Quality</option>
+                                        <!-- Options will be populated dynamically -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="setting-id">
+                                        Setting
+                                    </label>
+                                    <select 
+                                        class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="setting-id" 
+                                        name="setting-id"
+                                    >
+                                        <option value="">Select Setting (Optional)</option>
+                                        <!-- Options will be populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Default Values Section -->
+                        <div class="bg-white p-6 rounded-xl shadow-lifted">
+                            <h2 class="text-xl font-semibold text-jems-charcoal mb-6">Default Values</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="default-pcs">
+                                        Default Pieces
+                                    </label>
+                                    <input 
+                                        class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="default-pcs" 
+                                        name="default-pcs" 
+                                        placeholder="e.g., 10, 20" 
+                                        type="number" 
+                                        step="1"
+                                        min="0"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="default-total-carat">
+                                        Default Total Carat
+                                    </label>
+                                    <input 
+                                        class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold bg-gray-50" 
+                                        id="default-total-carat" 
+                                        name="default-total-carat" 
+                                        type="number" 
+                                        step="0.0001"
+                                        min="0"
+                                        readonly
+                                    />
+                                    <p class="mt-1 text-xs text-gray-500">Auto-calculated: Pieces × Carat per Stone</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Section -->
+                        <div class="bg-white p-6 rounded-xl shadow-lifted">
+                            <h2 class="text-xl font-semibold text-jems-charcoal mb-6">Pricing</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="rate-per-carat">
+                                        Rate per Carat
+                                    </label>
+                                    <input 
+                                        class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="rate-per-carat" 
+                                        name="rate-per-carat" 
+                                        placeholder="e.g., 50000.00" 
+                                        type="number" 
+                                        step="0.01"
+                                        min="0"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="rate-per-piece">
+                                        Rate per Piece
+                                    </label>
+                                    <input 
+                                        class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" 
+                                        id="rate-per-piece" 
+                                        name="rate-per-piece" 
+                                        placeholder="e.g., 500.00" 
+                                        type="number" 
+                                        step="0.01"
+                                        min="0"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Section -->
+                        <div class="bg-white p-6 rounded-xl shadow-lifted">
+                            <h2 class="text-xl font-semibold text-jems-charcoal mb-6">Status</h2>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="is-active">
+                                    Status
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="is-active" name="is-active" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <span class="text-sm text-gray-700" id="status-text">Active</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="flex items-center justify-end gap-4">
+                            <a href="list.html" class="rounded-lg bg-gray-200 hover:bg-gray-300 text-jems-charcoal font-semibold px-6 py-2.5 transition-colors">
+                                Cancel
+                            </a>
+                            <button type="button" id="reset-btn" class="rounded-lg bg-gray-200 hover:bg-gray-300 text-jems-charcoal font-semibold px-6 py-2.5 transition-colors">
+                                Reset
+                            </button>
+                            <button type="submit" id="save-btn" class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-6 py-2.5 transition-colors shadow-lifted">
+                                <span>Save Diamond</span>
+                                <span class="material-symbols-outlined">check</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Initialize CSV Storage
+        const diamondStorage = new CSVStorage('diamond-master');
+        const shapeStorage = new CSVStorage('diamond-shapes');
+        const sizeStorage = new CSVStorage('diamond-sizes');
+        const colourStorage = new CSVStorage('diamond-colours');
+        const clarityStorage = new CSVStorage('diamond-clarities');
+        const qualityStorage = new CSVStorage('diamond-qualities');
+        const settingStorage = new CSVStorage('diamond-setting-types');
+
+        // Load dropdowns
+        function loadDropdowns() {
+            // Load Shapes
+            const shapes = shapeStorage.getAllRecords().filter(s => s.is_active === true || s.is_active === 'true');
+            const shapeSelect = document.getElementById('shape-id');
+            shapes.forEach(shape => {
+                const option = document.createElement('option');
+                option.value = shape.id;
+                option.textContent = `${shape.shape_name} (${shape.shape_code})`;
+                shapeSelect.appendChild(option);
+            });
+
+            // Load Sizes
+            const sizes = sizeStorage.getAllRecords().filter(s => s.is_active === true || s.is_active === 'true');
+            const sizeSelect = document.getElementById('size-id');
+            sizes.forEach(size => {
+                const option = document.createElement('option');
+                option.value = size.id;
+                const mmSize = size.mm_size ? parseFloat(size.mm_size).toFixed(2) : '';
+                option.textContent = `${mmSize}mm${size.sieve_code ? ' (' + size.sieve_code + ')' : ''}`;
+                sizeSelect.appendChild(option);
+            });
+
+            // Load Colours
+            const colours = colourStorage.getAllRecords().filter(c => c.is_active === true || c.is_active === 'true');
+            const colourSelect = document.getElementById('colour-id');
+            colours.forEach(colour => {
+                const option = document.createElement('option');
+                option.value = colour.id;
+                option.textContent = `${colour.colour_name || colour.colour_code} (${colour.colour_code})`;
+                colourSelect.appendChild(option);
+            });
+
+            // Load Clarities
+            const clarities = clarityStorage.getAllRecords().filter(c => c.is_active === true || c.is_active === 'true');
+            const claritySelect = document.getElementById('clarity-id');
+            clarities.forEach(clarity => {
+                const option = document.createElement('option');
+                option.value = clarity.id;
+                option.textContent = `${clarity.clarity_name || clarity.clarity_code} (${clarity.clarity_code})`;
+                claritySelect.appendChild(option);
+            });
+
+            // Load Qualities
+            const qualities = qualityStorage.getAllRecords().filter(q => q.is_active === true || q.is_active === 'true');
+            const qualitySelect = document.getElementById('quality-id');
+            qualities.forEach(quality => {
+                const option = document.createElement('option');
+                option.value = quality.id;
+                option.textContent = `${quality.quality_name || quality.quality_code} (${quality.quality_code})`;
+                qualitySelect.appendChild(option);
+            });
+
+            // Load Settings
+            const settings = settingStorage.getAllRecords().filter(s => s.is_active === true || s.is_active === 'true');
+            const settingSelect = document.getElementById('setting-id');
+            settings.forEach(setting => {
+                const option = document.createElement('option');
+                option.value = setting.id;
+                option.textContent = `${setting.setting_name || setting.setting_code} (${setting.setting_code})`;
+                settingSelect.appendChild(option);
+            });
+        }
+
+        // Generate diamond code
+        function generateDiamondCode() {
+            const shapeId = document.getElementById('shape-id').value;
+            const sizeId = document.getElementById('size-id').value;
+            const qualityId = document.getElementById('quality-id').value;
+            const colourId = document.getElementById('colour-id').value;
+            const clarityId = document.getElementById('clarity-id').value;
+
+            if (!shapeId || !sizeId || !qualityId || !colourId || !clarityId) {
+                document.getElementById('diamond-code').value = '';
+                return;
+            }
+
+            const shape = shapeStorage.getRecord(shapeId);
+            const size = sizeStorage.getRecord(sizeId);
+            const quality = qualityStorage.getRecord(qualityId);
+            const colour = colourStorage.getRecord(colourId);
+            const clarity = clarityStorage.getRecord(clarityId);
+
+            if (!shape || !size || !quality || !colour || !clarity) {
+                document.getElementById('diamond-code').value = '';
+                return;
+            }
+
+            const shapeCode = shape.shape_code || '';
+            const mmSize = size.mm_size ? parseFloat(size.mm_size).toFixed(2).replace('.', '') : '';
+            const qualityCode = quality.quality_code || '';
+            const colourCode = colour.colour_code || '';
+            const clarityCode = clarity.clarity_code || '';
+
+            const diamondCode = `${shapeCode}${mmSize}-${qualityCode}-${colourCode}-${clarityCode}`;
+            document.getElementById('diamond-code').value = diamondCode;
+        }
+
+        // Calculate total carat
+        function calculateTotalCarat() {
+            const defaultPcs = parseFloat(document.getElementById('default-pcs').value) || 0;
+            const sizeId = document.getElementById('size-id').value;
+            
+            if (!sizeId || defaultPcs === 0) {
+                document.getElementById('default-total-carat').value = '';
+                return;
+            }
+
+            const size = sizeStorage.getRecord(sizeId);
+            if (!size || !size.carat_per_stone) {
+                document.getElementById('default-total-carat').value = '';
+                return;
+            }
+
+            const caratPerStone = parseFloat(size.carat_per_stone) || 0;
+            const totalCarat = defaultPcs * caratPerStone;
+            
+            document.getElementById('default-total-carat').value = totalCarat.toFixed(4);
+        }
+
+        // Event listeners for code generation
+        document.getElementById('shape-id').addEventListener('change', generateDiamondCode);
+        document.getElementById('size-id').addEventListener('change', () => {
+            generateDiamondCode();
+            calculateTotalCarat();
+        });
+        document.getElementById('quality-id').addEventListener('change', generateDiamondCode);
+        document.getElementById('colour-id').addEventListener('change', generateDiamondCode);
+        document.getElementById('clarity-id').addEventListener('change', generateDiamondCode);
+
+        // Event listeners for carat calculation
+        document.getElementById('default-pcs').addEventListener('input', calculateTotalCarat);
+
+        // Copy code button
+        document.getElementById('copy-code-btn').addEventListener('click', () => {
+            const codeInput = document.getElementById('diamond-code');
+            if (codeInput.value) {
+                codeInput.select();
+                document.execCommand('copy');
+                alert('Diamond code copied to clipboard!');
+            }
+        });
+
+        // Toggle status text
+        document.getElementById('is-active').addEventListener('change', (e) => {
+            document.getElementById('status-text').textContent = e.target.checked ? 'Active' : 'Inactive';
+        });
+
+        // Reset form
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+                document.getElementById('diamond-form').reset();
+                document.getElementById('is-active').checked = true;
+                document.getElementById('status-text').textContent = 'Active';
+                document.getElementById('diamond-code').value = '';
+                document.getElementById('default-total-carat').value = '';
+            }
+        });
+
+        // Form submission
+        document.getElementById('diamond-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const shapeId = document.getElementById('shape-id').value;
+            const sizeId = document.getElementById('size-id').value;
+            const colourId = document.getElementById('colour-id').value;
+            const clarityId = document.getElementById('clarity-id').value;
+            const qualityId = document.getElementById('quality-id').value;
+            const settingId = document.getElementById('setting-id').value;
+            const defaultPcs = document.getElementById('default-pcs').value ? parseFloat(document.getElementById('default-pcs').value) : null;
+            const defaultTotalCarat = document.getElementById('default-total-carat').value ? parseFloat(document.getElementById('default-total-carat').value) : null;
+            const ratePerCarat = document.getElementById('rate-per-carat').value ? parseFloat(document.getElementById('rate-per-carat').value) : null;
+            const ratePerPiece = document.getElementById('rate-per-piece').value ? parseFloat(document.getElementById('rate-per-piece').value) : null;
+            const isActive = document.getElementById('is-active').checked;
+            const diamondCode = document.getElementById('diamond-code').value;
+
+            // Validation
+            if (!shapeId || !sizeId || !colourId || !clarityId || !qualityId) {
+                alert('Please select all required fields (Shape, Size, Colour, Clarity, Quality).');
+                return;
+            }
+
+            if (!diamondCode) {
+                alert('Diamond code could not be generated. Please check your selections.');
+                return;
+            }
+
+            // Check if diamond code already exists
+            const existingDiamonds = diamondStorage.getAllRecords();
+            const codeExists = existingDiamonds.some(d => d.diamond_code && d.diamond_code === diamondCode);
+            if (codeExists) {
+                alert('A diamond with this code already exists. Please change your selections.');
+                return;
+            }
+
+            // Prepare form data
+            const formData = {
+                diamond_code: diamondCode,
+                shape_id: shapeId,
+                size_id: sizeId,
+                colour_id: colourId,
+                clarity_id: clarityId,
+                quality_id: qualityId,
+                setting_id: settingId || null,
+                default_pcs: defaultPcs,
+                default_total_carat: defaultTotalCarat,
+                rate_per_carat: ratePerCarat,
+                rate_per_piece: ratePerPiece,
+                is_active: isActive
+            };
+
+            // Save to CSV storage
+            diamondStorage.addRecord(formData);
+
+            // Success message
+            alert('Diamond created successfully!');
+            
+            // Redirect to list page
+            window.location.href = 'list.html';
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDropdowns();
+        });
+    </script>
+      <script>
+  // Collapsible Master Menu
+  document.getElementById('master-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('master-submenu');
+    const chevron = document.getElementById('master-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+
+ <script>
+  // Collapsible Order Menu
+  document.getElementById('order-toggle').addEventListener('click', function() {
+    const submenu = document.getElementById('order-submenu');
+    const chevron = document.getElementById('order-chevron');
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+
+  // ✅ FIXED PAGE SWITCHING + ALLOW REAL LINK NAVIGATION
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+
+      const href = this.getAttribute('href');
+
+      // ✅ IF REAL PAGE LINK → ALLOW NORMAL NAVIGATION
+      if (href && href !== '#') {
+        window.location.href = href;
+        return;
+      }
+
+      // ✅ OTHERWISE → KEEP SPA PAGE SWITCHING
+      e.preventDefault();
+
+      document.querySelectorAll('.menu-link').forEach(l => {
+        l.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
+      });
+
+      this.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const pageId = this.getAttribute('data-page');
+      document.getElementById(pageId)?.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
+

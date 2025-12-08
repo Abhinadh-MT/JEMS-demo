@@ -89,21 +89,19 @@
         </div>
       </div>
       <div class="space-y-1">
-  <button
-    class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium"
-    id="master-toggle"
-  >
-    <div class="flex items-center">
-      <span class="material-icons mr-3">settings</span>
-      <span>Master Settings</span>
-    </div>
-    <span
-      class="material-icons text-lg transition-transform"
-      id="master-chevron"
-    >
-      expand_more
-    </span>
-  </button>
+  <!-- MASTER TOGGLE -->
+<button id="master-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">settings</span>
+    <span>Master Settings</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="master-chevron">
+    expand_more
+  </span>
+</button>
 
   <!-- Submenu Items -->
   <div class="submenu" id="master-submenu">
@@ -127,6 +125,116 @@
     <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
   </div>
 </div>
+
+<button id="stock-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">inventory_2</span>
+    <span>Stock</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="stock-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ STOCK SUBMENU -->
+<div class="submenu" id="stock-submenu">
+  <a href="RawMaterialsSearchReport.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Raw Material Report
+  </a>
+
+  <a href="raw-material-stock-entry.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Raw Material Stock Entry
+  </a>
+
+  <a href="alloy-creation.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Alloy Creation
+  </a>
+
+  <a href="stock-report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Stock Report
+  </a>
+
+  <a href="stock-update.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Stock Update – Direct & Excel Export
+  </a>
+</div>
+<!-- ✅ MANUFACTURING / BAG TOGGLE -->
+<button id="bag-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">precision_manufacturing</span>
+    <span>Manufacturing</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="bag-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ MANUFACTURING / BAG SUBMENU -->
+<div class="submenu" id="bag-submenu">
+
+  <a href="materials-report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Materials Report
+  </a>
+
+  <a href="material-details-print.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Material Details & Print Bag Sticker
+  </a>
+
+  <a href="IssueMaterialtoBag.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Generate Bag & Issue Material
+  </a>
+
+  <a href="BagSplit.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Splitting
+  </a>
+
+  <a href="BageMovement.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Movement
+  </a>
+
+  <a href="bag-merging.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Merging
+  </a>
+
+  <a href="BagHistoryReport.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Rejection
+  </a>
+
+  <a href="WaxTreeCreation.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Wax Tree Creation
+  </a>
+
+  <a href="TreeLoad.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Tree Load
+  </a>
+
+  <a href="tree-cutting.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Tree Cutting
+  </a>
+
+</div>
+
     </nav>
 
     <!-- User Profile -->
@@ -1126,42 +1234,69 @@
   });
 </script>
 
-  <script>
-    // Collapsible Order Menu
-    document.getElementById('order-toggle').addEventListener('click', function() {
-      const submenu = document.getElementById('order-submenu');
-      const chevron = document.getElementById('order-chevron');
-      submenu.classList.toggle('open');
-      chevron.style.transform = submenu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
+ <script>
+  // Collapsible Order Menu
+  document.getElementById('order-toggle').addEventListener('click', function() {
+    const submenu = document.getElementById('order-submenu');
+    const chevron = document.getElementById('order-chevron');
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
 
-    // Page Switching + Active State
-    document.querySelectorAll('.menu-link').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
+  // ✅ FIXED PAGE SWITCHING + ALLOW REAL LINK NAVIGATION
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', function(e) {
 
-        // Remove active from all links
-        document.querySelectorAll('.menu-link').forEach(l => {
-          l.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
-        });
+      const href = this.getAttribute('href');
 
-        // Add active to clicked link
-        this.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+      // ✅ IF REAL PAGE LINK → ALLOW NORMAL NAVIGATION
+      if (href && href !== '#') {
+        window.location.href = href;
+        return;
+      }
 
-        // Hide all pages, show target
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        const pageId = this.getAttribute('data-page');
-        document.getElementById(pageId)?.classList.add('active');
+      // ✅ OTHERWISE → KEEP SPA PAGE SWITCHING
+      e.preventDefault();
+
+      document.querySelectorAll('.menu-link').forEach(l => {
+        l.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
       });
-    });
 
-    // Optional: Auto-open Order menu if any Order page is active
-    if (['new-order','update-order','update-design','search','detailed','print'].includes(
-      document.querySelector('.page.active')?.id
-    )) {
-      document.getElementById('order-submenu').classList.add('open');
-      document.getElementById('order-chevron').style.transform = 'rotate(180deg)';
-    }
-  </script>
+      this.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const pageId = this.getAttribute('data-page');
+      document.getElementById(pageId)?.classList.add('active');
+    });
+  });
+</script>
+<script>
+  // ✅ Collapsible Stock Menu
+  document.getElementById('stock-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('stock-submenu');
+    const chevron = document.getElementById('stock-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+<script>
+  // ✅ Collapsible Manufacturing / Bag Menu
+  document.getElementById('bag-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('bag-submenu');
+    const chevron = document.getElementById('bag-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+
+
 </body>
 </html>

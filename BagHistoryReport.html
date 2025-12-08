@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEMS - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+    .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 500px; } /* Adjust as needed */
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+    <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
+      <span class="material-icons text-primary text-3xl mr-2">diamond</span>
+      <h1 class="text-xl font-bold">JEMS</h1>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <!-- Home -->
+      <a href="#" data-page="home" class="menu-link flex items-center p-3 rounded-lg hover:bg-primary/10 transition-colors">
+        <span class="material-icons mr-3">home</span>Home
+      </a>
+
+      <!-- Dashboard -->
+      <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
+        <span class="material-icons mr-3">dashboard</span>Dashboard
+      </a>
+
+      <!-- ORDER - Collapsible Parent Menu -->
+      <div class="space-y-1">
+        <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium" id="order-toggle">
+          <div class="flex items-center">
+            <span class="material-icons mr-3">inventory_2</span>
+            <span>Order</span>
+          </div>
+          <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
+        </button>
+
+        <!-- Submenu Items -->
+        <div class="submenu" id="order-submenu">
+          <a href="#" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            New Order
+          </a>
+          <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update Order
+          </a>
+          <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update with Design Details
+          </a> -->
+          <a href="#" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Search
+          </a>
+          <a href="#" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Detailed View
+          </a>
+          <a href="#" data-page="print" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Order Printout
+          </a>
+        </div>
+      </div>
+      <div class="space-y-1">
+  <!-- MASTER TOGGLE -->
+<button id="master-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">settings</span>
+    <span>Master Settings</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="master-chevron">
+    expand_more
+  </span>
+</button>
+
+  <!-- Submenu Items -->
+  <div class="submenu" id="master-submenu">
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
+    <a 
+  href="create.html"
+  class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors"
+>
+  Diamond
+</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone Master</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
+  </div>
+</div>
+
+<button id="stock-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">inventory_2</span>
+    <span>Stock</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="stock-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ STOCK SUBMENU -->
+<div class="submenu" id="stock-submenu">
+  <a href="RawMaterialsSearchReport.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Raw Material Report
+  </a>
+
+  <a href="raw-material-stock-entry.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Raw Material Stock Entry
+  </a>
+
+  <a href="alloy-creation.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Alloy Creation
+  </a>
+
+  <a href="stock-report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Stock Report
+  </a>
+
+  <a href="stock-update.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Stock Update – Direct & Excel Export
+  </a>
+</div>
+<!-- ✅ MANUFACTURING / BAG TOGGLE -->
+<button id="bag-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">precision_manufacturing</span>
+    <span>Manufacturing</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="bag-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ MANUFACTURING / BAG SUBMENU -->
+<div class="submenu" id="bag-submenu">
+
+  <a href="materials-report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Materials Report
+  </a>
+
+  <a href="material-details-print.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Material Details & Print Bag Sticker
+  </a>
+
+  <a href="IssueMaterialtoBag.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Generate Bag & Issue Material
+  </a>
+
+  <a href="BagSplit.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Splitting
+  </a>
+
+  <a href="BageMovement.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Movement
+  </a>
+
+  <a href="bag-merging.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Merging
+  </a>
+
+  <a href="BagHistoryReport.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Bag Rejection
+  </a>
+
+  <a href="WaxTreeCreation.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Wax Tree Creation
+  </a>
+
+  <a href="tree-load.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Tree Load
+  </a>
+
+  <a href="tree-cutting.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Tree Cutting
+  </a>
+
+</div>
+
+    </nav>
+
+    <!-- User Profile -->
+    <div class="p-4 border-t border-border-light dark:border-border-dark">
+      <div class="flex items-center">
+        <img alt="CEO avatar" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85BNgmf1Td4nfDBnjZ7kE6EWbKzql7w8mx9ds3lpVNq5aOf5EPrU1ea_OJ0m_E1si1TlR6dCGvGx_NnGCN6uArhFHr9uy_8Na-dlzZSUPz7VbBwNPpFNtyjxDg4t_Ps3g-4ggM-ET5pq4p-yAEe0o1xX04OQT24DADvpV9rIDkMJVCLAKBdCEaYYsmHCpRTnWgEIa2hXEDzqNXrcoTKC1ZzwA6aP63DSUln1hNP5rMBFABCJc4wkmK42F5fZnd8TT876Agrsr19ds"/>
+        <div class="ml-3">
+          <p class="font-semibold text-sm">John Doe (CEO)</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Super User</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+<div class="flex-1 flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Bag History Report</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
+<span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
+</button>
+<button class="flex items-center gap-2 rounded-lg bg-jems-charcoal hover:bg-jems-charcoal-light text-white font-semibold px-4 py-2 transition-colors shadow-soft">
+<span class="material-symbols-outlined">print</span>
+<span>Print</span>
+</button>
+<div class="relative group">
+<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2 transition-colors shadow-soft">
+<span class="material-symbols-outlined">download</span>
+<span>Export</span>
+<span class="material-symbols-outlined text-base transition-transform duration-200 group-hover:rotate-180">expand_more</span>
+</button>
+<div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 invisible group-hover:visible">
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Export as CSV</a>
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Export as PDF</a>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 p-6 bg-jems-background">
+<div class="bg-white p-6 rounded-xl shadow-soft mb-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+<div>
+<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="search-bag-id">Search Bag ID</label>
+<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="search-bag-id" placeholder="Enter Bag ID..." type="text" value=""/>
+</div>
+<div>
+<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="date-range">Date Range</label>
+<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="date-range" placeholder="Select date range" type="text" value=""/>
+</div>
+<div>
+<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="department-filter">Department</label>
+<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="department-filter">
+<option>All</option>
+<option>Casting</option>
+<option>Setting</option>
+<option>Polishing</option>
+<option>QC</option>
+<option>Dispatch</option>
+</select>
+</div>
+<div>
+<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="search-employee">Employee</label>
+<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="search-employee" placeholder="Employee Name..." type="text" value=""/>
+</div>
+<div>
+<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-jems-charcoal hover:bg-jems-charcoal-light text-white font-semibold px-4 py-2 transition-colors shadow-soft">
+<span class="material-symbols-outlined text-base">filter_alt</span>
+<span>Apply Filters</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-soft overflow-hidden">
+<table class="w-full text-sm text-left text-gray-500">
+<thead class="text-xs text-jems-charcoal uppercase bg-jems-gold-light">
+<tr>
+<th class="px-6 py-3" scope="col">Bag ID</th>
+<th class="px-6 py-3" scope="col">Movement Date</th>
+<th class="px-6 py-3" scope="col">From Department</th>
+<th class="px-6 py-3" scope="col">To Department</th>
+<th class="px-6 py-3" scope="col">Handled By</th>
+<th class="px-6 py-3" scope="col">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00123</td>
+<td class="px-6 py-4">2024-07-28 09:15 AM</td>
+<td class="px-6 py-4">Casting</td>
+<td class="px-6 py-4">Setting</td>
+<td class="px-6 py-4">Anika Gupta</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-blue/10 text-jems-blue">In Transit</span>
+</td>
+</tr>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00123</td>
+<td class="px-6 py-4">2024-07-28 09:05 AM</td>
+<td class="px-6 py-4">Warehouse</td>
+<td class="px-6 py-4">Casting</td>
+<td class="px-6 py-4">Rohan Singh</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
+</td>
+</tr>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00122</td>
+<td class="px-6 py-4">2024-07-27 04:30 PM</td>
+<td class="px-6 py-4">Polishing</td>
+<td class="px-6 py-4">QC</td>
+<td class="px-6 py-4">Karan Mehta</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
+</td>
+</tr>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00122</td>
+<td class="px-6 py-4">2024-07-27 02:10 PM</td>
+<td class="px-6 py-4">Setting</td>
+<td class="px-6 py-4">Polishing</td>
+<td class="px-6 py-4">Aarav Patel</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
+</td>
+</tr>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00121</td>
+<td class="px-6 py-4">2024-07-26 11:00 AM</td>
+<td class="px-6 py-4">QC</td>
+<td class="px-6 py-4">Dispatch</td>
+<td class="px-6 py-4">Priya Sharma</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-yellow/10 text-jems-yellow">Pending QC</span>
+</td>
+</tr>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00120</td>
+<td class="px-6 py-4">2024-07-25 05:00 PM</td>
+<td class="px-6 py-4">Dispatch</td>
+<td class="px-6 py-4">Shipped</td>
+<td class="px-6 py-4">Vikram Rao</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
+</td>
+</tr>
+<tr class="bg-white border-b hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00119</td>
+<td class="px-6 py-4">2024-07-25 03:45 PM</td>
+<td class="px-6 py-4">Casting</td>
+<td class="px-6 py-4">Setting</td>
+<td class="px-6 py-4">Isha Reddy</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-red/10 text-jems-red">Cancelled</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="flex items-center justify-between p-4">
+<span class="text-sm text-gray-700">
+                    Showing <span class="font-semibold text-jems-charcoal">1</span> to <span class="font-semibold text-jems-charcoal">7</span> of <span class="font-semibold text-jems-charcoal">128</span> Entries
+                </span>
+<nav aria-label="Page navigation">
+<ul class="inline-flex items-center -space-x-px">
+<li>
+<a class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700" href="#">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</a>
+</li>
+<li>
+<a aria-current="page" class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-jems-gold border border-jems-gold hover:bg-primary-focus" href="#">1</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300 hover:bg-jems-gold-light hover:text-jems-charcoal" href="#">2</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300 hover:bg-jems-gold-light hover:text-jems-charcoal" href="#">3</a>
+</li>
+<li>
+<span class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300">...</span>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300 hover:bg-jems-gold-light hover:text-jems-charcoal" href="#">19</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700" href="#">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</main>
+</div>
+</div>
+<script>
+  // Collapsible Master Menu
+  document.getElementById('master-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('master-submenu');
+    const chevron = document.getElementById('master-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+
+ <script>
+  // Collapsible Order Menu
+  document.getElementById('order-toggle').addEventListener('click', function() {
+    const submenu = document.getElementById('order-submenu');
+    const chevron = document.getElementById('order-chevron');
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+
+  // ✅ FIXED PAGE SWITCHING + ALLOW REAL LINK NAVIGATION
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+
+      const href = this.getAttribute('href');
+
+      // ✅ IF REAL PAGE LINK → ALLOW NORMAL NAVIGATION
+      if (href && href !== '#') {
+        window.location.href = href;
+        return;
+      }
+
+      // ✅ OTHERWISE → KEEP SPA PAGE SWITCHING
+      e.preventDefault();
+
+      document.querySelectorAll('.menu-link').forEach(l => {
+        l.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
+      });
+
+      this.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const pageId = this.getAttribute('data-page');
+      document.getElementById(pageId)?.classList.add('active');
+    });
+  });
+</script>
+<script>
+  // ✅ Collapsible Stock Menu
+  document.getElementById('stock-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('stock-submenu');
+    const chevron = document.getElementById('stock-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+<script>
+  // ✅ Collapsible Manufacturing / Bag Menu
+  document.getElementById('bag-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('bag-submenu');
+    const chevron = document.getElementById('bag-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+</body></html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEMS - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+    .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 500px; } /* Adjust as needed */
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+    <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
+      <span class="material-icons text-primary text-3xl mr-2">diamond</span>
+      <h1 class="text-xl font-bold">JEMS</h1>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <!-- Home -->
+      <a href="#" data-page="home" class="menu-link flex items-center p-3 rounded-lg hover:bg-primary/10 transition-colors">
+        <span class="material-icons mr-3">home</span>Home
+      </a>
+
+      <!-- Dashboard -->
+      <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
+        <span class="material-icons mr-3">dashboard</span>Dashboard
+      </a>
+
+      <!-- ORDER - Collapsible Parent Menu -->
+      <div class="space-y-1">
+        <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium" id="order-toggle">
+          <div class="flex items-center">
+            <span class="material-icons mr-3">inventory_2</span>
+            <span>Order</span>
+          </div>
+          <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
+        </button>
+
+        <!-- Submenu Items -->
+        <div class="submenu" id="order-submenu">
+          <a href="#" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            New Order
+          </a>
+          <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update Order
+          </a>
+          <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update with Design Details
+          </a> -->
+          <a href="#" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Search
+          </a>
+          <a href="#" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Detailed View
+          </a>
+          <a href="#" data-page="print" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Order Printout
+          </a>
+        </div>
+      </div>
+      <div class="space-y-1">
+  <!-- MASTER TOGGLE -->
+<button id="master-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">settings</span>
+    <span>Master Settings</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="master-chevron">
+    expand_more
+  </span>
+</button>
+
+  <!-- Submenu Items -->
+  <div class="submenu" id="master-submenu">
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
+    <a 
+  href="create.html"
+  class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors"
+>
+  Diamond
+</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone Master</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
+  </div>
+</div>
+
+<button id="stock-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">inventory_2</span>
+    <span>Stock</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="stock-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ STOCK SUBMENU -->
+<div class="submenu" id="stock-submenu">
+  <a href="RawMaterialsSearchReport.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Raw Material Report
+  </a>
+
+  <a href="raw-material-stock-entry.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Raw Material Stock Entry
+  </a>
+
+  <a href="alloy-creation.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Alloy Creation
+  </a>
+
+  <a href="stock-report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Stock Report
+  </a>
+
+  <a href="stock-update.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Stock Update – Direct & Excel Export
+  </a>
+</div>
+    </nav>
+
+    <!-- User Profile -->
+    <div class="p-4 border-t border-border-light dark:border-border-dark">
+      <div class="flex items-center">
+        <img alt="CEO avatar" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85BNgmf1Td4nfDBnjZ7kE6EWbKzql7w8mx9ds3lpVNq5aOf5EPrU1ea_OJ0m_E1si1TlR6dCGvGx_NnGCN6uArhFHr9uy_8Na-dlzZSUPz7VbBwNPpFNtyjxDg4t_Ps3g-4ggM-ET5pq4p-yAEe0o1xX04OQT24DADvpV9rIDkMJVCLAKBdCEaYYsmHCpRTnWgEIa2hXEDzqNXrcoTKC1ZzwA6aP63DSUln1hNP5rMBFABCJc4wkmK42F5fZnd8TT876Agrsr19ds"/>
+        <div class="ml-3">
+          <p class="font-semibold text-sm">John Doe (CEO)</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Super User</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+        <div class="flex-1 flex flex-col">
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Raw Materials Search Report</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
+            
+                        <span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
+                    </button>
+                </div>
+            </header>
+            <main class="flex-1 p-6 bg-jems-background">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <!-- Date Filter Section -->
+                    <div class="bg-white p-6 rounded-xl shadow-lifted">
+                        <h2 class="text-xl font-semibold text-jems-charcoal mb-4">Date Filters</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 flex-wrap">
+                                <label class="block text-sm font-medium text-gray-700 whitespace-nowrap" for="quick-date-filter">Quick Filter:</label>
+                                <select class="form-select rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold min-w-[200px]" id="quick-date-filter">
+                                    <option value="">Select Period</option>
+                                    <option value="today">Today</option>
+                                    <option value="tomorrow">Tomorrow</option>
+                                    <option value="this-week">This Week</option>
+                                    <option value="this-month">This Month</option>
+                                </select>
+                            </div>
+                            <div class="border-t border-gray-200 pt-4">
+                                <div class="flex items-center gap-4 flex-wrap">
+                                    <label class="block text-sm font-medium text-gray-700 whitespace-nowrap" for="date-from">From Date:</label>
+                                    <input class="form-input rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="date-from" type="date"/>
+                                    <label class="block text-sm font-medium text-gray-700 whitespace-nowrap" for="date-to">To Date:</label>
+                                    <input class="form-input rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="date-to" type="date"/>
+                                    <button class="rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2 transition-colors" id="apply-date-range">
+                                        <span class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-base">filter_alt</span>
+                                            Apply Date Filter
+                                        </span>
+                                    </button>
+                                    <button class="rounded-lg bg-gray-200 hover:bg-gray-300 text-jems-charcoal font-semibold px-4 py-2 transition-colors" id="clear-date-range">
+                                        Clear Dates
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raw Materials Section -->
+                    <div class="bg-white p-6 rounded-xl shadow-lifted">
+                        <h2 class="text-xl font-semibold text-jems-charcoal mb-6">Raw Materials Inventory</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="border-b-2 border-gray-200 text-sm font-semibold text-gray-600 bg-gray-50">
+                                    <tr>
+                                        <th class="p-4 border border-gray-200 text-left">Material</th>
+                                        <th class="p-4 border border-gray-200 text-left">Colour</th>
+                                        <th class="p-4 border border-gray-200 text-left">Count / Weight</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materials-tbody">
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <td class="p-4 border border-gray-200 font-medium text-jems-charcoal">Gold</td>
+                                        <td class="p-4 border border-gray-200 text-gray-700">Yellow</td>
+                                        <td class="p-4 border border-gray-200 text-center">
+                                            <button class="material-count-btn text-lg font-semibold text-jems-gold hover:text-primary-focus transition-colors" data-material="gold">
+                                                <span id="count-gold">0</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <td class="p-4 border border-gray-200 font-medium text-jems-charcoal">Gold 22K</td>
+                                        <td class="p-4 border border-gray-200 text-gray-700">Yellow</td>
+                                        <td class="p-4 border border-gray-200 text-center">
+                                            <button class="material-count-btn text-lg font-semibold text-jems-gold hover:text-primary-focus transition-colors" data-material="gold22k">
+                                                <span id="count-gold22k">0</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <td class="p-4 border border-gray-200 font-medium text-jems-charcoal">Diamond 5"</td>
+                                        <td class="p-4 border border-gray-200 text-gray-700">D-F (Colourless)</td>
+                                        <td class="p-4 border border-gray-200 text-center">
+                                            <button class="material-count-btn text-lg font-semibold text-jems-gold hover:text-primary-focus transition-colors" data-material="diamond5">
+                                                <span id="count-diamond5">0</span> / <span id="weight-diamond5">0.0</span> ct
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <td class="p-4 border border-gray-200 font-medium text-jems-charcoal">Diamond 6"</td>
+                                        <td class="p-4 border border-gray-200 text-gray-700">G-J (Near Colourless)</td>
+                                        <td class="p-4 border border-gray-200 text-center">
+                                            <button class="material-count-btn text-lg font-semibold text-jems-gold hover:text-primary-focus transition-colors" data-material="diamond6">
+                                                <span id="count-diamond6">0</span> / <span id="weight-diamond6">0.0</span> ct
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <td class="p-4 border border-gray-200 font-medium text-jems-charcoal">Stone 6"</td>
+                                        <td class="p-4 border border-gray-200 text-gray-700">Ruby Red</td>
+                                        <td class="p-4 border border-gray-200 text-center">
+                                            <button class="material-count-btn text-lg font-semibold text-jems-gold hover:text-primary-focus transition-colors" data-material="stone6">
+                                                <span id="count-stone6">0</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <td class="p-4 border border-gray-200 font-medium text-jems-charcoal">Silver</td>
+                                        <td class="p-4 border border-gray-200 text-gray-700">White</td>
+                                        <td class="p-4 border border-gray-200 text-center">
+                                            <button class="material-count-btn text-lg font-semibold text-jems-gold hover:text-primary-focus transition-colors" data-material="silver">
+                                                <span id="count-silver">0</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Order IDs Display Section -->
+                    <div class="bg-white p-6 rounded-xl shadow-lifted" id="orders-section" style="display: none;">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-semibold text-jems-charcoal" id="orders-section-title">Order IDs</h2>
+                            <button class="text-gray-400 hover:text-gray-600 transition-colors" id="close-orders-btn">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div id="orders-list" class="space-y-3">
+                            <!-- Order IDs will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Generate random counts for each material
+        function generateRandomCount() {
+            return Math.floor(Math.random() * 100) + 1;
+        }
+
+        // Generate random weight for diamonds (in carats)
+        function generateRandomWeight() {
+            return (Math.random() * 5 + 0.5).toFixed(2); // Between 0.5 and 5.5 carats
+        }
+
+        // Initialize counts with random numbers
+        const materialCounts = {
+            gold: generateRandomCount(),
+            gold22k: generateRandomCount(),
+            diamond5: generateRandomCount(),
+            diamond6: generateRandomCount(),
+            stone6: generateRandomCount(),
+            silver: generateRandomCount()
+        };
+
+        // Initialize weights for diamonds only
+        const materialWeights = {
+            diamond5: generateRandomWeight(),
+            diamond6: generateRandomWeight()
+        };
+
+        // Generate sample order IDs for each material
+        function generateOrderIds(material, count) {
+            const orderIds = [];
+            const baseOrderNumber = Math.floor(Math.random() * 9000) + 1000;
+            
+            for (let i = 0; i < Math.min(count, 20); i++) { // Show max 20 orders
+                const orderNum = baseOrderNumber + i;
+                orderIds.push(`ORD-2024-${orderNum.toString().padStart(5, '0')}`);
+            }
+            
+            return orderIds;
+        }
+
+        // Material to display name mapping
+        const materialNames = {
+            gold: 'Gold',
+            gold22k: 'Gold 22K',
+            diamond5: 'Diamond 5"',
+            diamond6: 'Diamond 6"',
+            stone6: 'Stone 6"',
+            silver: 'Silver'
+        };
+
+        // Update display counts
+        function updateCounts() {
+            document.getElementById('count-gold').textContent = materialCounts.gold;
+            document.getElementById('count-gold22k').textContent = materialCounts.gold22k;
+            document.getElementById('count-diamond5').textContent = materialCounts.diamond5;
+            document.getElementById('weight-diamond5').textContent = materialWeights.diamond5;
+            document.getElementById('count-diamond6').textContent = materialCounts.diamond6;
+            document.getElementById('weight-diamond6').textContent = materialWeights.diamond6;
+            document.getElementById('count-stone6').textContent = materialCounts.stone6;
+            document.getElementById('count-silver').textContent = materialCounts.silver;
+        }
+
+        // Display order IDs for selected material
+        function displayOrderIds(material) {
+            const count = materialCounts[material];
+            const orderIds = generateOrderIds(material, count);
+            const materialName = materialNames[material];
+            
+            const ordersSection = document.getElementById('orders-section');
+            const ordersList = document.getElementById('orders-list');
+            const ordersTitle = document.getElementById('orders-section-title');
+            
+            ordersTitle.textContent = `${materialName} - Order IDs (${count} total)`;
+            
+            // Clear previous orders
+            ordersList.innerHTML = '';
+            
+            // Display orders step by step with animation
+            orderIds.forEach((orderId, index) => {
+                setTimeout(() => {
+                    const orderDiv = document.createElement('div');
+                    orderDiv.className = 'flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors';
+                    orderDiv.style.opacity = '0';
+                    orderDiv.style.transform = 'translateX(-10px)';
+                    orderDiv.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    
+                    orderDiv.innerHTML = `
+                        <span class="material-symbols-outlined text-jems-gold">receipt_long</span>
+                        <span class="font-medium text-jems-charcoal">${orderId}</span>
+                    `;
+                    
+                    ordersList.appendChild(orderDiv);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        orderDiv.style.opacity = '1';
+                        orderDiv.style.transform = 'translateX(0)';
+                    }, 10);
+                }, index * 100); // Stagger animation by 100ms
+            });
+            
+            // Show the section
+            ordersSection.style.display = 'block';
+            
+            // Scroll to section
+            setTimeout(() => {
+                ordersSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // Event listeners - make entire row clickable
+        document.querySelectorAll('tr.cursor-pointer').forEach(row => {
+            row.addEventListener('click', function(e) {
+                // Don't trigger if clicking the button itself (to avoid double trigger)
+                if (e.target.closest('.material-count-btn')) {
+                    const material = e.target.closest('.material-count-btn').getAttribute('data-material');
+                    displayOrderIds(material);
+                } else {
+                    // If clicking the row, find the button in this row
+                    const btn = this.querySelector('.material-count-btn');
+                    if (btn) {
+                        const material = btn.getAttribute('data-material');
+                        displayOrderIds(material);
+                    }
+                }
+            });
+        });
+
+        // Also keep button click listeners for direct clicks
+        document.querySelectorAll('.material-count-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent row click from also firing
+                const material = this.getAttribute('data-material');
+                displayOrderIds(material);
+            });
+        });
+
+        // Close orders section
+        document.getElementById('close-orders-btn').addEventListener('click', function() {
+            document.getElementById('orders-section').style.display = 'none';
+        });
+
+        // Date filter functionality
+        function applyQuickDateFilter(filterValue) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            let fromDate = null;
+            let toDate = null;
+            
+            switch(filterValue) {
+                case 'today':
+                    fromDate = new Date(today);
+                    toDate = new Date(today);
+                    break;
+                case 'tomorrow':
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    fromDate = tomorrow;
+                    toDate = tomorrow;
+                    break;
+                case 'this-week':
+                    const weekStart = new Date(today);
+                    weekStart.setDate(today.getDate() - today.getDay());
+                    fromDate = weekStart;
+                    toDate = new Date(today);
+                    break;
+                case 'this-month':
+                    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+                    fromDate = monthStart;
+                    toDate = new Date(today);
+                    break;
+            }
+            
+            if (fromDate && toDate) {
+                document.getElementById('date-from').value = fromDate.toISOString().split('T')[0];
+                document.getElementById('date-to').value = toDate.toISOString().split('T')[0];
+            }
+        }
+
+        function applyDateRangeFilter() {
+            const fromDate = document.getElementById('date-from').value;
+            const toDate = document.getElementById('date-to').value;
+            
+            if (fromDate || toDate) {
+                // Here you would filter your data based on dates
+                // For now, we'll just log the filter values
+                console.log('Date filter applied:', { fromDate, toDate });
+                // You can add actual filtering logic here based on your data structure
+            }
+        }
+
+        function clearDateFilters() {
+            document.getElementById('date-from').value = '';
+            document.getElementById('date-to').value = '';
+            document.getElementById('quick-date-filter').value = '';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCounts();
+            
+            // Date filter event listeners
+            const quickDateFilter = document.getElementById('quick-date-filter');
+            const applyDateRangeBtn = document.getElementById('apply-date-range');
+            const clearDateRangeBtn = document.getElementById('clear-date-range');
+            
+            quickDateFilter.addEventListener('change', function(e) {
+                if (e.target.value) {
+                    applyQuickDateFilter(e.target.value);
+                }
+            });
+            
+            applyDateRangeBtn.addEventListener('click', applyDateRangeFilter);
+            
+            clearDateRangeBtn.addEventListener('click', clearDateFilters);
+            
+            // Allow Enter key to apply filter on date inputs
+            document.getElementById('date-from').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    applyDateRangeBtn.click();
+                }
+            });
+            
+            document.getElementById('date-to').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    applyDateRangeBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
