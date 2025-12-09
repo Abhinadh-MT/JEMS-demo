@@ -1399,6 +1399,27 @@
   });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // ✅ Remove active state from all menu links
+    document.querySelectorAll('.menu-link').forEach(l => {
+      l.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
+    });
 
+    // ✅ Activate Dashboard menu
+    const dashboardLink = document.querySelector('[data-page="dashboard"]');
+    if (dashboardLink) {
+      dashboardLink.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+    }
+
+    // ✅ Show Dashboard page content
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    
+    const dashboardPage = document.getElementById("dashboard");
+    if (dashboardPage) {
+      dashboardPage.classList.add("active");
+    }
+  });
+</script>
 </body>
 </html>
