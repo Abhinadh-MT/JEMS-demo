@@ -36,10 +36,12 @@
     .submenu.open { max-height: 500px; } /* Adjust as needed */
   </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex overflow-hidden">
+
 
   <!-- SIDEBAR -->
-  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+    <aside class="w-64 fixed left-0 top-0 h-screen bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
@@ -334,7 +336,9 @@
     </div>
   </aside>
 <div class="p-4 border-t border-jems-charcoal-light">
-<div class="flex-1 flex flex-col ml-72">
+<div class="ml-64 flex-1 flex flex-col h-screen">
+
+
 <!-- <header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
 <div class="flex items-center gap-4">
 <h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Create Customer Order</h1>
@@ -346,7 +350,7 @@
 </button>
 </div>
 </header> -->
-<main class="flex-1 p-6 bg-jems-background">
+<main class="flex-1 overflow-y-auto p-4 bg-jems-background">
 <div class="max-w-7xl mx-auto space-y-6">
 <div class="bg-white p-6 rounded-xl shadow-lifted">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
