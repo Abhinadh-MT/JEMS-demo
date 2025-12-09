@@ -39,7 +39,8 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
 
   <!-- SIDEBAR -->
-  <aside class="w-80 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+  <aside class="fixed top-0 left-0 h-screen w-72 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark z-50">
+
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
@@ -57,7 +58,7 @@
       </a>
 
       <!-- ORDER - Collapsible Parent Menu -->
-        <div class="space-y-1">
+      <div class="space-y-1">
         <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium" id="order-toggle">
           <div class="flex items-center">
             <span class="material-icons mr-3">inventory_2</span>
@@ -65,6 +66,8 @@
           </div>
           <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
         </button>
+
+      
 
         <!-- Submenu Items -->
         <div class="submenu" id="order-submenu">
@@ -336,173 +339,294 @@
       </div>
     </div>
   </aside>
-<body class="bg-background-light dark:bg-background-dark font-sans">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color bg-white dark:bg-background-dark dark:border-border-color/20 px-10 py-3">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-4 text-text-primary dark:text-text-secondary">
-<svg class="h-8 w-8 text-primary" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
-<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-<h1 class="text-2xl font-bold leading-tight tracking-[-0.015em] font-display text-text-primary dark:text-text-secondary">JEMS</h1>
-</div>
-</div>
-<div class="flex flex-1 justify-end gap-4 items-center">
-<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-background-light dark:bg-background-dark/50 text-text-primary dark:text-text-secondary">
+<div class="p-4 border-t border-jems-charcoal-light">
 
-</button>
-<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-background-light dark:bg-background-dark/50 text-text-primary dark:text-text-secondary">
-<span class="material-symbols-outlined">settings</span>
-</button>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAwfArewlsl_PGNSmOv1qG1nEkZne6BGCiP7RBzhEKw7QnrUwY5NRtVjQZKUXOiearKmjopxfUPFsvwVlBGq9EQf9UwcXCfVtZuZiT2wKJbas22jwzp4kB0cy2MsVhtYBcf2bbcQV5SsINzsiiMbQlAgKJPx7CAXd8Y03nWd8kQzjAT8vS9z3V1xq_6vymzQDEwWk1BrrSUr5EqDgEeWKGyqYhuhJIfuGBJ7t1vOY5XAnPiAArf9CXbsGIO4PUfc2Kv1WCSyCneyQ");'></div>
 </div>
-</header>
-<main class="flex-1 px-4 sm:px-6 lg:px-10 py-8">
-<div class="max-w-7xl mx-auto">
-<div class="flex flex-wrap justify-between items-center gap-4 mb-8">
-<h1 class="text-text-primary dark:text-text-secondary text-4xl font-black leading-tight tracking-[-0.033em] font-display">Damage Report</h1>
-<button class="flex items-center gap-2 max-w-[480px] cursor-pointer justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="material-symbols-outlined">print</span>
-<span class="truncate">Print / Export</span>
+</aside>
+<div class="flex-1 flex flex-col ml-72">
+<!-- <header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
+<div class="flex items-center gap-4">
+<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Create Customer Order</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined text-jems-charcoal">notifications</span>
+<span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
 </button>
 </div>
-<div class="bg-white dark:bg-background-dark dark:border dark:border-border-color/20 rounded-xl p-6 mb-8 shadow-sm">
+</header> -->
+<main class="flex-1 p-6 bg-jems-background">
+<div class="max-w-7xl mx-auto space-y-6">
+<div class="bg-white p-6 rounded-xl shadow-lifted">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-<label class="flex flex-col col-span-1 md:col-span-2 lg:col-span-1">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Search</p>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">search</span>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 pl-10 pr-4 text-base font-normal leading-normal" placeholder="Search by Report #, Custodian..." value=""/>
-</div>
-</label>
-<label class="flex flex-col">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Date Range</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal leading-normal" type="date"/>
-</label>
-<label class="flex flex-col">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Department</p>
-<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 px-4 text-base font-normal leading-normal">
-<option>All Departments</option>
-<option>Casting</option>
-<option>Setting</option>
-<option>Polishing</option>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="order-type">Order Type</label>
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="order-type">
+<option>New Customer Order</option>
+<option>Repair Order</option>
+<option>Company Order</option>
 </select>
-</label>
-<label class="flex flex-col">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Custodian</p>
-<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 px-4 text-base font-normal leading-normal">
-<option>All Custodians</option>
-<option>John Doe</option>
-<option>Jane Smith</option>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="customer-name">Customer Name</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="customer-name" placeholder="Search customer..." type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="delivery-date">Expected Delivery Date</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="delivery-date" type="date"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="order-no">Order No.</label>
+<input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed" id="order-no" readonly="" type="text" value="ORD-2024-00123"/>
+</div>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-lifted">
+<h2 class="text-xl font-semibold text-jems-charcoal mb-4">Item Entry Panel</h2>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+<div class="col-span-1 md:col-span-2">
+<label class="block text-sm font-medium text-gray-700 mb-1" for="item-name-1">Item Name</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="item-name-1" placeholder="e.g., Jasmine Necklace" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="sku-1">SKU Reference <span class="text-gray-400">(Optional)</span></label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="sku-1" placeholder="SKU-REF-001" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="quantity-1">Quantity</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="quantity-1" min="1" type="number" value="1"/>
+</div>
+<div class="col-span-1 md:col-span-1">
+<label class="block text-sm font-medium text-gray-700 mb-1" for="category-1">Category</label>
+<div class="flex items-center gap-2">
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="category-1">
+<option>Select Category</option>
+<option>Necklace</option>
+<option>Ring</option>
+<option>Earrings</option>
+<option>Bracelet</option>
 </select>
+<button class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-jems-gold hover:bg-primary-focus text-white transition-colors" title="Add New Category">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<div class="col-span-1 md:col-span-1">
+<label class="block text-sm font-medium text-gray-700 mb-1" for="sub-category-1">Sub Category</label>
+<div class="flex items-center gap-2">
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="sub-category-1">
+<option>Select Sub Category</option>
+<option>Pendant</option>
+<option>Chain</option>
+<option>Choker</option>
+</select>
+<button class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-jems-gold hover:bg-primary-focus text-white transition-colors" title="Add New Sub Category">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block text-sm font-medium text-gray-700 mb-1">Create Child Category</label>
+<div class="flex items-center gap-2">
+<button class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-jems-gold hover:bg-primary-focus text-white transition-colors" title="Add Child Category">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-200 mt-6 pt-6">
+<h3 class="text-base font-semibold text-jems-charcoal mb-4">Metal Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="metal-type-1">Metal</label>
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="metal-type-1">
+<option>Gold 22Ct</option>
+<option>Gold 24 Ct</option>
+<option>Platinum 950</option>
+<option>Platinum 900</option>
+<option>Platinum 850</option>
+<option>Platinum 800</option>
+<option>Fine Silver (99.9)</option>
+<option>Sterling Silver (92.5)</option>
+<option>Argentium Silver (93.5 / 96)</option>
+<option>Coin Silver (90)</option>
+<option>Britannia Silver (95.8)</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="metal-weight-1">Metal Weight (g)</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="metal-weight-1" placeholder="e.g., 12.5" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="metal-colour-1">Metal Colour</label>
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="metal-colour-1">
+<option>Yellow</option>
+<option>White</option>
+<option>Rose</option>
+</select>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-200 mt-6 pt-6">
+<h3 class="text-base font-semibold text-jems-charcoal mb-4">Diamond Details</h3>
+<div class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="diamond-weight-1">Diamond Weight (ct)</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="diamond-weight-1" placeholder="e.g., 0.5" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="diamond-colour-1">Diamond Colour</label>
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="diamond-colour-1">
+<option>D-F (Colourless)</option>
+<option>G-J (Near Colourless)</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="diamond-category-1">Diamond Category</label>
+<select class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="diamond-category-1">
+<option>VVS</option>
+<option>VS</option>
+<option>SI</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="diamond-count-1">Diamond Count</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="diamond-count-1" placeholder="e.g., 15" type="number"/>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-2 mt-4 text-sm font-semibold text-jems-blue hover:text-jems-blue-dark transition-colors">
+<span class="material-symbols-outlined text-base">add_circle_outline</span>
+<span>Add New Diamond Details</span>
+</button>
+</div>
+<div class="border-t border-gray-200 mt-6 pt-6">
+<h3 class="text-base font-semibold text-jems-charcoal mb-4">Stone Details</h3>
+<div class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="stone-weight-1">Stone Weight</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="stone-weight-1" placeholder="e.g., 1.2 ct" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="stone-colour-1">Stone Colour</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="stone-colour-1" placeholder="e.g., Ruby Red" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="stone-shape-1">Stone Shape</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="stone-shape-1" placeholder="e.g., Round, Oval" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="stone-count-1">Stone Count</label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="stone-count-1" placeholder="e.g., 5" type="number"/>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-2 mt-4 text-sm font-semibold text-jems-blue hover:text-jems-blue-dark transition-colors">
+<span class="material-symbols-outlined text-base">add_circle_outline</span>
+<span>Add New Stone Details</span>
+</button>
+</div>
+<div class="border-t border-gray-200 mt-6 pt-6">
+<label class="block text-sm font-medium text-gray-700 mb-1" for="remarks">Remarks / Special Instructions</label>
+<div class="flex flex-col sm:flex-row gap-4">
+<textarea class="form-textarea flex-grow rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="remarks" placeholder="Optional notes for the item..." rows="2"></textarea>
+<label class="flex-shrink-0 relative cursor-pointer flex items-center gap-2 justify-center rounded-lg bg-white border border-gray-300 hover:border-jems-gold text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
+<span class="material-symbols-outlined text-base">upload_file</span>
+<span>Upload Reference Image</span>
+<input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="reference-image-upload" type="file"/>
 </label>
 </div>
-<div class="flex justify-end gap-3 mt-6">
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-background-light dark:bg-background-dark/50 border border-border-color dark:border-border-color/30 text-text-primary dark:text-text-secondary text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="truncate">Clear</span>
+</div>
+<div class="border-t border-gray-200 mt-6 pt-6">
+<h3 class="text-base font-semibold text-jems-charcoal mb-4">Cost Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="material-cost-1">Material Cost</label>
+<input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed" id="material-cost-1" placeholder="Auto-calculated" readonly="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="making-charge-1">Making Charge <span class="text-gray-400">(Optional)</span></label>
+<input class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold" id="making-charge-1" placeholder="e.g., 500.00" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="total-cost-1">Total Cost</label>
+<input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed" id="total-cost-1" placeholder="Auto-calculated" readonly="" type="text"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<button class="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white py-4 text-sm font-semibold text-jems-charcoal hover:border-jems-gold hover:text-jems-gold transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+<span>Add Another Item</span>
 </button>
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="truncate">Apply Filters</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-lifted">
+<h2 class="text-xl font-semibold text-jems-charcoal mb-4">Order Summary</h2>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="border-b-2 border-gray-200 text-sm font-semibold text-gray-600">
+<tr>
+<th class="p-3">Sl No</th>
+<th class="p-3 w-1/2">Item Name</th>
+<th class="p-3 text-center">Quantity</th>
+<th class="p-3 text-right">Total Cost</th>
+<th class="p-3 text-center">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-gray-100">
+<td class="p-3 text-gray-500">1</td>
+<td class="p-3 font-medium text-jems-charcoal">Jasmine Necklace</td>
+<td class="p-3 text-center text-gray-500">1</td>
+<td class="p-3 text-right font-medium text-jems-charcoal">$5,930.00</td>
+<td class="p-3 text-center">
+<button class="text-jems-red hover:text-red-700 transition-colors" title="Remove item">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b border-gray-100">
+<td class="p-3 text-gray-500">2</td>
+<td class="p-3 font-medium text-jems-charcoal">Ruby Earrings</td>
+<td class="p-3 text-center text-gray-500">2</td>
+<td class="p-3 text-right font-medium text-jems-charcoal">$2,450.00</td>
+<td class="p-3 text-center">
+<button class="text-jems-red hover:text-red-700 transition-colors" title="Remove item">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-4 flex justify-end">
+<div class="w-full max-w-sm rounded-lg bg-jems-gold-light p-4 border border-jems-gold">
+<div class="flex items-center justify-between">
+<p class="text-sm font-semibold text-jems-gold">Total Order Value</p>
+<p class="text-2xl font-bold text-jems-charcoal">$8,380.00</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-4 mt-6">
+<button class="rounded-lg bg-gray-200 hover:bg-gray-300 text-jems-charcoal font-semibold px-6 py-2.5 transition-colors">Cancel</button>
+<button class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white hover:border-jems-gold text-jems-charcoal font-semibold px-6 py-2.5 transition-colors">
+<span class="material-symbols-outlined text-lg">print</span>
+<span>Print Order</span>
+</button>
+<button class="rounded-lg bg-jems-charcoal-light hover:bg-jems-charcoal text-white font-semibold px-6 py-2.5 transition-colors">New Order</button>
+<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-6 py-2.5 transition-colors shadow-lifted">
+<span>Submit Order</span>
+<span class="material-symbols-outlined">arrow_forward</span>
 </button>
 </div>
-</div>
-<div class="bg-white dark:bg-background-dark dark:border dark:border-border-color/20 rounded-xl shadow-sm overflow-hidden">
-<div class="px-6 py-5 border-b border-border-color dark:border-border-color/20">
-<h2 class="text-text-primary dark:text-text-secondary text-2xl font-bold leading-tight tracking-[-0.015em] font-display">Damage Report #DR-2024-00123</h2>
-</div>
-<div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-border-color dark:border-border-color/20">
-<div>
-<p class="text-sm text-gray-500 dark:text-gray-400">Damage Date</p>
-<p class="text-lg font-medium text-text-primary dark:text-text-secondary">2024-07-21</p>
-</div>
-<div>
-<p class="text-sm text-gray-500 dark:text-gray-400">Damage Department</p>
-<p class="text-lg font-medium text-text-primary dark:text-text-secondary">Setting</p>
-</div>
-<div>
-<p class="text-sm text-gray-500 dark:text-gray-400">Responsible Custodian</p>
-<p class="text-lg font-medium text-text-primary dark:text-text-secondary">John Doe</p>
-</div>
-</div>
-<div class="p-6">
-<h3 class="text-text-primary dark:text-text-secondary text-xl font-bold leading-tight tracking-[-0.015em] mb-4 font-display">Damaged Diamonds</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="border-b border-border-color dark:border-border-color/20 bg-background-light dark:bg-background-dark/30">
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Count</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Weight (ct)</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Color</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Size</th>
-</tr>
-</thead>
-<tbody>
-<tr class="border-b border-border-color dark:border-border-color/20">
-<td class="p-3 text-text-primary dark:text-text-secondary">5</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">0.50</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">G</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">2.5mm</td>
-</tr>
-<tr class="border-b border-border-color dark:border-border-color/20">
-<td class="p-3 text-text-primary dark:text-text-secondary">2</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">1.20</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">H</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">4.0mm</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="p-6">
-<h3 class="text-text-primary dark:text-text-secondary text-xl font-bold leading-tight tracking-[-0.015em] mb-4 font-display">Damaged Color Stones</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="border-b border-border-color dark:border-border-color/20 bg-background-light dark:bg-background-dark/30">
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Stone Type</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Count</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Weight (ct)</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Shape</th>
-</tr>
-</thead>
-<tbody>
-<tr class="border-b border-border-color dark:border-border-color/20">
-<td class="p-3 text-text-primary dark:text-text-secondary">Sapphire</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">1</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">2.15</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">Oval</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="p-6">
-<h3 class="text-text-primary dark:text-text-secondary text-xl font-bold leading-tight tracking-[-0.015em] mb-4 font-display">Other Damaged Items</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="border-b border-border-color dark:border-border-color/20 bg-background-light dark:bg-background-dark/30">
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Item ID</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Description</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Quantity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="border-b-0">
-<td class="p-3 text-text-primary dark:text-text-secondary">SFG-0089</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">18K Gold Ring Mounting</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">1</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
+</main></div>
 </div>
   <script>
   // Collapsible Master Menu

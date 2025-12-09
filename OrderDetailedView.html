@@ -39,7 +39,7 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
 
   <!-- SIDEBAR -->
-  <aside class="w-80 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
@@ -57,7 +57,7 @@
       </a>
 
       <!-- ORDER - Collapsible Parent Menu -->
-        <div class="space-y-1">
+      <div class="space-y-1">
         <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium" id="order-toggle">
           <div class="flex items-center">
             <span class="material-icons mr-3">inventory_2</span>
@@ -65,6 +65,8 @@
           </div>
           <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
         </button>
+
+     
 
         <!-- Submenu Items -->
         <div class="submenu" id="order-submenu">
@@ -336,167 +338,137 @@
       </div>
     </div>
   </aside>
-<body class="bg-background-light dark:bg-background-dark font-sans">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color bg-white dark:bg-background-dark dark:border-border-color/20 px-10 py-3">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-4 text-text-primary dark:text-text-secondary">
-<svg class="h-8 w-8 text-primary" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
-<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-<h1 class="text-2xl font-bold leading-tight tracking-[-0.015em] font-display text-text-primary dark:text-text-secondary">JEMS</h1>
+<div class="flex-1 flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 text-jems-charcoal hover:text-jems-gold transition-colors" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="font-semibold">Back to Search</span>
+</a>
+<div class="w-px h-6 bg-gray-300"></div>
+<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Order Details</h1>
 </div>
-</div>
-<div class="flex flex-1 justify-end gap-4 items-center">
-<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-background-light dark:bg-background-dark/50 text-text-primary dark:text-text-secondary">
-
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
+<span class="material-symbols-outlined text-base">edit</span>
+<span>Edit Order</span>
 </button>
-<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-background-light dark:bg-background-dark/50 text-text-primary dark:text-text-secondary">
-<span class="material-symbols-outlined">settings</span>
+<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2.5 transition-colors shadow-soft">
+<span class="material-symbols-outlined text-base">print</span>
+<span>Print</span>
 </button>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAwfArewlsl_PGNSmOv1qG1nEkZne6BGCiP7RBzhEKw7QnrUwY5NRtVjQZKUXOiearKmjopxfUPFsvwVlBGq9EQf9UwcXCfVtZuZiT2wKJbas22jwzp4kB0cy2MsVhtYBcf2bbcQV5SsINzsiiMbQlAgKJPx7CAXd8Y03nWd8kQzjAT8vS9z3V1xq_6vymzQDEwWk1BrrSUr5EqDgEeWKGyqYhuhJIfuGBJ7t1vOY5XAnPiAArf9CXbsGIO4PUfc2Kv1WCSyCneyQ");'></div>
 </div>
 </header>
-<main class="flex-1 px-4 sm:px-6 lg:px-10 py-8">
-<div class="max-w-7xl mx-auto">
-<div class="flex flex-wrap justify-between items-center gap-4 mb-8">
-<h1 class="text-text-primary dark:text-text-secondary text-4xl font-black leading-tight tracking-[-0.033em] font-display">Damage Report</h1>
-<button class="flex items-center gap-2 max-w-[480px] cursor-pointer justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="material-symbols-outlined">print</span>
-<span class="truncate">Print / Export</span>
-</button>
-</div>
-<div class="bg-white dark:bg-background-dark dark:border dark:border-border-color/20 rounded-xl p-6 mb-8 shadow-sm">
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-<label class="flex flex-col col-span-1 md:col-span-2 lg:col-span-1">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Search</p>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">search</span>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 pl-10 pr-4 text-base font-normal leading-normal" placeholder="Search by Report #, Custodian..." value=""/>
-</div>
-</label>
-<label class="flex flex-col">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Date Range</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal leading-normal" type="date"/>
-</label>
-<label class="flex flex-col">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Department</p>
-<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 px-4 text-base font-normal leading-normal">
-<option>All Departments</option>
-<option>Casting</option>
-<option>Setting</option>
-<option>Polishing</option>
-</select>
-</label>
-<label class="flex flex-col">
-<p class="text-text-primary dark:text-text-secondary text-sm font-medium leading-normal pb-2">Custodian</p>
-<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary dark:text-text-secondary focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-color dark:border-border-color/30 bg-white dark:bg-background-dark/50 focus:border-primary h-12 px-4 text-base font-normal leading-normal">
-<option>All Custodians</option>
-<option>John Doe</option>
-<option>Jane Smith</option>
-</select>
-</label>
-</div>
-<div class="flex justify-end gap-3 mt-6">
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-background-light dark:bg-background-dark/50 border border-border-color dark:border-border-color/30 text-text-primary dark:text-text-secondary text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="truncate">Clear</span>
-</button>
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="truncate">Apply Filters</span>
-</button>
-</div>
-</div>
-<div class="bg-white dark:bg-background-dark dark:border dark:border-border-color/20 rounded-xl shadow-sm overflow-hidden">
-<div class="px-6 py-5 border-b border-border-color dark:border-border-color/20">
-<h2 class="text-text-primary dark:text-text-secondary text-2xl font-bold leading-tight tracking-[-0.015em] font-display">Damage Report #DR-2024-00123</h2>
-</div>
-<div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-border-color dark:border-border-color/20">
+<main class="flex-1 p-6 bg-jems-background">
+<div class="max-w-7xl mx-auto space-y-6">
+<div class="bg-white p-6 rounded-xl shadow-lifted">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 border-b border-gray-200 pb-6 mb-6">
 <div>
-<p class="text-sm text-gray-500 dark:text-gray-400">Damage Date</p>
-<p class="text-lg font-medium text-text-primary dark:text-text-secondary">2024-07-21</p>
+<p class="text-sm text-gray-500">Order No.</p>
+<p class="font-semibold text-jems-charcoal">ORD-2024-00123</p>
 </div>
 <div>
-<p class="text-sm text-gray-500 dark:text-gray-400">Damage Department</p>
-<p class="text-lg font-medium text-text-primary dark:text-text-secondary">Setting</p>
+<p class="text-sm text-gray-500">Customer Name</p>
+<p class="font-semibold text-jems-charcoal">Eleanor Vance</p>
 </div>
 <div>
-<p class="text-sm text-gray-500 dark:text-gray-400">Responsible Custodian</p>
-<p class="text-lg font-medium text-text-primary dark:text-text-secondary">John Doe</p>
+<p class="text-sm text-gray-500">Order Type</p>
+<p class="font-semibold text-jems-charcoal">New</p>
+</div>
+<div>
+<p class="text-sm text-gray-500">Expected Delivery Date</p>
+<p class="font-semibold text-jems-charcoal">2024-08-15</p>
+</div>
+<div class="col-span-full">
+<p class="text-sm text-gray-500">Remarks/Special Instructions</p>
+<p class="text-jems-charcoal">Customer requested a specific clasp type (lobster clasp) and a gift box with a personalized note.</p>
 </div>
 </div>
-<div class="p-6">
-<h3 class="text-text-primary dark:text-text-secondary text-xl font-bold leading-tight tracking-[-0.015em] mb-4 font-display">Damaged Diamonds</h3>
+<h2 class="text-xl font-semibold text-jems-charcoal mb-4">Order Items</h2>
 <div class="overflow-x-auto">
 <table class="w-full text-left">
-<thead>
-<tr class="border-b border-border-color dark:border-border-color/20 bg-background-light dark:bg-background-dark/30">
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Count</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Weight (ct)</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Color</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Size</th>
+<thead class="bg-gray-50 text-xs uppercase text-gray-700">
+<tr>
+<th class="px-4 py-3">Sl No</th>
+<th class="px-4 py-3">Item Name</th>
+<th class="px-4 py-3">Image</th>
+<th class="px-4 py-3">Category/Sub</th>
+<th class="px-4 py-3">SKU</th>
+<th class="px-4 py-3 text-center">Qty</th>
+<th class="px-4 py-3">Metal Details</th>
+<th class="px-4 py-3">Diamond Details</th>
+<th class="px-4 py-3">Stone Details</th>
+<th class="px-4 py-3 text-right">Material Cost</th>
+<th class="px-4 py-3 text-right">Making Charge</th>
+<th class="px-4 py-3 text-right">Total Cost</th>
 </tr>
 </thead>
 <tbody>
-<tr class="border-b border-border-color dark:border-border-color/20">
-<td class="p-3 text-text-primary dark:text-text-secondary">5</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">0.50</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">G</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">2.5mm</td>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-4">1</td>
+<td class="px-4 py-4 font-medium text-jems-charcoal">Evelyn Diamond Necklace</td>
+<td class="px-4 py-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-12 h-12" data-alt="Evelyn Diamond Necklace thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ");'></div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">Necklace / Pendants</td>
+<td class="px-4 py-4 text-sm text-gray-600">NK-101-YG-D</td>
+<td class="px-4 py-4 text-center text-sm text-gray-600">1</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>Yellow Gold</div>
+<div>22K Purity</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>0.75 ct, G, VVS1</div>
+<div>15 count</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>N/A</div>
+</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$5,200.00</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$1,100.00</td>
+<td class="px-4 py-4 text-right font-bold text-jems-charcoal">$6,300.00</td>
 </tr>
-<tr class="border-b border-border-color dark:border-border-color/20">
-<td class="p-3 text-text-primary dark:text-text-secondary">2</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">1.20</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">H</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">4.0mm</td>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-4">2</td>
+<td class="px-4 py-4 font-medium text-jems-charcoal">Azure Sapphire Ring</td>
+<td class="px-4 py-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-12 h-12" data-alt="Azure Sapphire Ring thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB91lphcbopI02nQpH7fzzl-eTvB_nk4wtVMUxuhUSnDrMZHDfDXZPxDRvyrVodJ2TuHGsFgywS6D0n0km63pBpkyTjHDjQ8RZUrJxrAiVH-boNI0PnVgGjk_ShZjk-V0lz2mfSoAII3MGuAO7RWh9MsVvqnal773elQ8A629rEvFhbWdE37TNxkbU8bnAgCEsJkfHigCwanxa2bmBiHObZSxKKHCTlDgziqtS4H-AibcPHyyxp1fI-KLOhIMSE1OTnwl709M537g");'></div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">Ring / Gemstone</td>
+<td class="px-4 py-4 text-sm text-gray-600">RG-205-WG-S</td>
+<td class="px-4 py-4 text-center text-sm text-gray-600">1</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>White Gold</div>
+<div>18K Purity</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>N/A</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>1.20 ct, Blue, Oval</div>
+<div>1 count</div>
+</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$1,500.00</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$580.00</td>
+<td class="px-4 py-4 text-right font-bold text-jems-charcoal">$2,080.00</td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="mt-6 flex justify-end">
+<div class="w-full max-w-sm space-y-3">
+<div class="flex justify-between items-center text-gray-600">
+<span>Subtotal</span>
+<span>$8,380.00</span>
 </div>
-<div class="p-6">
-<h3 class="text-text-primary dark:text-text-secondary text-xl font-bold leading-tight tracking-[-0.015em] mb-4 font-display">Damaged Color Stones</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="border-b border-border-color dark:border-border-color/20 bg-background-light dark:bg-background-dark/30">
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Stone Type</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Count</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Weight (ct)</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Shape</th>
-</tr>
-</thead>
-<tbody>
-<tr class="border-b border-border-color dark:border-border-color/20">
-<td class="p-3 text-text-primary dark:text-text-secondary">Sapphire</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">1</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">2.15</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">Oval</td>
-</tr>
-</tbody>
-</table>
+<div class="flex justify-between items-center text-gray-600">
+<span>Taxes (5%)</span>
+<span>$419.00</span>
 </div>
+<div class="flex justify-between items-center font-bold text-xl text-jems-charcoal border-t border-gray-300 pt-3 mt-3">
+<span>Total Order Value</span>
+<span>$8,799.00</span>
 </div>
-<div class="p-6">
-<h3 class="text-text-primary dark:text-text-secondary text-xl font-bold leading-tight tracking-[-0.015em] mb-4 font-display">Other Damaged Items</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="border-b border-border-color dark:border-border-color/20 bg-background-light dark:bg-background-dark/30">
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Item ID</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Description</th>
-<th class="p-3 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase">Quantity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="border-b-0">
-<td class="p-3 text-text-primary dark:text-text-secondary">SFG-0089</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">18K Gold Ring Mounting</td>
-<td class="p-3 text-text-primary dark:text-text-secondary">1</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </div>
