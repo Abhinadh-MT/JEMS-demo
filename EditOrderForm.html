@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>JEMS - Edit Order</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+        }
+
+        .modal {
+            display: none;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+    </style>
+
+    <style>
+        .submenu {
+            display: none;
+        }
+
+        .submenu.open {
+            display: block;
+        }
+
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+    </style>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background-light": "#f5f5f5",
+                        "background-dark": "#121212",
+
+                        "card-light": "#ffffff",
+                        "card-dark": "#1e1e1e",
+
+                        "text-light": "#333333",
+                        "text-dark": "#e0e0e0",
+
+                        "border-light": "#e0e0e0",
+                        "border-dark": "#333333",
+
+                        "primary": "#B9975B",
+                        "primary-focus": "#A88A52",
+
+                        // JEMS
+                        "jems-gold": "#B9975B",
+                        "jems-gold-light": "#F3E9D2",
+                        "jems-charcoal": "#1A202C",
+                        "jems-background": "#F8F8F8",
+                        "jems-text": "#333333"
+                    },
+                   fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'lifted': '0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.04)'
+                    }
+                    
+                },
+            },
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+
+<body class="bg-jems-background font-display text-jems-text">
+
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 fixed left-0 top-0 h-screen 
+bg-white 
+text-gray-800 
+flex flex-col 
+border-r border-gray-200">
+
+
+            <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
+                <span class="material-icons text-primary text-3xl mr-2">diamond</span>
+                <h1 class="text-xl font-bold">JEMS</h1>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+
+
+                <!-- Dashboard -->
+                <a href="jems.html" data-page="dashboard"
+                    class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
+                    <span class="material-icons mr-3">dashboard</span>Dashboard
+                </a>
+
+                <!-- ORDER - Collapsible Parent Menu -->
+                <div class="space-y-1">
+                    <button
+                        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium"
+                        id="order-toggle">
+                        <div class="flex items-center">
+                            <span class="material-icons mr-3">inventory_2</span>
+                            <span>Order</span>
+                        </div>
+                        <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
+                    </button>
+
+                    <!-- Submenu Items -->
+                    <div class="submenu" id="order-submenu">
+                        <a href="NewOrder.html" data-page="new-order"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            New Order
+                        </a>
+                        <a href="EditOrderForm.html" data-page="update-order"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Update Order
+                        </a>
+                        <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+            Update with Design Details
+          </a> -->
+                        <a href="OrderSearch.html" data-page="search"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Search
+                        </a>
+                        <a href="OrderDetailedView.html" data-page="detailed"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Detailed View
+                        </a>
+                        <a href="CustomerOrderPrintOut.html" data-page="print"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Order Printout
+                        </a>
+                    </div>
+                </div>
+                <div class="space-y-1">
+
+
+                    <button id="stock-toggle"
+                        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+                        <div class="flex items-center">
+                            <span class="material-icons mr-3">inventory_2</span>
+                            <span>Stock</span>
+                        </div>
+
+                        <span class="material-icons text-lg transition-transform" id="stock-chevron">
+                            expand_more
+                        </span>
+                    </button>
+
+                    <!-- ✅ STOCK SUBMENU -->
+                    <div class="submenu" id="stock-submenu">
+                        <a href="RawMaterialsSearchReport.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Raw Material Report
+                        </a>
+
+                        <a href="RawmaterrialStockEntry.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Raw Material Stock Entry
+                        </a>
+
+                        <a href="AlloyCreation.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Alloy Creation
+                        </a>
+
+                        <a href="StockReport.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Stock Report
+                        </a>
+
+                        <a href="stock-update.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Stock Update – Direct & Excel Export
+                        </a>
+                    </div>
+                    <!-- ✅ MANUFACTURING / BAG TOGGLE -->
+                    <button id="bag-toggle"
+                        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+                        <div class="flex items-center">
+                            <span class="material-icons mr-3">precision_manufacturing</span>
+                            <span>Manufacturing</span>
+                        </div>
+
+                        <span class="material-icons text-lg transition-transform" id="bag-chevron">
+                            expand_more
+                        </span>
+                    </button>
+
+                    <!-- ✅ MANUFACTURING / BAG SUBMENU -->
+                    <div class="submenu" id="bag-submenu">
+
+                        <a href="materials-report.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Materials Report
+                        </a>
+
+                        <a href="material-details-print.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Material Details & Print Bag Sticker
+                        </a>
+
+                        <a href="IssueMaterialtoBag.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Generate Bag & Issue Material
+                        </a>
+
+                        <a href="BagSplit.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Bag Splitting
+                        </a>
+
+                        <a href="BageMovement.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Bag Movement
+                        </a>
+
+                        <a href="bag-merging.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Bag Merging
+                        </a>
+
+                        <a href="BagHistoryReport.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Bag Rejection
+                        </a>
+
+                        <a href="WaxTreeCreation.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Wax Tree Creation
+                        </a>
+
+                        <a href="TreeLoad.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Tree Load
+                        </a>
+
+                        <a href="tree-cutting.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Tree Cutting
+                        </a>
+
+                    </div>
+                    <!-- ✅ QC TOGGLE -->
+                    <button id="qc-toggle"
+                        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+                        <div class="flex items-center">
+                            <span class="material-icons mr-3">fact_check</span>
+                            <span>QC</span>
+                        </div>
+
+                        <span class="material-icons text-lg transition-transform" id="qc-chevron">
+                            expand_more
+                        </span>
+                    </button>
+
+                    <!-- ✅ QC SUBMENU -->
+                    <div class="submenu" id="qc-submenu">
+
+                        <a href="FinalVerification-QC.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Final Verification – Finished Good
+                        </a>
+
+                        <a href="DamageDetailsEntry.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Damage Details Entry
+                        </a>
+
+                        <a href="DamageReport-View.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Damage Report
+                        </a>
+
+                        <a href="location_transfer_report.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            QC Report
+                        </a>
+
+                        <a href="WIP_Report.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            WIP Report
+                        </a>
+
+                    </div>
+
+                    <!-- ✅ HR & ADMIN TOGGLE -->
+                    <button id="hr-toggle"
+                        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+                        <div class="flex items-center">
+                            <span class="material-icons mr-3">admin_panel_settings</span>
+                            <span>HR & Admin</span>
+                        </div>
+
+                        <span class="material-icons text-lg transition-transform" id="hr-chevron">
+                            expand_more
+                        </span>
+                    </button>
+
+                    <!-- ✅ HR & ADMIN SUBMENU -->
+                    <div class="submenu" id="hr-submenu">
+
+                        <a href="Employees.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Employees
+                        </a>
+
+                        <a href="Department_report"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Department & HOD Report
+                        </a>
+
+                        <a href="UserRoles.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            User Roles
+                        </a>
+
+                        <a href="UserActivityLogs.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            User Activity Log
+                        </a>
+
+                        <a href="EmployeePerformance.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Employee Performance
+                        </a>
+
+                    </div>
+                    <!-- MASTER TOGGLE -->
+                    <button id="master-toggle"
+                        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+                        <div class="flex items-center">
+                            <span class="material-icons mr-3">settings</span>
+                            <span>Master Settings</span>
+                        </div>
+
+                        <span class="material-icons text-lg transition-transform" id="master-chevron">
+                            expand_more
+                        </span>
+                    </button>
+
+                    <!-- Submenu Items -->
+                    <div class="submenu" id="master-submenu">
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles
+                            & Access</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw
+                            Material</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
+                        <a href="create.html"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+                            Diamond
+                        </a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone
+                            Master</a>
+                        <a href="#"
+                            class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
+                    </div>
+                </div>
+
+            </nav>
+
+            <!-- User Profile -->
+            <div class="p-4 border-t border-border-light dark:border-border-dark">
+                <div class="flex items-center">
+                    <img alt="CEO avatar" class="h-10 w-10 rounded-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85BNgmf1Td4nfDBnjZ7kE6EWbKzql7w8mx9ds3lpVNq5aOf5EPrU1ea_OJ0m_E1si1TlR6dCGvGx_NnGCN6uArhFHr9uy_8Na-dlzZSUPz7VbBwNPpFNtyjxDg4t_Ps3g-4ggM-ET5pq4p-yAEe0o1xX04OQT24DADvpV9rIDkMJVCLAKBdCEaYYsmHCpRTnWgEIa2hXEDzqNXrcoTKC1ZzwA6aP63DSUln1hNP5rMBFABCJc4wkmK42F5fZnd8TT876Agrsr19ds" />
+                    <div class="ml-3">
+                        <p class="font-semibold text-sm">John Doe (CEO)</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Super User</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <div class="ml-64 flex-1 flex flex-col min-h-screen overflow-y-auto">
+            <header
+                class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
+                <div class="flex items-center gap-4">
+                    <a class="flex items-center gap-2 text-jems-charcoal hover:text-jems-gold transition-colors"
+                        href="OrderDetailForm.html">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                        <span class="font-semibold">Back to Order Details</span>
+                    </a>
+                    <div class="w-px h-6 bg-gray-300"></div>
+                    <h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Edit Order</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button
+                        class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
+                        <span class="material-symbols-outlined text-jems-charcoal">notifications</span>
+                        <span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
+                    </button>
+                </div>
+            </header>
+            <main class="flex-1 p-6 bg-jems-background">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lifted">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="order-type">Order
+                                    Type</label>
+                                <select
+                                    class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                    id="order-type">
+                                    <option>New Customer Order</option>
+                                    <option>Repair Order</option>
+                                    <option>Company Order</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="customer-name">Customer
+                                    Name</label>
+                                <input
+                                    class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                    id="customer-name" placeholder="Search customer..." type="text"
+                                    value="Eleanor Vance" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="delivery-date">Expected
+                                    Delivery Date</label>
+                                <input
+                                    class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                    id="delivery-date" type="date" value="2024-08-15" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="order-no">Order
+                                    No.</label>
+                                <input
+                                    class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed"
+                                    id="order-no" readonly="" type="text" value="ORD-2024-00123" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lifted">
+                        <h2 class="text-xl font-semibold text-jems-charcoal mb-4">Item Entry Panel</h2>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+                                    <div class="col-span-1 md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1"
+                                            for="item-name-1">Item Name</label>
+                                        <input
+                                            class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                            id="item-name-1" placeholder="e.g., Jasmine Necklace" type="text"
+                                            value="Evelyn Diamond Necklace" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1" for="sku-1">SKU
+                                            Reference <span class="text-gray-400">(Optional)</span></label>
+                                        <input
+                                            class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                            id="sku-1" placeholder="SKU-REF-001" type="text" value="NK-101-YG-D" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1"
+                                            for="quantity-1">Quantity</label>
+                                        <input
+                                            class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                            id="quantity-1" min="1" type="number" value="1" />
+                                    </div>
+                                    <div class="col-span-full">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Item Image</label>
+                                        <div class="flex items-center gap-4">
+                                            <div id="image-preview-container" class="flex items-center gap-2">
+                                                <div id="current-image"
+                                                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-24 h-24 border border-gray-300"
+                                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ");'>
+                                                </div>
+                                            </div>
+                                            <button type="button" id="add-image-btn"
+                                                class="flex items-center gap-2 rounded-lg border border-gray-300 hover:border-jems-gold bg-white text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
+                                                <span
+                                                    class="material-symbols-outlined text-base">add_photo_alternate</span>
+                                                <span>Add Image</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1 md:col-span-1">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1"
+                                            for="category-1">Category</label>
+                                        <div class="flex items-center gap-2">
+                                            <select
+                                                class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="category-1">
+                                                <option>Select Category</option>
+                                                <option selected>Necklace</option>
+                                                <option>Ring</option>
+                                                <option>Earrings</option>
+                                                <option>Bracelet</option>
+                                            </select>
+                                            <button
+                                                class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-jems-gold hover:bg-primary-focus text-white transition-colors"
+                                                title="Add New Category">
+                                                <span class="material-symbols-outlined">add</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1 md:col-span-1">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1"
+                                            for="sub-category-1">Sub Category</label>
+                                        <div class="flex items-center gap-2">
+                                            <select
+                                                class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="sub-category-1">
+                                                <option>Select Sub Category</option>
+                                                <option selected>Pendant</option>
+                                                <option>Chain</option>
+                                                <option>Choker</option>
+                                            </select>
+                                            <button
+                                                class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-jems-gold hover:bg-primary-focus text-white transition-colors"
+                                                title="Add New Sub Category">
+                                                <span class="material-symbols-outlined">add</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1 md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Create Child
+                                            Category</label>
+                                        <div class="flex items-center gap-2">
+                                            <button
+                                                class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-jems-gold hover:bg-primary-focus text-white transition-colors"
+                                                title="Add Child Category">
+                                                <span class="material-symbols-outlined">add</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="border-t border-gray-200 mt-6 pt-6">
+                                    <h3 class="text-base font-semibold text-jems-charcoal mb-4">Metal Details</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="metal-type-1">Metal</label>
+                                            <select
+                                                class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="metal-type-1">
+                                                <option>Gold 22Ct</option>
+                                                <option>Gold 24 Ct</option>
+                                                <option>Platinum 950</option>
+                                                <option>Platinum 900</option>
+                                                <option>Platinum 850</option>
+                                                <option>Platinum 800</option>
+                                                <option>Fine Silver (99.9)</option>
+                                                <option>Sterling Silver (92.5)</option>
+                                                <option>Argentium Silver (93.5 / 96)</option>
+                                                <option>Coin Silver (90)</option>
+                                                <option>Britannia Silver (95.8)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="metal-weight-1">Metal Weight (g)</label>
+                                            <input
+                                                class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="metal-weight-1" placeholder="e.g., 12.5" type="number" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="metal-colour-1">Metal Colour</label>
+                                            <select
+                                                class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="metal-colour-1">
+                                                <option selected>Yellow</option>
+                                                <option>White</option>
+                                                <option>Rose</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="border-t border-gray-200 mt-6 pt-6">
+                                    <h3 class="text-base font-semibold text-jems-charcoal mb-4">Diamond Details</h3>
+                                    <div class="space-y-4">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                    for="diamond-weight-1">Diamond Weight (ct)</label>
+                                                <input
+                                                    class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                    id="diamond-weight-1" placeholder="e.g., 0.5" type="number"
+                                                    value="0.75" />
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                    for="diamond-colour-1">Diamond Colour</label>
+                                                <select
+                                                    class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                    id="diamond-colour-1">
+                                                    <option selected>D-F (Colourless)</option>
+                                                    <option>G-J (Near Colourless)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                    for="diamond-category-1">Diamond Category</label>
+                                                <select
+                                                    class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                    id="diamond-category-1">
+                                                    <option selected>VVS</option>
+                                                    <option>VS</option>
+                                                    <option>SI</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                    for="diamond-count-1">Diamond Count</label>
+                                                <input
+                                                    class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                    id="diamond-count-1" placeholder="e.g., 15" type="number"
+                                                    value="15" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button
+                                    class="flex items-center gap-2 mt-4 text-sm font-semibold text-jems-blue hover:text-jems-blue-dark transition-colors">
+                                    <span class="material-symbols-outlined text-base">add_circle_outline</span>
+                                    <span>Add New Diamond Details</span>
+                                </button>
+                            </div>
+                            <div class="border-t border-gray-200 mt-6 pt-6">
+                                <h3 class="text-base font-semibold text-jems-charcoal mb-4">Stone Details</h3>
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="stone-weight-1">Stone Weight</label>
+                                            <input
+                                                class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="stone-weight-1" placeholder="e.g., 1.2 ct" type="text"
+                                                value="N/A" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="stone-colour-1">Stone Colour</label>
+                                            <input
+                                                class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="stone-colour-1" placeholder="e.g., Ruby Red" type="text"
+                                                value="N/A" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="stone-shape-1">Stone Shape</label>
+                                            <input
+                                                class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="stone-shape-1" placeholder="e.g., Round, Oval" type="text"
+                                                value="N/A" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1"
+                                                for="stone-count-1">Stone Count</label>
+                                            <input
+                                                class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                                id="stone-count-1" placeholder="e.g., 5" type="number" value="0" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                class="flex items-center gap-2 mt-4 text-sm font-semibold text-jems-blue hover:text-jems-blue-dark transition-colors">
+                                <span class="material-symbols-outlined text-base">add_circle_outline</span>
+                                <span>Add New Stone Details</span>
+                            </button>
+                        </div>
+                        <div class="border-t border-gray-200 mt-6 pt-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="remarks">Remarks / Special
+                                Instructions</label>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <textarea
+                                    class="form-textarea flex-grow rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                    id="remarks" placeholder="Optional notes for the item..."
+                                    rows="2">Customer requested a specific clasp type (lobster clasp) and a gift box with a personalized note.</textarea>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-200 mt-6 pt-6">
+                            <h3 class="text-base font-semibold text-jems-charcoal mb-4">Cost Details</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                                        for="material-cost-1">Material Cost</label>
+                                    <input
+                                        class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed"
+                                        id="material-cost-1" placeholder="Auto-calculated" readonly="" type="text"
+                                        value="$5,200.00" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                                        for="making-charge-1">Making Charge <span
+                                            class="text-gray-400">(Optional)</span></label>
+                                    <input
+                                        class="form-input w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold"
+                                        id="making-charge-1" placeholder="e.g., 500.00" type="number" value="1100" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" for="total-cost-1">Total
+                                        Cost</label>
+                                    <input
+                                        class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed"
+                                        id="total-cost-1" placeholder="Auto-calculated" readonly="" type="text"
+                                        value="$6,300.00" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button
+                    class="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white py-4 text-sm font-semibold text-jems-charcoal hover:border-jems-gold hover:text-jems-gold transition-colors">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    <span>Add Another Item</span>
+                </button>
+        </div>
+    </div>
+    <div class="flex items-center justify-end gap-4 mt-6">
+        <a href="OrderDetailForm.html"
+            class="rounded-lg bg-gray-200 hover:bg-gray-300 text-jems-charcoal font-semibold px-6 py-2.5 transition-colors">Cancel</a>
+        <button
+            class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white hover:border-jems-gold text-jems-charcoal font-semibold px-6 py-2.5 transition-colors">
+            <span class="material-symbols-outlined text-lg">print</span>
+            <span>Print Order</span>
+        </button>
+        <button
+            class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-6 py-2.5 transition-colors shadow-lifted">
+            <span>Save Changes</span>
+            <span class="material-symbols-outlined">check</span>
+        </button>
+    </div>
+    </main>
+    </div>
+    </div>
+
+    <!-- Image Upload Modal -->
+    <div id="image-upload-modal" class="modal fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-lifted max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-jems-charcoal">Add Image</h3>
+                    <button type="button" id="close-modal-btn"
+                        class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <button type="button" id="upload-from-device-btn"
+                        class="w-full flex items-center justify-center gap-3 rounded-lg border-2 border-dashed border-gray-300 hover:border-jems-gold bg-white text-jems-charcoal font-semibold px-6 py-4 transition-colors">
+                        <span class="material-symbols-outlined text-2xl">upload_file</span>
+                        <span>Upload from Device</span>
+                    </button>
+                    <input type="file" id="device-upload-input" accept="image/*" class="hidden" />
+                    <button type="button" id="choose-from-existing-btn"
+                        class="w-full flex items-center justify-center gap-3 rounded-lg border-2 border-dashed border-gray-300 hover:border-jems-gold bg-white text-jems-charcoal font-semibold px-6 py-4 transition-colors">
+                        <span class="material-symbols-outlined text-2xl">image_search</span>
+                        <span>Choose from Existing</span>
+                    </button>
+                    <div id="existing-skus-container" class="hidden mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select SKU</label>
+                        <select id="sku-select"
+                            class="form-select w-full rounded-lg border-gray-300 focus:ring-jems-gold focus:border-jems-gold">
+                            <option value="">Select a SKU...</option>
+                            <option value="NK-101-YG-D">NK-101-YG-D - Evelyn Diamond Necklace</option>
+                            <option value="RG-205-WG-S">RG-205-WG-S - Azure Sapphire Ring</option>
+                            <option value="ER-301-RG-E">ER-301-RG-E - Ruby Earrings</option>
+                            <option value="BR-402-PG-B">BR-402-PG-B - Pearl Bracelet</option>
+                            <option value="NK-503-WG-P">NK-503-WG-P - Platinum Pendant</option>
+                        </select>
+                        <button type="button" id="select-sku-btn"
+                            class="mt-3 w-full rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2.5 transition-colors">
+                            Select Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample SKU data with images (in a real app, this would come from an API)
+        const skuImages = {
+            'NK-101-YG-D': 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ',
+            'RG-205-WG-S': 'https://lh3.googleusercontent.com/aida-public/AB6AXuB91lphcbopI02nQpH7fzzl-eTvB_nk4wtVMUxuhUSnDrMZHDfDXZPxDRvyrVodJ2TuHGsFgywS6D0n0km63pBpkyTjHDjQ8RZUrJxrAiVH-boNI0PnVgGjk_ShZjk-V0lz2mfSoAII3MGuAO7RWh9MsVvqnal773elQ8A629rEvFhbWdE37TNxkbU8bnAgCEsJkfHigCwanxa2bmBiHObZSxKKHCTlDgziqtS4H-AibcPHyyxp1fI-KLOhIMSE1OTnwl709M537g',
+            'ER-301-RG-E': 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ',
+            'BR-402-PG-B': 'https://lh3.googleusercontent.com/aida-public/AB6AXuB91lphcbopI02nQpH7fzzl-eTvB_nk4wtVMUxuhUSnDrMZHDfDXZPxDRvyrVodJ2TuHGsFgywS6D0n0km63pBpkyTjHDjQ8RZUrJxrAiVH-boNI0PnVgGjk_ShZjk-V0lz2mfSoAII3MGuAO7RWh9MsVvqnal773elQ8A629rEvFhbWdE37TNxkbU8bnAgCEsJkfHigCwanxa2bmBiHObZSxKKHCTlDgziqtS4H-AibcPHyyxp1fI-KLOhIMSE1OTnwl709M537g',
+            'NK-503-WG-P': 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ'
+        };
+
+        const modal = document.getElementById('image-upload-modal');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const uploadFromDeviceBtn = document.getElementById('upload-from-device-btn');
+        const deviceUploadInput = document.getElementById('device-upload-input');
+        const chooseFromExistingBtn = document.getElementById('choose-from-existing-btn');
+        const existingSkusContainer = document.getElementById('existing-skus-container');
+        const skuSelect = document.getElementById('sku-select');
+        const selectSkuBtn = document.getElementById('select-sku-btn');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const currentImage = document.getElementById('current-image');
+
+        // Open modal
+        addImageBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+            existingSkusContainer.classList.add('hidden');
+        });
+
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            existingSkusContainer.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                existingSkusContainer.classList.add('hidden');
+            }
+        });
+
+        // Upload from device
+        uploadFromDeviceBtn.addEventListener('click', () => {
+            deviceUploadInput.click();
+        });
+
+        deviceUploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    currentImage.style.backgroundImage = `url(${event.target.result})`;
+                    modal.classList.remove('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Choose from existing
+        chooseFromExistingBtn.addEventListener('click', () => {
+            existingSkusContainer.classList.remove('hidden');
+        });
+
+        // Select SKU image
+        selectSkuBtn.addEventListener('click', () => {
+            const selectedSku = skuSelect.value;
+            if (selectedSku && skuImages[selectedSku]) {
+                currentImage.style.backgroundImage = `url(${skuImages[selectedSku]})`;
+                modal.classList.remove('active');
+                existingSkusContainer.classList.add('hidden');
+            }
+        });
+    </script>
+    <script>
+        function setupToggle(toggleId, submenuId, chevronId) {
+            const toggle = document.getElementById(toggleId);
+            const submenu = document.getElementById(submenuId);
+            const chevron = document.getElementById(chevronId);
+
+            if (!toggle || !submenu) return;
+
+            toggle.addEventListener("click", () => {
+                submenu.classList.toggle("open");
+                if (chevron) chevron.classList.toggle("rotate-180");
+            });
+        }
+
+        setupToggle("order-toggle", "order-submenu", "order-chevron");
+        setupToggle("stock-toggle", "stock-submenu", "stock-chevron");
+        setupToggle("bag-toggle", "bag-submenu", "bag-chevron");
+        setupToggle("qc-toggle", "qc-submenu", "qc-chevron");
+        setupToggle("hr-toggle", "hr-submenu", "hr-chevron");
+        setupToggle("master-toggle", "master-submenu", "master-chevron");
+    </script>
+
+</body>
+
+</html>

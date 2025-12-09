@@ -38,8 +38,11 @@
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
 
+
+
   <!-- SIDEBAR -->
-  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+  <aside class="w-64 fixed left-0 top-0 h-screen bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark z-50">
+
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
@@ -68,7 +71,7 @@
           <a href="NewOrder.html" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             New Order
           </a>
-          <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+      <a href="EditOrderForm.html" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Update Order
           </a>
           <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
@@ -333,7 +336,9 @@
       </div>
     </div>
   </aside>
-<div class="flex-1 flex flex-col ml-72">
+
+<div class="flex-1 flex flex-col ml-64 min-h-screen">
+
 <header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-10">
 <div class="flex items-center gap-4">
 <h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Raw Materials Stock Entry</h1>
