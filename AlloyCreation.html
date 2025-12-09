@@ -39,7 +39,8 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
 
   <!-- SIDEBAR -->
-  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+  <aside class="fixed top-0 left-0 h-screen w-72 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark z-50">
+
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
@@ -336,30 +337,23 @@
       </div>
     </div>
   </aside>
-<div class="flex-1 flex flex-col">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-10">
+<body class="bg-jems-background font-display text-jems-text">
+<div class="flex min-h-screen">
+
+<div class="flex-1 flex flex-col ml-72">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
 <div class="flex items-center gap-4">
-<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Bag History Report</h1>
+<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Alloy Creation Module</h1>
 </div>
 <div class="flex items-center gap-4">
-<button class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
-<span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
+<button class="flex items-center gap-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
+<span class="material-symbols-outlined text-base">history</span>
+<span>View History</span>
 </button>
-<button class="flex items-center gap-2 rounded-lg bg-jems-charcoal hover:bg-jems-charcoal-light text-white font-semibold px-4 py-2 transition-colors shadow-soft">
-<span class="material-symbols-outlined">print</span>
-<span>Print</span>
+<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2.5 transition-colors shadow-soft">
+<span class="material-symbols-outlined text-base">add</span>
+<span>New Alloy</span>
 </button>
-<div class="relative group">
-<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2 transition-colors shadow-soft">
-<span class="material-symbols-outlined">download</span>
-<span>Export</span>
-<span class="material-symbols-outlined text-base transition-transform duration-200 group-hover:rotate-180">expand_more</span>
-</button>
-<div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 invisible group-hover:visible">
-<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Export as CSV</a>
-<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Export as PDF</a>
-</div>
-</div>
 </div>
 </header>
 <main class="flex-1 p-6 bg-jems-background">
@@ -597,157 +591,176 @@
                 </div>
             </div>
         </div>
-<div class="bg-white p-6 rounded-xl shadow-soft mb-6">
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-<div>
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="search-bag-id">Search Bag ID</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="search-bag-id" placeholder="Enter Bag ID..." type="text" value=""/>
+<div class="max-w-7xl mx-auto space-y-6">
+<div class="bg-white p-6 rounded-xl shadow-lifted">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-6 border-b border-gray-200">
+<h2 class="text-xl font-semibold text-jems-charcoal mb-4 md:mb-0">Create New Alloy</h2>
+<div class="flex items-center gap-2 p-1 rounded-lg bg-gray-100">
+<button class="px-3 py-1.5 text-sm font-semibold text-gray-700 rounded-md transition-colors hover:bg-white">Enter Final Weight</button>
+<button class="px-3 py-1.5 text-sm font-semibold text-white bg-jems-gold rounded-md shadow-soft transition-colors">Auto-Calc Final Weight</button>
+<button class="px-3 py-1.5 text-sm font-semibold text-gray-700 rounded-md transition-colors hover:bg-white">Manual Entry</button>
 </div>
-<div>
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="date-range">Date Range</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="date-range" placeholder="Select date range" type="text" value=""/>
 </div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-gray-200 rounded-lg">
 <div>
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="department-filter">Department</label>
-<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="department-filter">
-<option>All</option>
-<option>Casting</option>
-<option>Setting</option>
-<option>Polishing</option>
-<option>QC</option>
-<option>Dispatch</option>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="recipe">Recipe</label>
+<select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="recipe">
+<option>22K (916)</option>
+<option>18K (750)</option>
+<option>14K (585)</option>
+<option>Custom</option>
 </select>
 </div>
 <div>
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="search-employee">Employee</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="search-employee" placeholder="Employee Name..." type="text" value=""/>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="alloy-type">Desired Alloy Type</label>
+<input class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="alloy-type" placeholder="e.g., Yellow Gold 22K" type="text" value="Yellow Gold 22K"/>
 </div>
 <div>
-<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-jems-charcoal hover:bg-jems-charcoal-light text-white font-semibold px-4 py-2 transition-colors shadow-soft">
-<span class="material-symbols-outlined text-base">filter_alt</span>
-<span>Apply Filters</span>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="final-weight">Final Alloy Weight (g)</label>
+<input class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-gray-100" disabled="" id="final-weight" placeholder="Auto-calculated" type="text"/>
+</div>
+</div>
+<div class="p-4 border border-gray-200 rounded-lg">
+<h3 class="text-lg font-semibold text-jems-charcoal mb-4">Source Metal Selection</h3>
+<div class="flex items-center gap-2 mb-4">
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="block w-full rounded-md border-gray-300 pl-10 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="Search by metal, purity, batch no..." type="text"/>
+</div>
+<button class="flex items-center gap-2 rounded-md border border-gray-300 hover:bg-gray-100 text-jems-charcoal font-semibold px-4 py-2 transition-colors text-sm">
+<span class="material-symbols-outlined text-base">filter_list</span>
+<span>Filter</span>
+</button>
+</div>
+<div class="max-h-64 overflow-y-auto pr-2">
+<table class="w-full text-sm text-left">
+<thead class="bg-gray-50 text-xs uppercase text-gray-700 sticky top-0">
+<tr>
+<th class="px-4 py-2"><input type="checkbox"/></th>
+<th class="px-4 py-2">Batch No.</th>
+<th class="px-4 py-2">Metal Type</th>
+<th class="px-4 py-2">Purity</th>
+<th class="px-4 py-2 text-right">Available (g)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b hover:bg-jems-gold-light/30">
+<td class="px-4 py-3"><input type="checkbox"/></td>
+<td class="px-4 py-3 font-medium">AU-B1001</td>
+<td class="px-4 py-3">Gold Bar</td>
+<td class="px-4 py-3">999.9</td>
+<td class="px-4 py-3 text-right">500.00</td>
+</tr>
+<tr class="border-b hover:bg-jems-gold-light/30">
+<td class="px-4 py-3"><input type="checkbox"/></td>
+<td class="px-4 py-3 font-medium">AU-S2034</td>
+<td class="px-4 py-3">Gold Scrap</td>
+<td class="px-4 py-3">917.2</td>
+<td class="px-4 py-3 text-right">125.50</td>
+</tr>
+<tr class="border-b hover:bg-jems-gold-light/30">
+<td class="px-4 py-3"><input type="checkbox"/></td>
+<td class="px-4 py-3 font-medium">CU-001</td>
+<td class="px-4 py-3">Copper</td>
+<td class="px-4 py-3">999.0</td>
+<td class="px-4 py-3 text-right">2000.00</td>
+</tr>
+<tr class="border-b hover:bg-jems-gold-light/30">
+<td class="px-4 py-3"><input type="checkbox"/></td>
+<td class="px-4 py-3 font-medium">AG-055</td>
+<td class="px-4 py-3">Silver</td>
+<td class="px-4 py-3">999.0</td>
+<td class="px-4 py-3 text-right">1500.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="p-4 border border-gray-200 rounded-lg">
+<h3 class="text-lg font-semibold text-jems-charcoal mb-4">Input Metal Weights (g)</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="gold-weight">Gold</label>
+<input class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="gold-weight" type="number" value="91.60"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="copper-weight">Copper</label>
+<input class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="copper-weight" type="number" value="5.40"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="silver-weight">Silver</label>
+<input class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="silver-weight" type="number" value="3.00"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="zinc-weight">Zinc</label>
+<input class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-gray-100" disabled="" id="zinc-weight" type="number"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col p-4 rounded-lg bg-yellow-50 border border-yellow-200">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-jems-yellow">warning</span>
+<div class="flex-grow">
+<h4 class="font-semibold text-yellow-800">Warnings</h4>
+<p class="text-sm text-yellow-700">Insufficient stock for Copper Batch CU-001. 5.4g required, 2.1g available in selected batch.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-1 bg-jems-gold-light/40 p-6 rounded-lg space-y-4 h-fit sticky top-28">
+<h3 class="text-lg font-semibold text-jems-charcoal border-b border-jems-gold/30 pb-3 mb-3">Calculation Preview</h3>
+<div class="space-y-3 text-sm">
+<div class="flex justify-between">
+<span class="text-gray-600">Final Purity:</span>
+<span class="font-semibold text-jems-charcoal">916.0 (22K)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Gold %:</span>
+<span class="font-semibold text-jems-charcoal">91.60%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Copper %:</span>
+<span class="font-semibold text-jems-charcoal">5.40%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Silver %:</span>
+<span class="font-semibold text-jems-charcoal">3.00%</span>
+</div>
+<div class="flex justify-between pt-2 border-t border-jems-gold/30">
+<span class="text-gray-600">Total Input Weight:</span>
+<span class="font-semibold text-jems-charcoal">100.00 g</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Wastage (0.5%):</span>
+<span class="font-semibold text-jems-charcoal">-0.50 g</span>
+</div>
+<div class="flex justify-between font-bold text-base">
+<span class="text-gray-800">Expected Yield:</span>
+<span class="text-jems-charcoal">99.50 g</span>
+</div>
+</div>
+<div class="pt-4 space-y-2 border-t border-jems-gold/30">
+<h4 class="font-semibold text-jems-charcoal">Source Batch Usage</h4>
+<p class="text-sm text-gray-600">AU-B1001: 91.60 g</p>
+<p class="text-sm text-gray-600">CU-001: 5.40 g</p>
+<p class="text-sm text-gray-600">AG-055: 3.00 g</p>
+</div>
+<div class="pt-4 space-y-2 border-t border-jems-gold/30">
+<h4 class="font-semibold text-jems-charcoal">Final Alloy Batch No.</h4>
+<p class="text-sm text-jems-charcoal font-mono bg-white px-2 py-1 rounded">AL-YG22K-240726-001</p>
+</div>
+<div class="pt-6 flex flex-col gap-3">
+<button class="w-full text-center rounded-lg border border-gray-400 hover:bg-gray-200 text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
+Reserve Selected Batches
+</button>
+<button class="w-full text-center rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-bold px-4 py-3 transition-colors shadow-soft">
+Create &amp; Consume Alloy
 </button>
 </div>
 </div>
 </div>
-<div class="bg-white rounded-xl shadow-soft overflow-hidden">
-<table class="w-full text-sm text-left text-gray-500">
-<thead class="text-xs text-jems-charcoal uppercase bg-jems-gold-light">
-<tr>
-<th class="px-6 py-3" scope="col">Bag ID</th>
-<th class="px-6 py-3" scope="col">Movement Date</th>
-<th class="px-6 py-3" scope="col">From Department</th>
-<th class="px-6 py-3" scope="col">To Department</th>
-<th class="px-6 py-3" scope="col">Handled By</th>
-<th class="px-6 py-3" scope="col">Status</th>
-</tr>
-</thead>
-<tbody>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00123</td>
-<td class="px-6 py-4">2024-07-28 09:15 AM</td>
-<td class="px-6 py-4">Casting</td>
-<td class="px-6 py-4">Setting</td>
-<td class="px-6 py-4">Anika Gupta</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-blue/10 text-jems-blue">In Transit</span>
-</td>
-</tr>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00123</td>
-<td class="px-6 py-4">2024-07-28 09:05 AM</td>
-<td class="px-6 py-4">Warehouse</td>
-<td class="px-6 py-4">Casting</td>
-<td class="px-6 py-4">Rohan Singh</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
-</td>
-</tr>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00122</td>
-<td class="px-6 py-4">2024-07-27 04:30 PM</td>
-<td class="px-6 py-4">Polishing</td>
-<td class="px-6 py-4">QC</td>
-<td class="px-6 py-4">Karan Mehta</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
-</td>
-</tr>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00122</td>
-<td class="px-6 py-4">2024-07-27 02:10 PM</td>
-<td class="px-6 py-4">Setting</td>
-<td class="px-6 py-4">Polishing</td>
-<td class="px-6 py-4">Aarav Patel</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
-</td>
-</tr>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00121</td>
-<td class="px-6 py-4">2024-07-26 11:00 AM</td>
-<td class="px-6 py-4">QC</td>
-<td class="px-6 py-4">Dispatch</td>
-<td class="px-6 py-4">Priya Sharma</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-yellow/10 text-jems-yellow">Pending QC</span>
-</td>
-</tr>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00120</td>
-<td class="px-6 py-4">2024-07-25 05:00 PM</td>
-<td class="px-6 py-4">Dispatch</td>
-<td class="px-6 py-4">Shipped</td>
-<td class="px-6 py-4">Vikram Rao</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-green/10 text-jems-green">Completed</span>
-</td>
-</tr>
-<tr class="bg-white border-b hover:bg-gray-50">
-<td class="px-6 py-4 font-medium text-jems-charcoal whitespace-nowrap">BAG-2024-00119</td>
-<td class="px-6 py-4">2024-07-25 03:45 PM</td>
-<td class="px-6 py-4">Casting</td>
-<td class="px-6 py-4">Setting</td>
-<td class="px-6 py-4">Isha Reddy</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jems-red/10 text-jems-red">Cancelled</span>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="flex items-center justify-between p-4">
-<span class="text-sm text-gray-700">
-                    Showing <span class="font-semibold text-jems-charcoal">1</span> to <span class="font-semibold text-jems-charcoal">7</span> of <span class="font-semibold text-jems-charcoal">128</span> Entries
-                </span>
-<nav aria-label="Page navigation">
-<ul class="inline-flex items-center -space-x-px">
-<li>
-<a class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700" href="#">
-<span class="material-symbols-outlined text-sm">chevron_left</span>
-</a>
-</li>
-<li>
-<a aria-current="page" class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-jems-gold border border-jems-gold hover:bg-primary-focus" href="#">1</a>
-</li>
-<li>
-<a class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300 hover:bg-jems-gold-light hover:text-jems-charcoal" href="#">2</a>
-</li>
-<li>
-<a class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300 hover:bg-jems-gold-light hover:text-jems-charcoal" href="#">3</a>
-</li>
-<li>
-<span class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300">...</span>
-</li>
-<li>
-<a class="flex items-center justify-center px-3 h-8 leading-tight text-jems-gold bg-white border border-gray-300 hover:bg-jems-gold-light hover:text-jems-charcoal" href="#">19</a>
-</li>
-<li>
-<a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700" href="#">
-<span class="material-symbols-outlined text-sm">chevron_right</span>
-</a>
-</li>
-</ul>
-</nav>
 </div>
 </div>
 </main>

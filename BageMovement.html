@@ -146,17 +146,17 @@
     Raw Material Report
   </a>
 
-  <a href="raw-material-stock-entry.html"
+  <a href="RawmaterrialStockEntry.html"
      class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
     Raw Material Stock Entry
   </a>
 
-  <a href="alloy-creation.html"
+  <a href="AlloyCreation.html"
      class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
     Alloy Creation
   </a>
 
-  <a href="stock-report.html"
+  <a href="StockReport.html"
      class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
     Stock Report
   </a>
@@ -213,17 +213,17 @@
     Bag Merging
   </a>
 
-  <a href="bag-rejection.html"
+  <a href="BagHistoryReport.html"
      class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
     Bag Rejection
   </a>
 
-  <a href="wax-tree-creation.html"
+  <a href="WaxTreeCreation.html"
      class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
     Wax Tree Creation
   </a>
 
-  <a href="tree-load.html"
+  <a href="TreeLoad.html"
      class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
     Tree Load
   </a>
@@ -234,6 +234,94 @@
   </a>
 
 </div>
+<!-- ✅ QC TOGGLE -->
+<button id="qc-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">fact_check</span>
+    <span>QC</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="qc-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ QC SUBMENU -->
+<div class="submenu" id="qc-submenu">
+
+  <a href="FinalVerification-QC.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Final Verification – Finished Good
+  </a>
+
+  <a href="DamageDetailsEntry.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Damage Details Entry
+  </a>
+
+  <a href="DamageReport-View.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Damage Report
+  </a>
+
+  <a href="location_transfer_report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    QC Report
+  </a>
+
+  <a href="WIP_Report.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    WIP Report
+  </a>
+
+</div>
+
+<!-- ✅ HR & ADMIN TOGGLE -->
+<button id="hr-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+
+  <div class="flex items-center">
+    <span class="material-icons mr-3">admin_panel_settings</span>
+    <span>HR & Admin</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="hr-chevron">
+    expand_more
+  </span>
+</button>
+
+<!-- ✅ HR & ADMIN SUBMENU -->
+<div class="submenu" id="hr-submenu">
+
+  <a href="Employees.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Employees
+  </a>
+
+  <a href="Department_report"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Department & HOD Report
+  </a>
+
+  <a href="UserRoles.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    User Roles
+  </a>
+
+  <a href="UserActivityLogs.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    User Activity Log
+  </a>
+
+  <a href="EmployeePerformance.html"
+     class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+    Employee Performance
+  </a>
+
+</div>
+
 
     </nav>
 
@@ -250,6 +338,7 @@
   </aside>
 
 <body class="bg-background-light dark:bg-background-dark font-display text-[#181611] dark:text-background-light">
+    
 <div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
 <div class="layout-container flex h-full grow flex-col">
 <div class="px-4 md:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-10">
@@ -365,7 +454,7 @@
 </div>
 </div>
 </div>
- <script>
+  <script>
   // Collapsible Master Menu
   document.getElementById('master-toggle').addEventListener('click', function () {
     const submenu = document.getElementById('master-submenu');
@@ -438,6 +527,27 @@
     chevron.style.transform = submenu.classList.contains('open')
       ? 'rotate(180deg)'
       : 'rotate(0deg)';
+  });
+</script>
+<script>
+  const qcToggle = document.getElementById("qc-toggle");
+  const qcSubmenu = document.getElementById("qc-submenu");
+  const qcChevron = document.getElementById("qc-chevron");
+
+  qcToggle.addEventListener("click", () => {
+    qcSubmenu.classList.toggle("open");
+    qcChevron.classList.toggle("rotate-180");
+  });
+</script>
+
+<script>
+  const hrToggle = document.getElementById("hr-toggle");
+  const hrSubmenu = document.getElementById("hr-submenu");
+  const hrChevron = document.getElementById("hr-chevron");
+
+  hrToggle.addEventListener("click", () => {
+    hrSubmenu.classList.toggle("open");
+    hrChevron.classList.toggle("rotate-180");
   });
 </script>
 

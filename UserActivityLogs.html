@@ -337,146 +337,164 @@
     </div>
   </aside>
 <body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif'>
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
 <div class="layout-container flex h-full grow flex-col">
-<div class="px-4 md:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-5">
-<div class="layout-content-container flex flex-col max-w-screen-xl flex-1">
-<!-- <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f4f3f0] dark:border-b-background-dark/20 px-4 md:px-10 py-3">
-<div class="flex items-center gap-4 text-[#181611] dark:text-white">
-<div class="size-6 text-primary">
-<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
-<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+<!-- <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-primary/20 px-10 py-3 dark:border-b-primary/30">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<h2 class="text-[#181611] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">JEMS</h2>
+<h2 class="text-xl font-bold tracking-[-0.015em] text-gray-800 dark:text-white">JEMS</h2>
 </div>
-<div class="flex flex-1 justify-end items-center gap-4 md:gap-8">
-<div class="hidden md:flex items-center gap-6 lg:gap-9">
-<a class="text-[#181611] dark:text-white/80 text-sm font-medium leading-normal" href="#">Dashboard</a>
-<a class="text-primary text-sm font-medium leading-normal" href="#">Wax Tree Creation</a>
-<a class="text-[#181611] dark:text-white/80 text-sm font-medium leading-normal" href="#">Reports</a>
-<a class="text-[#181611] dark:text-white/80 text-sm font-medium leading-normal" href="#">Settings</a>
+<div class="flex items-center gap-9">
+<a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="#">Dashboard</a>
+<a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="#">Inventory</a>
+<a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="#">Orders</a>
+<a class="text-sm font-medium text-primary dark:text-primary" href="#">Reports</a>
+<a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="#">Employees</a>
+<a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="#">Customers</a>
+<a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="#">Settings</a>
 </div>
-<div class="flex gap-2">
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"><span class="truncate">Create</span></button>
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f4f3f0] dark:bg-background-dark/50 text-[#181611] dark:text-white text-sm font-bold leading-normal tracking-[0.015em]"><span class="truncate">Help</span></button>
 </div>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjrFDMUEOmWboQFxORcKPuX-TjhM2GgZEWYw8Bfpzv6AfinAL0pqQLEcQgrWuoptpn_cKBqWrulQAOn6gpbK8on9Ob59btYtedpcORGpo08nGUM70V31E_wSnnxUAQiJQ8fuiMWF1xbKgUmZXzd9dKY2ZwPU6taNThxfVZcnSi2zWMBij5ETpv_ia4M5WZOVem24ny3rWPnIX8U0F4xDmhUQ8wzri26xKdtC2gwvNU9dg4KLzFIPZdfBxXByIUNFRJ4q33Dh06FA");'></div>
+<div class="flex flex-1 justify-end gap-4">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Export Report</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVZ9Yvxe2vyY_ZphcN--QaqE3Y6HZMgF9gU9fPx9gNOOCmJ64FTb31r2FUtMH9iC2VIFgXO3AkaUP1fzBVdYqNArWAOJqZdHYarR6Elk2T0d7uiglpnTndAUqN8rWvCrMW77tFzYCJN4BANUHVCbwMpR35ni2QMdUGDekHQLhO1NCW58KWeHYAlbq2RN4CPag6T8XlZZFPEjcCBF8nHaWgBsUMU5cPceNg-GC3Ubn9UijacbLrVyon3pN4V4gstvLyvGFgOtu86A");'></div>
 </div>
 </header> -->
-<main class="flex-1 p-4 md:p-6 lg:p-8">
-<!-- <div class="flex flex-wrap gap-2 pb-4">
-<a class="text-[#897c61] dark:text-white/60 text-sm font-medium leading-normal" href="#">Home</a>
-<span class="text-[#897c61] dark:text-white/60 text-sm font-medium leading-normal">/</span>
-<span class="text-[#181611] dark:text-white text-sm font-medium leading-normal">Wax Tree Creation</span>
-</div> -->
-<div class="flex flex-wrap justify-between gap-3 pb-6">
-<p class="text-[#181611] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Wax Tree Creation</p>
+<main class="px-10 py-8">
+<div class="flex flex-col max-w-7xl mx-auto">
+<div class="flex flex-wrap gap-2 mb-4">
+<a class="text-base font-medium text-gray-500 dark:text-gray-400 hover:text-primary" href="#">Home</a>
+<span class="text-base font-medium text-gray-500 dark:text-gray-400">/</span>
+<a class="text-base font-medium text-gray-500 dark:text-gray-400 hover:text-primary" href="#">Reports</a>
+<span class="text-base font-medium text-gray-500 dark:text-gray-400">/</span>
+<span class="text-base font-medium text-gray-800 dark:text-white">User Logs</span>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Wax Tree Number</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter number" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Wax Tree Name</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter name" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">No. of Bags</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter number of bags" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Metal Weight</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter metal weight" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Wax Tree Weight</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter wax tree weight" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Extra Qty</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter extra quantity" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Gross</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter gross value" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Issue</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter issue details" value=""/>
-</label>
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+<p class="text-4xl font-black tracking-[-0.033em] text-gray-800 dark:text-white">User Logs</p>
 </div>
-<div class="flex gap-4 mb-8">
-<button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em]"><span class="truncate">Create Wax Tree</span></button>
-<button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-[#f4f3f0] dark:bg-background-dark/50 text-[#181611] dark:text-white text-base font-bold leading-normal tracking-[0.015em]"><span class="truncate">Clear</span></button>
+<div class="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+<div class="relative h-12 w-full md:col-span-1">
+<select class="w-full h-full rounded-lg bg-white dark:bg-background-dark text-gray-500 dark:text-gray-400 px-4 text-base font-normal border-none focus:outline-0 focus:ring-0 appearance-none">
+<option selected="">Filter by User</option>
+<option>user123</option>
+<option>admin456</option>
+<option>manager789</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none">expand_more</span>
 </div>
-<div class="bg-white dark:bg-background-dark/30 rounded-xl shadow-md overflow-hidden">
-<h3 class="text-xl font-bold p-6 text-[#181611] dark:text-white">Created Wax Trees</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead class="border-b border-[#e6e2db] dark:border-white/20 bg-[#f8f7f6] dark:bg-background-dark/40">
-<tr>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Sl No</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Wax Tree Number</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Wax Tree Name</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">No. of Bags</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Metal Weight</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Wax Tree Weight</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Action</th>
+<div class="relative h-12 w-full md:col-span-1">
+<select class="w-full h-full rounded-lg bg-white dark:bg-background-dark text-gray-500 dark:text-gray-400 px-4 text-base font-normal border-none focus:outline-0 focus:ring-0 appearance-none">
+<option selected="">Filter by Action Type</option>
+<option>Bag Generated</option>
+<option>User Login</option>
+<option>Data Export</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none">expand_more</span>
+</div>
+<div class="relative h-12 w-full md:col-span-1">
+<input class="w-full h-full rounded-lg bg-white dark:bg-background-dark text-gray-500 dark:text-gray-400 px-4 text-base font-normal border-none focus:outline-0 focus:ring-0" placeholder="Filter by Date Range" type="text"/>
+</div>
+<div class="relative h-12 w-full md:col-span-1">
+<select class="w-full h-full rounded-lg bg-white dark:bg-background-dark text-gray-500 dark:text-gray-400 px-4 text-base font-normal border-none focus:outline-0 focus:ring-0 appearance-none">
+<option selected="">Filter by Department</option>
+<option>Casting</option>
+<option>Stone Setting</option>
+<option>Polishing</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none">expand_more</span>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] w-full md:w-auto md:col-span-1 lg:col-start-auto">
+<span class="truncate">Apply Filters</span>
+</button>
+</div>
+<div class="px-4 py-3 @container">
+<div class="flex overflow-hidden rounded-lg border border-primary/20 dark:border-primary/30 bg-white dark:bg-background-dark">
+<table class="flex-1">
+<thead>
+<tr class="bg-background-light dark:bg-background-dark/50">
+<th class="px-4 py-3 text-left text-gray-800 dark:text-white w-[150px] text-sm font-medium">User ID</th>
+<th class="px-4 py-3 text-left text-gray-800 dark:text-white w-[150px] text-sm font-medium">User Name</th>
+<th class="px-4 py-3 text-left text-gray-800 dark:text-white w-[150px] text-sm font-medium">Department</th>
+<th class="px-4 py-3 text-left text-gray-800 dark:text-white w-[200px] text-sm font-medium">Action Performed</th>
+<th class="px-4 py-3 text-left text-gray-800 dark:text-white w-[200px] text-sm font-medium">Timestamp</th>
+<th class="px-4 py-3 text-left text-gray-800 dark:text-white w-[300px] text-sm font-medium">Details</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-[#e6e2db] dark:divide-white/20">
-<tr>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">1</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">WT001</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">Standard Tree A</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">5</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">250g</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">50g</td>
-<td class="p-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 text-primary font-bold text-sm"><span class="material-symbols-outlined text-lg">edit</span>Edit</button>
-<button class="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm"><span class="material-symbols-outlined text-lg">delete</span>Delete</button>
-</div>
-</td>
+<tbody>
+<tr class="border-t border-t-primary/20 dark:border-t-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20">
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">user123</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Alex Smith</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Casting</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">Bag Generated</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">2024-01-15 10:30 AM</td>
+<td class="h-[72px] px-4 py-2 w-[300px] text-gray-600 dark:text-gray-300 text-sm font-normal">Bag ID: BG12345</td>
 </tr>
-<tr>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">2</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">WT002</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">Standard Tree B</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">8</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">400g</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">65g</td>
-<td class="p-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 text-primary font-bold text-sm"><span class="material-symbols-outlined text-lg">edit</span>Edit</button>
-<button class="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm"><span class="material-symbols-outlined text-lg">delete</span>Delete</button>
-</div>
-</td>
+<tr class="border-t border-t-primary/20 dark:border-t-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20">
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">admin456</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Jane Doe</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Admin</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">User Role Updated</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">2024-01-15 11:00 AM</td>
+<td class="h-[72px] px-4 py-2 w-[300px] text-gray-600 dark:text-gray-300 text-sm font-normal">User 'user123' promoted to 'Manager'</td>
 </tr>
-<tr>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">3</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">WT003</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">Custom Tree C</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">3</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">150g</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">45g</td>
-<td class="p-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 text-primary font-bold text-sm"><span class="material-symbols-outlined text-lg">edit</span>Edit</button>
-<button class="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm"><span class="material-symbols-outlined text-lg">delete</span>Delete</button>
-</div>
-</td>
+<tr class="border-t border-t-primary/20 dark:border-t-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20">
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">manager789</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Sam Wilson</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Management</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">Report Exported</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">2024-01-15 11:15 AM</td>
+<td class="h-[72px] px-4 py-2 w-[300px] text-gray-600 dark:text-gray-300 text-sm font-normal">Exported 'Sales Report'</td>
+</tr>
+<tr class="border-t border-t-primary/20 dark:border-t-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20">
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">user123</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Alex Smith</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Casting</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">Inventory Updated</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">2024-01-15 12:00 PM</td>
+<td class="h-[72px] px-4 py-2 w-[300px] text-gray-600 dark:text-gray-300 text-sm font-normal">Item 'Diamond Ring' quantity updated to 50</td>
+</tr>
+<tr class="border-t border-t-primary/20 dark:border-t-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20">
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">qa_specialist</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Maria Garcia</td>
+<td class="h-[72px] px-4 py-2 w-[150px] text-gray-600 dark:text-gray-300 text-sm font-normal">Quality Control</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">QC Status Changed</td>
+<td class="h-[72px] px-4 py-2 w-[200px] text-gray-600 dark:text-gray-300 text-sm font-normal">2024-01-15 01:30 PM</td>
+<td class="h-[72px] px-4 py-2 w-[300px] text-gray-600 dark:text-gray-300 text-sm font-normal">Bag ID: BG12345 status changed to 'Approved'</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+<div class="flex justify-center mt-6">
+<nav aria-label="Pagination">
+<ul class="inline-flex items-center -space-x-px">
+<li>
+<a class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-background-dark dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="#">Previous</a>
+</li>
+<li>
+<a class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-background-dark dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="#">1</a>
+</li>
+<li>
+<a class="px-3 py-2 leading-tight text-primary bg-primary/10 border border-primary hover:bg-primary/20 hover:text-primary dark:border-primary dark:text-primary dark:hover:bg-primary/30 dark:hover:text-primary" href="#">2</a>
+</li>
+<li>
+<a aria-current="page" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-background-dark dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="#">3</a>
+</li>
+<li>
+<a class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-background-dark dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="#">Next</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
 </main>
-</div>
-</div>
 </div>
 </div>
   <script>
@@ -575,6 +593,5 @@
     hrChevron.classList.toggle("rotate-180");
   });
 </script>
-
 
 </body></html>

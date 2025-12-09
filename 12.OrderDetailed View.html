@@ -39,7 +39,7 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
 
   <!-- SIDEBAR -->
-  <aside class="w-80 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
@@ -336,147 +336,142 @@
       </div>
     </div>
   </aside>
-<body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif'>
-<div class="layout-container flex h-full grow flex-col">
-<div class="px-4 md:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-5">
-<div class="layout-content-container flex flex-col max-w-screen-xl flex-1">
-<!-- <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f4f3f0] dark:border-b-background-dark/20 px-4 md:px-10 py-3">
-<div class="flex items-center gap-4 text-[#181611] dark:text-white">
-<div class="size-6 text-primary">
-<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
-<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
+<div class="flex-1 flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 text-jems-charcoal hover:text-jems-gold transition-colors" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="font-semibold">Back to Search</span>
+</a>
+<div class="w-px h-6 bg-gray-300"></div>
+<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Order Details</h1>
 </div>
-<h2 class="text-[#181611] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">JEMS</h2>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
+<span class="material-symbols-outlined text-base">edit</span>
+<span>Edit Order</span>
+</button>
+<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2.5 transition-colors shadow-soft">
+<span class="material-symbols-outlined text-base">print</span>
+<span>Print</span>
+</button>
 </div>
-<div class="flex flex-1 justify-end items-center gap-4 md:gap-8">
-<div class="hidden md:flex items-center gap-6 lg:gap-9">
-<a class="text-[#181611] dark:text-white/80 text-sm font-medium leading-normal" href="#">Dashboard</a>
-<a class="text-primary text-sm font-medium leading-normal" href="#">Wax Tree Creation</a>
-<a class="text-[#181611] dark:text-white/80 text-sm font-medium leading-normal" href="#">Reports</a>
-<a class="text-[#181611] dark:text-white/80 text-sm font-medium leading-normal" href="#">Settings</a>
+</header>
+<main class="flex-1 p-6 bg-jems-background">
+<div class="max-w-7xl mx-auto space-y-6">
+<div class="bg-white p-6 rounded-xl shadow-lifted">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 border-b border-gray-200 pb-6 mb-6">
+<div>
+<p class="text-sm text-gray-500">Order No.</p>
+<p class="font-semibold text-jems-charcoal">ORD-2024-00123</p>
 </div>
-<div class="flex gap-2">
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"><span class="truncate">Create</span></button>
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f4f3f0] dark:bg-background-dark/50 text-[#181611] dark:text-white text-sm font-bold leading-normal tracking-[0.015em]"><span class="truncate">Help</span></button>
+<div>
+<p class="text-sm text-gray-500">Customer Name</p>
+<p class="font-semibold text-jems-charcoal">Eleanor Vance</p>
 </div>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjrFDMUEOmWboQFxORcKPuX-TjhM2GgZEWYw8Bfpzv6AfinAL0pqQLEcQgrWuoptpn_cKBqWrulQAOn6gpbK8on9Ob59btYtedpcORGpo08nGUM70V31E_wSnnxUAQiJQ8fuiMWF1xbKgUmZXzd9dKY2ZwPU6taNThxfVZcnSi2zWMBij5ETpv_ia4M5WZOVem24ny3rWPnIX8U0F4xDmhUQ8wzri26xKdtC2gwvNU9dg4KLzFIPZdfBxXByIUNFRJ4q33Dh06FA");'></div>
+<div>
+<p class="text-sm text-gray-500">Order Type</p>
+<p class="font-semibold text-jems-charcoal">New</p>
 </div>
-</header> -->
-<main class="flex-1 p-4 md:p-6 lg:p-8">
-<!-- <div class="flex flex-wrap gap-2 pb-4">
-<a class="text-[#897c61] dark:text-white/60 text-sm font-medium leading-normal" href="#">Home</a>
-<span class="text-[#897c61] dark:text-white/60 text-sm font-medium leading-normal">/</span>
-<span class="text-[#181611] dark:text-white text-sm font-medium leading-normal">Wax Tree Creation</span>
-</div> -->
-<div class="flex flex-wrap justify-between gap-3 pb-6">
-<p class="text-[#181611] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Wax Tree Creation</p>
+<div>
+<p class="text-sm text-gray-500">Expected Delivery Date</p>
+<p class="font-semibold text-jems-charcoal">2024-08-15</p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Wax Tree Number</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter number" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Wax Tree Name</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter name" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">No. of Bags</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter number of bags" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Metal Weight</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter metal weight" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Wax Tree Weight</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter wax tree weight" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Extra Qty</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter extra quantity" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Gross</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter gross value" value=""/>
-</label>
-<label class="flex flex-col">
-<p class="text-[#181611] dark:text-white/90 text-base font-medium leading-normal pb-2">Issue</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#181611] dark:text-white focus:outline-0 focus:ring-0 border border-[#e6e2db] dark:border-white/20 bg-white dark:bg-background-dark/30 focus:border-primary h-14 placeholder:text-[#897c61] p-[15px] text-base font-normal leading-normal" placeholder="Enter issue details" value=""/>
-</label>
+<div class="col-span-full">
+<p class="text-sm text-gray-500">Remarks/Special Instructions</p>
+<p class="text-jems-charcoal">Customer requested a specific clasp type (lobster clasp) and a gift box with a personalized note.</p>
 </div>
-<div class="flex gap-4 mb-8">
-<button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em]"><span class="truncate">Create Wax Tree</span></button>
-<button class="flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-[#f4f3f0] dark:bg-background-dark/50 text-[#181611] dark:text-white text-base font-bold leading-normal tracking-[0.015em]"><span class="truncate">Clear</span></button>
 </div>
-<div class="bg-white dark:bg-background-dark/30 rounded-xl shadow-md overflow-hidden">
-<h3 class="text-xl font-bold p-6 text-[#181611] dark:text-white">Created Wax Trees</h3>
+<h2 class="text-xl font-semibold text-jems-charcoal mb-4">Order Items</h2>
 <div class="overflow-x-auto">
 <table class="w-full text-left">
-<thead class="border-b border-[#e6e2db] dark:border-white/20 bg-[#f8f7f6] dark:bg-background-dark/40">
+<thead class="bg-gray-50 text-xs uppercase text-gray-700">
 <tr>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Sl No</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Wax Tree Number</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Wax Tree Name</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">No. of Bags</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Metal Weight</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Wax Tree Weight</th>
-<th class="p-4 text-sm font-semibold text-[#897c61] dark:text-white/60">Action</th>
+<th class="px-4 py-3">Sl No</th>
+<th class="px-4 py-3">Item Name</th>
+<th class="px-4 py-3">Image</th>
+<th class="px-4 py-3">Category/Sub</th>
+<th class="px-4 py-3">SKU</th>
+<th class="px-4 py-3 text-center">Qty</th>
+<th class="px-4 py-3">Metal Details</th>
+<th class="px-4 py-3">Diamond Details</th>
+<th class="px-4 py-3">Stone Details</th>
+<th class="px-4 py-3 text-right">Material Cost</th>
+<th class="px-4 py-3 text-right">Making Charge</th>
+<th class="px-4 py-3 text-right">Total Cost</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-[#e6e2db] dark:divide-white/20">
-<tr>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">1</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">WT001</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">Standard Tree A</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">5</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">250g</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">50g</td>
-<td class="p-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 text-primary font-bold text-sm"><span class="material-symbols-outlined text-lg">edit</span>Edit</button>
-<button class="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm"><span class="material-symbols-outlined text-lg">delete</span>Delete</button>
-</div>
+<tbody>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-4">1</td>
+<td class="px-4 py-4 font-medium text-jems-charcoal">Evelyn Diamond Necklace</td>
+<td class="px-4 py-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-12 h-12" data-alt="Evelyn Diamond Necklace thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ");'></div>
 </td>
+<td class="px-4 py-4 text-sm text-gray-600">Necklace / Pendants</td>
+<td class="px-4 py-4 text-sm text-gray-600">NK-101-YG-D</td>
+<td class="px-4 py-4 text-center text-sm text-gray-600">1</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>Yellow Gold</div>
+<div>22K Purity</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>0.75 ct, G, VVS1</div>
+<div>15 count</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>N/A</div>
+</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$5,200.00</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$1,100.00</td>
+<td class="px-4 py-4 text-right font-bold text-jems-charcoal">$6,300.00</td>
 </tr>
-<tr>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">2</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">WT002</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">Standard Tree B</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">8</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">400g</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">65g</td>
-<td class="p-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 text-primary font-bold text-sm"><span class="material-symbols-outlined text-lg">edit</span>Edit</button>
-<button class="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm"><span class="material-symbols-outlined text-lg">delete</span>Delete</button>
-</div>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-4">2</td>
+<td class="px-4 py-4 font-medium text-jems-charcoal">Azure Sapphire Ring</td>
+<td class="px-4 py-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-12 h-12" data-alt="Azure Sapphire Ring thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB91lphcbopI02nQpH7fzzl-eTvB_nk4wtVMUxuhUSnDrMZHDfDXZPxDRvyrVodJ2TuHGsFgywS6D0n0km63pBpkyTjHDjQ8RZUrJxrAiVH-boNI0PnVgGjk_ShZjk-V0lz2mfSoAII3MGuAO7RWh9MsVvqnal773elQ8A629rEvFhbWdE37TNxkbU8bnAgCEsJkfHigCwanxa2bmBiHObZSxKKHCTlDgziqtS4H-AibcPHyyxp1fI-KLOhIMSE1OTnwl709M537g");'></div>
 </td>
-</tr>
-<tr>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">3</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">WT003</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">Custom Tree C</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">3</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">150g</td>
-<td class="p-4 text-base text-[#181611] dark:text-white/90">45g</td>
-<td class="p-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 text-primary font-bold text-sm"><span class="material-symbols-outlined text-lg">edit</span>Edit</button>
-<button class="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm"><span class="material-symbols-outlined text-lg">delete</span>Delete</button>
-</div>
+<td class="px-4 py-4 text-sm text-gray-600">Ring / Gemstone</td>
+<td class="px-4 py-4 text-sm text-gray-600">RG-205-WG-S</td>
+<td class="px-4 py-4 text-center text-sm text-gray-600">1</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>White Gold</div>
+<div>18K Purity</div>
 </td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>N/A</div>
+</td>
+<td class="px-4 py-4 text-sm text-gray-600">
+<div>1.20 ct, Blue, Oval</div>
+<div>1 count</div>
+</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$1,500.00</td>
+<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$580.00</td>
+<td class="px-4 py-4 text-right font-bold text-jems-charcoal">$2,080.00</td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="mt-6 flex justify-end">
+<div class="w-full max-w-sm space-y-3">
+<div class="flex justify-between items-center text-gray-600">
+<span>Subtotal</span>
+<span>$8,380.00</span>
+</div>
+<div class="flex justify-between items-center text-gray-600">
+<span>Taxes (5%)</span>
+<span>$419.00</span>
+</div>
+<div class="flex justify-between items-center font-bold text-xl text-jems-charcoal border-t border-gray-300 pt-3 mt-3">
+<span>Total Order Value</span>
+<span>$8,799.00</span>
+</div>
+</div>
+</div>
+</div>
 </div>
 </main>
-</div>
-</div>
 </div>
 </div>
   <script>
@@ -575,6 +570,5 @@
     hrChevron.classList.toggle("rotate-180");
   });
 </script>
-
 
 </body></html>
