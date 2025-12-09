@@ -457,4 +457,100 @@
 </footer>
 </div>
 </div>
+ <script>
+  // Collapsible Master Menu
+  document.getElementById('master-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('master-submenu');
+    const chevron = document.getElementById('master-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+
+ <script>
+  // Collapsible Order Menu
+  document.getElementById('order-toggle').addEventListener('click', function() {
+    const submenu = document.getElementById('order-submenu');
+    const chevron = document.getElementById('order-chevron');
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+
+  // ✅ FIXED PAGE SWITCHING + ALLOW REAL LINK NAVIGATION
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+
+      const href = this.getAttribute('href');
+
+      // ✅ IF REAL PAGE LINK → ALLOW NORMAL NAVIGATION
+      if (href && href !== '#') {
+        window.location.href = href;
+        return;
+      }
+
+      // ✅ OTHERWISE → KEEP SPA PAGE SWITCHING
+      e.preventDefault();
+
+      document.querySelectorAll('.menu-link').forEach(l => {
+        l.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
+      });
+
+      this.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const pageId = this.getAttribute('data-page');
+      document.getElementById(pageId)?.classList.add('active');
+    });
+  });
+</script>
+<script>
+  // ✅ Collapsible Stock Menu
+  document.getElementById('stock-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('stock-submenu');
+    const chevron = document.getElementById('stock-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+<script>
+  // ✅ Collapsible Manufacturing / Bag Menu
+  document.getElementById('bag-toggle').addEventListener('click', function () {
+    const submenu = document.getElementById('bag-submenu');
+    const chevron = document.getElementById('bag-chevron');
+
+    submenu.classList.toggle('open');
+    chevron.style.transform = submenu.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
+  });
+</script>
+<script>
+  const qcToggle = document.getElementById("qc-toggle");
+  const qcSubmenu = document.getElementById("qc-submenu");
+  const qcChevron = document.getElementById("qc-chevron");
+
+  qcToggle.addEventListener("click", () => {
+    qcSubmenu.classList.toggle("open");
+    qcChevron.classList.toggle("rotate-180");
+  });
+</script>
+
+<script>
+  const hrToggle = document.getElementById("hr-toggle");
+  const hrSubmenu = document.getElementById("hr-submenu");
+  const hrChevron = document.getElementById("hr-chevron");
+
+  hrToggle.addEventListener("click", () => {
+    hrSubmenu.classList.toggle("open");
+    hrChevron.classList.toggle("rotate-180");
+  });
+</script>
 </body></html>
