@@ -39,17 +39,14 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
 
   <!-- SIDEBAR -->
-  <aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+<aside class="fixed left-0 top-0 h-screen w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark z-50">
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
       <h1 class="text-xl font-bold">JEMS</h1>
     </div>
 
     <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-      <!-- Home -->
-      <a href="#" data-page="home" class="menu-link flex items-center p-3 rounded-lg hover:bg-primary/10 transition-colors">
-        <span class="material-icons mr-3">home</span>Home
-      </a>
+   
 
       <!-- Dashboard -->
       <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
@@ -67,64 +64,29 @@
         </button>
 
         <!-- Submenu Items -->
-        <div class="submenu" id="order-submenu">
-          <a href="#" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+               <div class="submenu" id="order-submenu">
+          <a href="NewOrder.html" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             New Order
           </a>
-          <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+         <a href="EditOrderForm.html" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Update Order
           </a>
           <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Update with Design Details
           </a> -->
-          <a href="#" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+          <a href="OrderSearch.html" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Search
           </a>
-          <a href="#" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+          <a href="OrderDetailedView.html" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Detailed View
           </a>
-          <a href="#" data-page="print" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
+          <a href="CustomerOrderPrintOut.html" data-page="print" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Order Printout
           </a>
         </div>
       </div>
       <div class="space-y-1">
-  <!-- MASTER TOGGLE -->
-<button id="master-toggle"
-  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
 
-  <div class="flex items-center">
-    <span class="material-icons mr-3">settings</span>
-    <span>Master Settings</span>
-  </div>
-
-  <span class="material-icons text-lg transition-transform" id="master-chevron">
-    expand_more
-  </span>
-</button>
-
-  <!-- Submenu Items -->
-  <div class="submenu" id="master-submenu">
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
-    <a 
-  href="create.html"
-  class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors"
->
-  Diamond
-</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone Master</a>
-    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
-  </div>
-</div>
 
 <button id="stock-toggle"
   class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
@@ -321,7 +283,42 @@
   </a>
 
 </div>
+  <!-- MASTER TOGGLE -->
+<button id="master-toggle"
+  class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
 
+  <div class="flex items-center">
+    <span class="material-icons mr-3">settings</span>
+    <span>Master Settings</span>
+  </div>
+
+  <span class="material-icons text-lg transition-transform" id="master-chevron">
+    expand_more
+  </span>
+</button>
+
+  <!-- Submenu Items -->
+ <div class="submenu" id="master-submenu">
+    <a href="customer.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
+    <a href="Role.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
+    <a 
+  href="create.html"
+  class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors"
+>
+  Diamond
+</a>
+    <a href="employee.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone Master</a>
+    <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
+  </div>
+</div>
 
     </nav>
 
@@ -336,144 +333,142 @@
       </div>
     </div>
   </aside>
-<div class="flex-1 flex flex-col">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-20">
-<div class="flex items-center gap-4">
-<a class="flex items-center gap-2 text-jems-charcoal hover:text-jems-gold transition-colors" href="#">
-<span class="material-symbols-outlined">arrow_back</span>
-<span class="font-semibold">Back to Search</span>
-</a>
-<div class="w-px h-6 bg-gray-300"></div>
-<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Order Details</h1>
-</div>
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 rounded-lg border border-gray-300 hover:bg-gray-100 text-jems-charcoal font-semibold px-4 py-2.5 transition-colors">
-<span class="material-symbols-outlined text-base">edit</span>
-<span>Edit Order</span>
-</button>
-<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2.5 transition-colors shadow-soft">
-<span class="material-symbols-outlined text-base">print</span>
-<span>Print</span>
-</button>
-</div>
-</header>
-<main class="flex-1 p-6 bg-jems-background">
-<div class="max-w-7xl mx-auto space-y-6">
-<div class="bg-white p-6 rounded-xl shadow-lifted">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 border-b border-gray-200 pb-6 mb-6">
-<div>
-<p class="text-sm text-gray-500">Order No.</p>
-<p class="font-semibold text-jems-charcoal">ORD-2024-00123</p>
-</div>
-<div>
-<p class="text-sm text-gray-500">Customer Name</p>
-<p class="font-semibold text-jems-charcoal">Eleanor Vance</p>
-</div>
-<div>
-<p class="text-sm text-gray-500">Order Type</p>
-<p class="font-semibold text-jems-charcoal">New</p>
-</div>
-<div>
-<p class="text-sm text-gray-500">Expected Delivery Date</p>
-<p class="font-semibold text-jems-charcoal">2024-08-15</p>
-</div>
-<div class="col-span-full">
-<p class="text-sm text-gray-500">Remarks/Special Instructions</p>
-<p class="text-jems-charcoal">Customer requested a specific clasp type (lobster clasp) and a gift box with a personalized note.</p>
-</div>
-</div>
-<h2 class="text-xl font-semibold text-jems-charcoal mb-4">Order Items</h2>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead class="bg-gray-50 text-xs uppercase text-gray-700">
-<tr>
-<th class="px-4 py-3">Sl No</th>
-<th class="px-4 py-3">Item Name</th>
-<th class="px-4 py-3">Image</th>
-<th class="px-4 py-3">Category/Sub</th>
-<th class="px-4 py-3">SKU</th>
-<th class="px-4 py-3 text-center">Qty</th>
-<th class="px-4 py-3">Metal Details</th>
-<th class="px-4 py-3">Diamond Details</th>
-<th class="px-4 py-3">Stone Details</th>
-<th class="px-4 py-3 text-right">Material Cost</th>
-<th class="px-4 py-3 text-right">Making Charge</th>
-<th class="px-4 py-3 text-right">Total Cost</th>
-</tr>
-</thead>
-<tbody>
-<tr class="border-b border-gray-200">
-<td class="px-4 py-4">1</td>
-<td class="px-4 py-4 font-medium text-jems-charcoal">Evelyn Diamond Necklace</td>
-<td class="px-4 py-4">
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-12 h-12" data-alt="Evelyn Diamond Necklace thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9XaoS3eHKHIQ4eoxWnKLhZ1ng7DSWgPMqJmnzrGBo9HR7kB93ReJ1PORHeX-mqE7moasxSxrMhhZaAEoGGUty-GENs18H0JdaDNWUtFeaxnloilAyz-OHWZ0YQcaOni4s1nfMAHqFtpxsQcrSyv3LKVa8RQPC5AiwuIv-U7b28yQHYpbGuL805LsyDHwnCETf7kTCfqXFkhQZMRgt9qiREzibp5JIK-iCrM8QdiHK9sKKu4RpWtC1BXJ3OgHvH3UH9Byaj-2LqQ");'></div>
-</td>
-<td class="px-4 py-4 text-sm text-gray-600">Necklace / Pendants</td>
-<td class="px-4 py-4 text-sm text-gray-600">NK-101-YG-D</td>
-<td class="px-4 py-4 text-center text-sm text-gray-600">1</td>
-<td class="px-4 py-4 text-sm text-gray-600">
-<div>Yellow Gold</div>
-<div>22K Purity</div>
-</td>
-<td class="px-4 py-4 text-sm text-gray-600">
-<div>0.75 ct, G, VVS1</div>
-<div>15 count</div>
-</td>
-<td class="px-4 py-4 text-sm text-gray-600">
-<div>N/A</div>
-</td>
-<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$5,200.00</td>
-<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$1,100.00</td>
-<td class="px-4 py-4 text-right font-bold text-jems-charcoal">$6,300.00</td>
-</tr>
-<tr class="border-b border-gray-200">
-<td class="px-4 py-4">2</td>
-<td class="px-4 py-4 font-medium text-jems-charcoal">Azure Sapphire Ring</td>
-<td class="px-4 py-4">
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md w-12 h-12" data-alt="Azure Sapphire Ring thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB91lphcbopI02nQpH7fzzl-eTvB_nk4wtVMUxuhUSnDrMZHDfDXZPxDRvyrVodJ2TuHGsFgywS6D0n0km63pBpkyTjHDjQ8RZUrJxrAiVH-boNI0PnVgGjk_ShZjk-V0lz2mfSoAII3MGuAO7RWh9MsVvqnal773elQ8A629rEvFhbWdE37TNxkbU8bnAgCEsJkfHigCwanxa2bmBiHObZSxKKHCTlDgziqtS4H-AibcPHyyxp1fI-KLOhIMSE1OTnwl709M537g");'></div>
-</td>
-<td class="px-4 py-4 text-sm text-gray-600">Ring / Gemstone</td>
-<td class="px-4 py-4 text-sm text-gray-600">RG-205-WG-S</td>
-<td class="px-4 py-4 text-center text-sm text-gray-600">1</td>
-<td class="px-4 py-4 text-sm text-gray-600">
-<div>White Gold</div>
-<div>18K Purity</div>
-</td>
-<td class="px-4 py-4 text-sm text-gray-600">
-<div>N/A</div>
-</td>
-<td class="px-4 py-4 text-sm text-gray-600">
-<div>1.20 ct, Blue, Oval</div>
-<div>1 count</div>
-</td>
-<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$1,500.00</td>
-<td class="px-4 py-4 text-right font-medium text-jems-charcoal">$580.00</td>
-<td class="px-4 py-4 text-right font-bold text-jems-charcoal">$2,080.00</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="mt-6 flex justify-end">
-<div class="w-full max-w-sm space-y-3">
-<div class="flex justify-between items-center text-gray-600">
-<span>Subtotal</span>
-<span>$8,380.00</span>
-</div>
-<div class="flex justify-between items-center text-gray-600">
-<span>Taxes (5%)</span>
-<span>$419.00</span>
-</div>
-<div class="flex justify-between items-center font-bold text-xl text-jems-charcoal border-t border-gray-300 pt-3 mt-3">
-<span>Total Order Value</span>
-<span>$8,799.00</span>
-</div>
-</div>
-</div>
-</div>
-</div>
+<body class="bg-gray-100">
+
+<!-- ✅ MAIN CONTENT (SIDEBAR SPACE FIXED) -->
+<main class="ml-64 min-h-screen p-8 w-[calc(100%-16rem)]">
+
+  <!-- ✅ FORM CARD -->
+  <div class="bg-white rounded-2xl shadow p-10 w-full mb-10">
+
+    <h2 class="text-2xl font-semibold text-center mb-8">Create Customer Master</h2>
+
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Customer Code</label>
+        <input type="text" placeholder="Enter customer code"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Customer Name</label>
+        <input type="text" placeholder="Enter customer name"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Mobile Number</label>
+        <input type="text" placeholder="Enter mobile number"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Email</label>
+        <input type="email" placeholder="Enter email ID"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Address</label>
+        <textarea placeholder="Enter address"
+          class="w-full border rounded-lg px-4 py-3 h-28"></textarea>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <label class="block text-sm font-medium mb-3">Status</label>
+        <label class="flex items-center gap-3">
+          <input type="checkbox" class="w-5 h-5" checked />
+          <span>Active</span>
+        </label>
+      </div>
+
+      <!-- ✅ BUTTONS -->
+      <div class="col-span-2 flex justify-end gap-4 mt-6">
+        <button type="button"
+          class="border rounded-lg px-8 py-3 hover:bg-gray-100 font-medium">
+          ❌ Cancel
+        </button>
+
+        <button type="submit"
+          class="bg-black text-white rounded-lg px-8 py-3 hover:opacity-90">
+          💾 Save
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ✅ CUSTOMER LIST TABLE -->
+  <h2 class="text-xl font-semibold mb-4">Customer List</h2>
+
+  <div class="bg-white rounded-xl shadow overflow-x-auto w-full">
+
+    <table class="w-full text-sm border-collapse">
+
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4 text-left">ID</th>
+          <th class="p-4 text-left">Code</th>
+          <th class="p-4 text-left">Name</th>
+          <th class="p-4 text-left">Mobile</th>
+          <th class="p-4 text-left">Email</th>
+          <th class="p-4 text-left">Address</th>
+          <th class="p-4 text-left">Status</th>
+          <th class="p-4 text-left">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- ✅ DEMO DATA -->
+        <tr class="border-b">
+          <td class="p-4">1</td>
+          <td class="p-4">CUST001</td>
+          <td class="p-4">Rahul Sharma</td>
+          <td class="p-4">9876543210</td>
+          <td class="p-4">rahul@gmail.com</td>
+          <td class="p-4">Bangalore</td>
+          <td class="p-4 text-green-600 font-semibold">Active</td>
+          <td class="p-4 flex gap-3">
+            <button class="text-blue-600">Edit</button>
+            <button class="text-red-600">Delete</button>
+          </td>
+        </tr>
+
+        <tr class="border-b">
+          <td class="p-4">2</td>
+          <td class="p-4">CUST002</td>
+          <td class="p-4">Anjali Verma</td>
+          <td class="p-4">9123456780</td>
+          <td class="p-4">anjali@yahoo.com</td>
+          <td class="p-4">Mumbai</td>
+          <td class="p-4 text-red-600 font-semibold">Inactive</td>
+          <td class="p-4 flex gap-3">
+            <button class="text-blue-600">Edit</button>
+            <button class="text-red-600">Delete</button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <!-- ✅ PAGINATION -->
+    <div class="flex justify-between items-center p-4 text-sm">
+      <span>2 records</span>
+
+      <div class="flex items-center gap-2">
+        <button class="border px-3 py-1 rounded">«</button>
+        <button class="border px-3 py-1 rounded">‹</button>
+        <span>Page 1 of 1</span>
+        <button class="border px-3 py-1 rounded">›</button>
+        <button class="border px-3 py-1 rounded">»</button>
+      </div>
+    </div>
+
+  </div>
+
 </main>
-</div>
-</div>
   <script>
   // Collapsible Master Menu
   document.getElementById('master-toggle').addEventListener('click', function () {
@@ -571,4 +566,5 @@
   });
 </script>
 
-</body></html>
+</body>
+</html>

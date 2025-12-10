@@ -36,12 +36,12 @@
     .submenu.open { max-height: 500px; } /* Adjust as needed */
   </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
 
 
 
   <!-- SIDEBAR -->
-  <aside class="w-64 fixed left-0 top-0 h-screen bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark z-50">
+<aside class="fixed left-0 top-0 h-screen w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark z-50">
 
     <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
       <span class="material-icons text-primary text-3xl mr-2">diamond</span>
@@ -336,195 +336,108 @@
       </div>
     </div>
   </aside>
+      <!-- ✅ MAIN CONTENT AREA -->
+<main class="ml-64 min-h-screen bg-[#f5f5f5] p-8">
 
-<div class="flex-1 flex flex-col ml-64 min-h-screen">
+  <!-- ✅ FORM CARD (WIDE) -->
+  <div class="bg-white rounded-2xl shadow-lg p-10 max-w-screen-xl mx-auto mb-10">
 
-<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-10">
-<div class="flex items-center gap-4">
-<h1 class="text-2xl font-bold text-jems-charcoal tracking-tight">Raw Materials Stock Entry</h1>
-</div>
-<div class="flex items-center gap-4">
-<button class="relative flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 transition-colors">
-<span class="material-symbols-outlined text-jems-charcoal">notifications</span>
-<span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-jems-red"></span>
-</button>
-<button class="flex items-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-4 py-2 transition-colors shadow-soft">
-<span class="material-symbols-outlined">add</span>
-<span>Add New Item</span>
-</button>
-</div>
-</header>
-<main class="flex-1 p-6 bg-jems-background">
-<div class="bg-white p-6 md:p-8 rounded-xl shadow-lifted max-w-4xl mx-auto">
-<form>
-<div class="border-b border-gray-200 pb-6 mb-6">
-<h2 class="text-lg font-semibold text-jems-charcoal">New Raw Material Details</h2>
-<p class="mt-1 text-sm text-gray-500">Enter the information for the new raw material below.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
-<div class="md:col-span-2 relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="item-name">Item Name</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="item-name" placeholder="e.g., Round Diamond" type="text"/>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="sku">SKU</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="sku" placeholder="e.g., RD-0.5-G-VS1" type="text"/>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="category">Category</label>
-<div class="flex items-center gap-2">
-<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="category">
-<option>Select Category</option>
-<option>Gemstone</option>
-<option>Metal</option>
-<option>Finding</option>
-<option>Other</option>
-</select>
-<button class="flex items-center justify-center gap-1 rounded-md bg-jems-gold-light hover:bg-jems-gold/20 text-jems-charcoal font-semibold px-3 py-2 text-xs transition-colors whitespace-nowrap" type="button">
-<span class="material-symbols-outlined text-base">add</span>
-<span>New</span>
-</button>
-</div>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="sub-category">Sub Category</label>
-<div class="flex items-center gap-2">
-<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="sub-category">
-<option>Select Sub Category</option>
-<option>Diamond</option>
-<option>Ruby</option>
-<option>Sapphire</option>
-<option>Gold</option>
-<option>Clasp</option>
-</select>
-<button class="flex items-center justify-center gap-1 rounded-md bg-jems-gold-light hover:bg-jems-gold/20 text-jems-charcoal font-semibold px-3 py-2 text-xs transition-colors whitespace-nowrap" type="button">
-<span class="material-symbols-outlined text-base">add</span>
-<span>New</span>
-</button>
-</div>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="color">Color</label>
-<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="color">
-<option>Select Color</option>
-<option>G</option>
-<option>H</option>
-<option>Yellow</option>
-<option>Rose</option>
-<option>White</option>
-</select>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="unit">Unit</label>
-<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="unit">
-<option>Select Unit</option>
-<option>Pieces (Nos.)</option>
-<option>Grams (g)</option>
-<option>Carats (ct)</option>
-</select>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="initial-stock">Initial Stock Quantity</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="initial-stock" placeholder="e.g., 50" type="number"/>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="reorder-level">Reorder Level</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="reorder-level" placeholder="e.g., 20" type="number"/>
-</div>
-<div class="relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="supplier">Supplier</label>
-<select class="form-select w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="supplier">
-<option>Select Supplier</option>
-<option>Supplier A</option>
-<option>Supplier B</option>
-<option>Supplier C</option>
-</select>
-</div>
-<div class="md:col-span-2 relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="description">Description</label>
-<textarea class="form-textarea w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="description" placeholder="Add any extra details or notes about the raw material..." rows="3"></textarea>
-</div>
-<div class="md:col-span-2 relative">
-<label class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-500" for="purchase-date">Purchase Date</label>
-<input class="form-input w-full rounded-lg border-gray-300 bg-white focus:ring-jems-gold focus:border-jems-gold text-sm" id="purchase-date" type="date"/>
-</div>
-</div>
-<div class="mt-8 pt-6 border-t border-gray-200 flex justify-end gap-4">
-<button class="flex items-center justify-center gap-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-jems-charcoal font-semibold px-6 py-2.5 transition-colors shadow-soft" type="button">
-<span>Clear</span>
-</button>
-<button class="flex items-center justify-center gap-2 rounded-lg bg-jems-gold hover:bg-primary-focus text-white font-semibold px-6 py-2.5 transition-colors shadow-lifted" type="submit">
-<span class="material-symbols-outlined">save</span>
-<span>Save Item</span>
-</button>
-</div>
-</form>
-</div>
-<div class="mt-8 bg-white p-6 md:p-8 rounded-xl shadow-lifted max-w-4xl mx-auto">
-<div class="border-b border-gray-200 pb-6 mb-6">
-<h2 class="text-lg font-semibold text-jems-charcoal">Current Stock Report</h2>
-<p class="mt-1 text-sm text-gray-500">Overview of all items currently in stock.</p>
-</div>
-<div class="overflow-x-auto">
-<table class="min-w-full divide-y divide-gray-200">
-<thead class="bg-jems-gold-light">
-<tr>
-<th class="px-6 py-3 text-left text-xs font-bold text-jems-charcoal uppercase tracking-wider" scope="col">Item Name</th>
-<th class="px-6 py-3 text-left text-xs font-bold text-jems-charcoal uppercase tracking-wider" scope="col">SKU</th>
-<th class="px-6 py-3 text-left text-xs font-bold text-jems-charcoal uppercase tracking-wider" scope="col">Category</th>
-<th class="px-6 py-3 text-left text-xs font-bold text-jems-charcoal uppercase tracking-wider" scope="col">Current Stock</th>
-<th class="px-6 py-3 text-right text-xs font-bold text-jems-charcoal uppercase tracking-wider" scope="col">Actions</th>
-</tr>
-</thead>
-<tbody class="bg-white divide-y divide-gray-200">
-<tr>
-<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">22K Gold Diamond Necklace</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">DN-00123</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Necklace</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10 Pcs</td>
-<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-<button class="text-jems-blue hover:text-jems-blue/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">edit</span></button>
-<button class="text-jems-red hover:text-jems-red/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">delete</span></button>
-</td>
-</tr>
-<tr class="bg-jems-background/50">
-<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Antique Gold Bangles</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BG-00456</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Bangles</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5 Pcs</td>
-<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-<button class="text-jems-blue hover:text-jems-blue/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">edit</span></button>
-<button class="text-jems-red hover:text-jems-red/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">delete</span></button>
-</td>
-</tr>
-<tr>
-<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Solitaire Diamond Ring</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">RG-00789</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Ring</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8 Pcs</td>
-<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-<button class="text-jems-blue hover:text-jems-blue/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">edit</span></button>
-<button class="text-jems-red hover:text-jems-red/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">delete</span></button>
-</td>
-</tr>
-<tr class="bg-jems-background/50">
-<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pearl Drop Earrings</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ER-00101</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Earrings</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12 Pcs</td>
-<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-<button class="text-jems-blue hover:text-jems-blue/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">edit</span></button>
-<button class="text-jems-red hover:text-jems-red/80 transition-colors p-1"><span class="material-symbols-outlined text-base align-middle">delete</span></button>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+    <h2 class="text-3xl font-semibold text-center mb-10">Add New Role</h2>
+
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+
+      <!-- Role Name -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Role Name</label>
+        <input
+          type="text"
+          value="Admin"
+          class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+        />
+      </div>
+
+      <!-- Role Code -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Role Code</label>
+        <input
+          type="text"
+          value="ADMIN"
+          class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black uppercase"
+        />
+      </div>
+
+      <!-- Role Description -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Role Description</label>
+        <textarea
+          class="w-full border rounded-xl px-4 py-3 h-28 focus:outline-none focus:ring-2 focus:ring-black"
+        >Full access to system</textarea>
+      </div>
+
+      <!-- Active Status -->
+      <div class="flex flex-col justify-center gap-4">
+        <span class="text-sm font-medium">Active Status</span>
+        <label class="flex items-center gap-3">
+          <input type="checkbox" class="w-5 h-5 rounded border-gray-300" checked />
+          <span>Active</span>
+        </label>
+      </div>
+
+      <!-- ✅ ACTION BUTTONS -->
+      <div class="col-span-2 flex justify-end gap-4 mt-6">
+
+        <button
+          type="button"
+          class="border rounded-lg px-8 py-3 hover:bg-gray-100 font-medium"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="bg-black text-white rounded-lg px-8 py-3 flex items-center gap-2 hover:opacity-90"
+        >
+          <span class="material-icons text-sm">save</span>
+          Save
+        </button>
+
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ✅ ROLES TABLE CARD (WIDE) -->
+  <div class="bg-white rounded-2xl shadow-lg max-w-screen-xl mx-auto overflow-hidden">
+
+    <table class="w-full text-sm border-collapse">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4"><input type="checkbox"></th>
+          <th class="p-4 text-left">ID</th>
+          <th class="p-4 text-left">Role Name</th>
+          <th class="p-4 text-left">Role Code</th>
+          <th class="p-4 text-left">Description</th>
+          <th class="p-4 text-left">Status</th>
+          <th class="p-4 text-left">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td colspan="7" class="p-10 text-center text-gray-500">
+            No employees found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
 </main>
-</div>
-</div>
-  <script>
+  </div>
+
+  
+ <script>
   // Collapsible Master Menu
   document.getElementById('master-toggle').addEventListener('click', function () {
     const submenu = document.getElementById('master-submenu');
@@ -621,4 +534,5 @@
   });
 </script>
 
-</body></html>
+</body>
+</html>
