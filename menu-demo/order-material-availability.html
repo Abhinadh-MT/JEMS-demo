@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Material Availability - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="order-material-availability" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Order Material Availability</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Check raw material availability for orders</p>
+          </div>
+          <button type="button" id="export-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+            <span class="material-icons">download</span>
+            <span>Export</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Filters Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Filters</h2>
+          <button type="button" id="clear-filters-btn" class="text-sm text-primary hover:opacity-80">
+            Clear All
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Search -->
+          <div>
+            <label for="search-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Search
+            </label>
+            <div class="relative">
+              <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input type="text" id="search-input" placeholder="Search order no, customer..."
+                     class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+            </div>
+          </div>
+
+          <!-- Order Type Filter -->
+          <div>
+            <label for="order-type-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Order Type
+            </label>
+            <select id="order-type-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Types</option>
+              <option value="NEW_CUSTOMER">New Customer Order</option>
+              <option value="REPAIR">Repair Order</option>
+              <option value="COMPANY">Company Order</option>
+            </select>
+          </div>
+
+          <!-- Availability Status Filter -->
+          <div>
+            <label for="availability-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Availability Status
+            </label>
+            <select id="availability-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Status</option>
+              <option value="available">Available</option>
+              <option value="insufficient">Insufficient</option>
+              <option value="not_available">Not Available</option>
+            </select>
+          </div>
+
+          <!-- Material Filter -->
+          <div>
+            <label for="material-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Raw Material
+            </label>
+            <select id="material-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Materials</option>
+              <!-- Options will be populated dynamically -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Availability Report Table -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Material Availability Report</h2>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Total Records:</span>
+            <span id="total-count" class="text-sm font-semibold text-primary">0</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left" id="availability-table">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3">Order No</th>
+                <th class="px-6 py-3">Customer Name</th>
+                <th class="px-6 py-3">Order Type</th>
+                <th class="px-6 py-3">Raw Material</th>
+                <th class="px-6 py-3 text-right">Required (g)</th>
+                <th class="px-6 py-3 text-right">Available (g)</th>
+                <th class="px-6 py-3 text-right">Shortage (g)</th>
+                <th class="px-6 py-3 text-center">Status</th>
+                <th class="px-6 py-3">Available Lots</th>
+              </tr>
+            </thead>
+            <tbody id="availability-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inventory_2</span>
+            <p>No material requirements found. Create orders to see material availability.</p>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-border-light dark:border-border-dark">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span id="showing-from">0</span> to <span id="showing-to">0</span> of <span id="showing-total">0</span> entries
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="prev-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Previous
+            </button>
+            <span class="px-4 py-2 text-sm">
+              Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+            </span>
+            <button type="button" id="next-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allOrders = [];
+    let allStockLots = [];
+    let allRawMaterials = [];
+    let availabilityData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    const itemsPerPage = 7;
+
+    // Map order metal types to raw material names
+    const metalTypeMapping = {
+      'gold_22ct': 'Gold 22Ct',
+      'gold_24ct': 'Gold 24K',
+      'platinum_950': 'Platinum 950',
+      'platinum_900': 'Platinum 900',
+      'platinum_850': 'Platinum 850',
+      'platinum_800': 'Platinum 800',
+      'fine_silver': 'Fine Silver (99.9)',
+      'sterling_silver': 'Silver 925',
+      'argentium_silver': 'Argentium Silver (93.5 / 96)',
+      'coin_silver': 'Coin Silver (90)',
+      'britannia_silver': 'Britannia Silver (95.8)'
+    };
+
+    // Load data
+    function loadData() {
+      allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      allStockLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      allRawMaterials = JSON.parse(localStorage.getItem('rawMaterials') || '[]');
+      
+      // Populate material filter
+      populateMaterialFilter();
+      
+      // Calculate availability
+      calculateAvailability();
+      applyFilters();
+    }
+
+    // Populate material filter dropdown
+    function populateMaterialFilter() {
+      const materialFilter = document.getElementById('material-filter');
+      const materialSet = new Set();
+      
+      // Get unique materials from orders
+      allOrders.forEach(order => {
+        if (order.items) {
+          order.items.forEach(item => {
+            if (item.metal && metalTypeMapping[item.metal]) {
+              materialSet.add(metalTypeMapping[item.metal]);
+            }
+          });
+        }
+      });
+      
+      // Add materials from stock
+      allRawMaterials.forEach(material => {
+        materialSet.add(material.name);
+      });
+      
+      // Populate dropdown
+      Array.from(materialSet).sort().forEach(materialName => {
+        const option = document.createElement('option');
+        option.value = materialName;
+        option.textContent = materialName;
+        materialFilter.appendChild(option);
+      });
+    }
+
+    // Calculate material availability for all orders
+    function calculateAvailability() {
+      availabilityData = [];
+      
+      allOrders.forEach(order => {
+        if (!order.items || order.items.length === 0) return;
+        
+        order.items.forEach(item => {
+          if (!item.metal || !item.metalWeight) return;
+          
+          const materialName = metalTypeMapping[item.metal] || item.metal;
+          const requiredWeight = item.metalWeight * (item.quantity || 1);
+          
+          // Find matching raw material
+          const rawMaterial = allRawMaterials.find(m => 
+            m.name === materialName || 
+            m.name.toLowerCase().includes(materialName.toLowerCase()) ||
+            materialName.toLowerCase().includes(m.name.toLowerCase())
+          );
+          
+          // Calculate available stock
+          let availableWeight = 0;
+          let availableLots = [];
+          
+          if (rawMaterial) {
+            const materialLots = allStockLots.filter(lot => 
+              lot.item_type === 'METAL' && 
+              lot.raw_material_id === rawMaterial.material_id
+            );
+            
+            materialLots.forEach(lot => {
+              const weight = parseFloat(lot.current_weight) || 0;
+              availableWeight += weight;
+              if (weight > 0) {
+                availableLots.push({
+                  lot_no: lot.lot_no || '',
+                  weight: weight
+                });
+              }
+            });
+          }
+          
+          const shortage = Math.max(0, requiredWeight - availableWeight);
+          let status = 'available';
+          if (availableWeight === 0) {
+            status = 'not_available';
+          } else if (shortage > 0) {
+            status = 'insufficient';
+          }
+          
+          availabilityData.push({
+            orderId: order.orderId,
+            customerName: order.customerName,
+            orderType: order.orderType,
+            materialName: materialName,
+            requiredWeight: requiredWeight,
+            availableWeight: availableWeight,
+            shortage: shortage,
+            status: status,
+            availableLots: availableLots,
+            itemName: item.name,
+            quantity: item.quantity || 1
+          });
+        });
+      });
+    }
+
+    // Apply filters
+    function applyFilters() {
+      filteredData = [...availabilityData];
+
+      // Search filter
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      if (searchTerm) {
+        filteredData = filteredData.filter(item => 
+          item.orderId.toLowerCase().includes(searchTerm) ||
+          item.customerName.toLowerCase().includes(searchTerm) ||
+          item.materialName.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // Order type filter
+      const orderType = document.getElementById('order-type-filter').value;
+      if (orderType) {
+        filteredData = filteredData.filter(item => item.orderType === orderType);
+      }
+
+      // Availability status filter
+      const availabilityStatus = document.getElementById('availability-filter').value;
+      if (availabilityStatus) {
+        filteredData = filteredData.filter(item => item.status === availabilityStatus);
+      }
+
+      // Material filter
+      const material = document.getElementById('material-filter').value;
+      if (material) {
+        filteredData = filteredData.filter(item => item.materialName === material);
+      }
+
+      renderTable();
+    }
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('availability-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (filteredData.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        updatePagination(0);
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      
+      // Pagination
+      const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+      const pageData = filteredData.slice(startIndex, endIndex);
+
+      tbody.innerHTML = '';
+      pageData.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const orderTypeDisplay = item.orderType === 'NEW_CUSTOMER' ? 'New Customer Order' : 
+                               item.orderType === 'REPAIR' ? 'Repair Order' : 
+                               item.orderType === 'COMPANY' ? 'Company Order' : item.orderType;
+        
+        // Status badge
+        let statusClass = '';
+        let statusText = '';
+        if (item.status === 'available') {
+          statusClass = 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400';
+          statusText = 'Available';
+        } else if (item.status === 'insufficient') {
+          statusClass = 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400';
+          statusText = 'Insufficient';
+        } else {
+          statusClass = 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400';
+          statusText = 'Not Available';
+        }
+        
+        // Available lots display
+        const lotsDisplay = item.availableLots.length > 0 
+          ? item.availableLots.map(lot => `${lot.lot_no} (${lot.weight.toFixed(3)}g)`).join(', ')
+          : 'No lots available';
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium">
+            <a href="order-view.html?orderId=${encodeURIComponent(item.orderId)}" class="text-primary hover:underline">
+              ${item.orderId || '-'}
+            </a>
+          </td>
+          <td class="px-6 py-4">${item.customerName || '-'}</td>
+          <td class="px-6 py-4">${orderTypeDisplay}</td>
+          <td class="px-6 py-4">
+            <div>
+              <div class="font-medium">${item.materialName || '-'}</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">${item.itemName || ''} (Qty: ${item.quantity})</div>
+            </div>
+          </td>
+          <td class="px-6 py-4 text-right">${item.requiredWeight.toFixed(3)}</td>
+          <td class="px-6 py-4 text-right">${item.availableWeight.toFixed(3)}</td>
+          <td class="px-6 py-4 text-right ${item.shortage > 0 ? 'text-red-600 dark:text-red-400 font-semibold' : ''}">${item.shortage > 0 ? item.shortage.toFixed(3) : '-'}</td>
+          <td class="px-6 py-4 text-center">
+            <span class="px-2 py-1 text-xs rounded font-medium ${statusClass}">${statusText}</span>
+          </td>
+          <td class="px-6 py-4 text-xs text-gray-600 dark:text-gray-400">${lotsDisplay}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updatePagination(filteredData.length, totalPages);
+    }
+
+    // Update pagination
+    function updatePagination(total, totalPages = 1) {
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('showing-total').textContent = total;
+      document.getElementById('total-pages').textContent = totalPages;
+      document.getElementById('current-page').textContent = currentPage;
+      
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, total);
+      document.getElementById('showing-from').textContent = total > 0 ? startIndex + 1 : 0;
+      document.getElementById('showing-to').textContent = endIndex;
+      
+      document.getElementById('prev-page').disabled = currentPage === 1;
+      document.getElementById('next-page').disabled = currentPage >= totalPages;
+    }
+
+    // Filter event listeners
+    document.getElementById('search-input').addEventListener('input', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('order-type-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('availability-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('material-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters-btn').addEventListener('click', function() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('order-type-filter').value = '';
+      document.getElementById('availability-filter').value = '';
+      document.getElementById('material-filter').value = '';
+      currentPage = 1;
+      applyFilters();
+    });
+
+    // Pagination
+    document.getElementById('prev-page').addEventListener('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    document.getElementById('next-page').addEventListener('click', function() {
+      const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    // Export
+    document.getElementById('export-btn').addEventListener('click', function() {
+      const headers = ['Order No', 'Customer Name', 'Order Type', 'Raw Material', 'Item Name', 'Quantity', 'Required (g)', 'Available (g)', 'Shortage (g)', 'Status', 'Available Lots'];
+      const rows = filteredData.map(item => [
+        item.orderId || '',
+        item.customerName || '',
+        item.orderType === 'NEW_CUSTOMER' ? 'New Customer Order' : item.orderType === 'REPAIR' ? 'Repair Order' : item.orderType === 'COMPANY' ? 'Company Order' : item.orderType || '',
+        item.materialName || '',
+        item.itemName || '',
+        item.quantity || 1,
+        item.requiredWeight.toFixed(3),
+        item.availableWeight.toFixed(3),
+        item.shortage > 0 ? item.shortage.toFixed(3) : '0',
+        item.status === 'available' ? 'Available' : item.status === 'insufficient' ? 'Insufficient' : 'Not Available',
+        item.availableLots.map(lot => `${lot.lot_no} (${lot.weight.toFixed(3)}g)`).join('; ')
+      ]);
+      
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `order-material-availability-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+
+    // Initialize
+    loadData();
+  </script>
+</body>
+</html>
+

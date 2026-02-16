@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raw Materials (Metal Master) - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="raw-materials" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Raw Materials (Metal Master)</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage raw material (metal) master data</p>
+      </header>
+
+      <!-- Raw Materials Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Raw Material</h2>
+        
+        <form id="raw-material-form" class="space-y-6">
+          <input type="hidden" id="material-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Material ID (Auto-generated, Read-only) -->
+            <div>
+              <label for="material-id-display" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Material ID
+              </label>
+              <input type="text" id="material-id-display" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                     placeholder="Auto-generated on save">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Unique identifier (CHAR(36))</p>
+            </div>
+
+            <!-- Material Name (Required) -->
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Material Name <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="name" name="name" required maxlength="255"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., Gold, Silver, Platinum">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Material name (VARCHAR(255))</p>
+            </div>
+
+            <!-- Material Code -->
+            <div>
+              <label for="code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Material Code
+              </label>
+              <input type="text" id="code" name="code" maxlength="50"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., GLD-001, SLV-001">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Material code (VARCHAR(50))</p>
+            </div>
+
+            <!-- Type -->
+            <div>
+              <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Type <span class="text-red-500">*</span>
+              </label>
+              <select id="type" name="type" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select type</option>
+                <option value="metal">Metal</option>
+                <option value="findings">Findings</option>
+                <option value="consumables">Consumables</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Material type</p>
+            </div>
+
+            <!-- Rate -->
+            <div>
+              <label for="rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Rate
+              </label>
+              <input type="number" id="rate" name="rate" step="0.01" min="0"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., 5000.00">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Rate per unit</p>
+            </div>
+
+            <!-- Unit of Measure (FK) -->
+            <div>
+              <label for="unit-of-measure" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Unit of Measure <span class="text-red-500">*</span>
+              </label>
+              <select id="unit-of-measure" name="unitOfMeasure" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select unit</option>
+                <option value="550e8400-e29b-41d4-a716-446655440010">Gram (g)</option>
+                <option value="660e8400-e29b-41d4-a716-446655440011">Kilogram (kg)</option>
+                <option value="770e8400-e29b-41d4-a716-446655440012">Ounce (oz)</option>
+                <option value="880e8400-e29b-41d4-a716-446655440013">Tola</option>
+                <option value="990e8400-e29b-41d4-a716-446655440014">Carat (ct)</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to uom_master table (CHAR(36) FK)</p>
+            </div>
+
+            <!-- Is Active -->
+            <div>
+              <label for="is-active" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Status <span class="text-red-500">*</span>
+              </label>
+              <select id="is-active" name="isActive" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Active status (BOOLEAN)</p>
+            </div>
+          </div>
+
+          <!-- Description (TEXT) -->
+          <div>
+            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description <span class="text-gray-400">(Optional)</span>
+            </label>
+            <textarea id="description" name="description" rows="4"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter material description, specifications, or additional details"></textarea>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Optional details (TEXT)</p>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Material
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by name, code, or description..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raw Materials List Table -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Raw Materials List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Material ID</th>
+                <th class="px-6 py-3" scope="col">Name</th>
+                <th class="px-6 py-3" scope="col">Code</th>
+                <th class="px-6 py-3" scope="col">Type</th>
+                <th class="px-6 py-3" scope="col">Rate</th>
+                <th class="px-6 py-3" scope="col">Unit of Measure</th>
+                <th class="px-6 py-3" scope="col">Description</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3" scope="col">Created At</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="materials-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No raw materials submitted yet. Fill out the form above to add your first material.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Demo data
+    const demoData = [
+      {
+        material_id: '550e8400-e29b-41d4-a716-446655440100',
+        name: 'Gold 24K',
+        code: 'GLD-24K-001',
+        type: 'metal',
+        rate: 5500.00,
+        description: 'Pure 24 karat gold, 99.9% purity',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-15T10:30:00.000Z'
+      },
+      {
+        material_id: '660e8400-e29b-41d4-a716-446655440101',
+        name: 'Silver 925',
+        code: 'SLV-925-001',
+        type: 'metal',
+        rate: 750.00,
+        description: 'Sterling silver, 92.5% purity',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-16T14:20:00.000Z'
+      },
+      {
+        material_id: '770e8400-e29b-41d4-a716-446655440102',
+        name: 'Platinum 950',
+        code: 'PLT-950-001',
+        type: 'metal',
+        rate: 3200.00,
+        description: 'Platinum 950, 95% purity',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-17T09:15:00.000Z'
+      }
+    ];
+
+    // UOM mapping for display
+    const uomMap = {
+      '550e8400-e29b-41d4-a716-446655440010': 'Gram (g)',
+      '660e8400-e29b-41d4-a716-446655440011': 'Kilogram (kg)',
+      '770e8400-e29b-41d4-a716-446655440012': 'Ounce (oz)',
+      '880e8400-e29b-41d4-a716-446655440013': 'Tola',
+      '990e8400-e29b-41d4-a716-446655440014': 'Carat (ct)'
+    };
+
+    // Store materials in localStorage for persistence
+    let storedData = localStorage.getItem('rawMaterials');
+    let materials = storedData ? JSON.parse(storedData) : demoData;
+    
+    if (!storedData) {
+      localStorage.setItem('rawMaterials', JSON.stringify(demoData));
+    }
+    
+    let editingId = null;
+
+    const form = document.getElementById('raw-material-form');
+    const tableBody = document.getElementById('materials-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    // Generate UUID
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // Format date
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Render table
+    function renderTable() {
+      if (materials.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = materials.map(material => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-mono">${material.material_id.substring(0, 8)}...</td>
+          <td class="px-6 py-4 font-medium">${material.name}</td>
+          <td class="px-6 py-4">${material.code || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="text-xs font-medium px-2.5 py-0.5 rounded-full ${material.type === 'metal' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' : material.type === 'findings' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300' : material.type === 'consumables' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}">
+              ${material.type ? material.type.charAt(0).toUpperCase() + material.type.slice(1) : '-'}
+            </span>
+          </td>
+          <td class="px-6 py-4">${material.rate ? (typeof material.rate === 'number' ? material.rate.toFixed(2) : material.rate) : '-'}</td>
+          <td class="px-6 py-4">${uomMap[material.unit_of_measure] || material.unit_of_measure.substring(0, 8)}</td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 max-w-xs truncate">${material.description || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="${material.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${material.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs">${formatDate(material.created_at)}</td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${material.material_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${material.material_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      attachEventListeners();
+      filterTable();
+    }
+
+    // Attach event listeners to edit/delete buttons
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const material = materials.find(m => m.material_id === id);
+          
+          if (material) {
+            editingId = id;
+            document.getElementById('material-id').value = id;
+            document.getElementById('material-id-display').value = id;
+            document.getElementById('name').value = material.name;
+            document.getElementById('code').value = material.code || '';
+            document.getElementById('type').value = material.type || '';
+            document.getElementById('rate').value = material.rate || '';
+            document.getElementById('description').value = material.description || '';
+            document.getElementById('unit-of-measure').value = material.unit_of_measure;
+            document.getElementById('is-active').value = material.is_active.toString();
+            
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          
+          if (confirm('Are you sure you want to delete this raw material?')) {
+            materials = materials.filter(m => m.material_id !== id);
+            localStorage.setItem('rawMaterials', JSON.stringify(materials));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    // Form submission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        material_id: editingId || generateUUID(),
+        name: document.getElementById('name').value.trim(),
+        code: document.getElementById('code').value.trim() || null,
+        type: document.getElementById('type').value,
+        rate: document.getElementById('rate').value ? parseFloat(document.getElementById('rate').value) : null,
+        description: document.getElementById('description').value.trim() || null,
+        unit_of_measure: document.getElementById('unit-of-measure').value,
+        is_active: document.getElementById('is-active').value === 'true',
+        created_at: editingId 
+          ? materials.find(m => m.material_id === editingId).created_at 
+          : new Date().toISOString()
+      };
+
+      if (editingId) {
+        const index = materials.findIndex(m => m.material_id === editingId);
+        if (index !== -1) {
+          materials[index] = formData;
+        }
+      } else {
+        materials.push(formData);
+      }
+
+      localStorage.setItem('rawMaterials', JSON.stringify(materials));
+      form.reset();
+      document.getElementById('material-id').value = '';
+      document.getElementById('material-id-display').value = '';
+      document.getElementById('is-active').value = 'true';
+      document.getElementById('type').value = '';
+      editingId = null;
+      renderTable();
+    });
+
+    // Search functionality
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    // Status filter
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#materials-table-body tr');
+      rows.forEach(row => {
+        const name = row.cells[1].textContent.toLowerCase();
+        const code = row.cells[2].textContent.toLowerCase();
+        const type = row.cells[3].textContent.toLowerCase();
+        const description = row.cells[6].textContent.toLowerCase();
+        const status = row.cells[7].querySelector('span').textContent.toLowerCase();
+        const isActive = status === 'active';
+        
+        const matchesSearch = !searchTerm || name.includes(searchTerm) || code.includes(searchTerm) || type.includes(searchTerm) || description.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || 
+          (statusFilter === 'true' && isActive) || 
+          (statusFilter === 'false' && !isActive);
+        
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>
+

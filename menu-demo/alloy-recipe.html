@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alloy Recipe Creation - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+          boxShadow: {
+            lifted: '0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.04)'
+          }
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .input-type-toggle { display: none; }
+    .toggle-label {
+      flex: 1; text-align: center; padding: 0.375rem 0.75rem;
+      font-size: 0.875rem; font-weight: 500; border-radius: 0.375rem;
+      transition: all 0.2s; cursor: pointer; color: #374151;
+    }
+    .toggle-label:hover { background-color: #E5E7EB; }
+    .toggle-label.active { background-color: #d4af37; color: #FFFFFF; }
+  </style>
+</head>
+<body data-page="alloy-recipe" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Create Alloy Recipe</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Define metal composition using percentage or weight.</p>
+      </header>
+
+      <div class="max-w-6xl space-y-6">
+        <form id="alloy-recipe-form" class="space-y-6">
+          <!-- Recipe Information -->
+          <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+            <h2 class="text-xl font-semibold text-text-light dark:text-text-dark mb-6">Recipe Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="recipe-name">Recipe Name <span class="text-red-500">*</span></label>
+                <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="recipe-name" placeholder="e.g., Standard Yellow Gold 22K" type="text" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="recipe-code">Recipe Code <span class="text-red-500">*</span></label>
+                <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="recipe-code" placeholder="e.g., YG22K-001" type="text" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="colour-type">Colour Type <span class="text-red-500">*</span></label>
+                <select class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="colour-type" required>
+                  <option value="">Select Colour Type</option>
+                  <option value="yellow">Yellow</option>
+                  <option value="white">White</option>
+                  <option value="pink">Pink</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="karat-value">Karat Value</label>
+                <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="karat-value" type="number" min="0" max="24" step="0.1" placeholder="e.g., 22">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="target-purity">Target Purity (%)</label>
+                <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="target-purity" type="number" min="0" max="100" step="0.01" placeholder="e.g., 91.6">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="expected-wastage">Expected Wastage (%)</label>
+                <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="expected-wastage" type="number" min="0" max="100" step="0.01" placeholder="e.g., 2.5">
+              </div>
+            </div>
+          </div>
+
+          <!-- Composition -->
+          <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+              <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Composition and Metal Details</h2>
+              <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Input Type:</span>
+                  <div class="flex items-center gap-1 p-1 bg-background-light dark:bg-background-dark rounded-lg">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="global-input-type" value="percentage" class="input-type-toggle" id="toggle-percentage" checked>
+                      <span class="toggle-label">Percentage (%)</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="global-input-type" value="weight" class="input-type-toggle" id="toggle-weight">
+                      <span class="toggle-label">Weight (g)</span>
+                    </label>
+                  </div>
+                </div>
+                <button type="button" id="add-row-btn" class="flex items-center gap-2 rounded-lg bg-primary hover:opacity-90 text-white font-semibold px-4 py-2 transition-colors">
+                  <span class="material-icons text-lg">add</span>
+                  <span>Add Row</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="border-b-2 border-border-light dark:border-border-dark text-sm font-semibold text-text-light dark:text-text-dark">
+                  <tr>
+                    <th class="p-3">Sl No</th>
+                    <th class="p-3">Metal Name</th>
+                    <th class="p-3" id="value-column-header">Percentage (%)</th>
+                    <th class="p-3 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="composition-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 p-4 bg-background-light dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Total Percentage:</span>
+                  <span id="total-percentage" class="ml-2 text-lg font-bold text-primary">0%</span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Total Weight:</span>
+                  <span id="total-weight" class="ml-2 text-lg font-bold text-primary">0 g</span>
+                </div>
+                <div>
+                  <span id="percentage-warning" class="text-sm text-red-500 dark:text-red-400 hidden">⚠️ Total percentage should equal 100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-end gap-4">
+            <button type="button" id="cancel-btn" class="rounded-lg border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark text-text-light dark:text-text-dark font-semibold px-6 py-2.5 transition-colors">Cancel</button>
+            <button type="button" id="reset-btn" class="rounded-lg border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark text-text-light dark:text-text-dark font-semibold px-6 py-2.5 transition-colors">Reset</button>
+            <button type="submit" id="save-recipe-btn" class="flex items-center gap-2 rounded-lg bg-primary hover:opacity-90 text-white font-semibold px-6 py-2.5 transition-opacity">
+              <span>Save Recipe</span>
+              <span class="material-icons">check</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let rowCount = 0;
+    let globalInputType = 'percentage';
+
+    const metalOptions = [
+      { value: "", label: "Select Metal" },
+      { value: "gold", label: "Gold" },
+      { value: "gold24", label: "Gold 24K" },
+      { value: "gold22", label: "Gold 22K" },
+      { value: "gold18", label: "Gold 18K" },
+      { value: "gold14", label: "Gold 14K" },
+      { value: "gold10", label: "Gold 10K" },
+      { value: "silver", label: "Silver" },
+      { value: "fine-silver", label: "Fine Silver (99.9)" },
+      { value: "sterling-silver", label: "Sterling Silver (92.5)" },
+      { value: "argentium-silver", label: "Argentium Silver (93.5 / 96)" },
+      { value: "britannia-silver", label: "Britannia Silver (95.8)" },
+      { value: "silvercoin", label: "Silver Coin" },
+      { value: "platinum", label: "Platinum" },
+      { value: "platinum950", label: "Platinum 950" },
+      { value: "platinum900", label: "Platinum 900" },
+      { value: "platinum850", label: "Platinum 850" },
+      { value: "platinum800", label: "Platinum 800" },
+      { value: "copper", label: "Copper" },
+      { value: "zinc", label: "Zinc" },
+      { value: "nickel", label: "Nickel" },
+      { value: "palladium", label: "Palladium" }
+    ];
+
+    function createCompositionRow(rowId = null) {
+      const id = rowId || ++rowCount;
+      const tbody = document.getElementById('composition-table-body');
+      const row = document.createElement('tr');
+      row.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+      row.dataset.rowId = id;
+
+      const metalSelectOptions = metalOptions.map(metal => `<option value="${metal.value}">${metal.label}</option>`).join('');
+      const showPercentage = globalInputType === 'percentage';
+
+      row.innerHTML = `
+        <td class="p-3 text-gray-500">${id}</td>
+        <td class="p-3">
+          <select class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary metal-name" required>
+            ${metalSelectOptions}
+          </select>
+        </td>
+        <td class="p-3">
+          <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary percentage-input" type="number" placeholder="0.00" step="0.01" min="0" max="100" style="${showPercentage ? '' : 'display:none;'}" ${showPercentage ? 'required' : ''}/>
+          <input class="w-full px-4 py-2 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary weight-input" type="number" placeholder="0.00" step="0.01" min="0" style="${showPercentage ? 'display:none;' : ''}" ${showPercentage ? '' : 'required'}/>
+        </td>
+        <td class="p-3 text-center">
+          <button type="button" class="remove-row-btn flex items-center justify-center mx-auto h-8 w-8 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors" title="Remove Row">
+            <span class="material-icons text-base">delete</span>
+          </button>
+        </td>
+      `;
+
+      row.querySelector('.remove-row-btn').addEventListener('click', () => {
+        if (tbody.children.length > 1) {
+          row.remove();
+          updateRowNumbers();
+          updateTotals();
+        } else {
+          alert('At least one row is required.');
+        }
+      });
+
+      row.querySelector('.percentage-input').addEventListener('input', updateTotals);
+      row.querySelector('.weight-input').addEventListener('input', updateTotals);
+
+      tbody.appendChild(row);
+      updateRowNumbers();
+      updateTotals();
+    }
+
+    function updateRowNumbers() {
+      const rows = document.querySelectorAll('#composition-table-body tr');
+      rows.forEach((row, index) => {
+        row.querySelector('td:first-child').textContent = index + 1;
+      });
+    }
+
+    function updateAllRowsInputType() {
+      const rows = document.querySelectorAll('#composition-table-body tr');
+      const headerColumn = document.getElementById('value-column-header');
+      headerColumn.textContent = globalInputType === 'percentage' ? 'Percentage (%)' : 'Weight (g)';
+
+      rows.forEach(row => {
+        const percentageInput = row.querySelector('.percentage-input');
+        const weightInput = row.querySelector('.weight-input');
+        if (globalInputType === 'percentage') {
+          percentageInput.style.display = '';
+          weightInput.style.display = 'none';
+          percentageInput.required = true;
+          weightInput.required = false;
+          weightInput.value = '';
+        } else {
+          percentageInput.style.display = 'none';
+          weightInput.style.display = '';
+          percentageInput.required = false;
+          weightInput.required = true;
+          percentageInput.value = '';
+        }
+      });
+      updateTotals();
+    }
+
+    function updateTotals() {
+      const rows = document.querySelectorAll('#composition-table-body tr');
+      let totalPercentage = 0;
+      let totalWeight = 0;
+      rows.forEach(row => {
+        const percentageInput = row.querySelector('.percentage-input');
+        const weightInput = row.querySelector('.weight-input');
+        if (globalInputType === 'percentage') {
+          totalPercentage += parseFloat(percentageInput.value) || 0;
+        } else {
+          totalWeight += parseFloat(weightInput.value) || 0;
+        }
+      });
+      document.getElementById('total-percentage').textContent = totalPercentage.toFixed(2) + '%';
+      document.getElementById('total-weight').textContent = totalWeight.toFixed(2) + ' g';
+
+      const warning = document.getElementById('percentage-warning');
+      if (globalInputType === 'percentage' && Math.abs(totalPercentage - 100) > 0.01 && totalPercentage > 0) {
+        warning.classList.remove('hidden');
+      } else {
+        warning.classList.add('hidden');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add row button
+      document.getElementById('add-row-btn').addEventListener('click', () => createCompositionRow());
+
+      // Reset button
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        if (confirm('Reset the form? All data will be lost.')) {
+          document.getElementById('alloy-recipe-form').reset();
+          document.getElementById('composition-table-body').innerHTML = '';
+          rowCount = 0;
+          createCompositionRow();
+          updateTotals();
+          updateToggleVisualState();
+        }
+      });
+
+      // Cancel button
+      document.getElementById('cancel-btn').addEventListener('click', () => {
+        if (confirm('Cancel and discard changes?')) {
+          window.location.href = '#';
+        }
+      });
+
+      // Form submission
+      document.getElementById('alloy-recipe-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+      const recipeName = document.getElementById('recipe-name').value.trim();
+      const recipeCode = document.getElementById('recipe-code').value.trim();
+      const colourType = document.getElementById('colour-type').value;
+      if (!recipeName || !recipeCode || !colourType) {
+        alert('Recipe name, code, and colour type are required.');
+        return;
+      }
+
+      const rows = document.querySelectorAll('#composition-table-body tr');
+      if (rows.length === 0) {
+        alert('Please add at least one composition row.');
+        return;
+      }
+
+      const composition = [];
+      let totalPercentage = 0;
+      let hasEmptyFields = false;
+
+      rows.forEach(row => {
+        const metalSelect = row.querySelector('.metal-name');
+        const metalValue = metalSelect.value;
+        const metalLabel = metalSelect.options[metalSelect.selectedIndex]?.text || '';
+        const percentageInput = row.querySelector('.percentage-input');
+        const weightInput = row.querySelector('.weight-input');
+        const percentage = globalInputType === 'percentage' ? (parseFloat(percentageInput.value) || 0) : null;
+        const weight = globalInputType === 'weight' ? (parseFloat(weightInput.value) || 0) : null;
+
+        if (!metalValue) hasEmptyFields = true;
+        if (metalValue && globalInputType === 'percentage' && percentage <= 0) hasEmptyFields = true;
+        if (metalValue && globalInputType === 'weight' && weight <= 0) hasEmptyFields = true;
+
+        if (metalValue && ((percentage !== null && percentage > 0) || (weight !== null && weight > 0))) {
+          composition.push({ metalName: metalLabel, metalValue, inputType: globalInputType, percentage, weight });
+          if (percentage !== null) totalPercentage += percentage;
+        }
+      });
+
+      if (hasEmptyFields) {
+        alert('Please select a metal and enter a value for all rows.');
+        return;
+      }
+      if (composition.length === 0) {
+        alert('Please add at least one metal with a valid value.');
+        return;
+      }
+      if (globalInputType === 'percentage' && Math.abs(totalPercentage - 100) > 0.01 && totalPercentage > 0) {
+        if (!confirm(`Total percentage is ${totalPercentage.toFixed(2)}%, not 100%. Do you still want to save?`)) {
+          return;
+        }
+      }
+
+      const formData = {
+        recipeName,
+        recipeCode,
+        colourType,
+        karatValue: document.getElementById('karat-value').value || null,
+        targetPurity: document.getElementById('target-purity').value || null,
+        expectedWastage: document.getElementById('expected-wastage').value || null,
+        inputType: globalInputType,
+        composition,
+        totalPercentage,
+        createdAt: new Date().toISOString()
+      };
+
+      const recipes = JSON.parse(localStorage.getItem('jems-alloy-recipes') || '[]');
+      recipes.push({ id: Date.now().toString(), ...formData });
+      localStorage.setItem('jems-alloy-recipes', JSON.stringify(recipes));
+
+      alert('Alloy recipe saved successfully!');
+      if (confirm('Recipe saved! Create another?')) {
+        document.getElementById('alloy-recipe-form').reset();
+        document.getElementById('composition-table-body').innerHTML = '';
+        rowCount = 0;
+        createCompositionRow();
+        updateTotals();
+        updateToggleVisualState();
+      }
+      });
+
+      // Initialize first row and toggle
+      createCompositionRow();
+      updateToggleVisualState();
+
+      // Toggle event listeners
+      const percentageToggle = document.getElementById('toggle-percentage');
+      const weightToggle = document.getElementById('toggle-weight');
+      percentageToggle.addEventListener('change', () => {
+        if (percentageToggle.checked) {
+          globalInputType = 'percentage';
+          updateAllRowsInputType();
+          updateToggleVisualState();
+        }
+      });
+      weightToggle.addEventListener('change', () => {
+        if (weightToggle.checked) {
+          globalInputType = 'weight';
+          updateAllRowsInputType();
+          updateToggleVisualState();
+        }
+      });
+    });
+
+    function updateToggleVisualState() {
+      const percentageToggle = document.getElementById('toggle-percentage');
+      const weightToggle = document.getElementById('toggle-weight');
+      const percentageLabel = percentageToggle.closest('label').querySelector('.toggle-label');
+      const weightLabel = weightToggle.closest('label').querySelector('.toggle-label');
+      if (percentageToggle.checked) {
+        percentageLabel.classList.add('active');
+        weightLabel.classList.remove('active');
+      } else {
+        percentageLabel.classList.remove('active');
+        weightLabel.classList.add('active');
+      }
+    }
+
+  </script>
+</body>
+</html>
+

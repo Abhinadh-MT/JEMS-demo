@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Stock Report - JEMS POS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "primary-dark": "#b0851d",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+            "status-green": "#22c55e",
+            "status-amber": "#f59e0b",
+            "status-red": "#ef4444",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .table-dense td, .table-dense th { @apply px-2 py-1.5 border-b border-border-light dark:border-border-dark; }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    .status-badge { @apply px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider text-center block w-fit; }
+    .low-stock-row { @apply bg-red-50/30 dark:bg-red-900/10; }
+    .high-density-text { font-size: 11px; letter-spacing: -0.01em; }
+  </style>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="pos-stock-report" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 flex flex-col overflow-hidden bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="bg-card-light dark:bg-card-dark border-b border-border-light dark:border-border-dark px-6 py-4 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-4">
+          <div class="p-2 rounded bg-background-light dark:bg-background-dark text-primary">
+            <span class="material-icons">analytics</span>
+          </div>
+          <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">Advanced Stock & Procurement Report</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="flex items-center gap-2 px-3 py-1.5 border border-border-light dark:border-border-dark rounded text-xs font-semibold hover:bg-background-light dark:hover:bg-background-dark transition-colors text-text-light dark:text-text-dark">
+            <span class="material-icons text-sm">description</span>
+            Export to Excel
+          </button>
+          <button class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded text-xs font-bold hover:opacity-90 transition-opacity shadow-sm">
+            <span class="material-icons text-sm">print</span>
+            Print Report
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <!-- Summary cards -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-card-light dark:bg-card-dark p-4 border border-border-light dark:border-border-dark rounded-lg shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-[10px] font-bold text-primary uppercase">Total Stock Value</p>
+              <span class="material-icons text-primary text-lg">payments</span>
+            </div>
+            <p class="text-xl font-bold tabular-nums text-text-light dark:text-text-dark">₹ 1,42,50,000</p>
+            <div class="mt-1 text-[9px] text-gray-400 font-medium uppercase">Live Market Evaluation</div>
+          </div>
+          <div class="bg-card-light dark:bg-card-dark p-4 border border-border-light dark:border-border-dark rounded-lg shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-[10px] font-bold text-primary uppercase">Total Net Weight</p>
+              <span class="material-icons text-primary text-lg">scale</span>
+            </div>
+            <p class="text-xl font-bold tabular-nums text-text-light dark:text-text-dark">1,245.50 <span class="text-xs font-medium text-primary">g</span></p>
+            <div class="mt-1 text-[9px] text-gray-400 font-medium uppercase">Consolidated Pure Metal</div>
+          </div>
+          <div class="bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-[10px] font-bold text-status-red uppercase">Out of Stock</p>
+              <span class="material-icons text-status-red text-lg">dangerous</span>
+            </div>
+            <p class="text-xl font-bold tabular-nums text-status-red">12</p>
+            <div class="mt-1 text-[9px] text-red-400 font-medium uppercase tracking-tight">Immediate Action Required</div>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-900/20 p-4 border border-amber-200 dark:border-amber-800 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-[10px] font-bold text-status-amber uppercase">Low Stock Items</p>
+              <span class="material-icons text-status-amber text-lg">warning</span>
+            </div>
+            <p class="text-xl font-bold tabular-nums text-status-amber">28</p>
+            <div class="mt-1 text-[9px] text-amber-500 font-medium uppercase tracking-tight">Below Re-order levels</div>
+          </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="bg-card-light dark:bg-card-dark p-4 rounded-lg border border-border-light dark:border-border-dark shadow-sm">
+          <div class="flex flex-wrap items-end gap-3">
+            <div class="w-32">
+              <label class="text-[10px] font-bold text-primary uppercase block mb-1">Metal</label>
+              <select class="w-full px-2 py-1.5 border border-border-light dark:border-border-dark rounded text-xs focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+                <option>All</option>
+                <option>Gold</option>
+                <option>Silver</option>
+              </select>
+            </div>
+            <div class="w-32">
+              <label class="text-[10px] font-bold text-primary uppercase block mb-1">Category</label>
+              <select class="w-full px-2 py-1.5 border border-border-light dark:border-border-dark rounded text-xs focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+                <option>All</option>
+                <option>Ring</option>
+                <option>Bangle</option>
+                <option>Necklace</option>
+                <option>Silverware</option>
+              </select>
+            </div>
+            <div class="w-32">
+              <label class="text-[10px] font-bold text-primary uppercase block mb-1">Supplier</label>
+              <select class="w-full px-2 py-1.5 border border-border-light dark:border-border-dark rounded text-xs focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+                <option>All Suppliers</option>
+                <option>Royal Jewels</option>
+                <option>Opal Exports</option>
+                <option>Heritage Gold</option>
+                <option>In-House Mfg</option>
+                <option>Elite Silver</option>
+              </select>
+            </div>
+            <div class="w-32">
+              <label class="text-[10px] font-bold text-primary uppercase block mb-1">Stock Status</label>
+              <select class="w-full px-2 py-1.5 border border-border-light dark:border-border-dark rounded text-xs focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+                <option>All Status</option>
+                <option>In Stock</option>
+                <option>Low Stock</option>
+                <option>Out of Stock</option>
+              </select>
+            </div>
+            <div class="flex-1 min-w-[150px]">
+              <label class="text-[10px] font-bold text-primary uppercase block mb-1">Search SKU/Barcode</label>
+              <div class="relative">
+                <span class="material-icons absolute left-2 top-1/2 -translate-y-1/2 text-sm text-primary">search</span>
+                <input class="w-full pl-8 pr-2 py-1.5 border border-border-light dark:border-border-dark rounded text-xs focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark" placeholder="Type to search..." type="text"/>
+              </div>
+            </div>
+            <button class="bg-slate-900 dark:bg-slate-700 text-white px-4 py-1.5 rounded text-xs font-bold hover:opacity-90 transition-all">
+              Search
+            </button>
+          </div>
+        </section>
+
+        <!-- Table -->
+        <section class="bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-lg shadow-sm overflow-hidden">
+          <div class="p-3 border-b border-border-light dark:border-border-dark flex justify-between items-center bg-background-light dark:bg-background-dark">
+            <h3 class="text-[10px] font-bold uppercase text-primary tracking-wider flex items-center gap-2">
+              <span class="material-icons text-sm">inventory_2</span>
+              Inventory Procurement Ledger
+            </h3>
+            <div class="text-[10px] font-medium text-primary">Showing 582 High-Density Records</div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left table-dense high-density-text">
+              <thead>
+                <tr class="bg-background-light dark:bg-background-dark text-primary text-[9px] font-bold uppercase">
+                  <th class="border-r border-border-light dark:border-border-dark">Barcode</th>
+                  <th>SKU</th>
+                  <th>Item Name</th>
+                  <th>Category</th>
+                  <th class="text-right">Net Wt</th>
+                  <th class="text-right">Qty</th>
+                  <th class="text-right">Re-order</th>
+                  <th class="text-center">Status</th>
+                  <th>Supplier</th>
+                  <th>Last Rcvd</th>
+                  <th class="text-right bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark">Value</th>
+                </tr>
+              </thead>
+              <tbody class="tabular-nums text-text-light dark:text-text-dark">
+                <tr class="hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                  <td class="font-bold border-r border-border-light dark:border-border-dark text-primary">829100124</td>
+                  <td class="text-gray-500">G-RING-001</td>
+                  <td class="font-semibold">Floral Wedding Band</td>
+                  <td>Ring</td>
+                  <td class="text-right">12.50g</td>
+                  <td class="text-right font-medium">15</td>
+                  <td class="text-right text-gray-400">5</td>
+                  <td class="text-center">
+                    <span class="status-badge bg-green-100 dark:bg-green-900/30 text-status-green mx-auto">In Stock</span>
+                  </td>
+                  <td class="truncate max-w-[100px]">Royal Jewels</td>
+                  <td class="text-gray-500">12 Oct 2023</td>
+                  <td class="text-right font-bold bg-card-light dark:bg-card-dark">₹ 78,125</td>
+                </tr>
+                <tr class="hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors low-stock-row">
+                  <td class="font-bold border-r border-border-light dark:border-border-dark text-primary">829100125</td>
+                  <td class="text-gray-500">D-NEC-045</td>
+                  <td class="font-semibold text-red-700 dark:text-red-400">Diamond Cluster Neck</td>
+                  <td>Necklace</td>
+                  <td class="text-right">40.70g</td>
+                  <td class="text-right font-bold text-status-amber">2</td>
+                  <td class="text-right text-gray-600 dark:text-gray-400 font-bold">5</td>
+                  <td class="text-center">
+                    <span class="status-badge bg-amber-100 dark:bg-amber-900/30 text-status-amber mx-auto">Low Stock</span>
+                  </td>
+                  <td class="truncate max-w-[100px]">Opal Exports</td>
+                  <td class="text-gray-500">05 Sep 2023</td>
+                  <td class="text-right font-bold bg-card-light dark:bg-card-dark">₹ 4,25,000</td>
+                </tr>
+                <tr class="hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors low-stock-row">
+                  <td class="font-bold border-r border-border-light dark:border-border-dark text-primary">829100126</td>
+                  <td class="text-gray-500">G-BAN-012</td>
+                  <td class="font-semibold text-red-700 dark:text-red-400">Antique Polki Bangle</td>
+                  <td>Bangle</td>
+                  <td class="text-right">23.60g</td>
+                  <td class="text-right font-bold text-status-red">0</td>
+                  <td class="text-right text-gray-600 dark:text-gray-400 font-bold">3</td>
+                  <td class="text-center">
+                    <span class="status-badge bg-red-100 dark:bg-red-900/30 text-status-red mx-auto">Out of Stock</span>
+                  </td>
+                  <td class="truncate max-w-[100px]">Heritage Gold</td>
+                  <td class="text-gray-500">22 Aug 2023</td>
+                  <td class="text-right font-bold bg-card-light dark:bg-card-dark">₹ 0</td>
+                </tr>
+                <tr class="hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                  <td class="font-bold border-r border-border-light dark:border-border-dark text-primary">829100127</td>
+                  <td class="text-gray-500">G-RING-054</td>
+                  <td class="font-semibold">Plain Gold Band 4mm</td>
+                  <td>Ring</td>
+                  <td class="text-right">5.50g</td>
+                  <td class="text-right font-medium">42</td>
+                  <td class="text-right text-gray-400">10</td>
+                  <td class="text-center">
+                    <span class="status-badge bg-green-100 dark:bg-green-900/30 text-status-green mx-auto">In Stock</span>
+                  </td>
+                  <td class="truncate max-w-[100px]">In-House Mfg</td>
+                  <td class="text-gray-500">01 Nov 2023</td>
+                  <td class="text-right font-bold bg-card-light dark:bg-card-dark">₹ 1,71,875</td>
+                </tr>
+                <tr class="hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors low-stock-row">
+                  <td class="font-bold border-r border-border-light dark:border-border-dark text-primary">829100128</td>
+                  <td class="text-gray-500">S-SET-009</td>
+                  <td class="font-semibold text-red-700 dark:text-red-400">Silver Puja Thali</td>
+                  <td>Silverware</td>
+                  <td class="text-right">250.0g</td>
+                  <td class="text-right font-bold text-status-amber">1</td>
+                  <td class="text-right text-gray-600 dark:text-gray-400 font-bold">2</td>
+                  <td class="text-center">
+                    <span class="status-badge bg-amber-100 dark:bg-amber-900/30 text-status-amber mx-auto">Low Stock</span>
+                  </td>
+                  <td class="truncate max-w-[100px]">Elite Silver</td>
+                  <td class="text-gray-500">15 Jul 2023</td>
+                  <td class="text-right font-bold bg-card-light dark:bg-card-dark">₹ 22,500</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="bg-slate-900 dark:bg-slate-800 text-white font-bold border-t-2 border-primary">
+                  <td class="px-3 py-2 border-r border-white/10 uppercase" colspan="2">Consolidated Total</td>
+                  <td class="px-3 py-2" colspan="2">-</td>
+                  <td class="px-3 py-2 text-right text-primary">1,245.50 <span class="text-[8px] font-normal text-gray-400">g</span></td>
+                  <td class="px-3 py-2 text-right">582</td>
+                  <td class="px-3 py-2 text-right">-</td>
+                  <td class="px-3 py-2 text-center" colspan="3">
+                    <span class="text-[9px] text-gray-400 font-normal uppercase italic">Procurement Summary Data</span>
+                  </td>
+                  <td class="px-3 py-2 text-right bg-primary text-slate-900 text-sm tabular-nums font-extrabold">₹ 1,42,50,000</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <footer class="bg-card-light dark:bg-card-dark border-t border-border-light dark:border-border-dark px-6 py-2 flex justify-between items-center text-[10px] text-primary shrink-0">
+        <div class="flex items-center gap-4">
+          <span>JEMS ERP v4.5.0 Premium</span>
+          <span class="text-gray-300">|</span>
+          <span>User: admin_jewel_01</span>
+          <span class="text-gray-300">|</span>
+          <span class="font-bold text-primary">Inventory Hub: Main Branch</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1 text-status-green">
+            <div class="w-1.5 h-1.5 rounded-full bg-status-green"></div>
+            Database Synced
+          </span>
+          <span>Auto-refresh: 30s</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+  <script src="menu.js"></script>
+</body>
+</html>

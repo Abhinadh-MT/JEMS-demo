@@ -1,0 +1,112 @@
+/* JEMS Design System Styles */
+/* Most styling is now handled by Tailwind CSS classes */
+/* This file contains any additional custom styles if needed */
+
+/* Submenu animation for collapsible menus */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+  max-height: 2000px; /* Increased to allow all items to be visible */
+}
+
+/* Ensure menu sidebar takes full height and scrolls properly */
+body.flex {
+  overflow: hidden;
+}
+
+body.flex > div {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+#menu-container {
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+#menu-container aside {
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* background: linear-gradient(180deg, #1B1833 0%, #1B1833 97%, #D39D55 97%, #D39D55 100%);
+   */
+   background-color: rgba(5, 5, 5, 0.926);
+  color: white;
+}
+
+/* Make all text white inside the menu bar */
+#menu-container aside * {
+  color: white;
+}
+
+/* Ensure links are white */
+#menu-container aside .menu-link {
+  color: white !important;
+}
+
+/* Ensure buttons are white */
+#menu-container aside button {
+  color: white !important;
+}
+
+/* Ensure headings are white */
+#menu-container aside h1,
+#menu-container aside h2,
+#menu-container aside h3 {
+  color: white !important;
+}
+
+/* Ensure material icons are white */
+#menu-container aside .material-icons {
+  color: white !important;
+}
+
+#menu-container nav.menu-nav-scroll,
+#menu-container nav {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
+  flex: 1 1 0%;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  min-height: 0;
+  max-height: none;
+}
+
+#menu-container nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+#menu-container nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#menu-container nav::-webkit-scrollbar-thumb {
+  background-color: rgba(212, 175, 55, 0.3);
+  border-radius: 3px;
+}
+
+#menu-container nav::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(212, 175, 55, 0.5);
+}
+
+/* Buttons outside menu bar - use #D39D55 color */
+main button.bg-primary,
+body > div > main button.bg-primary {
+  background-color: #D39D55 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Mobile-specific styles can be added here */
+  /* Tailwind handles most responsive design via utility classes */
+}

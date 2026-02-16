@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS - Jewellery Catalogue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#b8860b",
+              "background-light": "#FDFBF7",
+              "background-dark": "#221c10",
+              "text-light": "#333333",
+              "text-dark": "#f0f0f0",
+              "border-light": "#d4af37",
+              "border-dark": "#4a4a4a"
+            },
+            fontFamily: {
+              "display": ["Playfair Display", "serif"],
+              "body": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light/50 dark:border-border-dark px-10 py-3 bg-background-light dark:bg-background-dark fixed top-0 left-0 right-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined text-3xl text-primary">diamond</span>
+<h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-tight tracking-[-0.015em] font-display">JEMS</h2>
+</div>
+<div class="flex items-center gap-9">
+<a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-primary dark:text-primary text-sm font-bold leading-normal" href="#">Catalogue</a>
+<a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal" href="#">Orders</a>
+<a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal" href="#">Customers</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<label class="flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-text-light/70 dark:text-text-dark/70 flex border border-r-0 border-border-light/50 dark:border-border-dark bg-background-light dark:bg-background-dark/50 items-center justify-center pl-3 rounded-l-lg">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-1 focus:ring-primary border-l-0 border-border-light/50 dark:border-border-dark bg-background-light dark:bg-background-dark/50 h-full placeholder:text-text-light/50 dark:placeholder:text-text-dark/50 px-4 rounded-l-none text-base font-normal leading-normal" placeholder="Search" value=""/>
+</div>
+</label>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Add New Design</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCh4yqyxWfVOtDeBo_PHNDGAnrDJElBpzg-6c7zLRXa6aIw-eDiHuxM71BnCd4dgo29yj2ClchwDo_H_-lOCLVosSLNqqxxNhcay8ilTltS332guMArcFTeGoLkZ-v_u0nm6FV3ZENFI_vtg6mY6CbHGIFckcRIp52T7-7skBDhYijqE0O0ufEiSt_rdYBVP03xcDLPbdnQKHQ37a14OObgFnXNKuIgcbV2i2sL5lO_z3AXA6aDt-G-j4MqJVClle6v7uu7pc1VxA");'></div>
+</div>
+</header>
+<div class="flex flex-1 pt-[68px]">
+<aside class="w-64 fixed top-[68px] bottom-0 left-0 border-r border-border-light/50 dark:border-border-dark p-4 bg-background-light dark:bg-background-dark">
+<div class="flex h-full flex-col justify-between">
+<div class="flex flex-col gap-6">
+<div class="flex flex-col">
+<h1 class="text-text-light dark:text-text-dark text-lg font-bold leading-normal font-display">Filter &amp; Sort</h1>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">Refine your search</p>
+</div>
+<div class="flex flex-col gap-4">
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-normal">Product Type</p>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 dark:bg-primary/30" href="#">
+<p class="text-primary dark:text-primary text-sm font-medium leading-normal">All</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">Rings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">Necklaces</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">Earrings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">Bracelets</p>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-normal">Gold Purity</p>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">22 CT</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">18 CT</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">916</p>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="text-text-light dark:text-text-dark text-sm font-bold leading-normal" for="price-range">Price Range</label>
+<input class="w-full h-2 bg-primary/20 rounded-lg appearance-none cursor-pointer dark:bg-primary/30" id="price-range" max="10000" min="500" step="100" type="range"/>
+<div class="flex justify-between text-xs text-text-light/70 dark:text-text-dark/70">
+<span>$500</span>
+<span>$10000</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Apply Filters</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="ml-64 flex-1">
+<div class="p-8">
+<div class="flex flex-wrap justify-between gap-3 mb-8">
+<div class="flex min-w-72 flex-col gap-3">
+<h1 class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em] font-display">Jewellery Design Catalogue</h1>
+<p class="text-text-light/70 dark:text-text-dark/70 text-base font-normal leading-normal">Browse our exquisite collection</p>
+</div>
+</div>
+<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
+<div class="flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover" data-alt="Elegant Diamond Solitaire Ring" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBeYBHdrkBuCoLTtFhf3CktF4AzBgnDs8q-xIS5zfV8BsynC78lKdKfPdCYZtmlX8hmHCXx7muuk0BHTxybV8QGbfSPTc89kDdUV7OlNsZGi8iEfGRuiy3j8900UX54BMc7Tcn1xiBAp0uKYHAdGvR0U9vljhXo2GoISUwapuGzg6aGnx_BZJKFa4tlNis07oeC_CzBcZdIBn522-68L4LROhNFzc0vwhqR43XAZMX_ma0f9mkJa_MpC5DU5d9bkZE0SrNSHCu29A");'></div>
+<div class="p-4 flex flex-col gap-3">
+<p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal font-display">Elegant Diamond Solitaire Ring</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">A timeless piece featuring a brilliant-cut diamond. </p>
+<div class="flex gap-2">
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">White Gold</span>
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">22 CT</span>
+</div>
+<div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+<p><span class="font-semibold">Gold:</span> 5.2g</p>
+<p><span class="font-semibold">Diamond:</span> 0.50ct</p>
+<p class="text-lg font-bold text-primary">$2,500</p>
+</div>
+<button class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover" data-alt="Classic Gold Bangle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfY-nTWf02pIZQjatHDknC16cvy-zCUyJ89uNE7Xa9O-9E4PiIHAqgOOK7f2UGWSHw5O3pasH6m6UInQZGbrY-Pynfm5ZXmXfX1pC8Uj0an0R82nK9Z01_iK7h6vN1wSxxePiUHzB4sp0LR2bmfLs8QPhZQR20Yoq5kPFIM8NHDt6XQVJZ1-mvI5I87x_gFwdKzW6tKr3lLB9PS9OiNFoJr26BQ8nsL1Kz7VX6eR0zwCJ9S__NVKKAp05ItCSohTKtTxmOdxOPIQ");'></div>
+<div class="p-4 flex flex-col gap-3">
+<p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal font-display">Classic Gold Bangle</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">A classic and versatile gold bangle.</p>
+<div class="flex gap-2">
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">Yellow Gold</span>
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">916</span>
+</div>
+<div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+<p><span class="font-semibold">Gold:</span> 10g</p>
+<p><span class="font-semibold">Diamond:</span> N/A</p>
+<p class="text-lg font-bold text-primary">$800</p>
+</div>
+<button class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover" data-alt="Sapphire Drop Earrings" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBROrgtqzhqv-hb2y6wtxekPaokeoRFMzMm_0DduER5oSJxDVJ3fIxkjDAt7piwVqQT_cR97_ktqD9k_6b1HEFxhTMeaRa-zP6gqb41dUnG5PZl7EIKmO3rAPUkoVGqKVOPZYkEMi-MB01CVyXn_7bzODBPSd98AKB_fBXlnGDuDgTaYdNV19YSE7B-Ta4zkzxc6sXTBD5ra3hHJKFNiGJA9loRwZ4l9E3jIUhqYhNXlIJ-vb6pzswhYrwOB0Lf55lHrrWqnh9a9g");'></div>
+<div class="p-4 flex flex-col gap-3">
+<p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal font-display">Sapphire Drop Earrings</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">Stunning sapphire earrings perfect for any occasion.</p>
+<div class="flex gap-2">
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">White Gold</span>
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">18 CT</span>
+</div>
+<div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+<p><span class="font-semibold">Gold:</span> 3.5g</p>
+<p><span class="font-semibold">Sapphire:</span> 1.20ct</p>
+<p class="text-lg font-bold text-primary">$3,200</p>
+</div>
+<button class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover" data-alt="Pearl Strand Necklace" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCPAV3CoRU8M-3k9TLhgx72JXjSoeT2_5IEwq0DfM2go5ZEZG9dhmoYgPQRvCl-7FvWw2u7XQXJ3DXxwqezVjFnVIl3dBxprzaGXG3Nshm1_KGvH3_saOgIuIhaEej71qWrqVaAkw0hp0-5tD_iKvcWcBxK6hfz7bp8yyy43MMIIOrlxwRvVGiLZpBBVfPzOTaGMa7guXeeWBoEuEbM0H4OmtyAOfVwuyec6WvERfFVkAGL4zGzxNfSM16jFKu6LFdBzQvozAuwrg");'></div>
+<div class="p-4 flex flex-col gap-3">
+<p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal font-display">Pearl Strand Necklace</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">An elegant pearl necklace for a classic look.</p>
+<div class="flex gap-2">
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">Rose Gold</span>
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">22 CT</span>
+</div>
+<div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+<p><span class="font-semibold">Gold:</span> 7g</p>
+<p><span class="font-semibold">Pearl:</span> Various</p>
+<p class="text-lg font-bold text-primary">$1,500</p>
+</div>
+<button class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover" data-alt="Emerald Cut Ring" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCu7hTX1yUdMhygnPMJN_1B00sDqj2oblyBa05j0zfRkZQv9beY2AdQOP7aFpj-w9XorWIadRsG2y_B10JULTppiLaeWzj2ja3RGdZKFvS_UsAGymzpzZkunfddnU44E95wST4vTgkOcHum8TRnI1BVC9wG57Pj2R9yroBlKt9SnwVb95zv9Gfm5L1Rk49zH0RUorNz-oq8F9ppVAAbeFLhqeuX0DnFXVs1Zf--DTnC4NaH1IyDtOSs_IJYCYAPdifmOYNvHbCVwA");'></div>
+<div class="p-4 flex flex-col gap-3">
+<p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal font-display">Emerald Cut Ring</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">A breathtaking emerald cut diamond ring.</p>
+<div class="flex gap-2">
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">White Gold</span>
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">18 CT</span>
+</div>
+<div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+<p><span class="font-semibold">Gold:</span> 6g</p>
+<p><span class="font-semibold">Diamond:</span> 2.00ct</p>
+<p class="text-lg font-bold text-primary">$7,500</p>
+</div>
+<button class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details</button>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover" data-alt="Men's Gold Chain" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBid0b48dx4gNUmxrWUo15lWtnW22mBmpf6NCzBYSGEJg2OuToFap_JGmPIkvkRMlX0OqSbsO2LahmrK3nwEQM-WdnE5kqfII89s66o9aUjBb5aeJUrPjywWKAE_Pm58w1tMhBdyn43Za8UN_81DC17TP6xPt3Xz_8y3QTeH9yfz0C_6d9o9d-4Iu-M47Q5BMPNvhPnhRQ7llH2oI37OlNPAeL7naYNc2aL9YI9TCe3XiTL_uQhQpEY6I3qo7f7Hue7cxduGRUWew");'></div>
+<div class="p-4 flex flex-col gap-3">
+<p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal font-display">Men's Gold Chain</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">A stylish gold chain for men.</p>
+<div class="flex gap-2">
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">Yellow Gold</span>
+<span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">916</span>
+</div>
+<div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+<p><span class="font-semibold">Gold:</span> 20g</p>
+<p><span class="font-semibold">Diamond:</span> N/A</p>
+<p class="text-lg font-bold text-primary">$1,600</p>
+</div>
+<button class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details</button>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-center p-4 mt-8">
+<a class="flex size-10 items-center justify-center text-text-light dark:text-text-dark" href="#">
+<span class="material-symbols-outlined">chevron_left</span>
+</a>
+<a class="text-sm font-bold leading-normal tracking-[0.015em] flex size-10 items-center justify-center text-white rounded-full bg-primary" href="#">1</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20" href="#">2</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20" href="#">3</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20" href="#">4</a>
+<a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20" href="#">5</a>
+<a class="flex size-10 items-center justify-center text-text-light dark:text-text-dark" href="#">
+<span class="material-symbols-outlined">chevron_right</span>
+</a>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</body></html>

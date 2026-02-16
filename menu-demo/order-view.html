@@ -1,0 +1,1579 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>View Order - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="order-view" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">View Order</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1" id="order-id-display">Order Details</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button type="button" id="back-btn" class="flex items-center gap-2 px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              <span class="material-icons">arrow_back</span>
+              <span>Back</span>
+            </button>
+            <button type="button" id="delete-order-btn" class="flex items-center gap-2 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              <span class="material-icons">delete</span>
+              <span>Delete Order</span>
+            </button>
+            <button type="button" id="edit-order-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              <span class="material-icons">edit</span>
+              <span>Edit Order</span>
+            </button>
+            <button type="button" id="save-order-btn" class="hidden flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              <span class="material-icons">save</span>
+              <span>Save Changes</span>
+            </button>
+            <button type="button" id="cancel-edit-btn" class="hidden flex items-center gap-2 px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Order Header Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Order Information</h2>
+        
+        <form id="order-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Order Type -->
+            <div>
+              <label for="order-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Order Type <span class="text-red-500">*</span>
+              </label>
+              <select id="order-type" name="orderType" required disabled
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 cursor-not-allowed">
+                <option value="">Select Order Type</option>
+                <option value="NEW_CUSTOMER">New Customer Order</option>
+                <option value="REPAIR">Repair Order</option>
+                <option value="COMPANY">Company Order</option>
+              </select>
+            </div>
+
+            <!-- Customer Name -->
+            <div>
+              <label for="customer-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Customer Name <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="customer-name" name="customerName" required disabled
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                     placeholder="Customer name...">
+            </div>
+
+            <!-- Expected Delivery Date -->
+            <div>
+              <label for="delivery-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Expected Delivery Date
+              </label>
+              <input type="date" id="delivery-date" name="deliveryDate" disabled
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 cursor-not-allowed">
+            </div>
+
+            <!-- Order No -->
+            <div>
+              <label for="order-no" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Order No.
+              </label>
+              <input type="text" id="order-no" name="orderNo" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 cursor-not-allowed">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Item Entry Panel -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Item Entry Panel</h2>
+          <button type="button" id="add-item-btn" class="hidden flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm">
+            <span class="material-icons text-base">add</span>
+            <span>Add Item</span>
+          </button>
+        </div>
+
+        <div id="items-container" class="space-y-6">
+          <!-- Dynamic items will be added here -->
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Order Summary</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left border-collapse">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark border-b-2 border-border-light dark:border-border-dark">
+              <tr>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark" scope="col">SI No</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark" scope="col">Item Name</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark" scope="col">Type / Category / Size</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark" scope="col">Carat Weight</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark" scope="col">Count</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark" scope="col">Colour</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark text-right" scope="col">Rate</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark text-right" scope="col">Total Price</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark text-center" scope="col">Quantity</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark text-right" scope="col">Total Cost</th>
+                <th class="px-3 py-3 border border-border-light dark:border-border-dark text-center" scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="order-summary-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-summary-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">shopping_cart</span>
+            <p>No items in this order.</p>
+          </div>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <div class="w-full max-w-sm rounded-lg bg-primary/10 dark:bg-primary/20 p-4 border border-primary/30">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold text-primary">Total Order Value</p>
+              <p class="text-2xl font-bold text-text-light dark:text-text-dark" id="total-order-value">$0.00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let currentOrder = null;
+    let isEditMode = false;
+    let itemCounter = 0;
+    let originalOrderData = null;
+
+    // Get order ID from URL
+    function getOrderIdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('orderId');
+    }
+
+    // Load order data
+    function loadOrder() {
+      const orderId = getOrderIdFromURL();
+      if (!orderId) {
+        alert('Order ID not found. Redirecting to order report...');
+        window.location.href = 'order-report.html';
+        return;
+      }
+
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      currentOrder = orders.find(o => o.orderId === orderId);
+      
+      if (!currentOrder) {
+        alert('Order not found. Redirecting to order report...');
+        window.location.href = 'order-report.html';
+        return;
+      }
+
+      originalOrderData = JSON.parse(JSON.stringify(currentOrder));
+      displayOrder();
+    }
+
+    // Display order in view mode
+    function displayOrder() {
+      document.getElementById('order-id-display').textContent = `Order: ${currentOrder.orderId}`;
+      document.getElementById('order-no').value = currentOrder.orderId || '';
+      document.getElementById('order-type').value = currentOrder.orderType || '';
+      document.getElementById('customer-name').value = currentOrder.customerName || '';
+      document.getElementById('delivery-date').value = currentOrder.deliveryDate || '';
+      document.getElementById('total-order-value').textContent = `$${currentOrder.totalValue ? currentOrder.totalValue.toFixed(2) : '0.00'}`;
+
+      // Design images are now per-item, so we don't need to load them here
+
+      // Display items
+      const container = document.getElementById('items-container');
+      container.innerHTML = '';
+      itemCounter = 0;
+
+      if (currentOrder.items && currentOrder.items.length > 0) {
+        currentOrder.items.forEach(item => {
+          const itemForm = createItemForm(itemCounter++, item, false);
+          container.appendChild(itemForm);
+        });
+      }
+
+      updateOrderSummary();
+    }
+
+
+    // Helper functions
+    function safeValue(val) {
+      return val !== undefined && val !== null ? val : '';
+    }
+    
+    function safeNumber(val) {
+      return val !== undefined && val !== null ? val : '';
+    }
+
+    // Create item form (reused from order-creation with edit mode support)
+    function createItemForm(itemIndex, defaults = {}, editable = false) {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'border border-border-light dark:border-border-dark rounded-lg p-6 bg-background-light dark:bg-background-dark';
+      itemDiv.dataset.itemIndex = itemIndex;
+      
+      defaults = defaults || {};
+      const readonlyClass = editable ? '' : 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed';
+      const readonlyAttr = editable ? '' : 'disabled';
+      const deleteBtnStyle = editable ? '' : 'hidden';
+      
+      itemDiv.innerHTML = `
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-text-light dark:text-text-dark">Item ${itemIndex + 1}</h3>
+          <button type="button" class="delete-item-btn text-red-500 hover:opacity-80 ${deleteBtnStyle}">
+            <span class="material-icons">delete</span>
+          </button>
+        </div>
+
+        <!-- Basic Item Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="col-span-1 md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Item Name <span class="text-red-500">*</span></label>
+            <input type="text" class="item-name w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${editable ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="e.g., Jasmine Necklace" value="${safeValue(defaults.name)}" ${editable ? 'required' : readonlyAttr}>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">SKU Reference ${editable ? '<span class="text-gray-400">(Optional)</span>' : ''}</label>
+            <input type="text" class="item-sku w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${editable ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="SKU-REF-001" value="${safeValue(defaults.sku)}" ${readonlyAttr}>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quantity <span class="text-red-500">*</span></label>
+            <input type="number" class="item-quantity w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${editable ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" min="1" value="${defaults.quantity || 1}" ${editable ? 'required' : readonlyAttr}>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+            ${editable ? `
+            <div class="flex items-center gap-2">
+              <select class="item-category flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select Category</option>
+                <option value="necklace" ${defaults.category === 'necklace' ? 'selected' : ''}>Necklace</option>
+                <option value="ring" ${defaults.category === 'ring' ? 'selected' : ''}>Ring</option>
+                <option value="earrings" ${defaults.category === 'earrings' ? 'selected' : ''}>Earrings</option>
+                <option value="bracelet" ${defaults.category === 'bracelet' ? 'selected' : ''}>Bracelet</option>
+              </select>
+              <button type="button" class="add-category-btn flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity" title="Add New Category">
+                <span class="material-icons text-base">add</span>
+              </button>
+            </div>
+            ` : `
+            <select class="item-category flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${readonlyClass}" ${readonlyAttr}>
+              <option value="">Select Category</option>
+              <option value="necklace" ${defaults.category === 'necklace' ? 'selected' : ''}>Necklace</option>
+              <option value="ring" ${defaults.category === 'ring' ? 'selected' : ''}>Ring</option>
+              <option value="earrings" ${defaults.category === 'earrings' ? 'selected' : ''}>Earrings</option>
+              <option value="bracelet" ${defaults.category === 'bracelet' ? 'selected' : ''}>Bracelet</option>
+            </select>
+            `}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sub Category</label>
+            ${editable ? `
+            <div class="flex items-center gap-2">
+              <select class="item-subcategory flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select Sub Category</option>
+                <option value="pendant" ${defaults.subcategory === 'pendant' ? 'selected' : ''}>Pendant</option>
+                <option value="chain" ${defaults.subcategory === 'chain' ? 'selected' : ''}>Chain</option>
+                <option value="choker" ${defaults.subcategory === 'choker' ? 'selected' : ''}>Choker</option>
+              </select>
+              <button type="button" class="add-subcategory-btn flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity" title="Add New Sub Category">
+                <span class="material-icons text-base">add</span>
+              </button>
+            </div>
+            ` : `
+            <select class="item-subcategory flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${readonlyClass}" ${readonlyAttr}>
+              <option value="">Select Sub Category</option>
+              <option value="pendant" ${defaults.subcategory === 'pendant' ? 'selected' : ''}>Pendant</option>
+              <option value="chain" ${defaults.subcategory === 'chain' ? 'selected' : ''}>Chain</option>
+              <option value="choker" ${defaults.subcategory === 'choker' ? 'selected' : ''}>Choker</option>
+            </select>
+            `}
+          </div>
+        </div>
+
+        <!-- Metal Details -->
+        <div class="border-t border-border-light dark:border-border-dark pt-6 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-base font-semibold text-text-light dark:text-text-dark">Metal Details</h4>
+            <button type="button" class="add-metal-btn flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80" style="${editable ? '' : 'display: none;'}">
+              <span class="material-icons text-base">add_circle_outline</span>
+              <span>Add Metal Details</span>
+            </button>
+          </div>
+          <div class="metal-details-container space-y-4">
+            <!-- Metal detail rows will be added here -->
+          </div>
+        </div>
+
+        <!-- Diamond Details -->
+        <div class="border-t border-border-light dark:border-border-dark pt-6 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-base font-semibold text-text-light dark:text-text-dark">Diamond Details</h4>
+            <button type="button" class="add-diamond-btn flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80" style="${editable ? '' : 'display: none;'}">
+              <span class="material-icons text-base">add_circle_outline</span>
+              <span>Add Diamond Details</span>
+            </button>
+          </div>
+          <div class="diamond-details-container space-y-4">
+            <!-- Diamond detail rows will be added here -->
+          </div>
+        </div>
+
+        <!-- Stone Details -->
+        <div class="border-t border-border-light dark:border-border-dark pt-6 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-base font-semibold text-text-light dark:text-text-dark">Stone Details</h4>
+            <button type="button" class="add-stone-btn flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80" style="${editable ? '' : 'display: none;'}">
+              <span class="material-icons text-base">add_circle_outline</span>
+              <span>Add Stone Details</span>
+            </button>
+          </div>
+          <div class="stone-details-container space-y-4">
+            <!-- Stone detail rows will be added here -->
+          </div>
+        </div>
+
+        <!-- Remarks -->
+        <div class="border-t border-border-light dark:border-border-dark pt-6 mb-6">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Remarks / Special Instructions</label>
+          <textarea class="item-remarks w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${editable ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" rows="2" placeholder="Optional notes for the item..." ${readonlyAttr}>${safeValue(defaults.remarks)}</textarea>
+        </div>
+
+        <!-- Cost Details -->
+        <div class="border-t border-border-light dark:border-border-dark pt-6">
+          <h4 class="text-base font-semibold text-text-light dark:text-text-dark mb-4">Cost Details</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Material Cost</label>
+              <input type="text" class="item-material-cost w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 cursor-not-allowed" placeholder="Auto-calculated" readonly value="${defaults.materialCost !== undefined && defaults.materialCost !== null ? parseFloat(defaults.materialCost).toFixed(2) : '0.00'}">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Making Charge <span class="text-gray-400">(Optional)</span></label>
+              <input type="number" step="0.01" class="item-making-charge w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${editable ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="e.g., 500.00" value="${safeNumber(defaults.makingCharge)}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Cost</label>
+              <input type="text" class="item-total-cost w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 cursor-not-allowed" placeholder="Auto-calculated" readonly value="${defaults.totalCost !== undefined && defaults.totalCost !== null ? parseFloat(defaults.totalCost).toFixed(2) : '0.00'}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Item Status and Design Images -->
+        <div class="border-t border-border-light dark:border-border-dark pt-6">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-base font-semibold text-text-light dark:text-text-dark">Item Status & Design Images</h4>
+            <div class="flex items-center gap-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status:</label>
+              <select class="item-status px-4 py-2 border border-border-light dark:border-border-dark rounded-lg ${readonlyClass} ${editable ? 'bg-background-light dark:bg-background-dark' : 'bg-gray-100 dark:bg-gray-800'}" ${readonlyAttr}>
+                <option value="pending_approval" ${defaults.status === 'pending_approval' ? 'selected' : (!defaults.status ? 'selected' : '')}>Pending Approval</option>
+                <option value="partially_approved" ${defaults.status === 'partially_approved' ? 'selected' : ''}>Partially Approved</option>
+                <option value="completely_approved" ${defaults.status === 'completely_approved' ? 'selected' : ''}>Completely Approved</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Image Upload Area -->
+          <div class="item-image-upload-section ${editable ? '' : 'hidden'} border-2 border-dashed border-border-light dark:border-border-dark rounded-lg p-4 text-center mb-4">
+            <input type="file" class="item-design-image-input hidden" accept="image/*" multiple id="item-design-image-${itemIndex}">
+            <label for="item-design-image-${itemIndex}" class="cursor-pointer block">
+              <div class="flex flex-col items-center">
+                <span class="material-icons text-3xl text-gray-400 mb-2">cloud_upload</span>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Click to upload or drag and drop</p>
+                <p class="text-xs text-gray-500 dark:text-gray-500">PNG, JPG, GIF up to 10MB</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- Image Gallery -->
+          <div class="item-design-images-gallery grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Images will be displayed here -->
+          </div>
+          <div class="item-no-images-message text-center py-4 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-2xl mb-1">image</span>
+            <p class="text-sm">No design images uploaded yet.</p>
+          </div>
+        </div>
+      `;
+
+      // Initialize item design images
+      const itemDesignImages = defaults.designImages || [];
+      itemDiv.dataset.designImages = JSON.stringify(itemDesignImages);
+      displayItemDesignImages(itemDiv, itemDesignImages);
+
+      if (editable) {
+        const deleteBtn = itemDiv.querySelector('.delete-item-btn');
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to remove this item?')) {
+              itemDiv.remove();
+              updateOrderSummary();
+            }
+          });
+        }
+
+        const makingChargeInput = itemDiv.querySelector('.item-making-charge');
+        if (makingChargeInput) {
+          makingChargeInput.addEventListener('input', function() {
+            calculateItemCost(itemDiv);
+          });
+        }
+
+        // Add diamond details button handler
+        const addDiamondBtn = itemDiv.querySelector('.add-diamond-btn');
+        if (addDiamondBtn) {
+          addDiamondBtn.addEventListener('click', function() {
+            addDiamondDetail(itemDiv);
+          });
+        }
+
+        // Add stone details button handler
+        const addStoneBtn = itemDiv.querySelector('.add-stone-btn');
+        if (addStoneBtn) {
+          addStoneBtn.addEventListener('click', function() {
+            addStoneDetail(itemDiv);
+          });
+        }
+
+        // Add metal details button handler
+        const addMetalBtn = itemDiv.querySelector('.add-metal-btn');
+        if (addMetalBtn) {
+          addMetalBtn.addEventListener('click', function() {
+            addMetalDetail(itemDiv);
+          });
+        }
+
+        // Setup image upload for this item
+        setupItemImageUpload(itemDiv, itemIndex);
+      }
+
+      // Add default metals if provided
+      if (defaults.metals && defaults.metals.length > 0) {
+        defaults.metals.forEach(metal => {
+          addMetalDetail(itemDiv, metal);
+        });
+      } else if (defaults.metal) {
+        // Support legacy single metal format
+        addMetalDetail(itemDiv, {
+          metal: defaults.metal,
+          metalWeight: defaults.metalWeight,
+          metalColour: defaults.metalColour
+        });
+      }
+
+      // Add default diamond and stone if provided
+      if (defaults.diamonds && defaults.diamonds.length > 0) {
+        defaults.diamonds.forEach(diamond => {
+          addDiamondDetail(itemDiv, diamond);
+        });
+      }
+
+      if (defaults.stones && defaults.stones.length > 0) {
+        defaults.stones.forEach(stone => {
+          addStoneDetail(itemDiv, stone);
+        });
+      }
+
+      // Add summary update handlers
+      const itemNameInput = itemDiv.querySelector('.item-name');
+      const itemQuantityInput = itemDiv.querySelector('.item-quantity');
+      
+      if (itemNameInput) {
+        itemNameInput.addEventListener('input', updateOrderSummary);
+      }
+      if (itemQuantityInput) {
+        itemQuantityInput.addEventListener('input', updateOrderSummary);
+      }
+
+      // If defaults provided, calculate cost
+      if (defaults.materialCost || defaults.makingCharge) {
+        calculateItemCost(itemDiv);
+      }
+
+      return itemDiv;
+    }
+
+    // Add metal detail row
+    function addMetalDetail(itemDiv, metalData = {}) {
+      const container = itemDiv.querySelector('.metal-details-container');
+      if (!container) return;
+      
+      const metalIndex = container.querySelectorAll('.metal-detail-row').length + 1;
+      const readonlyClass = isEditMode ? '' : 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed';
+      const readonlyAttr = isEditMode ? '' : 'disabled';
+      const deleteBtnStyle = isEditMode ? '' : 'hidden';
+      
+      const metalRow = document.createElement('div');
+      metalRow.className = 'metal-detail-row border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+      
+      metalRow.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+          <h5 class="text-sm font-semibold text-text-light dark:text-text-dark">Metal ${metalIndex}</h5>
+          <button type="button" class="delete-metal-btn text-red-500 hover:opacity-80 ${deleteBtnStyle}" ${readonlyAttr}>
+            <span class="material-icons text-base">delete</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Metal</label>
+            <select class="metal-type w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${readonlyClass}" ${readonlyAttr}>
+              <option value="">Select Metal</option>
+              <option value="gold_22ct" ${metalData.metal === 'gold_22ct' ? 'selected' : ''}>Gold 22Ct</option>
+              <option value="gold_24ct" ${metalData.metal === 'gold_24ct' ? 'selected' : ''}>Gold 24 Ct</option>
+              <option value="platinum_950" ${metalData.metal === 'platinum_950' ? 'selected' : ''}>Platinum 950</option>
+              <option value="platinum_900" ${metalData.metal === 'platinum_900' ? 'selected' : ''}>Platinum 900</option>
+              <option value="platinum_850" ${metalData.metal === 'platinum_850' ? 'selected' : ''}>Platinum 850</option>
+              <option value="platinum_800" ${metalData.metal === 'platinum_800' ? 'selected' : ''}>Platinum 800</option>
+              <option value="fine_silver" ${metalData.metal === 'fine_silver' ? 'selected' : ''}>Fine Silver (99.9)</option>
+              <option value="sterling_silver" ${metalData.metal === 'sterling_silver' ? 'selected' : ''}>Sterling Silver (92.5)</option>
+              <option value="argentium_silver" ${metalData.metal === 'argentium_silver' ? 'selected' : ''}>Argentium Silver (93.5 / 96)</option>
+              <option value="coin_silver" ${metalData.metal === 'coin_silver' ? 'selected' : ''}>Coin Silver (90)</option>
+              <option value="britannia_silver" ${metalData.metal === 'britannia_silver' ? 'selected' : ''}>Britannia Silver (95.8)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Metal Weight (g)</label>
+            <input type="number" step="0.001" class="metal-weight w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="e.g., 12.5" value="${metalData.metalWeight || ''}" ${readonlyAttr}>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Metal Colour</label>
+            <select class="metal-colour w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+              <option value="">Select Colour</option>
+              <option value="yellow" ${metalData.metalColour === 'yellow' ? 'selected' : ''}>Yellow</option>
+              <option value="white" ${metalData.metalColour === 'white' ? 'selected' : ''}>White</option>
+              <option value="rose" ${metalData.metalColour === 'rose' ? 'selected' : ''}>Rose</option>
+            </select>
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(metalRow);
+      
+      // Add delete handler
+      if (isEditMode) {
+        metalRow.querySelector('.delete-metal-btn').addEventListener('click', function() {
+          metalRow.remove();
+          updateOrderSummary();
+        });
+      }
+      
+      // Update summary when metal details change
+      metalRow.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('change', updateOrderSummary);
+      });
+    }
+
+    // Add diamond detail row
+    function addDiamondDetail(itemDiv, diamondData = {}) {
+      const container = itemDiv.querySelector('.diamond-details-container');
+      if (!container) return;
+      
+      const diamondIndex = container.querySelectorAll('.diamond-detail-row').length + 1;
+      const readonlyClass = isEditMode ? '' : 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed';
+      const readonlyAttr = isEditMode ? '' : 'disabled';
+      const deleteBtnStyle = isEditMode ? '' : 'hidden';
+      
+      const diamondRow = document.createElement('div');
+      diamondRow.className = 'diamond-detail-row border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+      
+      diamondRow.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+          <h5 class="text-sm font-semibold text-text-light dark:text-text-dark">Diamond ${diamondIndex}</h5>
+          <button type="button" class="delete-diamond-btn text-red-500 hover:opacity-80 ${deleteBtnStyle}" ${readonlyAttr}>
+            <span class="material-icons text-base">delete</span>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Diamond Master</label>
+              <select class="diamond-master-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select diamond master</option>
+                <option value="550e8400-e29b-41d4-a716-446655440200" ${diamondData.diamond_master_id === '550e8400-e29b-41d4-a716-446655440200' ? 'selected' : ''}>DIA-RND-0.5-G-VS1</option>
+                <option value="660e8400-e29b-41d4-a716-446655440201" ${diamondData.diamond_master_id === '660e8400-e29b-41d4-a716-446655440201' ? 'selected' : ''}>DIA-PRN-1.0-F-VVS2</option>
+                <option value="770e8400-e29b-41d4-a716-446655440202" ${diamondData.diamond_master_id === '770e8400-e29b-41d4-a716-446655440202' ? 'selected' : ''}>DIA-OVL-0.75-H-SI1</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Shape</label>
+              <select class="diamond-shape w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select shape</option>
+                <option value="Round" ${diamondData.shape === 'Round' ? 'selected' : ''}>Round</option>
+                <option value="Princess" ${diamondData.shape === 'Princess' ? 'selected' : ''}>Princess</option>
+                <option value="Oval" ${diamondData.shape === 'Oval' ? 'selected' : ''}>Oval</option>
+                <option value="Marquise" ${diamondData.shape === 'Marquise' ? 'selected' : ''}>Marquise</option>
+                <option value="Pear" ${diamondData.shape === 'Pear' ? 'selected' : ''}>Pear</option>
+                <option value="Emerald" ${diamondData.shape === 'Emerald' ? 'selected' : ''}>Emerald</option>
+                <option value="Cushion" ${diamondData.shape === 'Cushion' ? 'selected' : ''}>Cushion</option>
+                <option value="Radiant" ${diamondData.shape === 'Radiant' ? 'selected' : ''}>Radiant</option>
+                <option value="Heart" ${diamondData.shape === 'Heart' ? 'selected' : ''}>Heart</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Size</label>
+              <input type="text" class="diamond-size w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="e.g., 5mm" value="${diamondData.size || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Clarity</label>
+              <select class="diamond-clarity w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select clarity</option>
+                <option value="FL" ${diamondData.clarity === 'FL' ? 'selected' : ''}>FL (Flawless)</option>
+                <option value="IF" ${diamondData.clarity === 'IF' ? 'selected' : ''}>IF (Internally Flawless)</option>
+                <option value="VVS1" ${diamondData.clarity === 'VVS1' ? 'selected' : ''}>VVS1</option>
+                <option value="VVS2" ${diamondData.clarity === 'VVS2' ? 'selected' : ''}>VVS2</option>
+                <option value="VS1" ${diamondData.clarity === 'VS1' ? 'selected' : ''}>VS1</option>
+                <option value="VS2" ${diamondData.clarity === 'VS2' ? 'selected' : ''}>VS2</option>
+                <option value="SI1" ${diamondData.clarity === 'SI1' ? 'selected' : ''}>SI1</option>
+                <option value="SI2" ${diamondData.clarity === 'SI2' ? 'selected' : ''}>SI2</option>
+                <option value="I1" ${diamondData.clarity === 'I1' ? 'selected' : ''}>I1</option>
+                <option value="I2" ${diamondData.clarity === 'I2' ? 'selected' : ''}>I2</option>
+                <option value="I3" ${diamondData.clarity === 'I3' ? 'selected' : ''}>I3</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Cut</label>
+              <select class="diamond-cut w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select cut</option>
+                <option value="Excellent" ${diamondData.cut === 'Excellent' ? 'selected' : ''}>Excellent</option>
+                <option value="Very Good" ${diamondData.cut === 'Very Good' ? 'selected' : ''}>Very Good</option>
+                <option value="Good" ${diamondData.cut === 'Good' ? 'selected' : ''}>Good</option>
+                <option value="Fair" ${diamondData.cut === 'Fair' ? 'selected' : ''}>Fair</option>
+                <option value="Poor" ${diamondData.cut === 'Poor' ? 'selected' : ''}>Poor</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Certification</label>
+              <select class="diamond-certification w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select certification</option>
+                <option value="GIA" ${diamondData.certification === 'GIA' ? 'selected' : ''}>GIA</option>
+                <option value="IGI" ${diamondData.certification === 'IGI' ? 'selected' : ''}>IGI</option>
+                <option value="HRD" ${diamondData.certification === 'HRD' ? 'selected' : ''}>HRD</option>
+                <option value="AGS" ${diamondData.certification === 'AGS' ? 'selected' : ''}>AGS</option>
+                <option value="EGL" ${diamondData.certification === 'EGL' ? 'selected' : ''}>EGL</option>
+                <option value="None" ${diamondData.certification === 'None' ? 'selected' : ''}>None</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Pieces</label>
+              <input type="number" min="0" class="diamond-pieces w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="0" value="${diamondData.pieces || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Total Carat</label>
+              <input type="number" step="0.0001" min="0" class="diamond-total-carat w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="0.0000" value="${diamondData.total_carat || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Rate Per Carat</label>
+              <input type="number" step="0.01" min="0" class="diamond-rate-per-carat w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="0.00" value="${diamondData.rate_per_carat || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Total Value</label>
+              <input type="number" step="0.01" class="diamond-total-value w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" placeholder="Auto-calculated" readonly value="${diamondData.total_value || ''}">
+            </div>
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(diamondRow);
+      
+      // Add delete handler
+      if (isEditMode) {
+        diamondRow.querySelector('.delete-diamond-btn').addEventListener('click', function() {
+          diamondRow.remove();
+          updateOrderSummary();
+        });
+      }
+      
+      // Calculate diamond total value
+      const calculateDiamondTotal = () => {
+        const totalCarat = parseFloat(diamondRow.querySelector('.diamond-total-carat').value) || 0;
+        const ratePerCarat = parseFloat(diamondRow.querySelector('.diamond-rate-per-carat').value) || 0;
+        const totalValue = totalCarat * ratePerCarat;
+        diamondRow.querySelector('.diamond-total-value').value = totalValue.toFixed(2);
+        updateOrderSummary();
+      };
+      
+      // Add event listeners for calculation
+      if (isEditMode) {
+        diamondRow.querySelector('.diamond-total-carat').addEventListener('input', calculateDiamondTotal);
+        diamondRow.querySelector('.diamond-rate-per-carat').addEventListener('input', calculateDiamondTotal);
+      }
+      
+      // Update summary when diamond details change
+      diamondRow.querySelectorAll('input, select').forEach(input => {
+        if (!input.classList.contains('diamond-total-value')) {
+          input.addEventListener('change', updateOrderSummary);
+        }
+      });
+    }
+
+    // Add stone detail row
+    function addStoneDetail(itemDiv, stoneData = {}) {
+      const container = itemDiv.querySelector('.stone-details-container');
+      if (!container) return;
+      
+      const stoneIndex = container.querySelectorAll('.stone-detail-row').length + 1;
+      const readonlyClass = isEditMode ? '' : 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed';
+      const readonlyAttr = isEditMode ? '' : 'disabled';
+      const deleteBtnStyle = isEditMode ? '' : 'hidden';
+      
+      const stoneRow = document.createElement('div');
+      stoneRow.className = 'stone-detail-row border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+      
+      stoneRow.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+          <h5 class="text-sm font-semibold text-text-light dark:text-text-dark">Stone ${stoneIndex}</h5>
+          <button type="button" class="delete-stone-btn text-red-500 hover:opacity-80 ${deleteBtnStyle}" ${readonlyAttr}>
+            <span class="material-icons text-base">delete</span>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Stone Master</label>
+              <select class="stone-master-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select stone master</option>
+                <option value="550e8400-e29b-41d4-a716-446655440800" ${stoneData.stone_master_id === '550e8400-e29b-41d4-a716-446655440800' ? 'selected' : ''}>STN-RUBY-RND-5MM-RED-AAA</option>
+                <option value="660e8400-e29b-41d4-a716-446655440801" ${stoneData.stone_master_id === '660e8400-e29b-41d4-a716-446655440801' ? 'selected' : ''}>STN-SAPPHIRE-OVL-6MM-BLUE-AA</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Stone Type</label>
+              <select class="stone-type-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select stone type</option>
+                <option value="550e8400-e29b-41d4-a716-446655440810" ${stoneData.stone_type_id === '550e8400-e29b-41d4-a716-446655440810' ? 'selected' : ''}>Ruby</option>
+                <option value="660e8400-e29b-41d4-a716-446655440811" ${stoneData.stone_type_id === '660e8400-e29b-41d4-a716-446655440811' ? 'selected' : ''}>Sapphire</option>
+                <option value="770e8400-e29b-41d4-a716-446655440812" ${stoneData.stone_type_id === '770e8400-e29b-41d4-a716-446655440812' ? 'selected' : ''}>Emerald</option>
+                <option value="880e8400-e29b-41d4-a716-446655440813" ${stoneData.stone_type_id === '880e8400-e29b-41d4-a716-446655440813' ? 'selected' : ''}>Diamond</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Shape</label>
+              <select class="stone-shape-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select shape</option>
+                <option value="550e8400-e29b-41d4-a716-446655440820" ${stoneData.shape_id === '550e8400-e29b-41d4-a716-446655440820' ? 'selected' : ''}>Round</option>
+                <option value="660e8400-e29b-41d4-a716-446655440821" ${stoneData.shape_id === '660e8400-e29b-41d4-a716-446655440821' ? 'selected' : ''}>Oval</option>
+                <option value="770e8400-e29b-41d4-a716-446655440822" ${stoneData.shape_id === '770e8400-e29b-41d4-a716-446655440822' ? 'selected' : ''}>Princess</option>
+                <option value="880e8400-e29b-41d4-a716-446655440823" ${stoneData.shape_id === '880e8400-e29b-41d4-a716-446655440823' ? 'selected' : ''}>Cushion</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Size</label>
+              <select class="stone-size-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select size</option>
+                <option value="550e8400-e29b-41d4-a716-446655440830" ${stoneData.size_id === '550e8400-e29b-41d4-a716-446655440830' ? 'selected' : ''}>3mm</option>
+                <option value="660e8400-e29b-41d4-a716-446655440831" ${stoneData.size_id === '660e8400-e29b-41d4-a716-446655440831' ? 'selected' : ''}>4mm</option>
+                <option value="770e8400-e29b-41d4-a716-446655440832" ${stoneData.size_id === '770e8400-e29b-41d4-a716-446655440832' ? 'selected' : ''}>5mm</option>
+                <option value="880e8400-e29b-41d4-a716-446655440833" ${stoneData.size_id === '880e8400-e29b-41d4-a716-446655440833' ? 'selected' : ''}>6mm</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Colour</label>
+              <select class="stone-colour-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select colour</option>
+                <option value="550e8400-e29b-41d4-a716-446655440840" ${stoneData.colour_id === '550e8400-e29b-41d4-a716-446655440840' ? 'selected' : ''}>Red</option>
+                <option value="660e8400-e29b-41d4-a716-446655440841" ${stoneData.colour_id === '660e8400-e29b-41d4-a716-446655440841' ? 'selected' : ''}>Blue</option>
+                <option value="770e8400-e29b-41d4-a716-446655440842" ${stoneData.colour_id === '770e8400-e29b-41d4-a716-446655440842' ? 'selected' : ''}>Green</option>
+                <option value="880e8400-e29b-41d4-a716-446655440843" ${stoneData.colour_id === '880e8400-e29b-41d4-a716-446655440843' ? 'selected' : ''}>Yellow</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Quality</label>
+              <select class="stone-quality-id w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" ${readonlyAttr}>
+                <option value="">Select quality</option>
+                <option value="550e8400-e29b-41d4-a716-446655440850" ${stoneData.quality_id === '550e8400-e29b-41d4-a716-446655440850' ? 'selected' : ''}>AAA</option>
+                <option value="660e8400-e29b-41d4-a716-446655440851" ${stoneData.quality_id === '660e8400-e29b-41d4-a716-446655440851' ? 'selected' : ''}>AA</option>
+                <option value="770e8400-e29b-41d4-a716-446655440852" ${stoneData.quality_id === '770e8400-e29b-41d4-a716-446655440852' ? 'selected' : ''}>A</option>
+                <option value="880e8400-e29b-41d4-a716-446655440853" ${stoneData.quality_id === '880e8400-e29b-41d4-a716-446655440853' ? 'selected' : ''}>B</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Pieces</label>
+              <input type="number" min="0" class="stone-pcs w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="0" value="${stoneData.pcs || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Total Carat</label>
+              <input type="number" step="0.0001" min="0" class="stone-total-carat w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="0.0000" value="${stoneData.total_carat || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Rate Per Carat</label>
+              <input type="number" step="0.01" min="0" class="stone-rate-per-carat w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg ${isEditMode ? 'bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary' : readonlyClass}" placeholder="0.00" value="${stoneData.rate_per_carat || ''}" ${readonlyAttr}>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Total Value</label>
+              <input type="number" step="0.01" class="stone-total-value w-full px-3 py-2 text-sm border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" placeholder="Auto-calculated" readonly value="${stoneData.total_value || ''}">
+            </div>
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(stoneRow);
+      
+      // Add delete handler
+      if (isEditMode) {
+        stoneRow.querySelector('.delete-stone-btn').addEventListener('click', function() {
+          stoneRow.remove();
+          updateOrderSummary();
+        });
+      }
+      
+      // Calculate stone total value
+      const calculateStoneTotal = () => {
+        const totalCarat = parseFloat(stoneRow.querySelector('.stone-total-carat').value) || 0;
+        const ratePerCarat = parseFloat(stoneRow.querySelector('.stone-rate-per-carat').value) || 0;
+        const totalValue = totalCarat * ratePerCarat;
+        stoneRow.querySelector('.stone-total-value').value = totalValue.toFixed(2);
+        updateOrderSummary();
+      };
+      
+      // Add event listeners for calculation
+      if (isEditMode) {
+        stoneRow.querySelector('.stone-total-carat').addEventListener('input', calculateStoneTotal);
+        stoneRow.querySelector('.stone-rate-per-carat').addEventListener('input', calculateStoneTotal);
+      }
+      
+      // Update summary when stone details change
+      stoneRow.querySelectorAll('input, select').forEach(input => {
+        if (!input.classList.contains('stone-total-value')) {
+          input.addEventListener('change', updateOrderSummary);
+        }
+      });
+    }
+
+    // Display design images for a specific item
+    function displayItemDesignImages(itemDiv, images) {
+      const gallery = itemDiv.querySelector('.item-design-images-gallery');
+      const noImagesMsg = itemDiv.querySelector('.item-no-images-message');
+      
+      gallery.innerHTML = '';
+      
+      if (!images || images.length === 0) {
+        noImagesMsg.classList.remove('hidden');
+        gallery.classList.add('hidden');
+      } else {
+        noImagesMsg.classList.add('hidden');
+        gallery.classList.remove('hidden');
+        
+        images.forEach((image, index) => {
+          const imageDiv = document.createElement('div');
+          imageDiv.className = 'relative group border border-border-light dark:border-border-dark rounded-lg overflow-hidden';
+          
+          imageDiv.innerHTML = `
+            <img src="${image.dataUrl}" alt="Design ${index + 1}" class="w-full h-32 object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
+              ${isEditMode ? `
+                <button type="button" class="delete-item-image-btn opacity-0 group-hover:opacity-100 text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition-opacity" data-index="${index}">
+                  <span class="material-icons text-sm">delete</span>
+                </button>
+              ` : ''}
+            </div>
+            <div class="p-2 bg-background-light dark:bg-background-dark">
+              <p class="text-xs text-gray-600 dark:text-gray-400 truncate">${image.fileName || `Design ${index + 1}`}</p>
+            </div>
+          `;
+          
+          gallery.appendChild(imageDiv);
+        });
+        
+        // Add delete button handlers
+        if (isEditMode) {
+          gallery.querySelectorAll('.delete-item-image-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const index = parseInt(this.dataset.index);
+              if (confirm('Are you sure you want to remove this image?')) {
+                let currentImages = JSON.parse(itemDiv.dataset.designImages || '[]');
+                currentImages.splice(index, 1);
+                itemDiv.dataset.designImages = JSON.stringify(currentImages);
+                displayItemDesignImages(itemDiv, currentImages);
+              }
+            });
+          });
+        }
+      }
+    }
+
+    // Get design images for an item
+    function getItemDesignImages(itemDiv) {
+      // Get from data attribute if available, otherwise from gallery
+      if (itemDiv.dataset.designImages) {
+        return JSON.parse(itemDiv.dataset.designImages);
+      }
+      
+      const gallery = itemDiv.querySelector('.item-design-images-gallery');
+      if (!gallery) return [];
+      
+      const images = [];
+      gallery.querySelectorAll('img').forEach(img => {
+        const parentDiv = img.closest('.relative');
+        if (parentDiv) {
+          const fileNameEl = parentDiv.querySelector('.text-xs');
+          const fileName = fileNameEl ? fileNameEl.textContent : `Design ${images.length + 1}`;
+          images.push({
+            fileName: fileName,
+            dataUrl: img.src
+          });
+        }
+      });
+      return images;
+    }
+
+    // Setup image upload for an item
+    function setupItemImageUpload(itemDiv, itemIndex) {
+      const uploadSection = itemDiv.querySelector('.item-image-upload-section');
+      const fileInput = itemDiv.querySelector('.item-design-image-input');
+      
+      if (!fileInput || !uploadSection) {
+        console.error('Image upload elements not found for item', itemIndex);
+        return;
+      }
+
+      // Ensure the file input has the correct ID
+      if (!fileInput.id) {
+        fileInput.id = `item-design-image-${itemIndex}`;
+      }
+      
+      // Ensure label has correct for attribute
+      const label = uploadSection.querySelector('label');
+      if (label && fileInput.id) {
+        label.setAttribute('for', fileInput.id);
+      }
+
+      // Remove any existing event listeners by cloning
+      const newFileInput = fileInput.cloneNode(true);
+      fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+      // File input change handler
+      newFileInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          handleItemImageFiles(itemDiv, files);
+        }
+        this.value = '';
+      });
+
+      // Drag and drop handlers
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadSection.addEventListener(eventName, preventDefaults, false);
+      });
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        uploadSection.addEventListener(eventName, () => {
+          uploadSection.classList.add('border-primary', 'bg-primary/5');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        uploadSection.addEventListener(eventName, () => {
+          uploadSection.classList.remove('border-primary', 'bg-primary/5');
+        }, false);
+      });
+
+      uploadSection.addEventListener('drop', function(e) {
+        const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+        handleItemImageFiles(itemDiv, files);
+      });
+    }
+
+    // Handle image files for an item
+    function handleItemImageFiles(itemDiv, files) {
+      files.forEach(file => {
+        if (!file.type.startsWith('image/')) {
+          alert(`${file.name} is not an image file.`);
+          return;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) {
+          alert(`${file.name} exceeds 10MB. Please choose a smaller file.`);
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          // Store images in a data attribute for persistence
+          let currentImages = JSON.parse(itemDiv.dataset.designImages || '[]');
+          currentImages.push({
+            fileName: file.name,
+            dataUrl: event.target.result,
+            uploadedAt: new Date().toISOString()
+          });
+          itemDiv.dataset.designImages = JSON.stringify(currentImages);
+          displayItemDesignImages(itemDiv, currentImages);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Calculate item cost
+    function calculateItemCost(itemDiv) {
+      const materialCost = parseFloat(itemDiv.querySelector('.item-material-cost').value.replace(/[^0-9.]/g, '')) || 0;
+      const makingCharge = parseFloat(itemDiv.querySelector('.item-making-charge').value) || 0;
+      const totalCost = materialCost + makingCharge;
+      
+      itemDiv.querySelector('.item-total-cost').value = totalCost.toFixed(2);
+      updateOrderSummary();
+    }
+
+    // Helper function to format currency
+    function formatCurrency(value) {
+      return parseFloat(value || 0).toFixed(2);
+    }
+
+    // Helper function to create a table cell
+    function createCell(content, className = '', align = 'left', isHTML = false) {
+      const td = document.createElement('td');
+      td.className = `px-3 py-2 border border-border-light dark:border-border-dark ${className}`;
+      td.style.textAlign = align;
+      if (isHTML) {
+        td.innerHTML = content;
+      } else {
+        td.textContent = content;
+      }
+      return td;
+    }
+
+    // Update order summary
+    function updateOrderSummary() {
+      const tbody = document.getElementById('order-summary-body');
+      const emptyState = document.getElementById('empty-summary-state');
+      const items = document.querySelectorAll('#items-container > div');
+      
+      tbody.innerHTML = '';
+      
+      if (items.length === 0) {
+        emptyState.classList.remove('hidden');
+        document.getElementById('total-order-value').textContent = '$0.00';
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      let totalOrderValue = 0;
+      let rowCounter = 0;
+
+      items.forEach((itemDiv, itemIndex) => {
+        const itemName = itemDiv.querySelector('.item-name').value || 'Unnamed Item';
+        const quantity = parseInt(itemDiv.querySelector('.item-quantity').value) || 1;
+        const materialCost = parseFloat(itemDiv.querySelector('.item-material-cost').value.replace(/[^0-9.]/g, '')) || 0;
+        const makingCharge = parseFloat(itemDiv.querySelector('.item-making-charge').value) || 0;
+        const totalCost = parseFloat(itemDiv.querySelector('.item-total-cost').value) || 0;
+        const itemTotal = totalCost * quantity;
+        totalOrderValue += itemTotal;
+
+        // Metal rows - get all metal details
+        const metalRows = itemDiv.querySelectorAll('.metal-detail-row');
+        let totalMetalWeight = 0;
+        
+        // First pass: calculate total metal weight
+        if (metalRows.length > 0) {
+          metalRows.forEach((metalDiv) => {
+            const metalWeight = parseFloat(metalDiv.querySelector('.metal-weight').value) || 0;
+            totalMetalWeight += metalWeight;
+          });
+        }
+        
+        if (metalRows.length > 0) {
+          metalRows.forEach((metalDiv, metalIndex) => {
+            rowCounter++;
+            const metalType = metalDiv.querySelector('.metal-type').value || '';
+            const metalWeight = parseFloat(metalDiv.querySelector('.metal-weight').value) || 0;
+            const metalColour = metalDiv.querySelector('.metal-colour').value || '';
+            const metalName = metalDiv.querySelector('.metal-type option:checked')?.text || '';
+            
+            // Calculate rate per gram and cost per metal (proportional to weight)
+            const metalRate = metalWeight > 0 && totalMetalWeight > 0 && materialCost > 0 ? (materialCost / totalMetalWeight).toFixed(2) : '0';
+            const metalMaterialCost = metalWeight > 0 && totalMetalWeight > 0 ? (materialCost * metalWeight) / totalMetalWeight : 0;
+            const metalTotalPrice = formatCurrency(metalMaterialCost);
+            
+            const metalRow = document.createElement('tr');
+            metalRow.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+            
+            metalRow.appendChild(createCell(rowCounter.toString(), 'text-gray-500 dark:text-gray-400'));
+            metalRow.appendChild(createCell(`Metal ${metalIndex + 1}`, 'font-medium text-text-light dark:text-text-dark'));
+            metalRow.appendChild(createCell(metalType ? (metalName || 'Select Metal') : 'Select Metal', ''));
+            metalRow.appendChild(createCell(metalWeight > 0 ? metalWeight.toFixed(3) : '', 'text-right'));
+            metalRow.appendChild(createCell('1', 'text-center'));
+            metalRow.appendChild(createCell(metalColour ? metalColour.charAt(0).toUpperCase() + metalColour.slice(1) : 'Select Colour', ''));
+            metalRow.appendChild(createCell(metalRate, 'text-right text-text-light dark:text-text-dark'));
+            metalRow.appendChild(createCell(metalTotalPrice, 'text-right text-text-light dark:text-text-dark'));
+            metalRow.appendChild(createCell(quantity.toString(), 'text-center text-gray-500 dark:text-gray-400'));
+            metalRow.appendChild(createCell(metalTotalPrice, 'text-right text-text-light dark:text-text-dark'));
+            metalRow.appendChild(createCell('', 'text-center'));
+            
+            tbody.appendChild(metalRow);
+          });
+        } else {
+          // Placeholder metal row if no metals added
+          rowCounter++;
+          const metalRow = document.createElement('tr');
+          metalRow.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+          
+          metalRow.appendChild(createCell(rowCounter.toString(), 'text-gray-500 dark:text-gray-400'));
+          metalRow.appendChild(createCell('Metal 1', 'font-medium text-text-light dark:text-text-dark'));
+          metalRow.appendChild(createCell('Select Metal', ''));
+          metalRow.appendChild(createCell('', 'text-right'));
+          metalRow.appendChild(createCell('', 'text-center'));
+          metalRow.appendChild(createCell('Select Colour', ''));
+          metalRow.appendChild(createCell('0', 'text-right text-gray-500 dark:text-gray-400'));
+          metalRow.appendChild(createCell('0', 'text-right text-gray-500 dark:text-gray-400'));
+          metalRow.appendChild(createCell(quantity.toString(), 'text-center text-gray-500 dark:text-gray-400'));
+          metalRow.appendChild(createCell('0', 'text-right text-gray-500 dark:text-gray-400'));
+          metalRow.appendChild(createCell('', 'text-center'));
+          
+          tbody.appendChild(metalRow);
+        }
+
+        // Diamond rows - get all diamond details
+        const diamondRows = itemDiv.querySelectorAll('.diamond-detail-row');
+        if (diamondRows.length > 0) {
+          diamondRows.forEach((diamondDiv, diamondIndex) => {
+            rowCounter++;
+            const diamondShape = diamondDiv.querySelector('.diamond-shape').value || '';
+            const diamondClarity = diamondDiv.querySelector('.diamond-clarity').value || '';
+            const diamondTotalCarat = parseFloat(diamondDiv.querySelector('.diamond-total-carat').value) || 0;
+            const diamondPieces = parseInt(diamondDiv.querySelector('.diamond-pieces').value) || 0;
+            const diamondRatePerCarat = parseFloat(diamondDiv.querySelector('.diamond-rate-per-carat').value) || 0;
+            const diamondTotalValue = parseFloat(diamondDiv.querySelector('.diamond-total-value').value) || 0;
+            
+            const diamondRow = document.createElement('tr');
+            diamondRow.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+            
+            diamondRow.appendChild(createCell(rowCounter.toString(), 'text-gray-500 dark:text-gray-400'));
+            diamondRow.appendChild(createCell(`Diamond ${diamondIndex + 1}`, 'font-medium text-text-light dark:text-text-dark'));
+            diamondRow.appendChild(createCell(`${diamondShape || 'Select Shape'} / ${diamondClarity || 'Select Clarity'}`, ''));
+            diamondRow.appendChild(createCell(diamondTotalCarat > 0 ? diamondTotalCarat.toFixed(4) : '', 'text-right'));
+            diamondRow.appendChild(createCell(diamondPieces > 0 ? diamondPieces.toString() : '', 'text-center'));
+            diamondRow.appendChild(createCell('', ''));
+            diamondRow.appendChild(createCell(diamondRatePerCarat > 0 ? diamondRatePerCarat.toFixed(2) : '0', 'text-right text-text-light dark:text-text-dark'));
+            diamondRow.appendChild(createCell(diamondTotalValue > 0 ? formatCurrency(diamondTotalValue) : '0', 'text-right text-text-light dark:text-text-dark'));
+            diamondRow.appendChild(createCell(quantity.toString(), 'text-center text-gray-500 dark:text-gray-400'));
+            diamondRow.appendChild(createCell(diamondTotalValue > 0 ? formatCurrency(diamondTotalValue) : '0', 'text-right text-text-light dark:text-text-dark'));
+            diamondRow.appendChild(createCell('', 'text-center'));
+            
+            tbody.appendChild(diamondRow);
+          });
+        }
+
+        // Stone rows - get all stone details
+        const stoneRows = itemDiv.querySelectorAll('.stone-detail-row');
+        if (stoneRows.length > 0) {
+          stoneRows.forEach((stoneDiv, stoneIndex) => {
+            rowCounter++;
+            const stoneType = stoneDiv.querySelector('.stone-type-id option:checked')?.text || '';
+            const stoneShape = stoneDiv.querySelector('.stone-shape-id option:checked')?.text || '';
+            const stoneSize = stoneDiv.querySelector('.stone-size-id option:checked')?.text || '';
+            const stoneColour = stoneDiv.querySelector('.stone-colour-id option:checked')?.text || '';
+            const stoneQuality = stoneDiv.querySelector('.stone-quality-id option:checked')?.text || '';
+            const stoneTotalCarat = parseFloat(stoneDiv.querySelector('.stone-total-carat').value) || 0;
+            const stonePcs = parseInt(stoneDiv.querySelector('.stone-pcs').value) || 0;
+            const stoneRatePerCarat = parseFloat(stoneDiv.querySelector('.stone-rate-per-carat').value) || 0;
+            const stoneTotalValue = parseFloat(stoneDiv.querySelector('.stone-total-value').value) || 0;
+            
+            const stoneRow = document.createElement('tr');
+            stoneRow.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+            
+            stoneRow.appendChild(createCell(rowCounter.toString(), 'text-gray-500 dark:text-gray-400'));
+            stoneRow.appendChild(createCell(`Stone ${stoneIndex + 1}`, 'font-medium text-text-light dark:text-text-dark'));
+            stoneRow.appendChild(createCell(`${stoneType || 'Select Type'} / ${stoneShape || 'Select Shape'} / ${stoneSize || 'Select Size'}`, ''));
+            stoneRow.appendChild(createCell(stoneTotalCarat > 0 ? stoneTotalCarat.toFixed(4) : '', 'text-right'));
+            stoneRow.appendChild(createCell(stonePcs > 0 ? stonePcs.toString() : '', 'text-center'));
+            stoneRow.appendChild(createCell(stoneColour || 'Select Colour', ''));
+            stoneRow.appendChild(createCell(stoneRatePerCarat > 0 ? stoneRatePerCarat.toFixed(2) : '0', 'text-right text-text-light dark:text-text-dark'));
+            stoneRow.appendChild(createCell(stoneTotalValue > 0 ? formatCurrency(stoneTotalValue) : '0', 'text-right text-text-light dark:text-text-dark'));
+            stoneRow.appendChild(createCell(quantity.toString(), 'text-center text-gray-500 dark:text-gray-400'));
+            stoneRow.appendChild(createCell(stoneTotalValue > 0 ? formatCurrency(stoneTotalValue) : '0', 'text-right text-text-light dark:text-text-dark'));
+            stoneRow.appendChild(createCell('', 'text-center'));
+            
+            tbody.appendChild(stoneRow);
+          });
+        }
+
+        // Making Charge row
+        if (makingCharge > 0) {
+          rowCounter++;
+          const makingChargeRow = document.createElement('tr');
+          makingChargeRow.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+          
+          makingChargeRow.appendChild(createCell(rowCounter.toString(), 'text-gray-500 dark:text-gray-400'));
+          makingChargeRow.appendChild(createCell('Making Charge', 'font-medium text-text-light dark:text-text-dark'));
+          makingChargeRow.appendChild(createCell('', ''));
+          makingChargeRow.appendChild(createCell('', 'text-right'));
+          makingChargeRow.appendChild(createCell('', 'text-center'));
+          makingChargeRow.appendChild(createCell('', ''));
+          makingChargeRow.appendChild(createCell('', 'text-right text-text-light dark:text-text-dark'));
+          makingChargeRow.appendChild(createCell(formatCurrency(makingCharge), 'text-right text-text-light dark:text-text-dark'));
+          makingChargeRow.appendChild(createCell(quantity.toString(), 'text-center text-gray-500 dark:text-gray-400'));
+          makingChargeRow.appendChild(createCell(formatCurrency(makingCharge), 'text-right text-text-light dark:text-text-dark'));
+          makingChargeRow.appendChild(createCell('', 'text-center'));
+          
+          tbody.appendChild(makingChargeRow);
+        }
+
+        // Subtotal row (Material + Making Charge)
+        const subtotalRow = document.createElement('tr');
+        subtotalRow.className = 'border-b-2 border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark font-semibold';
+        
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell('Subtotal', 'font-semibold text-text-light dark:text-text-dark', 'left'));
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell('', ''));
+        subtotalRow.appendChild(createCell(quantity.toString(), 'text-center font-semibold text-text-light dark:text-text-dark'));
+        subtotalRow.appendChild(createCell(formatCurrency(totalCost), 'text-right font-semibold text-text-light dark:text-text-dark'));
+        subtotalRow.appendChild(createCell('', ''));
+        
+        tbody.appendChild(subtotalRow);
+
+        // Total Item Cost row
+        const totalItemRow = document.createElement('tr');
+        totalItemRow.className = 'border-b-2 border-primary/30 bg-primary/5 dark:bg-primary/10 font-bold';
+        
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell(`Total Item Cost - ${itemName}`, 'font-bold text-text-light dark:text-text-dark', 'left'));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell('', ''));
+        totalItemRow.appendChild(createCell(formatCurrency(itemTotal), 'text-right font-bold text-primary'));
+        
+        const actionCell = document.createElement('td');
+        actionCell.className = 'px-3 py-2 border border-border-light dark:border-border-dark text-center';
+        if (isEditMode) {
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'text-red-500 hover:opacity-80';
+          deleteBtn.innerHTML = '<span class="material-icons text-base">delete</span>';
+          deleteBtn.title = 'Delete item';
+          deleteBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to remove this item?')) {
+              itemDiv.remove();
+              updateOrderSummary();
+            }
+          });
+          actionCell.appendChild(deleteBtn);
+        }
+        totalItemRow.appendChild(actionCell);
+        
+        tbody.appendChild(totalItemRow);
+      });
+
+      document.getElementById('total-order-value').textContent = `$${formatCurrency(totalOrderValue)}`;
+    }
+
+    // Enable edit mode
+    function enableEditMode() {
+      isEditMode = true;
+      document.getElementById('edit-order-btn').classList.add('hidden');
+      document.getElementById('save-order-btn').classList.remove('hidden');
+      document.getElementById('cancel-edit-btn').classList.remove('hidden');
+      document.getElementById('add-item-btn').classList.remove('hidden');
+
+      // Enable form fields
+      document.getElementById('order-type').disabled = false;
+      document.getElementById('order-type').classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed');
+      document.getElementById('order-type').classList.add('bg-background-light', 'dark:bg-background-dark');
+      
+      document.getElementById('customer-name').disabled = false;
+      document.getElementById('customer-name').classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed');
+      document.getElementById('customer-name').classList.add('bg-background-light', 'dark:bg-background-dark');
+      
+      document.getElementById('delivery-date').disabled = false;
+      document.getElementById('delivery-date').classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed');
+      document.getElementById('delivery-date').classList.add('bg-background-light', 'dark:bg-background-dark');
+
+      // Enable item fields
+      document.querySelectorAll('#items-container input, #items-container select').forEach(input => {
+        if (!input.readOnly) {
+          input.disabled = false;
+          input.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed');
+          input.classList.add('bg-background-light', 'dark:bg-background-dark');
+        }
+      });
+
+      // Show delete buttons
+      document.querySelectorAll('.delete-item-btn').forEach(btn => {
+        btn.classList.remove('hidden');
+      });
+      
+      // Show image upload sections for all items
+      document.querySelectorAll('.item-image-upload-section').forEach(section => {
+        section.classList.remove('hidden');
+      });
+      
+      // Show add buttons for metal, diamond, and stone
+      document.querySelectorAll('.add-metal-btn, .add-diamond-btn, .add-stone-btn').forEach(btn => {
+        btn.style.display = 'flex';
+      });
+      
+      // Enable delete buttons in metal, diamond, and stone rows
+      document.querySelectorAll('.delete-metal-btn, .delete-diamond-btn, .delete-stone-btn').forEach(btn => {
+        btn.classList.remove('hidden');
+        btn.disabled = false;
+      });
+      
+      // Enable inputs in metal, diamond, and stone rows
+      document.querySelectorAll('.metal-detail-row input, .metal-detail-row select, .diamond-detail-row input, .diamond-detail-row select, .stone-detail-row input, .stone-detail-row select').forEach(input => {
+        if (!input.readOnly) {
+          input.disabled = false;
+          input.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed');
+          input.classList.add('bg-background-light', 'dark:bg-background-dark');
+        }
+      });
+      
+      // Refresh image displays to show delete buttons and show upload sections
+      document.querySelectorAll('#items-container > div').forEach((itemDiv, index) => {
+        const images = getItemDesignImages(itemDiv);
+        displayItemDesignImages(itemDiv, images);
+        const uploadSection = itemDiv.querySelector('.item-image-upload-section');
+        if (uploadSection) {
+          uploadSection.classList.remove('hidden');
+        }
+        // Setup image upload for existing items when entering edit mode
+        setupItemImageUpload(itemDiv, index);
+        
+        // Attach event handlers for add buttons if not already attached
+        const addMetalBtn = itemDiv.querySelector('.add-metal-btn');
+        if (addMetalBtn && !addMetalBtn.dataset.handlerAttached) {
+          addMetalBtn.addEventListener('click', function() {
+            addMetalDetail(itemDiv);
+          });
+          addMetalBtn.dataset.handlerAttached = 'true';
+        }
+        
+        const addDiamondBtn = itemDiv.querySelector('.add-diamond-btn');
+        if (addDiamondBtn && !addDiamondBtn.dataset.handlerAttached) {
+          addDiamondBtn.addEventListener('click', function() {
+            addDiamondDetail(itemDiv);
+          });
+          addDiamondBtn.dataset.handlerAttached = 'true';
+        }
+        
+        const addStoneBtn = itemDiv.querySelector('.add-stone-btn');
+        if (addStoneBtn && !addStoneBtn.dataset.handlerAttached) {
+          addStoneBtn.addEventListener('click', function() {
+            addStoneDetail(itemDiv);
+          });
+          addStoneBtn.dataset.handlerAttached = 'true';
+        }
+      });
+    }
+
+    // Disable edit mode
+    function disableEditMode() {
+      isEditMode = false;
+      document.getElementById('edit-order-btn').classList.remove('hidden');
+      document.getElementById('save-order-btn').classList.add('hidden');
+      document.getElementById('cancel-edit-btn').classList.add('hidden');
+      document.getElementById('add-item-btn').classList.add('hidden');
+
+      // Reload original data
+      currentOrder = JSON.parse(JSON.stringify(originalOrderData));
+      displayOrder();
+    }
+
+    // Save order
+    function saveOrder() {
+      const orderType = document.getElementById('order-type').value;
+      const customerName = document.getElementById('customer-name').value;
+      const items = document.querySelectorAll('#items-container > div');
+
+      if (!orderType || !customerName) {
+        alert('Please fill in Order Type and Customer Name.');
+        return;
+      }
+
+      // Collect order data
+      const orderData = {
+        orderId: document.getElementById('order-no').value,
+        orderType: orderType,
+        customerName: customerName,
+        deliveryDate: document.getElementById('delivery-date').value,
+        items: [],
+        totalValue: parseFloat(document.getElementById('total-order-value').textContent.replace(/[^0-9.]/g, '')) || 0,
+        createdAt: currentOrder.createdAt,
+        updatedAt: new Date().toISOString()
+      };
+
+      items.forEach(itemDiv => {
+        const materialCost = parseFloat(itemDiv.querySelector('.item-material-cost').value.replace(/[^0-9.]/g, '')) || 0;
+        
+        // Collect multiple metals
+        const metalRows = itemDiv.querySelectorAll('.metal-detail-row');
+        const metals = [];
+        metalRows.forEach(metalDiv => {
+          metals.push({
+            metal: metalDiv.querySelector('.metal-type').value,
+            metalWeight: parseFloat(metalDiv.querySelector('.metal-weight').value) || 0,
+            metalColour: metalDiv.querySelector('.metal-colour').value
+          });
+        });
+        
+        // Collect diamonds
+        const diamondRows = itemDiv.querySelectorAll('.diamond-detail-row');
+        const diamonds = [];
+        diamondRows.forEach(diamondDiv => {
+          diamonds.push({
+            diamond_master_id: diamondDiv.querySelector('.diamond-master-id').value || null,
+            shape: diamondDiv.querySelector('.diamond-shape').value || null,
+            size: diamondDiv.querySelector('.diamond-size').value || null,
+            clarity: diamondDiv.querySelector('.diamond-clarity').value || null,
+            cut: diamondDiv.querySelector('.diamond-cut').value || null,
+            certification: diamondDiv.querySelector('.diamond-certification').value || null,
+            pieces: diamondDiv.querySelector('.diamond-pieces').value ? parseInt(diamondDiv.querySelector('.diamond-pieces').value) : null,
+            total_carat: diamondDiv.querySelector('.diamond-total-carat').value ? parseFloat(diamondDiv.querySelector('.diamond-total-carat').value) : null,
+            rate_per_carat: diamondDiv.querySelector('.diamond-rate-per-carat').value ? parseFloat(diamondDiv.querySelector('.diamond-rate-per-carat').value) : null,
+            total_value: diamondDiv.querySelector('.diamond-total-value').value ? parseFloat(diamondDiv.querySelector('.diamond-total-value').value) : null
+          });
+        });
+        
+        // Collect stones
+        const stoneRows = itemDiv.querySelectorAll('.stone-detail-row');
+        const stones = [];
+        stoneRows.forEach(stoneDiv => {
+          stones.push({
+            stone_master_id: stoneDiv.querySelector('.stone-master-id').value || null,
+            stone_type_id: stoneDiv.querySelector('.stone-type-id').value || null,
+            shape_id: stoneDiv.querySelector('.stone-shape-id').value || null,
+            size_id: stoneDiv.querySelector('.stone-size-id').value || null,
+            colour_id: stoneDiv.querySelector('.stone-colour-id').value || null,
+            quality_id: stoneDiv.querySelector('.stone-quality-id').value || null,
+            pcs: stoneDiv.querySelector('.stone-pcs').value ? parseInt(stoneDiv.querySelector('.stone-pcs').value) : null,
+            total_carat: stoneDiv.querySelector('.stone-total-carat').value ? parseFloat(stoneDiv.querySelector('.stone-total-carat').value) : null,
+            rate_per_carat: stoneDiv.querySelector('.stone-rate-per-carat').value ? parseFloat(stoneDiv.querySelector('.stone-rate-per-carat').value) : null,
+            total_value: stoneDiv.querySelector('.stone-total-value').value ? parseFloat(stoneDiv.querySelector('.stone-total-value').value) : null
+          });
+        });
+        
+        const item = {
+          name: itemDiv.querySelector('.item-name').value,
+          sku: itemDiv.querySelector('.item-sku').value,
+          quantity: parseInt(itemDiv.querySelector('.item-quantity').value) || 1,
+          category: itemDiv.querySelector('.item-category').value,
+          subcategory: itemDiv.querySelector('.item-subcategory').value,
+          metals: metals,
+          diamonds: diamonds,
+          stones: stones,
+          materialCost: materialCost,
+          makingCharge: parseFloat(itemDiv.querySelector('.item-making-charge').value) || 0,
+          totalCost: parseFloat(itemDiv.querySelector('.item-total-cost').value) || 0,
+          remarks: itemDiv.querySelector('.item-remarks') ? itemDiv.querySelector('.item-remarks').value : '',
+          status: itemDiv.querySelector('.item-status').value || 'pending_approval',
+          designImages: getItemDesignImages(itemDiv)
+        };
+        orderData.items.push(item);
+      });
+
+      // Update in localStorage
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      const orderIndex = orders.findIndex(o => o.orderId === orderData.orderId);
+      if (orderIndex !== -1) {
+        orders[orderIndex] = orderData;
+        localStorage.setItem('orders', JSON.stringify(orders));
+        alert('Order updated successfully!');
+        
+        // Update current order and original
+        currentOrder = orderData;
+        originalOrderData = JSON.parse(JSON.stringify(orderData));
+        disableEditMode();
+      }
+    }
+
+    // Prevent defaults for drag and drop
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    // Delete order function
+    function deleteOrder() {
+      const orderId = getOrderIdFromURL();
+      if (!orderId) {
+        alert('Order ID not found.');
+        return;
+      }
+
+      if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+        return;
+      }
+
+      // Remove from localStorage
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      const orderIndex = orders.findIndex(o => o.orderId === orderId);
+      
+      if (orderIndex !== -1) {
+        orders.splice(orderIndex, 1);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        alert('Order deleted successfully!');
+        window.location.href = 'order-report.html';
+      } else {
+        alert('Order not found.');
+      }
+    }
+
+    // Event listeners
+    document.getElementById('edit-order-btn').addEventListener('click', enableEditMode);
+    document.getElementById('save-order-btn').addEventListener('click', saveOrder);
+    document.getElementById('cancel-edit-btn').addEventListener('click', disableEditMode);
+    document.getElementById('delete-order-btn').addEventListener('click', deleteOrder);
+    document.getElementById('back-btn').addEventListener('click', () => {
+      window.location.href = 'order-report.html';
+    });
+
+    document.getElementById('add-item-btn').addEventListener('click', function() {
+      const container = document.getElementById('items-container');
+      const itemForm = createItemForm(itemCounter++, {}, true);
+      container.appendChild(itemForm);
+      updateOrderSummary();
+    });
+
+    // Initialize
+    loadOrder();
+  </script>
+</body>
+</html>
+

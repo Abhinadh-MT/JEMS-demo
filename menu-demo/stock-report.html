@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stock Report - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="stock-report" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Stock Report</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">View and analyze stock details with filters and sorting</p>
+          </div>
+          <button type="button" id="export-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+            <span class="material-icons">download</span>
+            <span>Export</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Tabs Navigation -->
+      <div class="mb-6 border-b border-border-light dark:border-border-dark">
+        <nav class="flex space-x-1" role="tablist">
+          <button type="button" 
+                  id="tab-stock-report" 
+                  class="tab-button active px-6 py-3 text-sm font-medium border-b-2 border-primary text-primary transition-colors"
+                  data-tab="stock-report">
+            Stock Report
+          </button>
+          <button type="button" 
+                  id="tab-bag-management" 
+                  class="tab-button px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                  data-tab="bag-management">
+            Bag Management
+          </button>
+        </nav>
+      </div>
+
+      <!-- Tab Panels -->
+      <!-- Stock Report Tab Panel -->
+      <div id="panel-stock-report" class="tab-panel">
+      <!-- Filters Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Filters</h2>
+          <button type="button" id="clear-filters-btn" class="text-sm text-primary hover:opacity-80">
+            Clear All
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Search -->
+          <div>
+            <label for="search-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Search
+            </label>
+            <div class="relative">
+              <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input type="text" id="search-input" placeholder="Search lot, item, batch..."
+                     class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+            </div>
+          </div>
+
+          <!-- Item Type Filter -->
+          <div>
+            <label for="item-type-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Item Type
+            </label>
+            <select id="item-type-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Types</option>
+              <option value="METAL|metal">Metal</option>
+              <option value="METAL|findings">Finding</option>
+              <option value="METAL|consumables">Consumables</option>
+              <option value="ALLOY">Alloy</option>
+              <option value="DIAMOND">Diamond</option>
+              <option value="STONE">Stone</option>
+            </select>
+          </div>
+
+          <!-- Material/Diamond/Stone Filter -->
+          <div>
+            <label for="item-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Item
+            </label>
+            <select id="item-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Items</option>
+              <!-- Options will be populated based on item type -->
+            </select>
+          </div>
+
+          <!-- Date Range -->
+          <div>
+            <label for="date-from" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date From
+            </label>
+            <input type="date" id="date-from"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Date To -->
+          <div>
+            <label for="date-to" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date To
+            </label>
+            <input type="date" id="date-to"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Weight Range From -->
+          <div>
+            <label for="weight-from" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Weight From (g)
+            </label>
+            <input type="number" id="weight-from" step="0.001" min="0"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                   placeholder="0.000">
+          </div>
+
+          <!-- Weight Range To -->
+          <div>
+            <label for="weight-to" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Weight To (g)
+            </label>
+            <input type="number" id="weight-to" step="0.001" min="0"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                   placeholder="0.000">
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Table -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Stock Details</h2>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Total Records:</span>
+            <span id="total-count" class="text-sm font-semibold text-primary">0</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left" id="stock-table">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="lot_no">
+                  <div class="flex items-center gap-2">
+                    <span>Lot No</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="item_type">
+                  <div class="flex items-center gap-2">
+                    <span>Item Type</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="item_name">
+                  <div class="flex items-center gap-2">
+                    <span>Item Name / Code</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="current_weight">
+                  <div class="flex items-center gap-2">
+                    <span>Current Weight (g)</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="current_pieces">
+                  <div class="flex items-center gap-2">
+                    <span>Current Pieces</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="stock-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inventory_2</span>
+            <p>No stock data found. Adjust your filters or add stock entries.</p>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-border-light dark:border-border-dark">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span id="showing-from">0</span> to <span id="showing-to">0</span> of <span id="showing-total">0</span> entries
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="prev-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Previous
+            </button>
+            <span class="px-4 py-2 text-sm">
+              Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+            </span>
+            <button type="button" id="next-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+      </div>
+      <!-- End Stock Report Tab Panel -->
+
+      <!-- Bag Management Tab Panel -->
+      <div id="panel-bag-management" class="tab-panel hidden">
+        <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Bag Management</h2>
+          </div>
+          
+          <div class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">shopping_bag</span>
+            <p>Bag Management content will be displayed here.</p>
+          </div>
+        </div>
+      </div>
+      <!-- End Bag Management Tab Panel -->
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allStockData = [];
+    let filteredData = [];
+    let sortedData = [];
+    let currentPage = 1;
+    const itemsPerPage = 20;
+    let sortColumn = '';
+    let sortDirection = 'asc';
+    let allRawMaterials = [];
+    let allDiamonds = [];
+    let allStones = [];
+    let allAlloys = [];
+    let allRecipes = [];
+
+    // Demo data for initialization
+    const demoStockLots = [
+      // Metal lots - Gold
+      { lot_id: 'lot-001', tenant_id: 'default-tenant-id', lot_no: 'LOT-GLD-001', item_type: 'METAL', raw_material_id: '550e8400-e29b-41d4-a716-446655440100', current_weight: '150.500', current_pieces: 1, created_at: '2024-01-20T10:00:00.000Z', updated_at: '2024-01-20T10:00:00.000Z' },
+      { lot_id: 'lot-002', tenant_id: 'default-tenant-id', lot_no: 'LOT-GLD-002', item_type: 'METAL', raw_material_id: '550e8400-e29b-41d4-a716-446655440100', current_weight: '200.750', current_pieces: 1, created_at: '2024-01-21T14:30:00.000Z', updated_at: '2024-01-21T14:30:00.000Z' },
+      { lot_id: 'lot-007', tenant_id: 'default-tenant-id', lot_no: 'LOT-GLD-003', item_type: 'METAL', raw_material_id: '550e8400-e29b-41d4-a716-446655440100', current_weight: '300.000', current_pieces: 1, created_at: '2024-02-01T09:00:00.000Z', updated_at: '2024-02-01T09:00:00.000Z' },
+      { lot_id: 'lot-009', tenant_id: 'default-tenant-id', lot_no: 'LOT-GLD-004', item_type: 'METAL', raw_material_id: '550e8400-e29b-41d4-a716-446655440100', current_weight: '175.250', current_pieces: 1, created_at: '2024-02-05T10:30:00.000Z', updated_at: '2024-02-05T10:30:00.000Z' },
+      // Metal lots - Silver
+      { lot_id: 'lot-003', tenant_id: 'default-tenant-id', lot_no: 'LOT-SLV-001', item_type: 'METAL', raw_material_id: '660e8400-e29b-41d4-a716-446655440101', current_weight: '75.250', current_pieces: 1, created_at: '2024-01-22T09:15:00.000Z', updated_at: '2024-01-22T09:15:00.000Z' },
+      { lot_id: 'lot-004', tenant_id: 'default-tenant-id', lot_no: 'LOT-SLV-002', item_type: 'METAL', raw_material_id: '660e8400-e29b-41d4-a716-446655440101', current_weight: '120.000', current_pieces: 1, created_at: '2024-01-23T11:20:00.000Z', updated_at: '2024-01-23T11:20:00.000Z' },
+      { lot_id: 'lot-008', tenant_id: 'default-tenant-id', lot_no: 'LOT-SLV-003', item_type: 'METAL', raw_material_id: '660e8400-e29b-41d4-a716-446655440101', current_weight: '250.750', current_pieces: 1, created_at: '2024-02-02T11:30:00.000Z', updated_at: '2024-02-02T11:30:00.000Z' },
+      { lot_id: 'lot-010', tenant_id: 'default-tenant-id', lot_no: 'LOT-SLV-004', item_type: 'METAL', raw_material_id: '660e8400-e29b-41d4-a716-446655440101', current_weight: '95.500', current_pieces: 1, created_at: '2024-02-06T14:00:00.000Z', updated_at: '2024-02-06T14:00:00.000Z' },
+      // Metal lots - Copper
+      { lot_id: 'lot-005', tenant_id: 'default-tenant-id', lot_no: 'LOT-COP-001', item_type: 'METAL', raw_material_id: '770e8400-e29b-41d4-a716-446655440102', current_weight: '50.500', current_pieces: 1, created_at: '2024-01-24T08:45:00.000Z', updated_at: '2024-01-24T08:45:00.000Z' },
+      { lot_id: 'lot-011', tenant_id: 'default-tenant-id', lot_no: 'LOT-COP-002', item_type: 'METAL', raw_material_id: '770e8400-e29b-41d4-a716-446655440102', current_weight: '80.000', current_pieces: 1, created_at: '2024-02-07T09:20:00.000Z', updated_at: '2024-02-07T09:20:00.000Z' },
+      // Metal lots - Palladium
+      { lot_id: 'lot-006', tenant_id: 'default-tenant-id', lot_no: 'LOT-PAL-001', item_type: 'METAL', raw_material_id: '880e8400-e29b-41d4-a716-446655440103', current_weight: '100.000', current_pieces: 1, created_at: '2024-01-25T13:00:00.000Z', updated_at: '2024-01-25T13:00:00.000Z' },
+      { lot_id: 'lot-012', tenant_id: 'default-tenant-id', lot_no: 'LOT-PAL-002', item_type: 'METAL', raw_material_id: '880e8400-e29b-41d4-a716-446655440103', current_weight: '150.750', current_pieces: 1, created_at: '2024-02-08T11:45:00.000Z', updated_at: '2024-02-08T11:45:00.000Z' },
+      // Diamond lots
+      { lot_id: 'lot-dia-001', tenant_id: 'default-tenant-id', lot_no: 'LOT-DIA-001', item_type: 'DIAMOND', diamond_master_id: 'dia-001', current_weight: '5.250', current_pieces: 25, created_at: '2024-01-26T10:00:00.000Z', updated_at: '2024-01-26T10:00:00.000Z' },
+      { lot_id: 'lot-dia-002', tenant_id: 'default-tenant-id', lot_no: 'LOT-DIA-002', item_type: 'DIAMOND', diamond_master_id: 'dia-002', current_weight: '8.500', current_pieces: 40, created_at: '2024-01-27T14:20:00.000Z', updated_at: '2024-01-27T14:20:00.000Z' },
+      { lot_id: 'lot-dia-003', tenant_id: 'default-tenant-id', lot_no: 'LOT-DIA-003', item_type: 'DIAMOND', diamond_master_id: 'dia-001', current_weight: '12.750', current_pieces: 60, created_at: '2024-02-03T09:15:00.000Z', updated_at: '2024-02-03T09:15:00.000Z' },
+      { lot_id: 'lot-dia-004', tenant_id: 'default-tenant-id', lot_no: 'LOT-DIA-004', item_type: 'DIAMOND', diamond_master_id: 'dia-003', current_weight: '6.500', current_pieces: 30, created_at: '2024-02-09T10:00:00.000Z', updated_at: '2024-02-09T10:00:00.000Z' },
+      { lot_id: 'lot-dia-005', tenant_id: 'default-tenant-id', lot_no: 'LOT-DIA-005', item_type: 'DIAMOND', diamond_master_id: 'dia-002', current_weight: '10.250', current_pieces: 50, created_at: '2024-02-10T13:30:00.000Z', updated_at: '2024-02-10T13:30:00.000Z' },
+      // Stone lots
+      { lot_id: 'lot-stn-001', tenant_id: 'default-tenant-id', lot_no: 'LOT-STN-001', item_type: 'STONE', stone_master_id: 'stn-001', current_weight: '15.500', current_pieces: 30, created_at: '2024-01-28T11:00:00.000Z', updated_at: '2024-01-28T11:00:00.000Z' },
+      { lot_id: 'lot-stn-002', tenant_id: 'default-tenant-id', lot_no: 'LOT-STN-002', item_type: 'STONE', stone_master_id: 'stn-002', current_weight: '20.250', current_pieces: 45, created_at: '2024-01-29T15:30:00.000Z', updated_at: '2024-01-29T15:30:00.000Z' },
+      { lot_id: 'lot-stn-003', tenant_id: 'default-tenant-id', lot_no: 'LOT-STN-003', item_type: 'STONE', stone_master_id: 'stn-001', current_weight: '18.750', current_pieces: 35, created_at: '2024-02-04T10:45:00.000Z', updated_at: '2024-02-04T10:45:00.000Z' },
+      { lot_id: 'lot-stn-004', tenant_id: 'default-tenant-id', lot_no: 'LOT-STN-004', item_type: 'STONE', stone_master_id: 'stn-003', current_weight: '22.500', current_pieces: 50, created_at: '2024-02-11T09:00:00.000Z', updated_at: '2024-02-11T09:00:00.000Z' },
+      { lot_id: 'lot-stn-005', tenant_id: 'default-tenant-id', lot_no: 'LOT-STN-005', item_type: 'STONE', stone_master_id: 'stn-002', current_weight: '16.750', current_pieces: 32, created_at: '2024-02-12T14:20:00.000Z', updated_at: '2024-02-12T14:20:00.000Z' }
+    ];
+
+    const demoAlloyCreations = [
+      {
+        alloy_creation_id: 'alloy-001',
+        recipe_id: 'recipe-001',
+        recipe_name: 'Standard Yellow Gold 22K',
+        purity: '916',
+        input_weight: 500.000,
+        wastage: 2.5,
+        expected_yield: 487.500,
+        new_batch: 'ALY-20240201-001',
+        created_at: '2024-02-01T10:00:00.000Z'
+      },
+      {
+        alloy_creation_id: 'alloy-002',
+        recipe_id: 'recipe-002',
+        recipe_name: 'White Gold 18K',
+        purity: '750',
+        input_weight: 300.000,
+        wastage: 3.0,
+        expected_yield: 291.000,
+        new_batch: 'ALY-20240202-002',
+        created_at: '2024-02-02T14:30:00.000Z'
+      },
+      {
+        alloy_creation_id: 'alloy-003',
+        recipe_id: 'recipe-003',
+        recipe_name: 'Rose Gold 18K',
+        purity: '750',
+        input_weight: 400.000,
+        wastage: 2.8,
+        expected_yield: 388.800,
+        new_batch: 'ALY-20240203-003',
+        created_at: '2024-02-03T09:15:00.000Z'
+      },
+      {
+        alloy_creation_id: 'alloy-004',
+        recipe_id: 'recipe-001',
+        recipe_name: 'Standard Yellow Gold 22K',
+        purity: '916',
+        input_weight: 600.000,
+        wastage: 2.5,
+        expected_yield: 585.000,
+        new_batch: 'ALY-20240213-004',
+        created_at: '2024-02-13T11:00:00.000Z'
+      },
+      {
+        alloy_creation_id: 'alloy-005',
+        recipe_id: 'recipe-002',
+        recipe_name: 'White Gold 18K',
+        purity: '750',
+        input_weight: 450.000,
+        wastage: 3.0,
+        expected_yield: 436.500,
+        new_batch: 'ALY-20240214-005',
+        created_at: '2024-02-14T15:30:00.000Z'
+      }
+    ];
+
+    const demoDiamonds = [
+      { diamond_master_id: 'dia-001', diamond_code: 'DIA-RND-0.5', shape_id: 'shape-001', size_id: 'size-001', colour_id: 'col-001', clarity_id: 'clar-001', rate_per_carat: 5000, is_active: true },
+      { diamond_master_id: 'dia-002', diamond_code: 'DIA-RND-1.0', shape_id: 'shape-001', size_id: 'size-002', colour_id: 'col-002', clarity_id: 'clar-002', rate_per_carat: 8000, is_active: true },
+      { diamond_master_id: 'dia-003', diamond_code: 'DIA-PRS-0.75', shape_id: 'shape-002', size_id: 'size-003', colour_id: 'col-001', clarity_id: 'clar-003', rate_per_carat: 6500, is_active: true },
+      { diamond_master_id: 'dia-004', diamond_code: 'DIA-RND-0.25', shape_id: 'shape-001', size_id: 'size-001', colour_id: 'col-003', clarity_id: 'clar-001', rate_per_carat: 3000, is_active: true },
+      { diamond_master_id: 'dia-005', diamond_code: 'DIA-OVL-1.5', shape_id: 'shape-003', size_id: 'size-004', colour_id: 'col-002', clarity_id: 'clar-002', rate_per_carat: 12000, is_active: true }
+    ];
+
+    const demoStones = [
+      { stone_master_id: 'stn-001', stone_code: 'STN-RUBY-001', stone_type_id: 'type-001', shape_id: 'shape-001', size_id: 'size-001', colour_id: 'col-001', quality_id: 'qual-001', rate_per_carat: 3000, is_active: true },
+      { stone_master_id: 'stn-002', stone_code: 'STN-EMR-001', stone_type_id: 'type-002', shape_id: 'shape-002', size_id: 'size-002', colour_id: 'col-002', quality_id: 'qual-002', rate_per_carat: 2500, is_active: true },
+      { stone_master_id: 'stn-003', stone_code: 'STN-SAP-001', stone_type_id: 'type-003', shape_id: 'shape-001', size_id: 'size-003', colour_id: 'col-003', quality_id: 'qual-001', rate_per_carat: 2000, is_active: true },
+      { stone_master_id: 'stn-004', stone_code: 'STN-RUBY-002', stone_type_id: 'type-001', shape_id: 'shape-002', size_id: 'size-002', colour_id: 'col-001', quality_id: 'qual-003', rate_per_carat: 3500, is_active: true },
+      { stone_master_id: 'stn-005', stone_code: 'STN-EMR-002', stone_type_id: 'type-002', shape_id: 'shape-001', size_id: 'size-001', colour_id: 'col-002', quality_id: 'qual-001', rate_per_carat: 2800, is_active: true }
+    ];
+
+    // Load stock data
+    function loadStockData() {
+      // Initialize or load stock lots
+      let storedLots = localStorage.getItem('stockLots');
+      if (!storedLots || JSON.parse(storedLots).length === 0) {
+        localStorage.setItem('stockLots', JSON.stringify(demoStockLots));
+      }
+      const stockLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      
+      // Initialize or load raw materials
+      let storedMaterials = localStorage.getItem('rawMaterials');
+      if (!storedMaterials || JSON.parse(storedMaterials).length === 0) {
+        const demoMaterials = [
+          { material_id: '550e8400-e29b-41d4-a716-446655440100', name: 'Gold 24K', code: 'GLD-24K-001', description: 'Pure 24 karat gold, 99.9% purity', unit_of_measure: '550e8400-e29b-41d4-a716-446655440010', is_active: true, created_at: '2024-01-15T10:30:00.000Z' },
+          { material_id: '660e8400-e29b-41d4-a716-446655440101', name: 'Silver 925', code: 'SLV-925-001', description: 'Sterling silver, 92.5% purity', unit_of_measure: '550e8400-e29b-41d4-a716-446655440010', is_active: true, created_at: '2024-01-16T14:20:00.000Z' },
+          { material_id: '770e8400-e29b-41d4-a716-446655440102', name: 'Copper', code: 'COP-001', description: 'Pure copper', unit_of_measure: '550e8400-e29b-41d4-a716-446655440010', is_active: true, created_at: '2024-01-17T09:15:00.000Z' },
+          { material_id: '880e8400-e29b-41d4-a716-446655440103', name: 'Palladium', code: 'PAL-001', description: 'Pure palladium', unit_of_measure: '550e8400-e29b-41d4-a716-446655440010', is_active: true, created_at: '2024-01-18T11:00:00.000Z' }
+        ];
+        localStorage.setItem('rawMaterials', JSON.stringify(demoMaterials));
+      }
+      allRawMaterials = JSON.parse(localStorage.getItem('rawMaterials') || '[]');
+      
+      // Add demo data to existing data if it doesn't exist (merge strategy)
+      const existingLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      const existingLotIds = new Set(existingLots.map(l => l.lot_id));
+      const newLots = demoStockLots.filter(l => !existingLotIds.has(l.lot_id));
+      if (newLots.length > 0) {
+        localStorage.setItem('stockLots', JSON.stringify([...existingLots, ...newLots]));
+      }
+      
+      const existingAlloys = JSON.parse(localStorage.getItem('alloyCreations') || '[]');
+      const existingAlloyIds = new Set(existingAlloys.map(a => a.alloy_creation_id));
+      const newAlloys = demoAlloyCreations.filter(a => !existingAlloyIds.has(a.alloy_creation_id));
+      if (newAlloys.length > 0) {
+        localStorage.setItem('alloyCreations', JSON.stringify([...existingAlloys, ...newAlloys]));
+      }
+      
+      const existingDiamonds = JSON.parse(localStorage.getItem('diamondMaster') || '[]');
+      const existingDiamondIds = new Set(existingDiamonds.map(d => d.diamond_master_id || d.diamondMasterID));
+      const newDiamonds = demoDiamonds.filter(d => !existingDiamondIds.has(d.diamond_master_id));
+      if (newDiamonds.length > 0) {
+        localStorage.setItem('diamondMaster', JSON.stringify([...existingDiamonds, ...newDiamonds]));
+      }
+      
+      const existingStones = JSON.parse(localStorage.getItem('stoneMaster') || '[]');
+      const existingStoneIds = new Set(existingStones.map(s => s.stone_master_id || s.stoneMasterID));
+      const newStones = demoStones.filter(s => !existingStoneIds.has(s.stone_master_id));
+      if (newStones.length > 0) {
+        localStorage.setItem('stoneMaster', JSON.stringify([...existingStones, ...newStones]));
+      }
+      
+      // Reload all data after merging demo data
+      const finalStockLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      allRawMaterials = JSON.parse(localStorage.getItem('rawMaterials') || '[]');
+      allDiamonds = JSON.parse(localStorage.getItem('diamondMaster') || '[]');
+      allStones = JSON.parse(localStorage.getItem('stoneMaster') || '[]');
+      allAlloys = JSON.parse(localStorage.getItem('alloyCreations') || []);
+      allRecipes = JSON.parse(localStorage.getItem('jems-alloy-recipes') || '[]');
+
+      // Process stock lots (Raw Materials, Diamonds, Stones)
+      const stockFromLots = finalStockLots.map(lot => {
+        let itemName = 'Unknown';
+        let itemCode = '';
+        let materialType = null;
+        
+        if (lot.item_type === 'METAL' && lot.raw_material_id) {
+          const material = allRawMaterials.find(m => m.material_id === lot.raw_material_id);
+          if (material) {
+            itemName = material.name || 'Unknown Metal';
+            itemCode = material.code || '';
+            materialType = material.type || null;
+          }
+        } else if (lot.item_type === 'DIAMOND' && lot.diamond_master_id) {
+          const diamond = allDiamonds.find(d => (d.diamond_master_id || d.diamondMasterID) === lot.diamond_master_id);
+          if (diamond) {
+            itemName = diamond.diamond_code || diamond.diamond_master_id || 'Unknown Diamond';
+            itemCode = diamond.diamond_code || '';
+          }
+        } else if (lot.item_type === 'STONE' && lot.stone_master_id) {
+          const stone = allStones.find(s => (s.stone_master_id || s.stoneMasterID) === lot.stone_master_id);
+          if (stone) {
+            itemName = stone.stone_code || stone.stone_master_id || 'Unknown Stone';
+            itemCode = stone.stone_code || '';
+          }
+        }
+
+        return {
+          lot_id: lot.lot_id,
+          lot_no: lot.lot_no || '',
+          item_type: lot.item_type || '',
+          item_name: itemName,
+          item_code: itemCode,
+          item_id: lot.raw_material_id || lot.diamond_master_id || lot.stone_master_id || '',
+          material_type: materialType, // Store raw material type for filtering
+          current_weight: parseFloat(lot.current_weight) || 0,
+          current_pieces: parseInt(lot.current_pieces) || 0,
+          created_at: lot.created_at || '',
+          updated_at: lot.updated_at || lot.created_at || ''
+        };
+      });
+
+      // Process alloys (from alloy creations)
+      const stockFromAlloys = allAlloys.map(alloy => {
+        const recipe = allRecipes.find(r => (r.id || r.recipeCode) === alloy.recipe_id);
+        const recipeName = recipe ? recipe.recipeName : 'Unknown Alloy';
+        
+        return {
+          lot_id: alloy.alloy_creation_id || generateUUID(),
+          lot_no: alloy.new_batch || '',
+          item_type: 'ALLOY',
+          item_name: recipeName,
+          item_code: alloy.new_batch || '',
+          item_id: alloy.recipe_id || '',
+          current_weight: parseFloat(alloy.expected_yield) || 0,
+          current_pieces: 1,
+          purity: alloy.purity || '',
+          created_at: alloy.created_at || '',
+          updated_at: alloy.created_at || ''
+        };
+      });
+
+      // Combine all stock data
+      allStockData = [...stockFromLots, ...stockFromAlloys];
+
+      // Populate item filter based on selected type
+      updateItemFilter();
+      applyFilters();
+    }
+
+    // Update item filter dropdown based on selected item type
+    function updateItemFilter() {
+      const itemType = document.getElementById('item-type-filter').value;
+      const itemFilter = document.getElementById('item-filter');
+      itemFilter.innerHTML = '<option value="">All Items</option>';
+
+      if (itemType === 'METAL|metal' || itemType === 'METAL|findings' || itemType === 'METAL|consumables' || itemType.startsWith('METAL|') || !itemType) {
+        const selectedSubType = itemType.includes('|') ? itemType.split('|')[1] : null;
+        allRawMaterials.filter(m => {
+          if (m.is_active === false) return false;
+          if (selectedSubType) {
+            return m.type === selectedSubType;
+          }
+          return true;
+        }).forEach(material => {
+          const option = document.createElement('option');
+          option.value = material.material_id;
+          option.textContent = material.name || material.code;
+          itemFilter.appendChild(option);
+        });
+      }
+      
+      if (itemType === 'DIAMOND' || !itemType) {
+        allDiamonds.forEach(diamond => {
+          const option = document.createElement('option');
+          option.value = diamond.diamond_master_id || diamond.diamondMasterID;
+          option.textContent = diamond.diamond_code || diamond.diamond_master_id || 'Diamond';
+          itemFilter.appendChild(option);
+        });
+      }
+      
+      if (itemType === 'STONE' || !itemType) {
+        allStones.forEach(stone => {
+          const option = document.createElement('option');
+          option.value = stone.stone_master_id || stone.stoneMasterID;
+          option.textContent = stone.stone_code || stone.stone_master_id || 'Stone';
+          itemFilter.appendChild(option);
+        });
+      }
+      
+      if (itemType === 'ALLOY' || !itemType) {
+        allRecipes.forEach(recipe => {
+          const option = document.createElement('option');
+          option.value = recipe.id || recipe.recipeCode;
+          option.textContent = recipe.recipeName || recipe.recipeCode;
+          itemFilter.appendChild(option);
+        });
+      }
+    }
+
+    // Generate UUID helper
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // Apply filters
+    function applyFilters() {
+      filteredData = [...allStockData];
+
+      // Search filter
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      if (searchTerm) {
+        filteredData = filteredData.filter(item => 
+          item.lot_no.toLowerCase().includes(searchTerm) ||
+          item.item_name.toLowerCase().includes(searchTerm) ||
+          (item.item_code && item.item_code.toLowerCase().includes(searchTerm)) ||
+          item.item_type.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // Item type filter
+      const itemType = document.getElementById('item-type-filter').value;
+      if (itemType) {
+        if (itemType.includes('|')) {
+          // Handle Metal sub-types (metal, findings, consumables)
+          const [type, subType] = itemType.split('|');
+          filteredData = filteredData.filter(item => {
+            if (item.item_type === type && item.item_type === 'METAL') {
+              // For METAL items, check the material_type field or raw material's type field
+              return item.material_type === subType;
+            }
+            return item.item_type === type;
+          });
+        } else {
+          filteredData = filteredData.filter(item => item.item_type === itemType);
+        }
+      }
+
+      // Item filter (Material/Diamond/Stone/Alloy)
+      const itemId = document.getElementById('item-filter').value;
+      if (itemId) {
+        filteredData = filteredData.filter(item => item.item_id === itemId);
+      }
+
+      // Date range filters
+      const dateFrom = document.getElementById('date-from').value;
+      const dateTo = document.getElementById('date-to').value;
+      if (dateFrom) {
+        filteredData = filteredData.filter(item => {
+          const itemDate = new Date(item.created_at);
+          return itemDate >= new Date(dateFrom);
+        });
+      }
+      if (dateTo) {
+        filteredData = filteredData.filter(item => {
+          const itemDate = new Date(item.created_at);
+          const toDate = new Date(dateTo);
+          toDate.setHours(23, 59, 59, 999);
+          return itemDate <= toDate;
+        });
+      }
+
+      // Weight range filters
+      const weightFrom = parseFloat(document.getElementById('weight-from').value);
+      const weightTo = parseFloat(document.getElementById('weight-to').value);
+      if (!isNaN(weightFrom)) {
+        filteredData = filteredData.filter(item => item.current_weight >= weightFrom);
+      }
+      if (!isNaN(weightTo)) {
+        filteredData = filteredData.filter(item => item.current_weight <= weightTo);
+      }
+
+      applySorting();
+    }
+
+    // Apply sorting
+    function applySorting() {
+      sortedData = [...filteredData];
+      
+      if (sortColumn) {
+        sortedData.sort((a, b) => {
+          let aVal = a[sortColumn];
+          let bVal = b[sortColumn];
+          
+          if (typeof aVal === 'string') {
+            aVal = aVal.toLowerCase();
+            bVal = bVal.toLowerCase();
+          }
+          
+          if (sortDirection === 'asc') {
+            return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+          } else {
+            return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+          }
+        });
+      }
+      
+      renderTable();
+    }
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('stock-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (sortedData.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        updatePagination(0);
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      
+      // Pagination
+      const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, sortedData.length);
+      const pageData = sortedData.slice(startIndex, endIndex);
+
+      tbody.innerHTML = '';
+      pageData.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        let itemTypeDisplay = '';
+        if (item.item_type === 'METAL') {
+          // Get the raw material type
+          const material = allRawMaterials.find(m => m.material_id === item.item_id);
+          if (material && material.type) {
+            itemTypeDisplay = material.type.charAt(0).toUpperCase() + material.type.slice(1);
+          } else {
+            itemTypeDisplay = 'Metal';
+          }
+        } else if (item.item_type === 'ALLOY') {
+          itemTypeDisplay = 'Alloy';
+        } else {
+          itemTypeDisplay = item.item_type || '-';
+        }
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium">${item.lot_no || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 text-xs rounded font-medium ${getItemTypeClass(item.item_type, item.item_id)}">${itemTypeDisplay}</span>
+          </td>
+          <td class="px-6 py-4">
+            <div>
+              <div class="font-medium">${item.item_name || '-'}</div>
+              ${item.item_code ? `<div class="text-xs text-gray-500 dark:text-gray-400">${item.item_code}</div>` : ''}
+            </div>
+          </td>
+          <td class="px-6 py-4">${item.current_weight.toFixed(3)}</td>
+          <td class="px-6 py-4">${item.current_pieces}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updatePagination(sortedData.length, totalPages);
+      updateSortIcons();
+    }
+
+    // Get item type badge class
+    function getItemTypeClass(type, itemId) {
+      if (type === 'METAL') {
+        // Get the raw material type for color coding
+        const material = allRawMaterials.find(m => m.material_id === itemId);
+        if (material && material.type) {
+          const typeClasses = {
+            'metal': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+            'findings': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400',
+            'consumables': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'
+          };
+          return typeClasses[material.type] || 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400';
+        }
+        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400';
+      }
+      const classes = {
+        'ALLOY': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400',
+        'DIAMOND': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+        'STONE': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+      };
+      return classes[type] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400';
+    }
+
+    // Update pagination
+    function updatePagination(total, totalPages = 1) {
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('showing-total').textContent = total;
+      document.getElementById('total-pages').textContent = totalPages;
+      document.getElementById('current-page').textContent = currentPage;
+      
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, total);
+      document.getElementById('showing-from').textContent = total > 0 ? startIndex + 1 : 0;
+      document.getElementById('showing-to').textContent = endIndex;
+      
+      document.getElementById('prev-page').disabled = currentPage === 1;
+      document.getElementById('next-page').disabled = currentPage >= totalPages;
+    }
+
+    // Update sort icons
+    function updateSortIcons() {
+      document.querySelectorAll('.sort-icon').forEach(icon => {
+        icon.textContent = 'unfold_more';
+      });
+      
+      if (sortColumn) {
+        const header = document.querySelector(`th[data-sort="${sortColumn}"]`);
+        if (header) {
+          const icon = header.querySelector('.sort-icon');
+          icon.textContent = sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward';
+        }
+      }
+    }
+
+    // Sort handler
+    document.querySelectorAll('th[data-sort]').forEach(header => {
+      header.addEventListener('click', function() {
+        const column = this.dataset.sort;
+        if (sortColumn === column) {
+          sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortColumn = column;
+          sortDirection = 'asc';
+        }
+        applySorting();
+      });
+    });
+
+    // Filter event listeners
+    document.getElementById('search-input').addEventListener('input', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('item-type-filter').addEventListener('change', function() {
+      currentPage = 1;
+      updateItemFilter();
+      applyFilters();
+    });
+
+    document.getElementById('item-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('date-from').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('date-to').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('weight-from').addEventListener('input', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('weight-to').addEventListener('input', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters-btn').addEventListener('click', function() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('item-type-filter').value = '';
+      document.getElementById('item-filter').value = '';
+      document.getElementById('date-from').value = '';
+      document.getElementById('date-to').value = '';
+      document.getElementById('weight-from').value = '';
+      document.getElementById('weight-to').value = '';
+      currentPage = 1;
+      sortColumn = '';
+      sortDirection = 'asc';
+      updateItemFilter();
+      applyFilters();
+    });
+
+    // Pagination
+    document.getElementById('prev-page').addEventListener('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    document.getElementById('next-page').addEventListener('click', function() {
+      const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    // Export
+    document.getElementById('export-btn').addEventListener('click', function() {
+      // Create CSV content
+      const headers = ['Lot No', 'Item Type', 'Item Name', 'Item Code', 'Current Weight (g)', 'Current Pieces'];
+      const rows = sortedData.map(item => {
+        let itemTypeDisplay = '';
+        if (item.item_type === 'METAL') {
+          const material = allRawMaterials.find(m => m.material_id === item.item_id);
+          if (material && material.type) {
+            itemTypeDisplay = material.type.charAt(0).toUpperCase() + material.type.slice(1);
+          } else {
+            itemTypeDisplay = 'Metal';
+          }
+        } else if (item.item_type === 'ALLOY') {
+          itemTypeDisplay = 'Alloy';
+        } else {
+          itemTypeDisplay = item.item_type || '';
+        }
+        
+        return [
+          item.lot_no || '',
+          itemTypeDisplay,
+          item.item_name || '',
+          item.item_code || '',
+          item.current_weight.toFixed(3),
+          item.current_pieces
+        ];
+      });
+      
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `stock-report-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+
+    // Initialize
+    loadStockData();
+
+    // Tab switching functionality
+    function switchTab(tabName) {
+      // Hide all tab panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      
+      // Remove active state from all tabs
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active', 'border-primary', 'text-primary');
+        button.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+      });
+      
+      // Show selected tab panel
+      const selectedPanel = document.getElementById(`panel-${tabName}`);
+      if (selectedPanel) {
+        selectedPanel.classList.remove('hidden');
+      }
+      
+      // Add active state to selected tab
+      const selectedTab = document.getElementById(`tab-${tabName}`);
+      if (selectedTab) {
+        selectedTab.classList.add('active', 'border-primary', 'text-primary');
+        selectedTab.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+      }
+    }
+
+    // Add click handlers to tab buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        switchTab(tabName);
+      });
+    });
+
+    // Check if page was opened with hash fragment for bag-management tab
+    // This allows the menu link to open the Bag Management tab directly
+    if (window.location.hash === '#bag-management') {
+      switchTab('bag-management');
+    }
+  </script>
+</body>
+</html>
+
+

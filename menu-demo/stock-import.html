@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stock Import - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="stock-import" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Stock Import</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Download template, add data, and import stock entries in bulk</p>
+      </header>
+
+      <!-- Download Template Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Download Template</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Download the Excel template to add your stock data. Fill in the required fields and upload it back.</p>
+        <button type="button" id="download-template-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+          <span class="material-icons">download</span>
+          <span>Download Excel Template</span>
+        </button>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Upload Excel File</h2>
+        <div id="upload-area" class="border-2 border-dashed border-border-light dark:border-border-dark rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+          <input type="file" id="file-input" accept=".xlsx,.xls" class="hidden">
+          <div class="flex flex-col items-center justify-center">
+            <span class="material-icons text-5xl text-gray-400 dark:text-gray-500 mb-4">cloud_upload</span>
+            <p class="text-lg font-medium text-text-light dark:text-text-dark mb-2">Click to upload or drag and drop</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Excel files only (.xlsx, .xls)</p>
+            <p id="file-name" class="text-sm text-primary mt-4 hidden"></p>
+          </div>
+        </div>
+        <div id="upload-error" class="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 hidden"></div>
+      </div>
+
+      <!-- Preview Section -->
+      <div id="preview-section" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6 hidden">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Preview Data</h2>
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            <span id="preview-count">0</span> stock entries found. Review the data below before importing.
+          </p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="border-b-2 border-border-light dark:border-border-dark">
+              <tr>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Lot No</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Item Type</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Item ID</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Current Weight (g)</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Current Pieces</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Validation</th>
+              </tr>
+            </thead>
+            <tbody id="preview-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Import Actions -->
+      <div id="import-actions" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Ready to import <span id="valid-count">0</span> valid stock entries
+            </p>
+            <p id="error-count" class="text-sm text-red-600 dark:text-red-400 mt-1 hidden">
+              <span id="error-count-num">0</span> entries have validation errors
+            </p>
+          </div>
+          <button type="button" id="import-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed">
+            <span class="material-icons">upload</span>
+            <span>Import Stock</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div id="message-container" class="hidden"></div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let uploadedData = [];
+    let validationResults = [];
+
+    // Generate UUID
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // Get Item Type Badge Class
+    function getItemTypeClass(type) {
+      const classes = {
+        'METAL': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+        'ALLOY': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400',
+        'DIAMOND': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+        'STONE': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+      };
+      return classes[type] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400';
+    }
+
+    // Download Template
+    document.getElementById('download-template-btn').addEventListener('click', () => {
+      const templateData = [
+        {
+          'Lot No': 'LOT-GLD-001',
+          'Item Type': 'METAL',
+          'Raw Material ID': '550e8400-e29b-41d4-a716-446655440100',
+          'Diamond Master ID': '',
+          'Stone Master ID': '',
+          'Recipe ID': '',
+          'Current Weight (g)': '150.500',
+          'Current Pieces': '1',
+          'Created Date': '2024-01-20'
+        },
+        {
+          'Lot No': 'LOT-DIA-001',
+          'Item Type': 'DIAMOND',
+          'Raw Material ID': '',
+          'Diamond Master ID': 'dia-001',
+          'Stone Master ID': '',
+          'Recipe ID': '',
+          'Current Weight (g)': '5.250',
+          'Current Pieces': '25',
+          'Created Date': '2024-01-26'
+        },
+        {
+          'Lot No': 'LOT-STN-001',
+          'Item Type': 'STONE',
+          'Raw Material ID': '',
+          'Diamond Master ID': '',
+          'Stone Master ID': 'stn-001',
+          'Recipe ID': '',
+          'Current Weight (g)': '15.500',
+          'Current Pieces': '30',
+          'Created Date': '2024-01-28'
+        },
+        {
+          'Lot No': 'ALY-20240201-001',
+          'Item Type': 'ALLOY',
+          'Raw Material ID': '',
+          'Diamond Master ID': '',
+          'Stone Master ID': '',
+          'Recipe ID': 'recipe-001',
+          'Current Weight (g)': '487.500',
+          'Current Pieces': '1',
+          'Created Date': '2024-02-01'
+        }
+      ];
+
+      const ws = XLSX.utils.json_to_sheet(templateData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Stock');
+      
+      // Set column widths
+      const colWidths = [
+        { wch: 20 }, { wch: 15 }, { wch: 40 }, { wch: 40 }, { wch: 40 }, { wch: 40 },
+        { wch: 18 }, { wch: 15 }, { wch: 15 }
+      ];
+      ws['!cols'] = colWidths;
+
+      XLSX.writeFile(wb, 'stock_import_template.xlsx');
+    });
+
+    // Upload Area Click
+    document.getElementById('upload-area').addEventListener('click', () => {
+      document.getElementById('file-input').click();
+    });
+
+    // Drag and Drop
+    const uploadArea = document.getElementById('upload-area');
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('border-primary');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('border-primary');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('border-primary');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFile(files[0]);
+      }
+    });
+
+    // File Input Change
+    document.getElementById('file-input').addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    // Handle File
+    function handleFile(file) {
+      if (!file.name.match(/\.(xlsx|xls)$/i)) {
+        showError('Please upload a valid Excel file (.xlsx or .xls)');
+        return;
+      }
+
+      document.getElementById('file-name').textContent = file.name;
+      document.getElementById('file-name').classList.remove('hidden');
+      document.getElementById('upload-error').classList.add('hidden');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+          
+          if (jsonData.length === 0) {
+            showError('The Excel file is empty. Please add stock data.');
+            return;
+          }
+
+          uploadedData = jsonData;
+          validateAndPreview();
+        } catch (error) {
+          showError('Error reading Excel file: ' + error.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // Validate and Preview
+    function validateAndPreview() {
+      validationResults = uploadedData.map((row, index) => {
+        const errors = [];
+        
+        // Required fields
+        if (!row['Lot No'] || row['Lot No'].toString().trim() === '') {
+          errors.push('Lot No is required');
+        }
+
+        if (!row['Item Type'] || row['Item Type'].toString().trim() === '') {
+          errors.push('Item Type is required');
+        } else {
+          const itemType = row['Item Type'].toString().trim().toUpperCase();
+          if (!['METAL', 'DIAMOND', 'STONE', 'ALLOY'].includes(itemType)) {
+            errors.push('Item Type must be METAL, DIAMOND, STONE, or ALLOY');
+          } else {
+            // Validate item ID based on type
+            if (itemType === 'METAL' && !row['Raw Material ID']) {
+              errors.push('Raw Material ID is required for METAL type');
+            }
+            if (itemType === 'DIAMOND' && !row['Diamond Master ID']) {
+              errors.push('Diamond Master ID is required for DIAMOND type');
+            }
+            if (itemType === 'STONE' && !row['Stone Master ID']) {
+              errors.push('Stone Master ID is required for STONE type');
+            }
+            if (itemType === 'ALLOY' && !row['Recipe ID']) {
+              errors.push('Recipe ID is required for ALLOY type');
+            }
+          }
+        }
+
+        // Validate numeric fields
+        if (row['Current Weight (g)'] && isNaN(parseFloat(row['Current Weight (g)']))) {
+          errors.push('Current Weight must be a number');
+        } else if (row['Current Weight (g)'] && parseFloat(row['Current Weight (g)']) < 0) {
+          errors.push('Current Weight must be positive');
+        }
+
+        if (row['Current Pieces'] && isNaN(parseInt(row['Current Pieces']))) {
+          errors.push('Current Pieces must be a number');
+        } else if (row['Current Pieces'] && parseInt(row['Current Pieces']) < 0) {
+          errors.push('Current Pieces must be positive');
+        }
+
+        // Validate date format if provided
+        if (row['Created Date']) {
+          const dateStr = row['Created Date'].toString().trim();
+          if (dateStr && isNaN(Date.parse(dateStr))) {
+            errors.push('Created Date must be a valid date');
+          }
+        }
+
+        return {
+          index: index + 1,
+          data: row,
+          errors: errors,
+          isValid: errors.length === 0
+        };
+      });
+
+      renderPreview();
+      document.getElementById('preview-section').classList.remove('hidden');
+      document.getElementById('import-actions').classList.remove('hidden');
+    }
+
+    // Render Preview
+    function renderPreview() {
+      const tbody = document.getElementById('preview-table-body');
+      tbody.innerHTML = '';
+
+      const validCount = validationResults.filter(r => r.isValid).length;
+      const errorCount = validationResults.filter(r => !r.isValid).length;
+
+      document.getElementById('preview-count').textContent = validationResults.length;
+      document.getElementById('valid-count').textContent = validCount;
+      
+      if (errorCount > 0) {
+        document.getElementById('error-count').classList.remove('hidden');
+        document.getElementById('error-count-num').textContent = errorCount;
+        document.getElementById('import-btn').disabled = true;
+      } else {
+        document.getElementById('error-count').classList.add('hidden');
+        document.getElementById('import-btn').disabled = false;
+      }
+
+      validationResults.forEach(result => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const itemType = result.data['Item Type'] || '';
+        const itemId = result.data['Raw Material ID'] || result.data['Diamond Master ID'] || result.data['Stone Master ID'] || result.data['Recipe ID'] || '-';
+        
+        const validationText = result.errors.length > 0 
+          ? '<span class="text-red-600 dark:text-red-400 text-xs">' + result.errors.join(', ') + '</span>'
+          : '<span class="text-green-600 dark:text-green-400 text-xs">✓ Valid</span>';
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-sm">${result.data['Lot No'] || '-'}</td>
+          <td class="px-4 py-3 text-sm">
+            <span class="px-2 py-1 text-xs rounded font-medium ${getItemTypeClass(itemType)}">${itemType || '-'}</span>
+          </td>
+          <td class="px-4 py-3 text-sm">${itemId}</td>
+          <td class="px-4 py-3 text-sm">${result.data['Current Weight (g)'] || '-'}</td>
+          <td class="px-4 py-3 text-sm">${result.data['Current Pieces'] || '-'}</td>
+          <td class="px-4 py-3 text-sm">${validationText}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Import Stock
+    document.getElementById('import-btn').addEventListener('click', () => {
+      const validStocks = validationResults.filter(r => r.isValid);
+      
+      if (validStocks.length === 0) {
+        showError('No valid stock entries to import');
+        return;
+      }
+
+      // Load existing stock lots
+      const existingLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      const existingLotNos = new Set(existingLots.map(l => l.lot_no));
+
+      // Convert Excel data to stock lot format
+      const newLots = validStocks.map(result => {
+        const row = result.data;
+        const itemType = row['Item Type'].toString().trim().toUpperCase();
+        const tenantId = 'default-tenant-id';
+        const now = new Date().toISOString();
+        const createdDate = row['Created Date'] ? new Date(row['Created Date']).toISOString() : now;
+
+        const lot = {
+          lot_id: generateUUID(),
+          tenant_id: tenantId,
+          lot_no: row['Lot No'].toString().trim(),
+          item_type: itemType,
+          current_weight: parseFloat(row['Current Weight (g)']) || 0,
+          current_pieces: parseInt(row['Current Pieces']) || 0,
+          created_at: createdDate,
+          updated_at: createdDate
+        };
+
+        // Add item-specific ID based on type
+        if (itemType === 'METAL' && row['Raw Material ID']) {
+          lot.raw_material_id = row['Raw Material ID'].toString().trim();
+        } else if (itemType === 'DIAMOND' && row['Diamond Master ID']) {
+          lot.diamond_master_id = row['Diamond Master ID'].toString().trim();
+        } else if (itemType === 'STONE' && row['Stone Master ID']) {
+          lot.stone_master_id = row['Stone Master ID'].toString().trim();
+        }
+
+        return lot;
+      });
+
+      // Filter out duplicates based on lot_no
+      const uniqueNewLots = newLots.filter(lot => !existingLotNos.has(lot.lot_no));
+
+      // Add new lots to existing
+      existingLots.push(...uniqueNewLots);
+      localStorage.setItem('stockLots', JSON.stringify(existingLots));
+
+      const duplicateCount = newLots.length - uniqueNewLots.length;
+      let message = `Successfully imported ${uniqueNewLots.length} stock entry(ies)!`;
+      if (duplicateCount > 0) {
+        message += ` ${duplicateCount} duplicate(s) skipped.`;
+      }
+
+      showSuccess(message);
+      
+      // Reset form
+      setTimeout(() => {
+        document.getElementById('file-input').value = '';
+        document.getElementById('file-name').classList.add('hidden');
+        document.getElementById('preview-section').classList.add('hidden');
+        document.getElementById('import-actions').classList.add('hidden');
+        uploadedData = [];
+        validationResults = [];
+      }, 2000);
+    });
+
+    // Show Error
+    function showError(message) {
+      const errorDiv = document.getElementById('upload-error');
+      errorDiv.textContent = message;
+      errorDiv.classList.remove('hidden');
+    }
+
+    // Show Success
+    function showSuccess(message) {
+      const messageDiv = document.getElementById('message-container');
+      messageDiv.className = 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 text-green-600 dark:text-green-400 mb-6';
+      messageDiv.textContent = message;
+      messageDiv.classList.remove('hidden');
+      
+      setTimeout(() => {
+        messageDiv.classList.add('hidden');
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
+

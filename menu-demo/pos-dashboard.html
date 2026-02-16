@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POS Dashboard - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "primary-dark": "#b0851d",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .gold-gradient { background: linear-gradient(135deg, #d4af37 0%, #b0851d 100%); }
+    .gold-accent-gradient { background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%); }
+    .dark .gold-accent-gradient { background: linear-gradient(135deg, #1e1e1e 0%, #2d2610 100%); }
+  </style>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="pos-dashboard" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+      <!-- Gold price bar -->
+      <div class="bg-card-light dark:bg-card-dark border-b border-border-light dark:border-border-dark px-6 py-3 flex flex-wrap items-center justify-center gap-6">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-gray-400 uppercase">Gold 24K</span>
+          <span class="text-sm font-bold text-text-light dark:text-text-dark">₹6,240</span>
+          <span class="material-icons text-green-500 text-sm">trending_up</span>
+        </div>
+        <div class="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-gray-400 uppercase">Gold 22K</span>
+          <span class="text-sm font-bold text-text-light dark:text-text-dark">₹5,720</span>
+          <span class="material-icons text-green-500 text-sm">trending_up</span>
+        </div>
+        <div class="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-gray-400 uppercase">Platinum</span>
+          <span class="text-sm font-bold text-text-light dark:text-text-dark">₹2,980</span>
+          <span class="material-icons text-red-500 text-sm">trending_down</span>
+        </div>
+        <div class="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-gray-400 uppercase">Silver</span>
+          <span class="text-sm font-bold text-text-light dark:text-text-dark">₹74.50</span>
+          <span class="material-icons text-green-500 text-sm">trending_up</span>
+        </div>
+      </div>
+
+      <!-- Dashboard content -->
+      <div class="p-6">
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-text-light dark:text-text-dark">POS Dashboard</h1>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Executive control panel</p>
+        </div>
+
+        <!-- KPI cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
+          <div class="gold-gradient rounded-xl p-4 text-white shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[7rem]">
+            <span class="material-icons absolute -right-3 -top-3 text-white/10 text-5xl">payments</span>
+            <p class="text-[9px] font-bold text-white/80 uppercase tracking-widest">Total Sales</p>
+            <h2 class="text-xl font-black leading-none">₹4.25L</h2>
+            <span class="text-[9px] font-bold bg-white/20 w-fit px-1.5 py-0.5 rounded">+12.4%</span>
+          </div>
+          <div class="bg-card-light dark:bg-card-dark border-2 border-primary/20 gold-accent-gradient rounded-xl p-3.5 shadow-sm flex flex-col justify-between min-h-[7rem]">
+            <div class="flex items-center justify-between">
+              <p class="text-[9px] font-bold text-primary-dark uppercase tracking-widest leading-none">Avg Value</p>
+              <span class="material-icons text-primary text-base">receipt</span>
+            </div>
+            <h2 class="text-lg font-black text-text-light dark:text-text-dark leading-none">₹32,450</h2>
+            <p class="text-[9px] text-gray-400 font-medium leading-none">Per Transaction</p>
+          </div>
+          <div class="bg-card-light dark:bg-card-dark border-2 border-primary/20 gold-accent-gradient rounded-xl p-3.5 shadow-sm flex flex-col justify-between min-h-[7rem]">
+            <div class="flex items-center justify-between">
+              <p class="text-[9px] font-bold text-primary-dark uppercase tracking-widest leading-none">Tax Coll.</p>
+              <span class="material-icons text-primary text-base">account_balance</span>
+            </div>
+            <h2 class="text-lg font-black text-text-light dark:text-text-dark leading-none">₹1.15L</h2>
+            <p class="text-[9px] text-green-600 font-bold leading-none">GST Accounted</p>
+          </div>
+          <div class="bg-card-light dark:bg-card-dark border-2 border-primary/20 gold-accent-gradient rounded-xl p-3.5 shadow-sm flex flex-col justify-between min-h-[7rem]">
+            <div class="flex items-center justify-between">
+              <p class="text-[9px] font-bold text-primary-dark uppercase tracking-widest leading-none">New Cust.</p>
+              <span class="material-icons text-primary text-base">person_add</span>
+            </div>
+            <h2 class="text-xl font-black text-text-light dark:text-text-dark leading-none">12</h2>
+            <p class="text-[9px] text-primary-dark font-bold leading-none">+3 vs Avg</p>
+          </div>
+          <div class="bg-card-light dark:bg-card-dark rounded-xl p-3.5 border border-border-light dark:border-border-dark shadow-sm flex flex-col justify-between min-h-[7rem]">
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none">Stock Value</p>
+            <h2 class="text-lg font-black text-text-light dark:text-text-dark leading-none">₹14.2 Cr</h2>
+            <p class="text-[9px] text-gray-400 font-medium italic leading-none">Asset Valuation</p>
+          </div>
+          <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-3.5 border border-red-100 dark:border-red-800 shadow-sm flex flex-col justify-between min-h-[7rem]">
+            <div class="flex justify-between items-start">
+              <p class="text-[9px] font-bold text-red-500 uppercase tracking-widest leading-none">Low Stock</p>
+              <span class="material-icons text-red-500 text-base leading-none">warning</span>
+            </div>
+            <h2 class="text-lg font-black text-red-700 dark:text-red-400 leading-none">14 <span class="text-[9px] font-medium text-red-400 tracking-normal">Items</span></h2>
+            <p class="text-[9px] font-bold text-red-600 dark:text-red-500 underline cursor-pointer leading-none">Review</p>
+          </div>
+          <div class="bg-card-light dark:bg-card-dark rounded-xl p-3.5 border border-border-light dark:border-border-dark shadow-sm flex flex-col justify-between min-h-[7rem]">
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none">Top Staff</p>
+            <div class="flex items-center gap-2">
+              <div class="size-5 rounded-full bg-primary/10 flex items-center justify-center font-bold text-[8px] text-primary">RK</div>
+              <h2 class="text-[10px] font-bold text-text-light dark:text-text-dark truncate">Rahul K.</h2>
+            </div>
+            <p class="text-[9px] text-primary font-bold leading-none">₹1.4L Today</p>
+          </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Revenue Performance -->
+          <div class="lg:col-span-2 bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark p-6 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-6 shrink-0">
+              <div>
+                <h3 class="font-bold text-text-light dark:text-text-dark tracking-tight">Revenue Performance</h3>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Performance Analysis (Revenue in ₹)</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="size-2.5 rounded-sm bg-primary"></span>
+                <span class="text-[10px] font-bold text-gray-500 uppercase">Sales Amount</span>
+              </div>
+            </div>
+            <div class="flex-1 flex items-end justify-around px-2 pb-2 gap-4 min-h-[200px]">
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[55%]">
+                  <div class="absolute bottom-0 w-full bg-primary/20 h-full rounded-t-lg"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[70%] rounded-t-lg transition-all group-hover:brightness-105"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">3.2L</p>
+                  <p class="text-[9px] font-bold text-gray-400 uppercase">Oct 18</p>
+                </div>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[60%]">
+                  <div class="absolute bottom-0 w-full bg-primary/20 h-full rounded-t-lg"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[82%] rounded-t-lg transition-all group-hover:brightness-105"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">3.5L</p>
+                  <p class="text-[9px] font-bold text-gray-400 uppercase">Oct 19</p>
+                </div>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[65%]">
+                  <div class="absolute bottom-0 w-full bg-primary/20 h-full rounded-t-lg"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[85%] rounded-t-lg transition-all group-hover:brightness-105"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">3.8L</p>
+                  <p class="text-[9px] font-bold text-gray-400 uppercase">Oct 20</p>
+                </div>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[75%]">
+                  <div class="absolute bottom-0 w-full bg-primary/20 h-full rounded-t-lg"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[60%] rounded-t-lg transition-all group-hover:brightness-105"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">4.2L</p>
+                  <p class="text-[9px] font-bold text-gray-400 uppercase">Oct 21</p>
+                </div>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[85%]">
+                  <div class="absolute bottom-0 w-full bg-primary/20 h-full rounded-t-lg"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[92%] rounded-t-lg transition-all group-hover:brightness-105"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">5.1L</p>
+                  <p class="text-[9px] font-bold text-gray-400 uppercase">Oct 22</p>
+                </div>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[70%]">
+                  <div class="absolute bottom-0 w-full bg-primary/20 h-full rounded-t-lg"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[78%] rounded-t-lg transition-all group-hover:brightness-105"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">4.5L</p>
+                  <p class="text-[9px] font-bold text-gray-400 uppercase">Oct 23</p>
+                </div>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                <div class="relative w-full max-w-[32px] bg-gray-50 dark:bg-gray-800 rounded-t-lg h-[80%]">
+                  <div class="absolute bottom-0 w-full bg-primary/30 h-full rounded-t-lg border-x border-t border-primary/40 border-dashed"></div>
+                  <div class="absolute bottom-0 w-full bg-primary h-[82%] rounded-t-lg transition-all group-hover:brightness-110"></div>
+                </div>
+                <div class="text-center">
+                  <p class="text-[10px] font-black text-text-light dark:text-text-dark">4.7L</p>
+                  <p class="text-[9px] font-black text-primary uppercase">Today</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Mode -->
+          <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark p-6 shadow-sm flex flex-col">
+            <div class="mb-4 shrink-0">
+              <h3 class="font-bold text-text-light dark:text-text-dark tracking-tight">Payment Mode</h3>
+              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Volume Distribution</p>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center min-h-0">
+              <div class="size-32 rounded-full border-[16px] border-primary border-l-slate-100 dark:border-gray-700 border-b-primary/40 flex items-center justify-center relative shadow-inner">
+                <div class="text-center">
+                  <span class="material-icons text-gray-300 dark:text-gray-600 text-2xl">account_balance_wallet</span>
+                </div>
+              </div>
+              <div class="mt-4 w-full space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="size-2 rounded-full bg-primary"></div>
+                    <span class="text-[11px] font-semibold text-text-light dark:text-text-dark uppercase">Card</span>
+                  </div>
+                  <span class="text-[11px] font-black text-text-light dark:text-text-dark">48%</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="size-2 rounded-full bg-primary/40"></div>
+                    <span class="text-[11px] font-semibold text-text-light dark:text-text-dark uppercase">UPI</span>
+                  </div>
+                  <span class="text-[11px] font-black text-text-light dark:text-text-dark">32%</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="size-2 rounded-full bg-slate-100 dark:bg-gray-600"></div>
+                    <span class="text-[11px] font-semibold text-text-light dark:text-text-dark uppercase">Cash</span>
+                  </div>
+                  <span class="text-[11px] font-black text-text-light dark:text-text-dark">20%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <!-- Category Breakdown -->
+          <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark p-6 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-4 shrink-0">
+              <div>
+                <h3 class="font-bold text-text-light dark:text-text-dark tracking-tight">Category Breakdown</h3>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Sales Share %</p>
+              </div>
+              <span class="material-icons text-gray-400">equalizer</span>
+            </div>
+            <div class="flex-1 space-y-3.5 overflow-hidden">
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px] font-bold text-text-light dark:text-text-dark uppercase">
+                  <span>Gold Jewellery</span>
+                  <span class="text-text-light dark:text-text-dark">65%</span>
+                </div>
+                <div class="h-1.5 w-full bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+                </div>
+              </div>
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px] font-bold text-text-light dark:text-text-dark uppercase">
+                  <span>Diamond & Solitaire</span>
+                  <span class="text-text-light dark:text-text-dark">22%</span>
+                </div>
+                <div class="h-1.5 w-full bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary/60 rounded-full" style="width: 22%"></div>
+                </div>
+              </div>
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px] font-bold text-text-light dark:text-text-dark uppercase">
+                  <span>Silver Articles</span>
+                  <span class="text-text-light dark:text-text-dark">13%</span>
+                </div>
+                <div class="h-1.5 w-full bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-slate-200 dark:bg-gray-600 rounded-full" style="width: 13%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invoicing Activity -->
+          <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark p-6 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-4 shrink-0">
+              <div class="flex items-center gap-4">
+                <div>
+                  <h3 class="font-bold text-text-light dark:text-text-dark tracking-tight">Invoicing Activity</h3>
+                  <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Transaction Performance</p>
+                </div>
+                <div class="h-8 w-px bg-gray-100 dark:bg-gray-700"></div>
+                <div class="relative">
+                  <select class="appearance-none bg-gray-50 dark:bg-gray-800 border border-border-light dark:border-border-dark text-[10px] font-bold rounded-lg pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-primary/20 focus:border-primary text-text-light dark:text-text-dark outline-none cursor-pointer transition-all hover:bg-white dark:hover:bg-gray-700">
+                    <option selected value="today">Today</option>
+                    <option value="this-week">This Week</option>
+                    <option value="this-month">This Month</option>
+                  </select>
+                  <span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">expand_more</span>
+                </div>
+              </div>
+              <div class="size-8 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+                <span class="material-icons text-green-600 dark:text-green-400 text-sm">check_circle</span>
+              </div>
+            </div>
+            <div class="flex-1 flex items-center gap-8 min-h-0">
+              <div class="flex-1 bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 text-center flex flex-col justify-center">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Bills Issued</p>
+                <h4 class="text-4xl font-black text-text-light dark:text-text-dark tracking-tight">128</h4>
+                <p class="text-[10px] font-bold text-green-600 dark:text-green-400 mt-2 flex items-center justify-center gap-1">
+                  <span class="material-icons text-xs">trending_up</span> 14% vs LW
+                </p>
+              </div>
+              <div class="flex-1 space-y-2.5">
+                <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-1.5">
+                  <span class="text-[10px] font-semibold text-gray-500 uppercase">Avg Value</span>
+                  <span class="text-xs font-bold text-text-light dark:text-text-dark">₹32,450</span>
+                </div>
+                <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-1.5">
+                  <span class="text-[10px] font-semibold text-gray-500 uppercase">Tax Coll.</span>
+                  <span class="text-xs font-bold text-text-light dark:text-text-dark">₹1.15L</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-semibold text-gray-500 uppercase">New Cust.</span>
+                  <span class="text-xs font-bold text-text-light dark:text-text-dark">12</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="menu.js"></script>
+</body>
+</html>

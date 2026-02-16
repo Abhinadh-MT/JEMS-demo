@@ -1,0 +1,140 @@
+<!-- SIDEBAR -->
+<aside class="w-64 bg-card-light dark:bg-card-dark flex flex-col border-r border-border-light dark:border-border-dark">
+  <div class="p-6 flex items-center justify-center border-b border-border-light dark:border-border-dark">
+    <span class="material-icons text-primary text-3xl mr-2">diamond</span>
+    <h1 class="text-xl font-bold">JEMS</h1>
+  </div>
+
+  <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+    <!-- Dashboard -->
+    <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
+      <span class="material-icons mr-3">dashboard</span>Dashboard
+    </a>
+
+    <!-- ORDER - Collapsible Parent Menu -->
+    <div class="space-y-1">
+      <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium" id="order-toggle">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">inventory_2</span>
+          <span>Order</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
+      </button>
+
+      <!-- Submenu Items -->
+      <div class="submenu" id="order-submenu">
+        <a href="#" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">New Order</a>
+        <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Update Order</a>
+        <a href="#" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Search</a>
+        <a href="#" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Detailed View</a>
+        <a href="CustomerOrderPrintOut.html" data-page="print" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Order Printout</a>
+      </div>
+    </div>
+
+    <div class="space-y-1">
+      <button id="stock-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">inventory_2</span>
+          <span>Stock</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="stock-chevron">expand_more</span>
+      </button>
+
+      <div class="submenu" id="stock-submenu">
+        <a href="RawMaterialsSearchReport.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material Report</a>
+        <a href="RawmaterrialStockEntry.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material Stock Entry</a>
+        <a href="AlloyCreation.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Alloy Creation</a>
+        <a href="StockReport.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stock Report</a>
+        <a href="stock-update.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stock Update – Direct & Excel Export</a>
+      </div>
+
+      <button id="bag-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">precision_manufacturing</span>
+          <span>Manufacturing</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="bag-chevron">expand_more</span>
+      </button>
+
+      <div class="submenu" id="bag-submenu">
+        <a href="materials-report.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Materials Report</a>
+        <a href="material-details-print.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Material Details & Print Bag Sticker</a>
+        <a href="IssueMaterialtoBag.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Generate Bag & Issue Material</a>
+        <a href="BagSplit.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Bag Splitting</a>
+        <a href="BageMovement.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Bag Movement</a>
+        <a href="bag-merging.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Bag Merging</a>
+        <a href="BagHistoryReport.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Bag Rejection</a>
+        <a href="WaxTreeCreation.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Wax Tree Creation</a>
+        <a href="TreeLoad.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tree Load</a>
+        <a href="tree-cutting.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tree Cutting</a>
+      </div>
+
+      <button id="qc-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">fact_check</span>
+          <span>QC</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="qc-chevron">expand_more</span>
+      </button>
+
+      <div class="submenu" id="qc-submenu">
+        <a href="FinalVerification-QC.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Final Verification – Finished Good</a>
+        <a href="DamageDetailsEntry.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Damage Details Entry</a>
+        <a href="DamageReport-View.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Damage Report</a>
+        <a href="location_transfer_report.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">QC Report</a>
+        <a href="WIP_Report.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">WIP Report</a>
+      </div>
+
+      <button id="hr-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">admin_panel_settings</span>
+          <span>HR & Admin</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="hr-chevron">expand_more</span>
+      </button>
+
+      <div class="submenu" id="hr-submenu">
+        <a href="Employees.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employees</a>
+        <a href="Department_report" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Department & HOD Report</a>
+        <a href="UserRoles.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">User Roles</a>
+        <a href="UserActivityLogs.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">User Activity Log</a>
+        <a href="EmployeePerformance.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee Performance</a>
+      </div>
+
+      <button id="master-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">settings</span>
+          <span>Master Settings</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="master-chevron">expand_more</span>
+      </button>
+
+      <div class="submenu" id="master-submenu">
+        <a href="customer.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
+        <a href="vendor.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Vendor</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
+        <a href="Role.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Raw Material</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Brand</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Category</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Subcategory</a>
+        <a href="create.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Diamond</a>
+        <a href="employee.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Employee</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Measure</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Stone Master</a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Tenants</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="p-4 border-t border-border-light dark:border-border-dark">
+    <div class="flex items-center">
+      <img alt="CEO avatar" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85BNgmf1Td4nfDBnjZ7kE6EWbKzql7w8mx9ds3lpVNq5aOf5EPrU1ea_OJ0m_E1si1TlR6dCGvGx_NnGCN6uArhFHr9uy_8Na-dlzZSUPz7VbBwNPpFNtyjxDg4t_Ps3g-4ggM-ET5pq4p-yAEe0o1xX04OQT24DADvpV9rIDkMJVCLAKBdCEaYYsmHCpRTnWgEIa2hXEDzqNXrcoTKC1ZzwA6aP63DSUln1hNP5rMBFABCJc4wkmK42F5fZnd8TT876Agrsr19ds"/>
+      <div class="ml-3">
+        <p class="font-semibold text-sm">John Doe (CEO)</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Super User</p>
+      </div>
+    </div>
+  </div>
+</aside>

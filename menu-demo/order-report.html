@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Report - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="order-report" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Order Report</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">View and search all orders</p>
+          </div>
+          <button type="button" id="export-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+            <span class="material-icons">download</span>
+            <span>Export</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Filters Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Filters</h2>
+          <button type="button" id="clear-filters-btn" class="text-sm text-primary hover:opacity-80">
+            Clear All
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Search -->
+          <div>
+            <label for="search-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Search
+            </label>
+            <div class="relative">
+              <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input type="text" id="search-input" placeholder="Search order no..."
+                     class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+            </div>
+          </div>
+
+          <!-- Customer Name Filter -->
+          <div>
+            <label for="customer-name-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Customer Name
+            </label>
+            <input type="text" id="customer-name-filter" placeholder="Filter by customer name..."
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Order Type Filter -->
+          <div>
+            <label for="order-type-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Order Type
+            </label>
+            <select id="order-type-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Types</option>
+              <option value="NEW_CUSTOMER">New Customer Order</option>
+              <option value="REPAIR">Repair Order</option>
+              <option value="COMPANY">Company Order</option>
+            </select>
+          </div>
+
+          <!-- Date From -->
+          <div>
+            <label for="date-from" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date From
+            </label>
+            <input type="date" id="date-from"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Date To -->
+          <div>
+            <label for="date-to" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date To
+            </label>
+            <input type="date" id="date-to"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Design Status Filter -->
+          <div>
+            <label for="design-status-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Design Status
+            </label>
+            <select id="design-status-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Status</option>
+              <option value="approved">Design Approved</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Orders</h2>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Total Records:</span>
+            <span id="total-count" class="text-sm font-semibold text-primary">0</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left" id="orders-table">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="orderId">
+                  <div class="flex items-center gap-2">
+                    <span>Order No</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="orderType">
+                  <div class="flex items-center gap-2">
+                    <span>Order Type</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="customerName">
+                  <div class="flex items-center gap-2">
+                    <span>Customer Name</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="deliveryDate">
+                  <div class="flex items-center gap-2">
+                    <span>Delivery Date</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="totalValue">
+                  <div class="flex items-center gap-2">
+                    <span>Total Value</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="createdAt">
+                  <div class="flex items-center gap-2">
+                    <span>Created Date</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="designApproved">
+                  <div class="flex items-center gap-2">
+                    <span>Design Status</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">shopping_cart</span>
+            <p>No orders found. Create your first order to get started.</p>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-border-light dark:border-border-dark">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span id="showing-from">0</span> to <span id="showing-to">0</span> of <span id="showing-total">0</span> entries
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="prev-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Previous
+            </button>
+            <span class="px-4 py-2 text-sm">
+              Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+            </span>
+            <button type="button" id="next-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allOrders = [];
+    let filteredData = [];
+    let sortedData = [];
+    let currentPage = 1;
+    const itemsPerPage = 7;
+    let sortColumn = '';
+    let sortDirection = 'asc';
+
+    // Demo order data
+    const demoOrders = [
+      {
+        orderId: 'ORD-2024-001',
+        orderType: 'NEW_CUSTOMER',
+        customerName: 'John Smith',
+        deliveryDate: '2024-03-15',
+        items: [
+          {
+            name: 'Jasmine Necklace',
+            sku: 'SKU-REF-001',
+            quantity: 1,
+            category: 'necklace',
+            subcategory: 'pendant',
+            metal: 'gold_22ct',
+            metalWeight: 12.5,
+            metalColour: 'yellow',
+            materialCost: 5000.00,
+            makingCharge: 500.00,
+            totalCost: 5500.00
+          }
+        ],
+        totalValue: 5500.00,
+        createdAt: '2024-01-15T10:30:00.000Z'
+      },
+      {
+        orderId: 'ORD-2024-002',
+        orderType: 'REPAIR',
+        customerName: 'Sarah Johnson',
+        deliveryDate: '2024-03-20',
+        items: [
+          {
+            name: 'Ruby Earrings',
+            sku: 'SKU-REF-002',
+            quantity: 2,
+            category: 'earrings',
+            subcategory: '',
+            metal: 'gold_24ct',
+            metalWeight: 8.3,
+            metalColour: 'rose',
+            materialCost: 3000.00,
+            makingCharge: 300.00,
+            totalCost: 3300.00
+          }
+        ],
+        totalValue: 6600.00,
+        createdAt: '2024-01-20T14:20:00.000Z'
+      },
+      {
+        orderId: 'ORD-2024-003',
+        orderType: 'COMPANY',
+        customerName: 'ABC Jewelry Store',
+        deliveryDate: '2024-04-01',
+        items: [
+          {
+            name: 'Diamond Ring',
+            sku: 'SKU-REF-003',
+            quantity: 1,
+            category: 'ring',
+            subcategory: '',
+            metal: 'platinum_950',
+            metalWeight: 5.2,
+            metalColour: 'white',
+            materialCost: 8000.00,
+            makingCharge: 800.00,
+            totalCost: 8800.00
+          },
+          {
+            name: 'Gold Bracelet',
+            sku: 'SKU-REF-004',
+            quantity: 3,
+            category: 'bracelet',
+            subcategory: '',
+            metal: 'gold_22ct',
+            metalWeight: 15.0,
+            metalColour: 'yellow',
+            materialCost: 6000.00,
+            makingCharge: 600.00,
+            totalCost: 6600.00
+          }
+        ],
+        totalValue: 31000.00,
+        createdAt: '2024-02-01T09:15:00.000Z'
+      },
+      {
+        orderId: 'ORD-2024-004',
+        orderType: 'NEW_CUSTOMER',
+        customerName: 'Michael Brown',
+        deliveryDate: '2024-03-25',
+        items: [
+          {
+            name: 'Emerald Pendant',
+            sku: 'SKU-REF-005',
+            quantity: 1,
+            category: 'necklace',
+            subcategory: 'pendant',
+            metal: 'gold_22ct',
+            metalWeight: 10.0,
+            metalColour: 'yellow',
+            materialCost: 4500.00,
+            makingCharge: 450.00,
+            totalCost: 4950.00
+          }
+        ],
+        totalValue: 4950.00,
+        createdAt: '2024-02-05T11:45:00.000Z'
+      },
+      {
+        orderId: 'ORD-2024-005',
+        orderType: 'REPAIR',
+        customerName: 'Emily Davis',
+        deliveryDate: '2024-03-18',
+        items: [
+          {
+            name: 'Silver Chain',
+            sku: 'SKU-REF-006',
+            quantity: 1,
+            category: 'necklace',
+            subcategory: 'chain',
+            metal: 'sterling_silver',
+            metalWeight: 20.0,
+            metalColour: 'white',
+            materialCost: 1500.00,
+            makingCharge: 150.00,
+            totalCost: 1650.00
+          }
+        ],
+        totalValue: 1650.00,
+        createdAt: '2024-02-10T13:30:00.000Z'
+      }
+    ];
+
+    // Load orders
+    function loadOrders() {
+      // Initialize demo data if no orders exist
+      let storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      if (storedOrders.length === 0) {
+        localStorage.setItem('orders', JSON.stringify(demoOrders));
+        allOrders = demoOrders;
+      } else {
+        // Merge demo orders with existing orders (only add if orderId doesn't exist)
+        const existingOrderIds = new Set(storedOrders.map(o => o.orderId));
+        const newOrders = demoOrders.filter(o => !existingOrderIds.has(o.orderId));
+        if (newOrders.length > 0) {
+          const mergedOrders = [...storedOrders, ...newOrders];
+          localStorage.setItem('orders', JSON.stringify(mergedOrders));
+          allOrders = mergedOrders;
+        } else {
+          allOrders = storedOrders;
+        }
+      }
+      applyFilters();
+    }
+
+    // Apply filters
+    function applyFilters() {
+      filteredData = [...allOrders];
+
+      // Search filter (order ID only)
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      if (searchTerm) {
+        filteredData = filteredData.filter(order => 
+          order.orderId.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // Customer name filter
+      const customerName = document.getElementById('customer-name-filter').value.toLowerCase();
+      if (customerName) {
+        filteredData = filteredData.filter(order => 
+          order.customerName.toLowerCase().includes(customerName)
+        );
+      }
+
+      // Order type filter
+      const orderType = document.getElementById('order-type-filter').value;
+      if (orderType) {
+        filteredData = filteredData.filter(order => order.orderType === orderType);
+      }
+
+      // Date range filters
+      const dateFrom = document.getElementById('date-from').value;
+      const dateTo = document.getElementById('date-to').value;
+      if (dateFrom) {
+        filteredData = filteredData.filter(order => {
+          const orderDate = new Date(order.createdAt);
+          return orderDate >= new Date(dateFrom);
+        });
+      }
+      if (dateTo) {
+        filteredData = filteredData.filter(order => {
+          const orderDate = new Date(order.createdAt);
+          const toDate = new Date(dateTo);
+          toDate.setHours(23, 59, 59, 999);
+          return orderDate <= toDate;
+        });
+      }
+
+      // Design status filter
+      const designStatus = document.getElementById('design-status-filter').value;
+      if (designStatus) {
+        filteredData = filteredData.filter(order => {
+          const isApproved = order.designApproved || (order.designImages && order.designImages.length > 0);
+          if (designStatus === 'approved') {
+            return isApproved;
+          } else if (designStatus === 'pending') {
+            return !isApproved;
+          }
+          return true;
+        });
+      }
+
+      applySorting();
+    }
+
+    // Apply sorting
+    function applySorting() {
+      sortedData = [...filteredData];
+      
+      if (sortColumn) {
+        sortedData.sort((a, b) => {
+          let aVal = a[sortColumn];
+          let bVal = b[sortColumn];
+          
+          // Handle designApproved boolean
+          if (sortColumn === 'designApproved') {
+            aVal = a.designApproved || (a.designImages && a.designImages.length > 0) ? 1 : 0;
+            bVal = b.designApproved || (b.designImages && b.designImages.length > 0) ? 1 : 0;
+          } else if (typeof aVal === 'string') {
+            aVal = aVal.toLowerCase();
+            bVal = bVal.toLowerCase();
+          }
+          
+          if (sortDirection === 'asc') {
+            return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+          } else {
+            return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+          }
+        });
+      }
+      
+      renderTable();
+    }
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('orders-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (sortedData.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        updatePagination(0);
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      
+      // Pagination
+      const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, sortedData.length);
+      const pageData = sortedData.slice(startIndex, endIndex);
+
+      tbody.innerHTML = '';
+      pageData.forEach(order => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark cursor-pointer';
+        tr.addEventListener('click', () => {
+          window.location.href = `order-view.html?orderId=${encodeURIComponent(order.orderId)}`;
+        });
+        
+        const orderTypeDisplay = order.orderType === 'NEW_CUSTOMER' ? 'New Customer Order' : 
+                               order.orderType === 'REPAIR' ? 'Repair Order' : 
+                               order.orderType === 'COMPANY' ? 'Company Order' : order.orderType;
+        
+        const createdDate = new Date(order.createdAt).toLocaleDateString();
+        const deliveryDate = order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString() : '-';
+        
+        // Design approval status
+        const designApproved = order.designApproved || (order.designImages && order.designImages.length > 0);
+        const statusClass = designApproved 
+          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+          : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400';
+        const statusText = designApproved ? 'Design Approved' : 'Pending';
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium">${order.orderId || '-'}</td>
+          <td class="px-6 py-4">${orderTypeDisplay}</td>
+          <td class="px-6 py-4">${order.customerName || '-'}</td>
+          <td class="px-6 py-4">${deliveryDate}</td>
+          <td class="px-6 py-4">$${order.totalValue ? order.totalValue.toFixed(2) : '0.00'}</td>
+          <td class="px-6 py-4">${createdDate}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 text-xs rounded font-medium ${statusClass}">${statusText}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updatePagination(sortedData.length, totalPages);
+      updateSortIcons();
+    }
+
+    // Update pagination
+    function updatePagination(total, totalPages = 1) {
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('showing-total').textContent = total;
+      document.getElementById('total-pages').textContent = totalPages;
+      document.getElementById('current-page').textContent = currentPage;
+      
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, total);
+      document.getElementById('showing-from').textContent = total > 0 ? startIndex + 1 : 0;
+      document.getElementById('showing-to').textContent = endIndex;
+      
+      document.getElementById('prev-page').disabled = currentPage === 1;
+      document.getElementById('next-page').disabled = currentPage >= totalPages;
+    }
+
+    // Update sort icons
+    function updateSortIcons() {
+      document.querySelectorAll('.sort-icon').forEach(icon => {
+        icon.textContent = 'unfold_more';
+      });
+      
+      if (sortColumn) {
+        const header = document.querySelector(`th[data-sort="${sortColumn}"]`);
+        if (header) {
+          const icon = header.querySelector('.sort-icon');
+          icon.textContent = sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward';
+        }
+      }
+    }
+
+    // Sort handler
+    document.querySelectorAll('th[data-sort]').forEach(header => {
+      header.addEventListener('click', function() {
+        const column = this.dataset.sort;
+        if (sortColumn === column) {
+          sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortColumn = column;
+          sortDirection = 'asc';
+        }
+        applySorting();
+      });
+    });
+
+    // Filter event listeners
+    document.getElementById('search-input').addEventListener('input', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('customer-name-filter').addEventListener('input', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('order-type-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('date-from').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('date-to').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('design-status-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters-btn').addEventListener('click', function() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('customer-name-filter').value = '';
+      document.getElementById('order-type-filter').value = '';
+      document.getElementById('date-from').value = '';
+      document.getElementById('date-to').value = '';
+      document.getElementById('design-status-filter').value = '';
+      currentPage = 1;
+      sortColumn = '';
+      sortDirection = 'asc';
+      applyFilters();
+    });
+
+    // Pagination
+    document.getElementById('prev-page').addEventListener('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    document.getElementById('next-page').addEventListener('click', function() {
+      const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    // Export
+    document.getElementById('export-btn').addEventListener('click', function() {
+      const headers = ['Order No', 'Order Type', 'Customer Name', 'Delivery Date', 'Total Value', 'Created Date', 'Design Status'];
+      const rows = sortedData.map(order => {
+        const designApproved = order.designApproved || (order.designImages && order.designImages.length > 0);
+        return [
+          order.orderId || '',
+          order.orderType === 'NEW_CUSTOMER' ? 'New Customer Order' : order.orderType === 'REPAIR' ? 'Repair Order' : order.orderType === 'COMPANY' ? 'Company Order' : order.orderType || '',
+          order.customerName || '',
+          order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString() : '',
+          order.totalValue ? order.totalValue.toFixed(2) : '0.00',
+          new Date(order.createdAt).toLocaleDateString(),
+          designApproved ? 'Design Approved' : 'Pending'
+        ];
+      });
+      
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `order-report-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+
+    // Initialize
+    loadOrders();
+  </script>
+</body>
+</html>
+

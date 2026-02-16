@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS: Reports Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4AF37", // Professional Gold (Metallic Gold)
+                        "primary-dark": "#B8860B", // Dark Goldenrod
+                        "background-light": "#F9F9F7",
+                        "background-dark": "#121210",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { font-family: 'Manrope', sans-serif; }
+        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .chart-bar:hover { filter: brightness(0.8); transition: 0.2s; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md">
+<div class="px-6 flex h-16 items-center justify-between">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white text-2xl leading-none">diamond</span>
+</div>
+<h1 class="text-2xl font-black tracking-[0.1em] text-slate-900 dark:text-white uppercase">JEMS</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary pb-1" href="#">Reports</a>
+<a class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors" href="#">Audit Log</a>
+<a class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-64 pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search Customer or ID..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgJP3wJ6783lOPfDPtLU3GAGV2uYqhq4k8Wg-J1nl4AVBPuYoRn9sOEOr4EWUSF33YpTrIOStNCXH8iK_2XxZ0UMn-Tkw_OeIbiivNnrDFX_DmDVKxnUtyeG4zgwfiZoeLMLu8epsF60uM9CEm_zVvIwrbsV8fo7Q7QlYYLrbxpEh0yUFxHZFBi2JZmPOLzGbsCyulB3GxthJ3JHkzZBegBabBV1mnsbYZ_7hGSvPW6QTdos1RI7n0E9syUHNryLaHOxEVFufl90E"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex min-h-[calc(100vh-64px)]">
+<aside class="w-72 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark p-6 hidden lg:flex flex-col gap-8">
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-6">Scheme Management</p>
+<nav class="flex flex-col gap-1.5">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">pie_chart</span>
+<span class="text-sm font-semibold">Active Schemes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-sm font-semibold">Installment Dues</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white shadow-xl shadow-primary/25" href="#">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+<span class="text-sm font-bold">Gold Liability</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="text-sm font-semibold">Customer Passbook</span>
+</a>
+</nav>
+</div>
+<div class="mt-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-6">Advanced Filters</p>
+<div class="space-y-4 px-1">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase">Scheme Type</label>
+<select class="w-full text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary">
+<option>All Schemes</option>
+<option>Fixed Rate Lock</option>
+<option>Variable Weight</option>
+</select>
+</div>
+</div>
+</div>
+<div class="mt-auto">
+<div class="bg-primary/5 rounded-2xl p-5 border border-primary/20">
+<p class="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Live Market Rate</p>
+<div class="flex items-baseline gap-2">
+<p class="text-2xl font-black text-slate-900 dark:text-white">₹7,215</p>
+<p class="text-[10px] font-bold text-slate-400">/ per gram</p>
+</div>
+<div class="flex items-center gap-1 mt-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">update</span>
+<span class="text-[10px] font-bold">Updated 2m ago</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-8 lg:p-12">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+<div>
+<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Gold Liability Report</h2>
+<p class="text-slate-500 font-medium">Risk exposure &amp; maturity projections for JEMS schemes</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+                        Export
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-slate-900 dark:bg-primary text-white dark:text-slate-900 rounded-xl text-sm font-bold shadow-lg transition-opacity hover:opacity-90">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                        Re-Calculate
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+<span class="material-symbols-outlined text-amber-600">database</span>
+</div>
+<span class="text-[10px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full">+4.2%</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Total Gold Liability</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">4,250.50g</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<span class="text-[10px] font-bold bg-primary/10 text-primary-dark px-2 py-0.5 rounded-full uppercase tracking-tighter">Realtime</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Monetary Value</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">₹3,06,67,357</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">group</span>
+</div>
+<span class="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full">+12 new</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Active Customers</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">1,240</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/5 rounded-lg border border-primary/20">
+<span class="material-symbols-outlined text-primary">lock_clock</span>
+</div>
+<span class="text-[10px] font-bold bg-primary/10 text-primary-dark px-2 py-0.5 rounded-full">32% Fixed</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Locked Liability</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">1,360.16g</p>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<div class="xl:col-span-1 bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white">Liability Aging</h3>
+<p class="text-xs text-slate-400 uppercase tracking-widest mt-0.5">Maturity Timeline</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">analytics</span>
+</div>
+<div class="h-64 flex items-end justify-between gap-4 px-2">
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="chart-bar w-full bg-primary/30 rounded-t-lg" style="height: 40%;"></div>
+</div>
+<span class="text-[9px] font-black text-slate-400 mt-4 uppercase tracking-tighter">0-3m</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="chart-bar w-full bg-primary/50 rounded-t-lg" style="height: 65%;"></div>
+</div>
+<span class="text-[9px] font-black text-slate-400 mt-4 uppercase tracking-tighter">4-6m</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="chart-bar w-full bg-primary rounded-t-lg" style="height: 85%;"></div>
+</div>
+<span class="text-[9px] font-black text-slate-400 mt-4 uppercase tracking-tighter">7-9m</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="chart-bar w-full bg-primary/20 rounded-t-lg" style="height: 30%;"></div>
+</div>
+<span class="text-[9px] font-black text-slate-400 mt-4 uppercase tracking-tighter">10-12m</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="chart-bar w-full bg-slate-300 dark:bg-slate-600 rounded-t-lg" style="height: 15%;"></div>
+</div>
+<span class="text-[9px] font-black text-slate-400 mt-4 uppercase tracking-tighter">12m+</span>
+</div>
+</div>
+<div class="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-xs font-semibold text-slate-500">Immediate Liability</span>
+</div>
+<span class="text-xs font-bold text-slate-900 dark:text-white">1,200.5g</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary/30"></div>
+<span class="text-xs font-semibold text-slate-500">Projected</span>
+</div>
+<span class="text-xs font-bold text-slate-900 dark:text-white">3,050.0g</span>
+</div>
+</div>
+</div>
+<div class="xl:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h3 class="font-bold text-slate-900 dark:text-white">Breakdown by Customer</h3>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
+<span class="material-symbols-outlined text-slate-400 text-xl">tune</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Scheme ID</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Customer</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Weight (g)</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider text-right">Valuation</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider text-center">Type</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 text-[11px] font-black text-primary tracking-tight">#JEM-24-001</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Aditya Verma</span>
+<span class="text-[10px] text-slate-400">Premium Tier</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-bold text-slate-700 dark:text-slate-300">45.20g</td>
+<td class="px-6 py-5 text-sm font-black text-slate-900 dark:text-white text-right">₹3,26,118</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2 py-1 rounded text-[10px] font-black bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800">RATE LOCK</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 text-[11px] font-black text-primary tracking-tight">#JEM-24-042</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Meera Kapoor</span>
+<span class="text-[10px] text-slate-400">Regular Member</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-bold text-slate-700 dark:text-slate-300">120.00g</td>
+<td class="px-6 py-5 text-sm font-black text-slate-900 dark:text-white text-right">₹8,65,800</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2 py-1 rounded text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 uppercase">Floating</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 text-[11px] font-black text-primary tracking-tight">#JEM-23-981</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Rajesh Shinde</span>
+<span class="text-[10px] text-slate-400">HNI Client</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-bold text-slate-700 dark:text-slate-300">500.00g</td>
+<td class="px-6 py-5 text-sm font-black text-slate-900 dark:text-white text-right">₹36,07,500</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2 py-1 rounded text-[10px] font-black bg-primary/10 text-primary-dark">MATURING</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-5 text-[11px] font-black text-primary tracking-tight">#JEM-24-105</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Ananya Rao</span>
+<span class="text-[10px] text-slate-400">New Account</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-bold text-slate-700 dark:text-slate-300">10.50g</td>
+<td class="px-6 py-5 text-sm font-black text-slate-900 dark:text-white text-right">₹75,757</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2 py-1 rounded text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 uppercase">Floating</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-5 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-transparent">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Page 1 of 310</p>
+<div class="flex gap-2">
+<button class="px-4 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">Prev</button>
+<button class="px-4 py-1.5 bg-slate-900 dark:bg-primary text-white dark:text-slate-900 rounded-lg text-xs font-bold shadow-md">Next</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 bg-[#1A1A17] text-white p-10 rounded-3xl overflow-hidden relative border border-primary/20 shadow-2xl">
+<div class="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-8">
+<div class="max-w-xl">
+<div class="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+<span class="material-symbols-outlined text-sm">warning</span> 
+                            Rate Sensitivity Alert
+                        </div>
+<h3 class="text-3xl font-black mb-4 leading-tight">Liability exposure increases by ₹42.5k per ₹10 price hike.</h3>
+<p class="text-slate-400 text-sm leading-relaxed mb-4">Market volatility analysis suggests a bullish trend for the next quarter. We recommend active hedging for matured floating-rate schemes to lock in current margins.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-10 py-4 bg-primary text-slate-900 rounded-2xl font-black text-sm hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 shadow-xl shadow-primary/20">
+                            Hedge Gold Now
+                        </button>
+<button class="px-10 py-4 bg-transparent border-2 border-slate-700 text-white rounded-2xl font-black text-sm hover:bg-slate-800 transition-all">
+                            View Simulation
+                        </button>
+</div>
+</div>
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="60" id="grid" patternUnits="userSpaceOnUse" width="60">
+<path d="M 60 0 L 0 0 0 60" fill="none" stroke="#D4AF37" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+</div>
+</main>
+</div>
+<footer class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-8 py-6">
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 max-w-[1600px] mx-auto">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">© 2024 JEMS GOLD SYSTEMS • ENTERPRISE ERP v5.0</p>
+<div class="flex gap-8">
+<a class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors" href="#">Security</a>
+<a class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors" href="#">System Status</a>
+<a class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</div>
+</footer>
+
+</body></html>

@@ -1,0 +1,150 @@
+////////////////////////////////////////////////////
+
+// ALLOY CREATION
+
+////////////////////////////////////////////////////
+
+
+
+Table alloy_creations {
+
+  alloy_creation_id char(36) [pk]
+
+  tenant_id char(36)
+
+  recipe_id varchar(100)
+
+  recipe_name varchar(255)
+
+  purity decimal(10,3)
+
+  input_weight decimal(12,3)
+
+  wastage decimal(5,2)
+
+  expected_yield decimal(12,3)
+
+  new_batch varchar(100)
+
+  status enum('DRAFT','RESERVED','COMPLETED','CANCELLED')
+
+  created_by char(36)
+
+  created_at datetime
+
+  updated_at datetime
+
+}
+
+
+
+Ref: alloy_creations.tenant_id > tenants.tenant_id
+
+Ref: alloy_creations.recipe_id > alloy_recipes.recipe_id
+
+Ref: alloy_creations.created_by > users.user_id
+
+
+
+Table alloy_creation_items {
+
+  creation_item_id char(36) [pk]
+
+  alloy_creation_id char(36)
+
+  metal_id char(36)
+
+  metal_name varchar(255)
+
+  purity decimal(10,3)
+
+  lot_id char(36)
+
+  lot_no varchar(50)
+
+  available_quantity decimal(12,3)
+
+  required_quantity decimal(12,3)
+
+  actual_quantity_used decimal(12,3)
+
+  created_at datetime
+
+}
+
+
+
+Ref: alloy_creation_items.alloy_creation_id > alloy_creations.alloy_creation_id
+
+Ref: alloy_creation_items.metal_id > raw_materials.material_id
+
+Ref: alloy_creation_items.lot_id > stock_lots.lot_id
+
+
+
+Table batch_reservations {
+
+  reservation_id char(36) [pk]
+
+  tenant_id char(36)
+
+  alloy_creation_id char(36)
+
+  lot_id char(36)
+
+  reserved_quantity decimal(12,3)
+
+  reservation_status enum('PENDING','CONFIRMED','RELEASED','CANCELLED')
+
+  reserved_by char(36)
+
+  reserved_at datetime
+
+  released_at datetime
+
+  created_at datetime
+
+  updated_at datetime
+
+}
+
+
+
+Ref: batch_reservations.tenant_id > tenants.tenant_id
+
+Ref: batch_reservations.alloy_creation_id > alloy_creations.alloy_creation_id
+
+Ref: batch_reservations.lot_id > stock_lots.lot_id
+
+Ref: batch_reservations.reserved_by > users.user_id
+
+
+
+Table alloy_batches {
+
+  alloy_batch_id char(36) [pk]
+
+  tenant_id char(36)
+
+  batch_no varchar(100)
+
+  alloy_creation_id char(36)
+
+  purity decimal(10,3)
+
+  weight decimal(12,3)
+
+  status enum('CREATED','IN_USE','COMPLETED','CANCELLED')
+
+  created_at datetime
+
+  updated_at datetime
+
+}
+
+
+
+Ref: alloy_batches.tenant_id > tenants.tenant_id
+
+Ref: alloy_batches.alloy_creation_id > alloy_creations.alloy_creation_id
+

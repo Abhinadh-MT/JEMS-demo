@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diamond Master - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="diamond-master" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Diamond Master</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage diamond master data</p>
+      </header>
+
+      <!-- Diamond Master Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Diamond</h2>
+        
+        <form id="diamond-form" class="space-y-6">
+          <input type="hidden" id="diamond-master-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Diamond Master ID (Auto-generated, Read-only) -->
+            <div>
+              <label for="diamond-master-id-display" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Diamond Master ID
+              </label>
+              <input type="text" id="diamond-master-id-display" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                     placeholder="Auto-generated on save">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Unique identifier (CHAR(36) PK)</p>
+            </div>
+
+            <!-- Diamond Code -->
+            <div>
+              <label for="diamond-code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Diamond Code
+              </label>
+              <input type="text" id="diamond-code" name="diamondCode" maxlength="100"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., DIA-001, DIA-RND-0.5">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Diamond code (VARCHAR(100))</p>
+            </div>
+
+            <!-- Shape ID (FK) -->
+            <div>
+              <label for="shape-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Shape <span class="text-red-500">*</span>
+              </label>
+              <select id="shape-id" name="shapeId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select shape</option>
+                <option value="550e8400-e29b-41d4-a716-446655440020">Round</option>
+                <option value="660e8400-e29b-41d4-a716-446655440021">Princess</option>
+                <option value="770e8400-e29b-41d4-a716-446655440022">Emerald</option>
+                <option value="880e8400-e29b-41d4-a716-446655440023">Oval</option>
+                <option value="990e8400-e29b-41d4-a716-446655440024">Marquise</option>
+                <option value="aa0e8400-e29b-41d4-a716-446655440025">Pear</option>
+                <option value="bb0e8400-e29b-41d4-a716-446655440026">Cushion</option>
+                <option value="cc0e8400-e29b-41d4-a716-446655440027">Heart</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to shape master (CHAR(36) FK)</p>
+            </div>
+
+            <!-- Size ID (FK) -->
+            <div>
+              <label for="size-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Size <span class="text-red-500">*</span>
+              </label>
+              <select id="size-id" name="sizeId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select size</option>
+                <option value="550e8400-e29b-41d4-a716-446655440030">0.10 ct</option>
+                <option value="660e8400-e29b-41d4-a716-446655440031">0.15 ct</option>
+                <option value="770e8400-e29b-41d4-a716-446655440032">0.20 ct</option>
+                <option value="880e8400-e29b-41d4-a716-446655440033">0.25 ct</option>
+                <option value="990e8400-e29b-41d4-a716-446655440034">0.30 ct</option>
+                <option value="aa0e8400-e29b-41d4-a716-446655440035">0.50 ct</option>
+                <option value="bb0e8400-e29b-41d4-a716-446655440036">0.75 ct</option>
+                <option value="cc0e8400-e29b-41d4-a716-446655440037">1.00 ct</option>
+                <option value="dd0e8400-e29b-41d4-a716-446655440038">1.50 ct</option>
+                <option value="ee0e8400-e29b-41d4-a716-446655440039">2.00 ct</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to size master (CHAR(36) FK)</p>
+            </div>
+
+            <!-- Colour ID (FK) -->
+            <div>
+              <label for="colour-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Colour <span class="text-red-500">*</span>
+              </label>
+              <select id="colour-id" name="colourId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select colour</option>
+                <option value="550e8400-e29b-41d4-a716-446655440040">D (Colorless)</option>
+                <option value="660e8400-e29b-41d4-a716-446655440041">E (Colorless)</option>
+                <option value="770e8400-e29b-41d4-a716-446655440042">F (Colorless)</option>
+                <option value="880e8400-e29b-41d4-a716-446655440043">G (Near Colorless)</option>
+                <option value="990e8400-e29b-41d4-a716-446655440044">H (Near Colorless)</option>
+                <option value="aa0e8400-e29b-41d4-a716-446655440045">I (Near Colorless)</option>
+                <option value="bb0e8400-e29b-41d4-a716-446655440046">J (Near Colorless)</option>
+                <option value="cc0e8400-e29b-41d4-a716-446655440047">K (Faint Yellow)</option>
+                <option value="dd0e8400-e29b-41d4-a716-446655440048">L (Faint Yellow)</option>
+                <option value="ee0e8400-e29b-41d4-a716-446655440049">M (Faint Yellow)</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to colour master (CHAR(36) FK)</p>
+            </div>
+
+            <!-- Clarity ID (FK) -->
+            <div>
+              <label for="clarity-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Clarity <span class="text-red-500">*</span>
+              </label>
+              <select id="clarity-id" name="clarityId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select clarity</option>
+                <option value="550e8400-e29b-41d4-a716-446655440050">FL (Flawless)</option>
+                <option value="660e8400-e29b-41d4-a716-446655440051">IF (Internally Flawless)</option>
+                <option value="770e8400-e29b-41d4-a716-446655440052">VVS1 (Very Very Slightly Included 1)</option>
+                <option value="880e8400-e29b-41d4-a716-446655440053">VVS2 (Very Very Slightly Included 2)</option>
+                <option value="990e8400-e29b-41d4-a716-446655440054">VS1 (Very Slightly Included 1)</option>
+                <option value="aa0e8400-e29b-41d4-a716-446655440055">VS2 (Very Slightly Included 2)</option>
+                <option value="bb0e8400-e29b-41d4-a716-446655440056">SI1 (Slightly Included 1)</option>
+                <option value="cc0e8400-e29b-41d4-a716-446655440057">SI2 (Slightly Included 2)</option>
+                <option value="dd0e8400-e29b-41d4-a716-446655440058">I1 (Included 1)</option>
+                <option value="ee0e8400-e29b-41d4-a716-446655440059">I2 (Included 2)</option>
+                <option value="ff0e8400-e29b-41d4-a716-446655440060">I3 (Included 3)</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to clarity master (CHAR(36) FK)</p>
+            </div>
+
+            <!-- Cut Grade -->
+            <div>
+              <label for="cut-grade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Cut Grade
+              </label>
+              <select id="cut-grade" name="cutGrade"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select cut grade</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Very Good">Very Good</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Cut grade (ENUM)</p>
+            </div>
+
+            <!-- Certificate Number -->
+            <div>
+              <label for="certificate-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Certificate Number
+              </label>
+              <input type="text" id="certificate-number" name="certificateNumber" maxlength="100"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., GIA-1234567890">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Certificate number (VARCHAR(100))</p>
+            </div>
+
+            <!-- Rate Per Carat -->
+            <div>
+              <label for="rate-per-carat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Rate Per Carat
+              </label>
+              <input type="number" id="rate-per-carat" name="ratePerCarat" step="0.01" min="0"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="0.00">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Rate per carat (DECIMAL(12,2))</p>
+            </div>
+
+            <!-- Rate Per Piece -->
+            <div>
+              <label for="rate-per-piece" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Rate Per Piece
+              </label>
+              <input type="number" id="rate-per-piece" name="ratePerPiece" step="0.01" min="0"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="0.00">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Rate per piece (DECIMAL(12,2))</p>
+            </div>
+
+            <!-- Is Active -->
+            <div>
+              <label for="is-active" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Status <span class="text-red-500">*</span>
+              </label>
+              <select id="is-active" name="isActive" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Active status (BOOLEAN)</p>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Diamond
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by code, shape, size, colour, or clarity..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diamond Master List Table -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Diamond Master List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Diamond ID</th>
+                <th class="px-6 py-3" scope="col">Code</th>
+                <th class="px-6 py-3" scope="col">Shape</th>
+                <th class="px-6 py-3" scope="col">Size</th>
+                <th class="px-6 py-3" scope="col">Colour</th>
+                <th class="px-6 py-3" scope="col">Clarity</th>
+                <th class="px-6 py-3" scope="col">Cut</th>
+                <th class="px-6 py-3" scope="col">Certificate</th>
+                <th class="px-6 py-3" scope="col">Rate/Carat</th>
+                <th class="px-6 py-3" scope="col">Rate/Piece</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="diamonds-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No diamonds submitted yet. Fill out the form above to add your first diamond.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Demo data
+    const demoData = [
+      {
+        diamond_master_id: '550e8400-e29b-41d4-a716-446655440200',
+        diamond_code: 'DIA-RND-0.5-G-VS1',
+        shape_id: '550e8400-e29b-41d4-a716-446655440020',
+        size_id: 'aa0e8400-e29b-41d4-a716-446655440035',
+        colour_id: '880e8400-e29b-41d4-a716-446655440043',
+        clarity_id: '990e8400-e29b-41d4-a716-446655440054',
+        cut_grade: 'Excellent',
+        certificate_number: 'GIA-1234567890',
+        rate_per_carat: 5000.00,
+        rate_per_piece: 2500.00,
+        is_active: true
+      },
+      {
+        diamond_master_id: '660e8400-e29b-41d4-a716-446655440201',
+        diamond_code: 'DIA-PRN-1.0-F-VVS2',
+        shape_id: '660e8400-e29b-41d4-a716-446655440021',
+        size_id: 'cc0e8400-e29b-41d4-a716-446655440037',
+        colour_id: '770e8400-e29b-41d4-a716-446655440042',
+        clarity_id: '880e8400-e29b-41d4-a716-446655440053',
+        cut_grade: 'Very Good',
+        certificate_number: 'IGI-9876543210',
+        rate_per_carat: 8000.00,
+        rate_per_piece: 8000.00,
+        is_active: true
+      },
+      {
+        diamond_master_id: '770e8400-e29b-41d4-a716-446655440202',
+        diamond_code: 'DIA-OVL-0.75-H-SI1',
+        shape_id: '880e8400-e29b-41d4-a716-446655440023',
+        size_id: 'bb0e8400-e29b-41d4-a716-446655440036',
+        colour_id: '990e8400-e29b-41d4-a716-446655440044',
+        clarity_id: 'bb0e8400-e29b-41d4-a716-446655440056',
+        cut_grade: 'Good',
+        certificate_number: 'HRD-5678901234',
+        rate_per_carat: 3500.00,
+        rate_per_piece: 2625.00,
+        is_active: true
+      }
+    ];
+
+    // Shape mapping for display
+    const shapeMap = {
+      '550e8400-e29b-41d4-a716-446655440020': 'Round',
+      '660e8400-e29b-41d4-a716-446655440021': 'Princess',
+      '770e8400-e29b-41d4-a716-446655440022': 'Emerald',
+      '880e8400-e29b-41d4-a716-446655440023': 'Oval',
+      '990e8400-e29b-41d4-a716-446655440024': 'Marquise',
+      'aa0e8400-e29b-41d4-a716-446655440025': 'Pear',
+      'bb0e8400-e29b-41d4-a716-446655440026': 'Cushion',
+      'cc0e8400-e29b-41d4-a716-446655440027': 'Heart'
+    };
+
+    // Size mapping for display
+    const sizeMap = {
+      '550e8400-e29b-41d4-a716-446655440030': '0.10 ct',
+      '660e8400-e29b-41d4-a716-446655440031': '0.15 ct',
+      '770e8400-e29b-41d4-a716-446655440032': '0.20 ct',
+      '880e8400-e29b-41d4-a716-446655440033': '0.25 ct',
+      '990e8400-e29b-41d4-a716-446655440034': '0.30 ct',
+      'aa0e8400-e29b-41d4-a716-446655440035': '0.50 ct',
+      'bb0e8400-e29b-41d4-a716-446655440036': '0.75 ct',
+      'cc0e8400-e29b-41d4-a716-446655440037': '1.00 ct',
+      'dd0e8400-e29b-41d4-a716-446655440038': '1.50 ct',
+      'ee0e8400-e29b-41d4-a716-446655440039': '2.00 ct'
+    };
+
+    // Colour mapping for display
+    const colourMap = {
+      '550e8400-e29b-41d4-a716-446655440040': 'D',
+      '660e8400-e29b-41d4-a716-446655440041': 'E',
+      '770e8400-e29b-41d4-a716-446655440042': 'F',
+      '880e8400-e29b-41d4-a716-446655440043': 'G',
+      '990e8400-e29b-41d4-a716-446655440044': 'H',
+      'aa0e8400-e29b-41d4-a716-446655440045': 'I',
+      'bb0e8400-e29b-41d4-a716-446655440046': 'J',
+      'cc0e8400-e29b-41d4-a716-446655440047': 'K',
+      'dd0e8400-e29b-41d4-a716-446655440048': 'L',
+      'ee0e8400-e29b-41d4-a716-446655440049': 'M'
+    };
+
+    // Clarity mapping for display
+    const clarityMap = {
+      '550e8400-e29b-41d4-a716-446655440050': 'FL',
+      '660e8400-e29b-41d4-a716-446655440051': 'IF',
+      '770e8400-e29b-41d4-a716-446655440052': 'VVS1',
+      '880e8400-e29b-41d4-a716-446655440053': 'VVS2',
+      '990e8400-e29b-41d4-a716-446655440054': 'VS1',
+      'aa0e8400-e29b-41d4-a716-446655440055': 'VS2',
+      'bb0e8400-e29b-41d4-a716-446655440056': 'SI1',
+      'cc0e8400-e29b-41d4-a716-446655440057': 'SI2',
+      'dd0e8400-e29b-41d4-a716-446655440058': 'I1',
+      'ee0e8400-e29b-41d4-a716-446655440059': 'I2',
+      'ff0e8400-e29b-41d4-a716-446655440060': 'I3'
+    };
+
+    // Store diamonds in localStorage for persistence
+    let storedData = localStorage.getItem('diamondMaster');
+    let diamonds = storedData ? JSON.parse(storedData) : demoData;
+    
+    if (!storedData) {
+      localStorage.setItem('diamondMaster', JSON.stringify(demoData));
+    }
+    
+    let editingId = null;
+
+    const form = document.getElementById('diamond-form');
+    const tableBody = document.getElementById('diamonds-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    // Generate UUID
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // Format date
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Format currency
+    function formatCurrency(amount) {
+      if (amount === null || amount === undefined) return '-';
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+      }).format(amount);
+    }
+
+    // Render table
+    function renderTable() {
+      if (diamonds.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = diamonds.map(diamond => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-mono">${diamond.diamond_master_id.substring(0, 8)}...</td>
+          <td class="px-6 py-4 font-medium">${diamond.diamond_code || '-'}</td>
+          <td class="px-6 py-4">${shapeMap[diamond.shape_id] || diamond.shape_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${sizeMap[diamond.size_id] || diamond.size_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${colourMap[diamond.colour_id] || diamond.colour_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${clarityMap[diamond.clarity_id] || diamond.clarity_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${diamond.cut_grade || '-'}</td>
+          <td class="px-6 py-4">${diamond.certificate_number || '-'}</td>
+          <td class="px-6 py-4">${formatCurrency(diamond.rate_per_carat)}</td>
+          <td class="px-6 py-4">${formatCurrency(diamond.rate_per_piece)}</td>
+          <td class="px-6 py-4">
+            <span class="${diamond.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${diamond.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${diamond.diamond_master_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${diamond.diamond_master_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      attachEventListeners();
+      filterTable();
+    }
+
+    // Attach event listeners to edit/delete buttons
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const diamond = diamonds.find(d => d.diamond_master_id === id);
+          
+          if (diamond) {
+            editingId = id;
+            document.getElementById('diamond-master-id').value = id;
+            document.getElementById('diamond-master-id-display').value = id;
+            document.getElementById('diamond-code').value = diamond.diamond_code || '';
+            document.getElementById('shape-id').value = diamond.shape_id;
+            document.getElementById('size-id').value = diamond.size_id;
+            document.getElementById('colour-id').value = diamond.colour_id;
+            document.getElementById('clarity-id').value = diamond.clarity_id;
+            document.getElementById('cut-grade').value = diamond.cut_grade || '';
+            document.getElementById('certificate-number').value = diamond.certificate_number || '';
+            document.getElementById('rate-per-carat').value = diamond.rate_per_carat || '';
+            document.getElementById('rate-per-piece').value = diamond.rate_per_piece || '';
+            document.getElementById('is-active').value = diamond.is_active.toString();
+            
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          
+          if (confirm('Are you sure you want to delete this diamond?')) {
+            diamonds = diamonds.filter(d => d.diamond_master_id !== id);
+            localStorage.setItem('diamondMaster', JSON.stringify(diamonds));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    // Form submission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        diamond_master_id: editingId || generateUUID(),
+        diamond_code: document.getElementById('diamond-code').value.trim() || null,
+        shape_id: document.getElementById('shape-id').value,
+        size_id: document.getElementById('size-id').value,
+        colour_id: document.getElementById('colour-id').value,
+        clarity_id: document.getElementById('clarity-id').value,
+        rate_per_carat: document.getElementById('rate-per-carat').value ? parseFloat(document.getElementById('rate-per-carat').value) : null,
+        rate_per_piece: document.getElementById('rate-per-piece').value ? parseFloat(document.getElementById('rate-per-piece').value) : null,
+        cut_grade: document.getElementById('cut-grade').value || null,
+        certificate_number: document.getElementById('certificate-number').value.trim() || null,
+        is_active: document.getElementById('is-active').value === 'true'
+      };
+
+      if (editingId) {
+        const index = diamonds.findIndex(d => d.diamond_master_id === editingId);
+        if (index !== -1) {
+          diamonds[index] = formData;
+        }
+      } else {
+        diamonds.push(formData);
+      }
+
+      localStorage.setItem('diamondMaster', JSON.stringify(diamonds));
+      form.reset();
+      document.getElementById('diamond-master-id').value = '';
+      document.getElementById('diamond-master-id-display').value = '';
+      document.getElementById('created-at').value = '';
+      document.getElementById('updated-at').value = '';
+      document.getElementById('is-active').value = 'true';
+      document.getElementById('cut-grade').value = '';
+      document.getElementById('certificate-number').value = '';
+      editingId = null;
+      renderTable();
+    });
+
+    // Search functionality
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    // Status filter
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#diamonds-table-body tr');
+      rows.forEach(row => {
+        const code = row.cells[1].textContent.toLowerCase();
+        const shape = row.cells[2].textContent.toLowerCase();
+        const size = row.cells[3].textContent.toLowerCase();
+        const colour = row.cells[4].textContent.toLowerCase();
+        const clarity = row.cells[5].textContent.toLowerCase();
+        const status = row.cells[8].querySelector('span').textContent.toLowerCase();
+        const isActive = status === 'active';
+        
+        const matchesSearch = !searchTerm || code.includes(searchTerm) || shape.includes(searchTerm) || 
+                             size.includes(searchTerm) || colour.includes(searchTerm) || clarity.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || 
+          (statusFilter === 'true' && isActive) || 
+          (statusFilter === 'false' && !isActive);
+        
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEMS - Dashboard (Themes)</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+    .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 500px; }
+    
+    /* Color Scheme Variables */
+    :root {
+      --theme-primary: #4F200D;
+      --theme-secondary: #FF9A00;
+      --theme-accent: #FFD93D;
+      --theme-background: #F6F1E9;
+      --theme-card: #ffffff;
+      --theme-text: #333333;
+      --theme-text-light: #666666;
+    }
+    
+    body {
+      background-color: var(--theme-background);
+      color: var(--theme-text);
+    }
+    
+    .bg-theme-primary { background-color: var(--theme-primary); }
+    .bg-theme-secondary { background-color: var(--theme-secondary); }
+    .bg-theme-accent { background-color: var(--theme-accent); }
+    .bg-theme-background { background-color: var(--theme-background); }
+    .bg-theme-card { background-color: var(--theme-card); }
+    
+    .text-theme-primary { color: var(--theme-primary); }
+    .text-theme-secondary { color: var(--theme-secondary); }
+    .text-theme-accent { color: var(--theme-accent); }
+    
+    .border-theme-primary { border-color: var(--theme-primary); }
+    .border-theme-secondary { border-color: var(--theme-secondary); }
+    
+    .hover-theme-primary:hover { background-color: var(--theme-primary); }
+    .hover-theme-secondary:hover { background-color: var(--theme-secondary); }
+    
+    /* Theme 1: 4F200D (dark brown), FF9A00 (orange), FFD93D (yellow), F6F1E9 (cream) */
+    .theme-1 {
+      --theme-primary: #4F200D;
+      --theme-secondary: #FF9A00;
+      --theme-accent: #FFD93D;
+      --theme-background: #F6F1E9;
+      --theme-card: #ffffff;
+      --theme-text: #4F200D;
+      --theme-text-light: #666666;
+    }
+    
+    /* Theme 2: 521C0D (dark brown), D5451B (red-orange), FF9B45 (orange), F4E7E1 (pink cream) */
+    .theme-2 {
+      --theme-primary: #521C0D;
+      --theme-secondary: #D5451B;
+      --theme-accent: #FF9B45;
+      --theme-background: #F4E7E1;
+      --theme-card: #ffffff;
+      --theme-text: #521C0D;
+      --theme-text-light: #666666;
+    }
+    
+    /* Theme 3: 1B1833 (dark navy), 441752 (purple), AB4459 (pink), F29F58 (peach) */
+    .theme-3 {
+      --theme-primary: #1B1833;
+      --theme-secondary: #441752;
+      --theme-accent: #AB4459;
+      --theme-background: #F29F58;
+      --theme-card: #ffffff;
+      --theme-text: #1B1833;
+      --theme-text-light: #666666;
+    }
+    
+    /* Theme 4: 8D0B41 (burgundy), D39D55 (brown), D6CFB4 (beige), FFF8E6 (cream) */
+    .theme-4 {
+      --theme-primary: #8D0B41;
+      --theme-secondary: #D39D55;
+      --theme-accent: #D6CFB4;
+      --theme-background: #FFF8E6;
+      --theme-card: #ffffff;
+      --theme-text: #8D0B41;
+      --theme-text-light: #666666;
+    }
+    
+    /* Theme 5: 10375C (navy), EB8317 (orange), F3C623 (yellow), F4F6FF (light blue) */
+    .theme-5 {
+      --theme-primary: #10375C;
+      --theme-secondary: #EB8317;
+      --theme-accent: #F3C623;
+      --theme-background: #F4F6FF;
+      --theme-card: #ffffff;
+      --theme-text: #10375C;
+      --theme-text-light: #666666;
+    }
+  </style>
+</head>
+<body class="font-display theme-1">
+  <!-- Theme Selector -->
+  <div class="fixed top-4 right-4 z-50 bg-white rounded-lg shadow-lg p-4 border-2 border-gray-200">
+    <label class="block text-sm font-semibold mb-2 text-gray-700">Choose Design Theme:</label>
+    <select id="theme-selector" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-primary focus:border-theme-primary">
+      <option value="theme-1">Theme 1: Earth Tones</option>
+      <option value="theme-2">Theme 2: Warm Autumn</option>
+      <option value="theme-3">Theme 3: Deep Purple</option>
+      <option value="theme-4">Theme 4: Soft Cream</option>
+      <option value="theme-5">Theme 5: Ocean Blue</option>
+    </select>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-theme-card flex flex-col border-r border-theme-primary/20 shadow-sm" style="border-right-width: 3px;">
+    <div class="p-6 flex items-center justify-center border-b border-theme-primary/20" style="border-bottom-width: 2px; background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);">
+      <span class="material-icons text-white text-3xl mr-2">diamond</span>
+      <h1 class="text-xl font-bold text-white">JEMS</h1>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <!-- Dashboard -->
+      <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-theme-primary/20 text-theme-primary font-semibold">
+        <span class="material-icons mr-3">dashboard</span>Dashboard
+      </a>
+
+      <!-- ORDER - Collapsible Parent Menu -->
+      <div class="space-y-1">
+        <button class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-theme-primary/10 transition-colors font-medium" id="order-toggle">
+          <div class="flex items-center">
+            <span class="material-icons mr-3">inventory_2</span>
+            <span>Order</span>
+          </div>
+          <span class="material-icons text-lg transition-transform" id="order-chevron">expand_more</span>
+        </button>
+
+        <!-- Submenu Items -->
+        <div class="submenu" id="order-submenu">
+          <a href="#" data-page="new-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+            New Order
+          </a>
+          <a href="#" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+            Update Order
+          </a>
+          <a href="#" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+            Search
+          </a>
+          <a href="#" data-page="detailed" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+            Detailed View
+          </a>
+        </div>
+      </div>
+
+      <!-- STOCK TOGGLE -->
+      <button id="stock-toggle"
+        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-theme-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">inventory_2</span>
+          <span>Stock</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="stock-chevron">expand_more</span>
+      </button>
+
+      <!-- STOCK SUBMENU -->
+      <div class="submenu" id="stock-submenu">
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+          Raw Material Report
+        </a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+          Raw Material Stock Entry
+        </a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+          Alloy Creation
+        </a>
+      </div>
+
+      <!-- MANUFACTURING / BAG TOGGLE -->
+      <button id="bag-toggle"
+        class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-theme-primary/10 transition-colors font-medium">
+        <div class="flex items-center">
+          <span class="material-icons mr-3">precision_manufacturing</span>
+          <span>Manufacturing</span>
+        </div>
+        <span class="material-icons text-lg transition-transform" id="bag-chevron">expand_more</span>
+      </button>
+
+      <!-- MANUFACTURING / BAG SUBMENU -->
+      <div class="submenu" id="bag-submenu">
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+          Materials Report
+        </a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+          Generate Bag & Issue Material
+        </a>
+        <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-theme-primary/10 transition-colors">
+          Bag Movement
+        </a>
+      </div>
+
+      <!-- PRODUCT MASTER -->
+      <a href="#" data-page="product-master" class="menu-link flex items-center p-3 rounded-lg hover:bg-theme-primary/10 transition-colors font-medium">
+        <span class="material-icons mr-3">inventory</span>Product Master
+      </a>
+    </nav>
+
+    <!-- User Profile -->
+    <div class="p-4 border-t border-theme-primary/20" style="border-top-width: 2px;">
+      <div class="flex items-center">
+        <div class="h-10 w-10 rounded-full border-2 border-theme-primary flex items-center justify-center bg-theme-primary/10">
+          <img alt="CEO avatar" class="h-8 w-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85BNgmf1Td4nfDBnjZ7kE6EWbKzql7w8mx9ds3lpVNq5aOf5EPrU1ea_OJ0m_E1si1TlR6dCGvGx_NnGCN6uArhFHr9uy_8Na-dlzZSUPz7VbBwNPpFNtyjxDg4t_Ps3g-4ggM-ET5pq4p-yAEe0o1xX04OQT24DADvpV9rIDkMJVCLAKBdCEaYYsmHCpRTnWgEIa2hXEDzqNXrcoTKC1ZzwA6aP63DSUln1hNP5rMBFABCJc4wkmK42F5fZnd8TT876Agrsr19ds"/>
+        </div>
+        <div class="ml-3">
+          <p class="font-semibold text-sm text-theme-text">John Doe (CEO)</p>
+          <p class="text-xs text-theme-text-light">Super User</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 overflow-y-auto p-8 bg-theme-background">
+
+    <!-- Dashboard Page -->
+    <div id="dashboard" class="page active">
+      <header class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-theme-text">Super User Dashboard</h2>
+          <p class="text-gray-600">Welcome back, John! Here's an overview of J&amp;J Pvt Ltd.</p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button class="p-2 rounded-full hover:bg-theme-primary/10 transition-colors">
+            <span class="material-icons">notifications</span>
+          </button>
+          <button class="p-2 rounded-full hover:bg-theme-primary/10 transition-colors">
+            <span class="material-icons">dark_mode</span>
+          </button>
+          <button class="bg-theme-primary text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:opacity-90 transition-opacity shadow-lg" style="box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px var(--theme-primary);">
+            <span class="material-icons">+</span>
+            <span>Generate Bag</span>
+          </button>
+        </div>
+      </header>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-theme-card p-6 rounded-lg shadow-sm border-2 border-theme-primary/30 hover:border-theme-primary transition-all">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-theme-text-light">Total Bags Generated</p>
+              <p class="text-3xl font-bold text-theme-primary">1,250</p>
+            </div>
+            <div class="p-3 bg-theme-primary/20 rounded-full border-2 border-theme-primary/30">
+              <span class="material-icons text-theme-primary">inventory_2</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-theme-card p-6 rounded-lg shadow-sm border-2 border-theme-secondary/30 hover:border-theme-secondary transition-all">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-theme-text-light">Bags in Progress</p>
+              <p class="text-3xl font-bold text-theme-secondary">821</p>
+            </div>
+            <div class="p-3 bg-theme-secondary/20 rounded-full border-2 border-theme-secondary/30">
+              <span class="material-icons text-theme-secondary">hourglass_top</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-theme-card p-6 rounded-lg shadow-sm border-2 border-green-500/30 hover:border-green-500 transition-all">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-theme-text-light">Completed Bags</p>
+              <p class="text-3xl font-bold text-green-600">405</p>
+            </div>
+            <div class="p-3 bg-green-500/20 rounded-full border-2 border-green-500/30">
+              <span class="material-icons text-green-500">check_circle</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-theme-card p-6 rounded-lg shadow-sm border-2 border-red-500/30 hover:border-red-500 transition-all">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-theme-text-light">Rejected Bags</p>
+              <p class="text-3xl font-bold text-red-600">24</p>
+            </div>
+            <div class="p-3 bg-red-500/20 rounded-full border-2 border-red-500/30">
+              <span class="material-icons text-red-500">cancel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-theme-card p-6 rounded-lg shadow-sm border-2 border-theme-primary/20">
+          <h3 class="text-xl font-semibold mb-4 text-theme-primary border-b-2 border-theme-primary/20 pb-2">Bag Status by Department</h3>
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <p class="w-1/3 text-gray-700">2D &amp; 3D Design</p>
+              <div class="w-2/3 bg-gray-200 rounded-full h-4">
+                <div class="bg-theme-primary h-4 rounded-full" style="width: 20%"></div>
+              </div>
+              <p class="ml-4 font-semibold w-12 text-right">85</p>
+            </div>
+            <div class="flex items-center">
+              <p class="w-1/3 text-gray-700">Casting</p>
+              <div class="w-2/3 bg-gray-200 rounded-full h-4">
+                <div class="bg-theme-secondary h-4 rounded-full" style="width: 35%"></div>
+              </div>
+              <p class="ml-4 font-semibold w-12 text-right">120</p>
+            </div>
+            <div class="flex items-center">
+              <p class="w-1/3 text-gray-700">Assembly</p>
+              <div class="w-2/3 bg-gray-200 rounded-full h-4">
+                <div class="bg-theme-accent h-4 rounded-full" style="width: 50%"></div>
+              </div>
+              <p class="ml-4 font-semibold w-12 text-right">210</p>
+            </div>
+            <div class="flex items-center">
+              <p class="w-1/3 text-gray-700">Setting</p>
+              <div class="w-2/3 bg-gray-200 rounded-full h-4">
+                <div class="bg-theme-primary h-4 rounded-full" style="width: 70%"></div>
+              </div>
+              <p class="ml-4 font-semibold w-12 text-right">301</p>
+            </div>
+            <div class="flex items-center">
+              <p class="w-1/3 text-gray-700">Final QC</p>
+              <div class="w-2/3 bg-gray-200 rounded-full h-4">
+                <div class="bg-theme-secondary h-4 rounded-full" style="width: 25%"></div>
+              </div>
+              <p class="ml-4 font-semibold w-12 text-right">105</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-theme-card p-6 rounded-lg shadow-sm border-2 border-theme-secondary/20">
+          <h3 class="text-xl font-semibold mb-4 text-theme-secondary border-b-2 border-theme-secondary/20 pb-2">Recent Bag Movements</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <div class="bg-green-500/20 p-2 rounded-full mr-4">
+                <span class="material-icons text-green-500 text-xl">arrow_downward</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Bag #B-7890 received by Filing Dept.</p>
+                <p class="text-xs text-gray-500">From: Grinding Dept. | 2 mins ago</p>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <div class="bg-red-500/20 p-2 rounded-full mr-4">
+                <span class="material-icons text-red-500 text-xl">splitscreen</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Bag #B-7885 split in Casting Dept.</p>
+                <p class="text-xs text-gray-500">Created #B-7885-A, #B-7885-B | 15 mins ago</p>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <div class="bg-theme-primary/20 p-2 rounded-full mr-4">
+                <span class="material-icons text-theme-primary text-xl">arrow_upward</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Bag #B-7888 sent from Assembly.</p>
+                <p class="text-xs text-gray-500">To: Setting Dept. | 1 hour ago</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="mt-8 bg-theme-card p-6 rounded-lg shadow-sm border-2 border-theme-accent/20">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-semibold text-theme-primary border-b-2 border-theme-accent/20 pb-2">Work In Progress - Bag Status</h3>
+          <div class="flex items-center space-x-2">
+            <input class="w-48 bg-white border-2 border-theme-primary/30 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-theme-primary focus:border-theme-primary transition-all" placeholder="Search Bag..." type="text" />
+            <button class="text-gray-500 p-2 rounded-lg hover:bg-theme-primary/10">
+              <span class="material-icons text-base">filter_list</span>
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-theme-text uppercase" style="background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%); color: white;">
+              <tr>
+                <th class="px-6 py-3" scope="col">Bag ID</th>
+                <th class="px-6 py-3" scope="col">Current Dept.</th>
+                <th class="px-6 py-3" scope="col">Handler</th>
+                <th class="px-6 py-3" scope="col">Days in Dept.</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3" scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme-primary/20 hover:bg-theme-background transition-colors">
+                <th class="px-6 py-4 font-medium whitespace-nowrap" scope="row">#B-7891</th>
+                <td class="px-6 py-4">Setting</td>
+                <td class="px-6 py-4">Emily White</td>
+                <td class="px-6 py-4">2</td>
+                <td class="px-6 py-4">
+                  <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">In Progress</span>
+                </td>
+                <td class="px-6 py-4">
+                  <button class="font-medium text-theme-primary hover:underline">View</button>
+                </td>
+              </tr>
+              <tr class="border-b border-theme-primary/20 hover:bg-theme-background transition-colors">
+                <th class="px-6 py-4 font-medium whitespace-nowrap" scope="row">#B-7890</th>
+                <td class="px-6 py-4">Filing</td>
+                <td class="px-6 py-4">Michael Brown</td>
+                <td class="px-6 py-4">1</td>
+                <td class="px-6 py-4">
+                  <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">In Progress</span>
+                </td>
+                <td class="px-6 py-4">
+                  <button class="font-medium text-theme-primary hover:underline">View</button>
+                </td>
+              </tr>
+              <tr class="border-b border-theme-primary/20 hover:bg-theme-background transition-colors">
+                <th class="px-6 py-4 font-medium whitespace-nowrap" scope="row">#B-7889</th>
+                <td class="px-6 py-4">Casting</td>
+                <td class="px-6 py-4">Sarah Jones</td>
+                <td class="px-6 py-4">5</td>
+                <td class="px-6 py-4">
+                  <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Delayed</span>
+                </td>
+                <td class="px-6 py-4">
+                  <button class="font-medium text-theme-primary hover:underline">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Pages -->
+    <div id="new-order" class="page">
+      <h1 class="text-3xl font-bold text-theme-text">New Order</h1>
+      <p class="text-gray-600 mt-2">Create a new customer order...</p>
+    </div>
+
+    <div id="update-order" class="page">
+      <h1 class="text-3xl font-bold text-theme-text">Update Order</h1>
+      <p class="text-gray-600 mt-2">Modify existing order details...</p>
+    </div>
+
+    <div id="search" class="page">
+      <h1 class="text-3xl font-bold text-theme-text">Search Orders</h1>
+      <p class="text-gray-600 mt-2">Search and filter orders...</p>
+    </div>
+
+    <div id="detailed" class="page">
+      <h1 class="text-3xl font-bold text-theme-text">Detailed View</h1>
+      <p class="text-gray-600 mt-2">View detailed order information...</p>
+    </div>
+
+    <!-- Product Master Page -->
+    <div id="product-master" class="page">
+      <header class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-theme-text">Product Master</h2>
+          <p class="text-gray-600">Create and manage product master data</p>
+        </div>
+      </header>
+
+      <div class="bg-theme-card p-6 rounded-lg shadow-sm border-2 border-theme-primary/20">
+        <h2 class="text-xl font-semibold text-theme-primary mb-6 border-b-2 border-theme-primary/20 pb-2">Product Master Form</h2>
+        
+        <form id="product-master-form" class="space-y-6">
+          <!-- Basic Information Section -->
+          <div class="border-b border-theme-primary/20 pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-theme-primary">Basic Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="order-id">Order ID</label>
+                <div class="flex items-center gap-2">
+                  <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="order-id">
+                    <option value="">Select Order</option>
+                  </select>
+                  <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Order">
+                    <span class="material-icons">add</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="design-number">Design Number</label>
+                <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="design-number" type="text" placeholder="e.g., DES-2024-001" maxlength="255"/>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="product-name">Product Name <span class="text-red-500">*</span></label>
+                <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="product-name" type="text" placeholder="e.g., Elegant Gold Necklace" maxlength="255" required/>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="category-id">Category</label>
+                <div class="flex items-center gap-2">
+                  <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="category-id">
+                    <option value="">Select Category</option>
+                  </select>
+                  <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Category">
+                    <span class="material-icons">add</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="subcategory-id">Subcategory</label>
+                <div class="flex items-center gap-2">
+                  <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="subcategory-id">
+                    <option value="">Select Subcategory</option>
+                  </select>
+                  <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Subcategory">
+                    <span class="material-icons">add</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="brand-id">Brand</label>
+                <div class="flex items-center gap-2">
+                  <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="brand-id">
+                    <option value="">Select Brand</option>
+                  </select>
+                  <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Brand">
+                    <span class="material-icons">add</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="gross-weight">Gross Weight</label>
+                <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="gross-weight" type="number" step="0.001" placeholder="0.000"/>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="uom-id">Unit of Measure (UOM)</label>
+                <div class="flex items-center gap-2">
+                  <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="uom-id">
+                    <option value="">Select UOM</option>
+                  </select>
+                  <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New UOM">
+                    <span class="material-icons">add</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="hsn-code">HSN Code</label>
+                <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="hsn-code" type="text" placeholder="e.g., 7113" maxlength="50"/>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="default-price">Default Price</label>
+                <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="default-price" type="number" step="0.01" placeholder="0.00"/>
+              </div>
+
+              <div>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input class="form-checkbox h-5 w-5 rounded border-gray-300 text-theme-primary focus:ring-theme-primary" id="is-active" type="checkbox" checked/>
+                  <span class="text-sm font-medium text-gray-700">Is Active</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="product-description">Product Description</label>
+              <textarea class="form-textarea w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary" id="product-description" rows="3" placeholder="Enter product description..."></textarea>
+            </div>
+          </div>
+
+          <!-- Product Metal Section (Multiple Entries) -->
+          <div class="border-b border-theme-primary/20 pb-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-theme-primary">Product Metals</h3>
+              <button type="button" id="add-metal-btn" class="flex items-center gap-2 text-sm font-semibold text-theme-primary hover:text-theme-secondary transition-colors">
+                <span class="material-icons text-base">add_circle_outline</span>
+                <span>Add Metal</span>
+              </button>
+            </div>
+            <div id="metal-entries" class="space-y-4">
+              <div class="metal-entry border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Alloy</label>
+                    <div class="flex items-center gap-2">
+                      <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary metal-alloy-id">
+                        <option value="">Select Alloy</option>
+                      </select>
+                      <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Alloy">
+                        <span class="material-icons">add</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary metal-weight" type="number" step="0.001" placeholder="0.000"/>
+                  </div>
+                </div>
+                <button type="button" class="mt-2 text-red-600 hover:text-red-700 text-sm font-medium remove-metal-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Diamonds Section (Multiple Entries) -->
+          <div class="border-b border-theme-primary/20 pb-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-theme-primary">Product Diamonds</h3>
+              <button type="button" id="add-diamond-btn" class="flex items-center gap-2 text-sm font-semibold text-theme-primary hover:text-theme-secondary transition-colors">
+                <span class="material-icons text-base">add_circle_outline</span>
+                <span>Add Diamond</span>
+              </button>
+            </div>
+            <div id="diamond-entries" class="space-y-4">
+              <div class="diamond-entry border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Diamond Master</label>
+                    <div class="flex items-center gap-2">
+                      <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-master-id">
+                        <option value="">Select Diamond</option>
+                      </select>
+                      <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Diamond Master">
+                        <span class="material-icons">add</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pieces</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-pieces" type="number" placeholder="0"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Total Carat</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-total-carat" type="number" step="0.0001" placeholder="0.0000"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rate Per Carat</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-rate-per-carat" type="number" step="0.01" placeholder="0.00"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Total Value</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed diamond-total-value" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+                  </div>
+                </div>
+                <button type="button" class="mt-2 text-red-600 hover:text-red-700 text-sm font-medium remove-diamond-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Stones Section (Multiple Entries) -->
+          <div class="border-b border-theme-primary/20 pb-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-theme-primary">Product Stones</h3>
+              <button type="button" id="add-stone-btn" class="flex items-center gap-2 text-sm font-semibold text-theme-primary hover:text-theme-secondary transition-colors">
+                <span class="material-icons text-base">add_circle_outline</span>
+                <span>Add Stone</span>
+              </button>
+            </div>
+            <div id="stone-entries" class="space-y-4">
+              <div class="stone-entry border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Stone Master</label>
+                    <div class="flex items-center gap-2">
+                      <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-master-id">
+                        <option value="">Select Stone</option>
+                      </select>
+                      <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Stone Master">
+                        <span class="material-icons">add</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pieces</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-pcs" type="number" placeholder="0"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Total Carat</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-total-carat" type="number" step="0.0001" placeholder="0.0000"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rate Per Carat</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-rate-per-carat" type="number" step="0.01" placeholder="0.00"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Total Value</label>
+                    <input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed stone-total-value" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+                  </div>
+                </div>
+                <button type="button" class="mt-2 text-red-600 hover:text-red-700 text-sm font-medium remove-stone-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex justify-end gap-4 pt-4">
+            <button type="button" class="px-6 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">
+              Clear
+            </button>
+            <button type="submit" class="px-6 py-2 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white font-semibold transition-colors shadow-lg">
+              Save Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Theme Switcher
+    const themeSelector = document.getElementById('theme-selector');
+    const body = document.body;
+    
+    themeSelector.addEventListener('change', function() {
+      // Remove all theme classes
+      body.classList.remove('theme-1', 'theme-2', 'theme-3', 'theme-4', 'theme-5');
+      // Add selected theme class
+      body.classList.add(this.value);
+    });
+
+    // Collapsible Order Menu
+    document.getElementById('order-toggle').addEventListener('click', function() {
+      const submenu = document.getElementById('order-submenu');
+      const chevron = document.getElementById('order-chevron');
+      submenu.classList.toggle('open');
+      chevron.style.transform = submenu.classList.contains('open')
+        ? 'rotate(180deg)'
+        : 'rotate(0deg)';
+    });
+
+    // Collapsible Stock Menu
+    document.getElementById('stock-toggle').addEventListener('click', function () {
+      const submenu = document.getElementById('stock-submenu');
+      const chevron = document.getElementById('stock-chevron');
+      submenu.classList.toggle('open');
+      chevron.style.transform = submenu.classList.contains('open')
+        ? 'rotate(180deg)'
+        : 'rotate(0deg)';
+    });
+
+    // Collapsible Bag Menu
+    document.getElementById('bag-toggle').addEventListener('click', function () {
+      const submenu = document.getElementById('bag-submenu');
+      const chevron = document.getElementById('bag-chevron');
+      submenu.classList.toggle('open');
+      chevron.style.transform = submenu.classList.contains('open')
+        ? 'rotate(180deg)'
+        : 'rotate(0deg)';
+    });
+
+    // Page Navigation
+    document.querySelectorAll('.menu-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        document.querySelectorAll('.menu-link').forEach(l => {
+          l.classList.remove('bg-theme-primary/20', 'text-theme-primary', 'font-semibold');
+        });
+        
+        this.classList.add('bg-theme-primary/20', 'text-theme-primary', 'font-semibold');
+        
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const pageId = this.getAttribute('data-page');
+        if (pageId) {
+          document.getElementById(pageId)?.classList.add('active');
+        }
+      });
+    });
+
+    // Initialize Dashboard as active
+    document.addEventListener('DOMContentLoaded', () => {
+      const dashboardLink = document.querySelector('[data-page="dashboard"]');
+      if (dashboardLink) {
+        dashboardLink.classList.add('bg-theme-primary/20', 'text-theme-primary', 'font-semibold');
+      }
+    });
+
+    // Product Master Form Functionality
+    // Add Metal Entry
+    document.getElementById('add-metal-btn')?.addEventListener('click', function() {
+      const container = document.getElementById('metal-entries');
+      const newEntry = document.createElement('div');
+      newEntry.className = 'metal-entry border border-gray-200 rounded-lg p-4 bg-gray-50';
+      newEntry.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Alloy</label>
+            <div class="flex items-center gap-2">
+              <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary metal-alloy-id">
+                <option value="">Select Alloy</option>
+              </select>
+              <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Alloy">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary metal-weight" type="number" step="0.001" placeholder="0.000"/>
+          </div>
+        </div>
+        <button type="button" class="mt-2 text-red-600 hover:text-red-700 text-sm font-medium remove-metal-btn">Remove</button>
+      `;
+      container.appendChild(newEntry);
+      attachMetalRemoveListener(newEntry);
+    });
+
+    // Remove Metal Entry
+    function attachMetalRemoveListener(element) {
+      const removeBtn = element.querySelector('.remove-metal-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          element.remove();
+        });
+      }
+    }
+
+    // Attach remove listeners to existing metal entries
+    document.querySelectorAll('.metal-entry').forEach(entry => {
+      attachMetalRemoveListener(entry);
+    });
+
+    // Add Diamond Entry
+    document.getElementById('add-diamond-btn')?.addEventListener('click', function() {
+      const container = document.getElementById('diamond-entries');
+      const newEntry = document.createElement('div');
+      newEntry.className = 'diamond-entry border border-gray-200 rounded-lg p-4 bg-gray-50';
+      newEntry.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Diamond Master</label>
+            <div class="flex items-center gap-2">
+              <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-master-id">
+                <option value="">Select Diamond</option>
+              </select>
+              <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Diamond Master">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Pieces</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-pieces" type="number" placeholder="0"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Total Carat</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-total-carat" type="number" step="0.0001" placeholder="0.0000"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Rate Per Carat</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary diamond-rate-per-carat" type="number" step="0.01" placeholder="0.00"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Total Value</label>
+            <input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed diamond-total-value" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+          </div>
+        </div>
+        <button type="button" class="mt-2 text-red-600 hover:text-red-700 text-sm font-medium remove-diamond-btn">Remove</button>
+      `;
+      container.appendChild(newEntry);
+      attachDiamondRemoveListener(newEntry);
+      attachDiamondCalculationListener(newEntry);
+    });
+
+    // Remove Diamond Entry
+    function attachDiamondRemoveListener(element) {
+      const removeBtn = element.querySelector('.remove-diamond-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          element.remove();
+        });
+      }
+    }
+
+    // Calculate Diamond Total Value
+    function calculateDiamondTotal(entry) {
+      const totalCarat = parseFloat(entry.querySelector('.diamond-total-carat').value) || 0;
+      const ratePerCarat = parseFloat(entry.querySelector('.diamond-rate-per-carat').value) || 0;
+      const totalValue = totalCarat * ratePerCarat;
+      entry.querySelector('.diamond-total-value').value = totalValue.toFixed(2);
+    }
+
+    function attachDiamondCalculationListener(entry) {
+      const totalCaratInput = entry.querySelector('.diamond-total-carat');
+      const ratePerCaratInput = entry.querySelector('.diamond-rate-per-carat');
+      
+      [totalCaratInput, ratePerCaratInput].forEach(input => {
+        input.addEventListener('input', () => calculateDiamondTotal(entry));
+      });
+    }
+
+    // Attach listeners to existing diamond entries
+    document.querySelectorAll('.diamond-entry').forEach(entry => {
+      attachDiamondRemoveListener(entry);
+      attachDiamondCalculationListener(entry);
+    });
+
+    // Add Stone Entry
+    document.getElementById('add-stone-btn')?.addEventListener('click', function() {
+      const container = document.getElementById('stone-entries');
+      const newEntry = document.createElement('div');
+      newEntry.className = 'stone-entry border border-gray-200 rounded-lg p-4 bg-gray-50';
+      newEntry.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Stone Master</label>
+            <div class="flex items-center gap-2">
+              <select class="form-select flex-1 rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-master-id">
+                <option value="">Select Stone</option>
+              </select>
+              <button type="button" class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-theme-primary hover:bg-theme-secondary text-white transition-colors" title="Add New Stone Master">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Pieces</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-pcs" type="number" placeholder="0"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Total Carat</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-total-carat" type="number" step="0.0001" placeholder="0.0000"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Rate Per Carat</label>
+            <input class="form-input w-full rounded-lg border-gray-300 focus:ring-theme-primary focus:border-theme-primary stone-rate-per-carat" type="number" step="0.01" placeholder="0.00"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Total Value</label>
+            <input class="form-input w-full rounded-lg border-gray-300 bg-gray-100 cursor-not-allowed stone-total-value" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+          </div>
+        </div>
+        <button type="button" class="mt-2 text-red-600 hover:text-red-700 text-sm font-medium remove-stone-btn">Remove</button>
+      `;
+      container.appendChild(newEntry);
+      attachStoneRemoveListener(newEntry);
+      attachStoneCalculationListener(newEntry);
+    });
+
+    // Remove Stone Entry
+    function attachStoneRemoveListener(element) {
+      const removeBtn = element.querySelector('.remove-stone-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          element.remove();
+        });
+      }
+    }
+
+    // Calculate Stone Total Value
+    function calculateStoneTotal(entry) {
+      const totalCarat = parseFloat(entry.querySelector('.stone-total-carat').value) || 0;
+      const ratePerCarat = parseFloat(entry.querySelector('.stone-rate-per-carat').value) || 0;
+      const totalValue = totalCarat * ratePerCarat;
+      entry.querySelector('.stone-total-value').value = totalValue.toFixed(2);
+    }
+
+    function attachStoneCalculationListener(entry) {
+      const totalCaratInput = entry.querySelector('.stone-total-carat');
+      const ratePerCaratInput = entry.querySelector('.stone-rate-per-carat');
+      
+      [totalCaratInput, ratePerCaratInput].forEach(input => {
+        input.addEventListener('input', () => calculateStoneTotal(entry));
+      });
+    }
+
+    // Attach listeners to existing stone entries
+    document.querySelectorAll('.stone-entry').forEach(entry => {
+      attachStoneRemoveListener(entry);
+      attachStoneCalculationListener(entry);
+    });
+
+    // Form Submission
+    document.getElementById('product-master-form')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Form submission logic would go here
+      alert('Product saved successfully!');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bag QC - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="bag-qc" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Bag Quality Control</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Verify weight, pieces, and condition</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="open-split-merge-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <span class="material-icons text-base">call_split</span>
+              <span>Split & Merge</span>
+            </button>
+            <select id="qc-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="ALL">All Bags</option>
+              <option value="QC_PENDING">Pending QC</option>
+              <option value="QC_APPROVED">Passed</option>
+              <option value="QC_HOLD">On Hold</option>
+              <option value="QC_REJECTED">Failed</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <!-- Pending QC Bags List -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4">Bags Pending QC</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Bag No</th>
+                <th class="px-6 py-3" scope="col">Department</th>
+                <th class="px-6 py-3" scope="col">Expected Weight</th>
+                <th class="px-6 py-3" scope="col">Expected Pieces</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3" scope="col">Last Updated</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bags-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">fact_check</span>
+            <p>No bags pending QC.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- QC Form (Modal-like) -->
+      <div id="qc-form-section" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm hidden">
+        <h2 class="text-xl font-semibold mb-6">Quality Control Verification</h2>
+        
+        <form id="bag-qc-form" class="space-y-6">
+          <input type="hidden" id="bag-id">
+          
+          <!-- Bag Information -->
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <h3 class="text-lg font-semibold mb-3">Bag Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Bag No</div>
+                <div id="qc-bag-no" class="text-lg font-bold text-primary">-</div>
+              </div>
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Current Department</div>
+                <div id="qc-department" class="text-lg font-bold text-primary">-</div>
+              </div>
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Reference</div>
+                <div id="qc-reference" class="text-lg font-bold text-primary">-</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weight Verification -->
+          <div class="border-t border-border-light dark:border-border-dark pt-6">
+            <h3 class="text-lg font-semibold mb-4">Weight Verification</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Expected Weight</div>
+                <div id="expected-weight" class="text-2xl font-bold text-primary">0.000 g</div>
+              </div>
+              <div>
+                <label for="checked-weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Checked Weight (g) <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="checked-weight" name="checkedWeight" step="0.001" min="0" required
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0.000">
+                <div id="weight-difference" class="text-xs mt-1"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pieces Verification -->
+          <div class="border-t border-border-light dark:border-border-dark pt-6">
+            <h3 class="text-lg font-semibold mb-4">Pieces Verification</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Expected Pieces</div>
+                <div id="expected-pieces" class="text-2xl font-bold text-primary">0</div>
+              </div>
+              <div>
+                <label for="checked-pieces" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Checked Pieces <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="checked-pieces" name="checkedPieces" min="0" required
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0">
+                <div id="pieces-difference" class="text-xs mt-1"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QC Status -->
+          <div class="border-t border-border-light dark:border-border-dark pt-6">
+            <h3 class="text-lg font-semibold mb-4">QC Status</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label class="flex items-center p-4 border-2 border-border-light dark:border-border-dark rounded-lg cursor-pointer hover:bg-background-light dark:hover:bg-background-dark transition-colors qc-status-option" data-status="PASS">
+                <input type="radio" name="qcStatus" value="PASS" class="sr-only" required>
+                <div class="flex-1">
+                  <div class="font-semibold text-green-600 dark:text-green-400">Pass</div>
+                  <div class="text-xs text-gray-600 dark:text-gray-400">Continue flow</div>
+                </div>
+                <span class="material-icons text-green-600 dark:text-green-400">check_circle</span>
+              </label>
+              <label class="flex items-center p-4 border-2 border-border-light dark:border-border-dark rounded-lg cursor-pointer hover:bg-background-light dark:hover:bg-background-dark transition-colors qc-status-option" data-status="HOLD">
+                <input type="radio" name="qcStatus" value="HOLD" class="sr-only" required>
+                <div class="flex-1">
+                  <div class="font-semibold text-orange-600 dark:text-orange-400">Hold</div>
+                  <div class="text-xs text-gray-600 dark:text-gray-400">Needs adjustment</div>
+                </div>
+                <span class="material-icons text-orange-600 dark:text-orange-400">pause_circle</span>
+              </label>
+              <label class="flex items-center p-4 border-2 border-border-light dark:border-border-dark rounded-lg cursor-pointer hover:bg-background-light dark:hover:bg-background-dark transition-colors qc-status-option" data-status="FAIL">
+                <input type="radio" name="qcStatus" value="FAIL" class="sr-only" required>
+                <div class="flex-1">
+                  <div class="font-semibold text-red-600 dark:text-red-400">Fail</div>
+                  <div class="text-xs text-gray-600 dark:text-gray-400">Rejection required</div>
+                </div>
+                <span class="material-icons text-red-600 dark:text-red-400">cancel</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Remarks -->
+          <div>
+            <label for="qc-remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Remarks <span class="text-red-500">*</span>
+            </label>
+            <textarea id="qc-remarks" name="remarks" rows="4" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter QC remarks and observations"></textarea>
+          </div>
+
+          <!-- Attachments (Optional) -->
+          <div>
+            <label for="qc-attachments" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Attachments (Optional)
+            </label>
+            <div class="flex items-center gap-4">
+              <input type="file" id="qc-attachments" name="attachments" multiple
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     accept="image/*,.pdf">
+              <div id="attachment-list" class="flex-1 text-sm text-gray-600 dark:text-gray-400"></div>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">You can upload images or PDF files</p>
+          </div>
+
+          <!-- Discrepancy Warning -->
+          <div id="discrepancy-warning" class="hidden bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div class="flex items-start">
+              <span class="material-icons text-yellow-600 dark:text-yellow-400 mr-2">warning</span>
+              <div>
+                <div class="font-medium text-yellow-800 dark:text-yellow-300">Discrepancy Detected</div>
+                <div class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">
+                  Checked values differ from expected values. Please review before proceeding.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex items-center justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="button" id="cancel-qc-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Cancel
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit QC
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Split and Merge Form Section -->
+      <div id="split-merge-section" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6 hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-semibold">Bag Split & Merge Management</h2>
+          <button type="button" id="close-split-merge-btn" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-border-light dark:border-border-dark mb-6">
+          <div class="flex gap-4">
+            <button type="button" id="split-tab" class="px-4 py-2 border-b-2 border-primary text-primary font-medium split-merge-tab active">
+              Split Bag
+            </button>
+            <button type="button" id="merge-tab" class="px-4 py-2 border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-primary font-medium split-merge-tab">
+              Merge Bags
+            </button>
+          </div>
+        </div>
+
+        <!-- Split Bag Form -->
+        <div id="split-form-container" class="split-merge-content">
+          <form id="split-bag-form" class="space-y-6">
+            <input type="hidden" id="split-bag-id">
+            
+            <!-- Bag Selection (when no bag is pre-selected) -->
+            <div id="split-bag-selection" class="hidden">
+              <label for="split-select-bag" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Select Bag to Split <span class="text-red-500">*</span>
+              </label>
+              <select id="split-select-bag" 
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select a bag...</option>
+              </select>
+            </div>
+            
+            <!-- Source Bag Information -->
+            <div id="split-bag-info" class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark hidden">
+              <h3 class="text-lg font-semibold mb-3">Source Bag Information</h3>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Bag No</div>
+                  <div id="split-bag-no" class="text-lg font-bold text-primary">-</div>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Total Weight</div>
+                  <div id="split-total-weight" class="text-lg font-bold text-primary">0.000 g</div>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Total Pieces</div>
+                  <div id="split-total-pieces" class="text-lg font-bold text-primary">0</div>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Department</div>
+                  <div id="split-department" class="text-lg font-bold text-primary">-</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Split Configuration (shown when bag is selected) -->
+            <div id="split-config" class="hidden">
+              <!-- Number of Bags to Split Into -->
+              <div>
+                <label for="split-count" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Number of Bags to Create <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="split-count" name="splitCount" min="2" max="10" required
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="Enter number of bags (2-10)">
+              </div>
+
+              <!-- Split Details Container -->
+              <div id="split-details-container" class="space-y-4">
+                <!-- Dynamic split details will be added here -->
+              </div>
+            </div>
+
+            <!-- Split Remarks -->
+            <div>
+              <label for="split-remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Remarks
+              </label>
+              <textarea id="split-remarks" name="splitRemarks" rows="3"
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                        placeholder="Enter reason for splitting bag"></textarea>
+            </div>
+
+            <!-- Split Validation -->
+            <div id="split-validation" class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+              <div class="flex items-start">
+                <span class="material-icons text-red-600 dark:text-red-400 mr-2">error</span>
+                <div>
+                  <div class="font-medium text-red-800 dark:text-red-300">Validation Error</div>
+                  <div id="split-validation-message" class="text-sm text-red-700 dark:text-red-400 mt-1"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Split Form Actions -->
+            <div class="flex items-center justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+              <button type="button" id="cancel-split-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                Cancel
+              </button>
+              <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                Split Bag
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Merge Bags Form -->
+        <div id="merge-form-container" class="split-merge-content hidden">
+          <form id="merge-bags-form" class="space-y-6">
+            <!-- Bag Selection -->
+            <div>
+              <label for="merge-bag-search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Search and Select Bags to Merge <span class="text-red-500">*</span>
+              </label>
+              <div class="flex gap-2">
+                <input type="text" id="merge-bag-search" 
+                       class="flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="Search by bag number...">
+                <button type="button" id="add-merge-bag-btn" class="px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                  Add Bag
+                </button>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Select at least 2 bags to merge</p>
+            </div>
+
+            <!-- Selected Bags List -->
+            <div id="selected-bags-list" class="space-y-2">
+              <!-- Dynamic selected bags will be added here -->
+            </div>
+
+            <!-- Merge Summary -->
+            <div id="merge-summary" class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark hidden">
+              <h3 class="text-lg font-semibold mb-3">Merge Summary</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Total Weight</div>
+                  <div id="merge-total-weight" class="text-xl font-bold text-primary">0.000 g</div>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Total Pieces</div>
+                  <div id="merge-total-pieces" class="text-xl font-bold text-primary">0</div>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Bags to Merge</div>
+                  <div id="merge-bags-count" class="text-xl font-bold text-primary">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Bag Information -->
+            <div class="border-t border-border-light dark:border-border-dark pt-6">
+              <h3 class="text-lg font-semibold mb-4">New Merged Bag Information</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="merge-new-bag-no" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    New Bag Number <span class="text-red-500">*</span>
+                  </label>
+                  <input type="text" id="merge-new-bag-no" name="newBagNo" required
+                         class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                         placeholder="Enter new bag number">
+                </div>
+                <div>
+                  <label for="merge-department" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Department <span class="text-red-500">*</span>
+                  </label>
+                  <select id="merge-department" name="department" required
+                          class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                    <option value="">Select Department</option>
+                    <option value="CUTTING">Cutting</option>
+                    <option value="POLISHING">Polishing</option>
+                    <option value="QC">Quality Control</option>
+                    <option value="PACKAGING">Packaging</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Merge Remarks -->
+            <div>
+              <label for="merge-remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Remarks
+              </label>
+              <textarea id="merge-remarks" name="mergeRemarks" rows="3"
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                        placeholder="Enter reason for merging bags"></textarea>
+            </div>
+
+            <!-- Merge Validation -->
+            <div id="merge-validation" class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+              <div class="flex items-start">
+                <span class="material-icons text-red-600 dark:text-red-400 mr-2">error</span>
+                <div>
+                  <div class="font-medium text-red-800 dark:text-red-300">Validation Error</div>
+                  <div id="merge-validation-message" class="text-sm text-red-700 dark:text-red-400 mt-1"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Merge Form Actions -->
+            <div class="flex items-center justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+              <button type="button" id="cancel-merge-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                Cancel
+              </button>
+              <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                Merge Bags
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allBags = [];
+    let currentBag = null;
+    let currentFilter = 'QC_PENDING';
+
+    // Load bags
+    function loadBags() {
+      allBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      renderBagsTable();
+    }
+
+    // Render bags table
+    function renderBagsTable() {
+      const tbody = document.getElementById('bags-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      // Filter bags based on selected filter
+      let filteredBags = [];
+      if (currentFilter === 'ALL') {
+        filteredBags = allBags.filter(b => ['QC_PENDING', 'QC_APPROVED', 'QC_HOLD', 'QC_REJECTED'].includes(b.status));
+      } else {
+        filteredBags = allBags.filter(b => b.status === currentFilter);
+      }
+      
+      if (filteredBags.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = '';
+
+      filteredBags.forEach(bag => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const lastUpdated = new Date(bag.last_updated || bag.created_at);
+        const formattedDate = lastUpdated.toLocaleDateString() + ' ' + lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const statusClass = {
+          'QC_PENDING': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400',
+          'QC_APPROVED': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+          'QC_HOLD': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+          'QC_REJECTED': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+        };
+
+        const statusText = {
+          'QC_PENDING': 'Pending',
+          'QC_APPROVED': 'Passed',
+          'QC_HOLD': 'On Hold',
+          'QC_REJECTED': 'Failed'
+        };
+
+        const canSplitMerge = bag.status !== 'SPLIT' && bag.status !== 'MERGED';
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium">${bag.bag_no || '-'}</td>
+          <td class="px-6 py-4">${bag.current_department || '-'}</td>
+          <td class="px-6 py-4">${(parseFloat(bag.total_weight) || 0).toFixed(3)} g</td>
+          <td class="px-6 py-4">${bag.total_pieces || 0}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 text-xs rounded font-medium ${statusClass[bag.status] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'}">${statusText[bag.status] || bag.status}</span>
+          </td>
+          <td class="px-6 py-4">${formattedDate}</td>
+          <td class="px-6 py-4 text-center">
+            <div class="flex flex-col items-center gap-2">
+              ${bag.status === 'QC_PENDING' ? `
+                <button type="button" class="qc-btn px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm" data-bag-id="${bag.bag_id}">
+                  Perform QC
+                </button>
+              ` : `
+                <button type="button" class="view-qc-btn px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors text-sm" data-bag-id="${bag.bag_id}">
+                  View QC
+                </button>
+              `}
+              ${canSplitMerge ? `
+                <div class="flex gap-2">
+                  <button type="button" class="split-bag-btn px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors" data-bag-id="${bag.bag_id}">
+                    Split
+                  </button>
+                  <button type="button" class="merge-bag-btn px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700 transition-colors" data-bag-id="${bag.bag_id}">
+                    Merge
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Add event listeners
+      document.querySelectorAll('.qc-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const bagId = this.dataset.bagId;
+          openQCForm(bagId);
+        });
+      });
+
+      document.querySelectorAll('.view-qc-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const bagId = this.dataset.bagId;
+          viewQCResults(bagId);
+        });
+      });
+
+      document.querySelectorAll('.split-bag-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const bagId = this.dataset.bagId;
+          openSplitMergeSection('split', bagId);
+        });
+      });
+
+      document.querySelectorAll('.merge-bag-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const bagId = this.dataset.bagId;
+          const bag = allBags.find(b => b.bag_id === bagId);
+          openSplitMergeSection('merge');
+          // Pre-select this bag
+          if (bag && !selectedBagsForMerge.find(b => b.bag_id === bagId)) {
+            selectedBagsForMerge.push(bag);
+            renderSelectedBags();
+            updateMergeSummary();
+          }
+        });
+      });
+    }
+
+    // Open QC form
+    function openQCForm(bagId) {
+      currentBag = allBags.find(b => b.bag_id === bagId);
+      if (!currentBag) return;
+
+      // Populate form
+      document.getElementById('bag-id').value = currentBag.bag_id;
+      document.getElementById('qc-bag-no').textContent = currentBag.bag_no || '-';
+      document.getElementById('qc-department').textContent = currentBag.current_department || '-';
+      document.getElementById('qc-reference').textContent = 
+        `${currentBag.reference_type || '-'} - ${currentBag.reference_id || '-'}`;
+      document.getElementById('expected-weight').textContent = (parseFloat(currentBag.total_weight) || 0).toFixed(3) + ' g';
+      document.getElementById('expected-pieces').textContent = currentBag.total_pieces || 0;
+
+      // Clear form
+      document.getElementById('checked-weight').value = '';
+      document.getElementById('checked-pieces').value = '';
+      document.getElementById('qc-remarks').value = '';
+      document.getElementById('qc-attachments').value = '';
+      document.getElementById('attachment-list').textContent = '';
+      document.querySelectorAll('input[name="qcStatus"]').forEach(radio => radio.checked = false);
+      document.querySelectorAll('.qc-status-option').forEach(option => {
+        option.classList.remove('border-primary', 'bg-primary/10');
+      });
+      document.getElementById('discrepancy-warning').classList.add('hidden');
+      document.getElementById('weight-difference').textContent = '';
+      document.getElementById('pieces-difference').textContent = '';
+
+      // Show form
+      document.getElementById('qc-form-section').classList.remove('hidden');
+      document.getElementById('qc-form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // View QC results (read-only)
+    function viewQCResults(bagId) {
+      const bag = allBags.find(b => b.bag_id === bagId);
+      if (!bag) return;
+
+      // Load QC records
+      const qcRecords = JSON.parse(localStorage.getItem('bagQCRecords') || '[]');
+      const qcRecord = qcRecords.find(q => q.bag_id === bagId);
+
+      if (qcRecord) {
+        alert(`QC Status: ${qcRecord.qc_status}\nChecked Weight: ${qcRecord.checked_weight.toFixed(3)} g\nChecked Pieces: ${qcRecord.checked_pieces}\nRemarks: ${qcRecord.remarks || 'N/A'}`);
+      } else {
+        alert('No QC record found for this bag');
+      }
+    }
+
+    // Calculate differences
+    function calculateDifferences() {
+      const expectedWeight = parseFloat(document.getElementById('expected-weight').textContent) || 0;
+      const checkedWeight = parseFloat(document.getElementById('checked-weight').value) || 0;
+      const expectedPieces = parseInt(document.getElementById('expected-pieces').textContent) || 0;
+      const checkedPieces = parseInt(document.getElementById('checked-pieces').value) || 0;
+
+      const weightDiff = checkedWeight - expectedWeight;
+      const piecesDiff = checkedPieces - expectedPieces;
+      const tolerance = 0.001; // 0.001g tolerance
+
+      // Weight difference
+      const weightDiffElement = document.getElementById('weight-difference');
+      if (Math.abs(weightDiff) > tolerance) {
+        weightDiffElement.textContent = `Difference: ${weightDiff > 0 ? '+' : ''}${weightDiff.toFixed(3)} g`;
+        weightDiffElement.className = weightDiff > 0 ? 'text-xs mt-1 text-green-600 dark:text-green-400' : 'text-xs mt-1 text-red-600 dark:text-red-400';
+      } else {
+        weightDiffElement.textContent = 'Match';
+        weightDiffElement.className = 'text-xs mt-1 text-green-600 dark:text-green-400';
+      }
+
+      // Pieces difference
+      const piecesDiffElement = document.getElementById('pieces-difference');
+      if (piecesDiff !== 0) {
+        piecesDiffElement.textContent = `Difference: ${piecesDiff > 0 ? '+' : ''}${piecesDiff} pieces`;
+        piecesDiffElement.className = piecesDiff > 0 ? 'text-xs mt-1 text-green-600 dark:text-green-400' : 'text-xs mt-1 text-red-600 dark:text-red-400';
+      } else {
+        piecesDiffElement.textContent = 'Match';
+        piecesDiffElement.className = 'text-xs mt-1 text-green-600 dark:text-green-400';
+      }
+
+      // Show warning if significant discrepancy
+      if (Math.abs(weightDiff) > 0.01 || Math.abs(piecesDiff) > 0) {
+        document.getElementById('discrepancy-warning').classList.remove('hidden');
+      } else {
+        document.getElementById('discrepancy-warning').classList.add('hidden');
+      }
+    }
+
+    // QC status option selection
+    document.querySelectorAll('.qc-status-option').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.qc-status-option').forEach(opt => {
+          opt.classList.remove('border-primary', 'bg-primary/10');
+        });
+        this.classList.add('border-primary', 'bg-primary/10');
+        const radio = this.querySelector('input[type="radio"]');
+        radio.checked = true;
+      });
+    });
+
+    // Add event listeners for difference calculation
+    document.getElementById('checked-weight').addEventListener('input', calculateDifferences);
+    document.getElementById('checked-pieces').addEventListener('input', calculateDifferences);
+
+    // File attachment handler
+    document.getElementById('qc-attachments').addEventListener('change', function() {
+      const files = this.files;
+      const fileList = document.getElementById('attachment-list');
+      if (files.length > 0) {
+        fileList.textContent = `${files.length} file(s) selected`;
+      } else {
+        fileList.textContent = '';
+      }
+    });
+
+    // Form submission
+    document.getElementById('bag-qc-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!currentBag) {
+        alert('No bag selected');
+        return;
+      }
+
+      const checkedWeight = parseFloat(document.getElementById('checked-weight').value);
+      const checkedPieces = parseInt(document.getElementById('checked-pieces').value);
+      const qcStatus = document.querySelector('input[name="qcStatus"]:checked').value;
+      const remarks = document.getElementById('qc-remarks').value;
+      const attachments = document.getElementById('qc-attachments').files;
+
+      // Save QC record
+      const qcRecord = {
+        qc_id: 'qc-' + Date.now(),
+        bag_id: currentBag.bag_id,
+        bag_no: currentBag.bag_no,
+        expected_weight: parseFloat(currentBag.total_weight) || 0,
+        expected_pieces: currentBag.total_pieces || 0,
+        checked_weight: checkedWeight,
+        checked_pieces: checkedPieces,
+        qc_status: qcStatus,
+        remarks: remarks,
+        attachments_count: attachments.length,
+        qc_by: 'Current User', // TODO: Get from auth
+        qc_at: new Date().toISOString()
+      };
+
+      let qcRecords = JSON.parse(localStorage.getItem('bagQCRecords') || '[]');
+      qcRecords.push(qcRecord);
+      localStorage.setItem('bagQCRecords', JSON.stringify(qcRecords));
+
+      // Update bag status based on QC result
+      const bags = JSON.parse(localStorage.getItem('bags') || '[]');
+      const bagIndex = bags.findIndex(b => b.bag_id === currentBag.bag_id);
+      if (bagIndex !== -1) {
+        if (qcStatus === 'PASS') {
+          bags[bagIndex].status = 'QC_APPROVED';
+          bags[bagIndex].total_weight = checkedWeight.toFixed(3);
+          bags[bagIndex].total_pieces = checkedPieces;
+        } else if (qcStatus === 'HOLD') {
+          bags[bagIndex].status = 'QC_HOLD';
+        } else if (qcStatus === 'FAIL') {
+          bags[bagIndex].status = 'QC_REJECTED';
+        }
+        bags[bagIndex].last_updated = new Date().toISOString();
+        localStorage.setItem('bags', JSON.stringify(bags));
+      }
+
+      let outcomeMessage = '';
+      if (qcStatus === 'PASS') {
+        outcomeMessage = 'QC Passed! Bag can continue in the flow.';
+      } else if (qcStatus === 'HOLD') {
+        outcomeMessage = 'QC On Hold! Bag needs adjustment before proceeding.';
+      } else if (qcStatus === 'FAIL') {
+        outcomeMessage = 'QC Failed! Bag requires rejection.';
+      }
+
+      alert(`QC submitted successfully!\n\n${outcomeMessage}`);
+      
+      // Reload data and hide form
+      loadBags();
+      document.getElementById('qc-form-section').classList.add('hidden');
+      currentBag = null;
+    });
+
+    // Cancel QC
+    document.getElementById('cancel-qc-btn').addEventListener('click', function() {
+      document.getElementById('qc-form-section').classList.add('hidden');
+      currentBag = null;
+    });
+
+    // Filter change
+    document.getElementById('qc-filter').addEventListener('change', function() {
+      currentFilter = this.value;
+      renderBagsTable();
+    });
+
+    // Open split/merge section from header button
+    document.getElementById('open-split-merge-btn').addEventListener('click', function() {
+      openSplitMergeSection('split');
+    });
+
+    // Check for bag ID in URL
+    function checkUrlParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const bagId = urlParams.get('bag');
+      if (bagId) {
+        // Wait for bags to load, then open form
+        setTimeout(() => {
+          const bag = allBags.find(b => b.bag_id === bagId);
+          if (bag && bag.status === 'QC_PENDING') {
+            openQCForm(bagId);
+          }
+        }, 100);
+      }
+    }
+
+    // Split and Merge functionality
+    let selectedBagsForMerge = [];
+    let currentSplitBag = null;
+
+    // Tab switching
+    document.getElementById('split-tab').addEventListener('click', function() {
+      switchSplitMergeTab('split');
+    });
+
+    document.getElementById('merge-tab').addEventListener('click', function() {
+      switchSplitMergeTab('merge');
+    });
+
+    function switchSplitMergeTab(tab) {
+      document.querySelectorAll('.split-merge-tab').forEach(t => {
+        t.classList.remove('border-primary', 'text-primary');
+        t.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+      });
+
+      document.querySelectorAll('.split-merge-content').forEach(c => {
+        c.classList.add('hidden');
+      });
+
+      if (tab === 'split') {
+        document.getElementById('split-tab').classList.add('border-primary', 'text-primary');
+        document.getElementById('split-tab').classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        document.getElementById('split-form-container').classList.remove('hidden');
+      } else {
+        document.getElementById('merge-tab').classList.add('border-primary', 'text-primary');
+        document.getElementById('merge-tab').classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        document.getElementById('merge-form-container').classList.remove('hidden');
+      }
+    }
+
+    // Open split/merge section
+    function openSplitMergeSection(mode, bagId = null) {
+      document.getElementById('split-merge-section').classList.remove('hidden');
+      switchSplitMergeTab(mode);
+      
+      if (mode === 'split') {
+        if (bagId) {
+          openSplitForm(bagId);
+        } else {
+          resetSplitForm();
+          populateSplitBagSelection();
+          document.getElementById('split-bag-selection').classList.remove('hidden');
+          document.getElementById('split-bag-info').classList.add('hidden');
+        }
+      } else if (mode === 'merge') {
+        resetMergeForm();
+      }
+      
+      document.getElementById('split-merge-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Bag selection for split form
+    document.getElementById('split-select-bag').addEventListener('change', function() {
+      const bagId = this.value;
+      if (bagId) {
+        openSplitForm(bagId);
+      } else {
+        document.getElementById('split-bag-info').classList.add('hidden');
+        document.getElementById('split-config').classList.add('hidden');
+        document.getElementById('split-details-container').innerHTML = '';
+        currentSplitBag = null;
+      }
+    });
+
+    // Close split/merge section
+    document.getElementById('close-split-merge-btn').addEventListener('click', function() {
+      document.getElementById('split-merge-section').classList.add('hidden');
+      resetSplitForm();
+      resetMergeForm();
+    });
+
+    // Split Bag Functions
+    function openSplitForm(bagId) {
+      const bag = allBags.find(b => b.bag_id === bagId);
+      if (!bag) {
+        alert('Bag not found');
+        return;
+      }
+
+      loadBagIntoSplitForm(bag);
+    }
+
+    function loadBagIntoSplitForm(bag) {
+      if (bag.status === 'SPLIT' || bag.status === 'MERGED') {
+        alert('Cannot split a bag that has been split or merged');
+        return;
+      }
+
+      currentSplitBag = bag;
+      document.getElementById('split-bag-id').value = bag.bag_id;
+      document.getElementById('split-bag-no').textContent = bag.bag_no || '-';
+      document.getElementById('split-total-weight').textContent = (parseFloat(bag.total_weight) || 0).toFixed(3) + ' g';
+      document.getElementById('split-total-pieces').textContent = bag.total_pieces || 0;
+      document.getElementById('split-department').textContent = bag.current_department || '-';
+      document.getElementById('split-count').value = '2';
+      document.getElementById('split-remarks').value = '';
+      
+      // Show bag info and config, hide selection
+      document.getElementById('split-bag-selection').classList.add('hidden');
+      document.getElementById('split-bag-info').classList.remove('hidden');
+      document.getElementById('split-config').classList.remove('hidden');
+      
+      generateSplitDetails(2);
+    }
+
+    function populateSplitBagSelection() {
+      const select = document.getElementById('split-select-bag');
+      select.innerHTML = '<option value="">Select a bag...</option>';
+      
+      const availableBags = allBags.filter(b => 
+        b.status !== 'SPLIT' && b.status !== 'MERGED'
+      );
+      
+      availableBags.forEach(bag => {
+        const option = document.createElement('option');
+        option.value = bag.bag_id;
+        option.textContent = `${bag.bag_no || '-'} - ${(parseFloat(bag.total_weight) || 0).toFixed(3)}g - ${bag.total_pieces || 0} pcs`;
+        select.appendChild(option);
+      });
+    }
+
+    function generateSplitDetails(count) {
+      const container = document.getElementById('split-details-container');
+      container.innerHTML = '';
+
+      const totalWeight = parseFloat(currentSplitBag.total_weight) || 0;
+      const totalPieces = parseInt(currentSplitBag.total_pieces) || 0;
+      const avgWeight = totalWeight / count;
+      const avgPieces = Math.floor(totalPieces / count);
+      const remainderPieces = totalPieces % count;
+
+      for (let i = 0; i < count; i++) {
+        const div = document.createElement('div');
+        div.className = 'bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark';
+        div.innerHTML = `
+          <h4 class="font-semibold mb-3">Bag ${i + 1}</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                New Bag Number <span class="text-red-500">*</span>
+              </label>
+              <input type="text" class="split-bag-no w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" 
+                     required placeholder="Bag number" data-index="${i}">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Weight (g) <span class="text-red-500">*</span>
+              </label>
+              <input type="number" class="split-bag-weight w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" 
+                     step="0.001" min="0" required placeholder="${avgWeight.toFixed(3)}" data-index="${i}">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Pieces <span class="text-red-500">*</span>
+              </label>
+              <input type="number" class="split-bag-pieces w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" 
+                     min="0" required placeholder="${avgPieces + (i < remainderPieces ? 1 : 0)}" data-index="${i}">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      }
+
+      // Add validation listeners
+      container.querySelectorAll('.split-bag-weight, .split-bag-pieces').forEach(input => {
+        input.addEventListener('input', validateSplitForm);
+      });
+    }
+
+    document.getElementById('split-count').addEventListener('change', function() {
+      const count = parseInt(this.value) || 2;
+      if (count >= 2 && count <= 10 && currentSplitBag) {
+        generateSplitDetails(count);
+      }
+    });
+
+    function validateSplitForm() {
+      const totalWeight = parseFloat(currentSplitBag.total_weight) || 0;
+      const totalPieces = parseInt(currentSplitBag.total_pieces) || 0;
+      
+      const weightInputs = document.querySelectorAll('.split-bag-weight');
+      const piecesInputs = document.querySelectorAll('.split-bag-pieces');
+      
+      let sumWeight = 0;
+      let sumPieces = 0;
+      
+      weightInputs.forEach(input => {
+        sumWeight += parseFloat(input.value) || 0;
+      });
+      
+      piecesInputs.forEach(input => {
+        sumPieces += parseInt(input.value) || 0;
+      });
+
+      const validationDiv = document.getElementById('split-validation');
+      const messageDiv = document.getElementById('split-validation-message');
+      
+      const weightDiff = Math.abs(sumWeight - totalWeight);
+      const piecesDiff = Math.abs(sumPieces - totalPieces);
+      
+      if (weightDiff > 0.001 || piecesDiff > 0) {
+        validationDiv.classList.remove('hidden');
+        let messages = [];
+        if (weightDiff > 0.001) {
+          messages.push(`Weight mismatch: ${sumWeight.toFixed(3)}g vs ${totalWeight.toFixed(3)}g (diff: ${(sumWeight - totalWeight).toFixed(3)}g)`);
+        }
+        if (piecesDiff > 0) {
+          messages.push(`Pieces mismatch: ${sumPieces} vs ${totalPieces} (diff: ${sumPieces - totalPieces})`);
+        }
+        messageDiv.textContent = messages.join('. ');
+        return false;
+      } else {
+        validationDiv.classList.add('hidden');
+        return true;
+      }
+    }
+
+    function resetSplitForm() {
+      currentSplitBag = null;
+      document.getElementById('split-bag-form').reset();
+      document.getElementById('split-details-container').innerHTML = '';
+      document.getElementById('split-validation').classList.add('hidden');
+      document.getElementById('split-bag-selection').classList.add('hidden');
+      document.getElementById('split-bag-info').classList.add('hidden');
+      document.getElementById('split-config').classList.add('hidden');
+    }
+
+    // Split form submission
+    document.getElementById('split-bag-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!currentSplitBag) {
+        alert('No bag selected for splitting');
+        return;
+      }
+
+      if (!validateSplitForm()) {
+        alert('Please fix validation errors before submitting');
+        return;
+      }
+
+      const splitCount = parseInt(document.getElementById('split-count').value);
+      const remarks = document.getElementById('split-remarks').value;
+      const bags = JSON.parse(localStorage.getItem('bags') || '[]');
+      const bagIndex = bags.findIndex(b => b.bag_id === currentSplitBag.bag_id);
+      
+      if (bagIndex === -1) {
+        alert('Source bag not found');
+        return;
+      }
+
+      // Collect split details
+      const splitDetails = [];
+      for (let i = 0; i < splitCount; i++) {
+        const bagNo = document.querySelector(`.split-bag-no[data-index="${i}"]`).value;
+        const weight = parseFloat(document.querySelector(`.split-bag-weight[data-index="${i}"]`).value);
+        const pieces = parseInt(document.querySelector(`.split-bag-pieces[data-index="${i}"]`).value);
+        
+        if (!bagNo || !weight || !pieces) {
+          alert(`Please fill all fields for Bag ${i + 1}`);
+          return;
+        }
+
+        splitDetails.push({ bagNo, weight, pieces });
+      }
+
+      // Create new bags
+      const newBags = splitDetails.map((detail, index) => {
+        const newBag = {
+          ...currentSplitBag,
+          bag_id: 'bag-' + Date.now() + '-' + index,
+          bag_no: detail.bagNo,
+          total_weight: detail.weight.toFixed(3),
+          total_pieces: detail.pieces,
+          status: currentSplitBag.status,
+          created_at: new Date().toISOString(),
+          last_updated: new Date().toISOString(),
+          split_from: currentSplitBag.bag_id,
+          split_remarks: remarks
+        };
+        return newBag;
+      });
+
+      // Add new bags
+      newBags.forEach(bag => bags.push(bag));
+
+      // Mark source bag as split (or remove it)
+      bags[bagIndex].status = 'SPLIT';
+      bags[bagIndex].split_into = newBags.map(b => b.bag_id);
+      bags[bagIndex].last_updated = new Date().toISOString();
+
+      localStorage.setItem('bags', JSON.stringify(bags));
+
+      alert(`Bag split successfully into ${splitCount} bags!`);
+      
+      loadBags();
+      resetSplitForm();
+      document.getElementById('split-merge-section').classList.add('hidden');
+    });
+
+    document.getElementById('cancel-split-btn').addEventListener('click', function() {
+      resetSplitForm();
+      document.getElementById('split-merge-section').classList.add('hidden');
+    });
+
+    // Merge Bag Functions
+    function resetMergeForm() {
+      selectedBagsForMerge = [];
+      document.getElementById('merge-bags-form').reset();
+      document.getElementById('selected-bags-list').innerHTML = '';
+      document.getElementById('merge-summary').classList.add('hidden');
+      document.getElementById('merge-validation').classList.add('hidden');
+      updateMergeSummary();
+    }
+
+    document.getElementById('add-merge-bag-btn').addEventListener('click', function() {
+      const searchValue = document.getElementById('merge-bag-search').value.trim();
+      if (!searchValue) {
+        alert('Please enter a bag number');
+        return;
+      }
+
+      const bag = allBags.find(b => 
+        b.bag_no && b.bag_no.toLowerCase().includes(searchValue.toLowerCase())
+      );
+
+      if (!bag) {
+        alert('Bag not found');
+        return;
+      }
+
+      if (selectedBagsForMerge.find(b => b.bag_id === bag.bag_id)) {
+        alert('Bag already added');
+        return;
+      }
+
+      if (bag.status === 'SPLIT' || bag.status === 'MERGED') {
+        alert('Cannot merge a bag that has been split or merged');
+        return;
+      }
+
+      selectedBagsForMerge.push(bag);
+      document.getElementById('merge-bag-search').value = '';
+      renderSelectedBags();
+      updateMergeSummary();
+    });
+
+    function renderSelectedBags() {
+      const container = document.getElementById('selected-bags-list');
+      container.innerHTML = '';
+
+      if (selectedBagsForMerge.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm">No bags selected</p>';
+        return;
+      }
+
+      selectedBagsForMerge.forEach((bag, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between bg-background-light dark:bg-background-dark p-3 rounded-lg border border-border-light dark:border-border-dark';
+        div.innerHTML = `
+          <div class="flex-1">
+            <div class="font-medium">${bag.bag_no || '-'}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+              Weight: ${(parseFloat(bag.total_weight) || 0).toFixed(3)}g | 
+              Pieces: ${bag.total_pieces || 0} | 
+              Dept: ${bag.current_department || '-'}
+            </div>
+          </div>
+          <button type="button" class="remove-merge-bag-btn text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-4" data-index="${index}">
+            <span class="material-icons">close</span>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+
+      // Add remove listeners
+      container.querySelectorAll('.remove-merge-bag-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const index = parseInt(this.dataset.index);
+          selectedBagsForMerge.splice(index, 1);
+          renderSelectedBags();
+          updateMergeSummary();
+        });
+      });
+    }
+
+    function updateMergeSummary() {
+      if (selectedBagsForMerge.length < 2) {
+        document.getElementById('merge-summary').classList.add('hidden');
+        return;
+      }
+
+      let totalWeight = 0;
+      let totalPieces = 0;
+
+      selectedBagsForMerge.forEach(bag => {
+        totalWeight += parseFloat(bag.total_weight) || 0;
+        totalPieces += parseInt(bag.total_pieces) || 0;
+      });
+
+      document.getElementById('merge-total-weight').textContent = totalWeight.toFixed(3) + ' g';
+      document.getElementById('merge-total-pieces').textContent = totalPieces;
+      document.getElementById('merge-bags-count').textContent = selectedBagsForMerge.length;
+      document.getElementById('merge-summary').classList.remove('hidden');
+    }
+
+    // Merge form submission
+    document.getElementById('merge-bags-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (selectedBagsForMerge.length < 2) {
+        document.getElementById('merge-validation').classList.remove('hidden');
+        document.getElementById('merge-validation-message').textContent = 'Please select at least 2 bags to merge';
+        return;
+      }
+
+      const newBagNo = document.getElementById('merge-new-bag-no').value.trim();
+      const department = document.getElementById('merge-department').value;
+      const remarks = document.getElementById('merge-remarks').value;
+
+      if (!newBagNo || !department) {
+        document.getElementById('merge-validation').classList.remove('hidden');
+        document.getElementById('merge-validation-message').textContent = 'Please fill all required fields';
+        return;
+      }
+
+      // Check if bag number already exists
+      const existingBag = allBags.find(b => b.bag_no === newBagNo);
+      if (existingBag) {
+        document.getElementById('merge-validation').classList.remove('hidden');
+        document.getElementById('merge-validation-message').textContent = 'Bag number already exists';
+        return;
+      }
+
+      document.getElementById('merge-validation').classList.add('hidden');
+
+      // Calculate totals
+      let totalWeight = 0;
+      let totalPieces = 0;
+      const mergedFrom = [];
+
+      selectedBagsForMerge.forEach(bag => {
+        totalWeight += parseFloat(bag.total_weight) || 0;
+        totalPieces += parseInt(bag.total_pieces) || 0;
+        mergedFrom.push(bag.bag_id);
+      });
+
+      // Create merged bag
+      const mergedBag = {
+        ...selectedBagsForMerge[0],
+        bag_id: 'bag-' + Date.now(),
+        bag_no: newBagNo,
+        total_weight: totalWeight.toFixed(3),
+        total_pieces: totalPieces,
+        current_department: department,
+        status: selectedBagsForMerge[0].status, // Keep status from first bag
+        created_at: new Date().toISOString(),
+        last_updated: new Date().toISOString(),
+        merged_from: mergedFrom,
+        merge_remarks: remarks
+      };
+
+      // Update bags in localStorage
+      const bags = JSON.parse(localStorage.getItem('bags') || '[]');
+      
+      // Mark source bags as merged
+      selectedBagsForMerge.forEach(bag => {
+        const bagIndex = bags.findIndex(b => b.bag_id === bag.bag_id);
+        if (bagIndex !== -1) {
+          bags[bagIndex].status = 'MERGED';
+          bags[bagIndex].merged_into = mergedBag.bag_id;
+          bags[bagIndex].last_updated = new Date().toISOString();
+        }
+      });
+
+      // Add merged bag
+      bags.push(mergedBag);
+      localStorage.setItem('bags', JSON.stringify(bags));
+
+      alert(`Successfully merged ${selectedBagsForMerge.length} bags into ${newBagNo}!`);
+      
+      loadBags();
+      resetMergeForm();
+      document.getElementById('split-merge-section').classList.add('hidden');
+    });
+
+    document.getElementById('cancel-merge-btn').addEventListener('click', function() {
+      resetMergeForm();
+      document.getElementById('split-merge-section').classList.add('hidden');
+    });
+
+
+    // Initialize
+    loadBags();
+    checkUrlParams();
+  </script>
+</body>
+</html>
+

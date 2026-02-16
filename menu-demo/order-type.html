@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Type - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="order-type" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Order Type</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage order types</p>
+      </header>
+
+      <!-- Order Type Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Order Type</h2>
+        
+        <form id="order-type-form" class="space-y-6">
+          <input type="hidden" id="order-type-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Code <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="code" name="code" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., ORD-NEW" maxlength="50">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Unique code identifier (max 50 characters)</p>
+            </div>
+
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Name <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="name" name="name" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., New Customer Order" maxlength="255">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Display name (max 255 characters)</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea id="description" name="description" rows="4"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter description for this order type..."></textarea>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Optional description or notes</p>
+          </div>
+
+          <div class="flex items-center">
+            <input type="checkbox" id="is-active" name="is_active" checked
+                   class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2">
+            <label for="is-active" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Active
+            </label>
+            <p class="ml-4 text-xs text-gray-500 dark:text-gray-400">Uncheck to deactivate this order type</p>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Order Type
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by code, name, or description..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="active">Active Only</option>
+              <option value="inactive">Inactive Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submitted Order Types List -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Order Types List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Code</th>
+                <th class="px-6 py-3" scope="col">Name</th>
+                <th class="px-6 py-3" scope="col">Description</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3" scope="col">Created At</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="order-types-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No order types submitted yet. Fill out the form above to add your first order type.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Demo data
+    const demoData = [
+      {
+        order_type_id: 'demo-1',
+        code: 'ORD-NEW',
+        name: 'New Customer Order',
+        description: 'Standard order for new customers',
+        is_active: true,
+        created_at: '2024-01-15T10:30:00.000Z'
+      },
+      {
+        order_type_id: 'demo-2',
+        code: 'ORD-REP',
+        name: 'Repair Order',
+        description: 'Order for repair and maintenance services',
+        is_active: true,
+        created_at: '2024-01-16T14:20:00.000Z'
+      },
+      {
+        order_type_id: 'demo-3',
+        code: 'ORD-COMP',
+        name: 'Company Order',
+        description: 'Bulk orders from company clients',
+        is_active: false,
+        created_at: '2024-01-17T09:15:00.000Z'
+      },
+      {
+        order_type_id: 'demo-4',
+        code: 'ORD-EXCH',
+        name: 'Exchange Order',
+        description: 'Order for exchanging existing jewelry items',
+        is_active: true,
+        created_at: '2024-01-18T11:45:00.000Z'
+      },
+      {
+        order_type_id: 'demo-5',
+        code: 'ORD-CUST',
+        name: 'Custom Order',
+        description: 'Custom-made jewelry orders based on customer specifications',
+        is_active: true,
+        created_at: '2024-01-19T16:20:00.000Z'
+      },
+      {
+        order_type_id: 'demo-6',
+        code: 'ORD-RES',
+        name: 'Resale Order',
+        description: 'Orders for resale of pre-owned jewelry',
+        is_active: false,
+        created_at: '2024-01-20T08:30:00.000Z'
+      }
+    ];
+
+    // Store order types in localStorage for persistence
+    // Initialize with demo data if localStorage is empty
+    let storedData = localStorage.getItem('orderTypes');
+    let orderTypes = storedData ? JSON.parse(storedData) : demoData;
+    
+    // If localStorage was empty, save demo data
+    if (!storedData) {
+      localStorage.setItem('orderTypes', JSON.stringify(demoData));
+    }
+    
+    let editingId = null;
+
+    const form = document.getElementById('order-type-form');
+    const tableBody = document.getElementById('order-types-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    // Generate unique ID
+    function generateId() {
+      return 'order-type-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Render table
+    function renderTable() {
+      if (orderTypes.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = orderTypes.map(orderType => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 font-medium">${orderType.code}</td>
+          <td class="px-6 py-4">${orderType.name}</td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400">${orderType.description || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="${orderType.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${orderType.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400">${formatDate(orderType.created_at)}</td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${orderType.order_type_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${orderType.order_type_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      // Re-attach event listeners
+      attachEventListeners();
+      filterTable();
+    }
+
+    // Attach event listeners to edit/delete buttons
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const orderType = orderTypes.find(ot => ot.order_type_id === id);
+          
+          if (orderType) {
+            editingId = id;
+            document.getElementById('order-type-id').value = id;
+            document.getElementById('code').value = orderType.code;
+            document.getElementById('name').value = orderType.name;
+            document.getElementById('description').value = orderType.description || '';
+            document.getElementById('is-active').checked = orderType.is_active;
+            
+            // Scroll to form
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this order type?')) {
+            orderTypes = orderTypes.filter(ot => ot.order_type_id !== id);
+            localStorage.setItem('orderTypes', JSON.stringify(orderTypes));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    // Form submission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        order_type_id: editingId || generateId(),
+        code: document.getElementById('code').value.trim(),
+        name: document.getElementById('name').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        is_active: document.getElementById('is-active').checked,
+        created_at: editingId 
+          ? orderTypes.find(ot => ot.order_type_id === editingId).created_at 
+          : new Date().toISOString()
+      };
+
+      if (editingId) {
+        // Update existing
+        const index = orderTypes.findIndex(ot => ot.order_type_id === editingId);
+        if (index !== -1) {
+          orderTypes[index] = formData;
+        }
+      } else {
+        // Add new
+        orderTypes.push(formData);
+      }
+
+      localStorage.setItem('orderTypes', JSON.stringify(orderTypes));
+      form.reset();
+      document.getElementById('order-type-id').value = '';
+      document.getElementById('is-active').checked = true;
+      editingId = null;
+      renderTable();
+    });
+
+    // Search functionality
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    // Status filter
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#order-types-table-body tr');
+      rows.forEach(row => {
+        const code = row.cells[0].textContent.toLowerCase();
+        const name = row.cells[1].textContent.toLowerCase();
+        const description = row.cells[2].textContent.toLowerCase();
+        const status = row.cells[3].querySelector('span').textContent.toLowerCase();
+        
+        const matchesSearch = !searchTerm || code.includes(searchTerm) || name.includes(searchTerm) || description.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || 
+                            (statusFilter === 'active' && status === 'active') ||
+                            (statusFilter === 'inactive' && status === 'inactive');
+        
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>

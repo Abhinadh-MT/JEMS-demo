@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS: Scheme Enrollment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4AF37", // Metallic Gold
+                        "primary-dark": "#B8860B", // Dark Goldenrod
+                        "primary-light": "#F4E0A1", // Champagne/Light Gold
+                        "background-light": "#FAF9F6", // Off-white/Alabaster
+                        "background-dark": "#1A1610", // Deep Ebony Gold tint
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #F4E0A1 50%, #B8860B 100%);
+        }
+        .gold-border {
+            border-color: #D4AF37;
+        }
+        .text-gold {
+            color: #D4AF37;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#1a1610] dark:text-gray-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e5dcc3] dark:border-[#3a321e] px-10 py-3 bg-white dark:bg-[#12100b]">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl font-bold" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+<h2 class="text-primary-dark dark:text-primary-light text-2xl font-serif font-bold leading-tight tracking-tight">JEMS</h2>
+</div>
+<nav class="flex items-center gap-9">
+<a class="text-[#1a1610] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary" href="#">Dashboard</a>
+<a class="text-[#1a1610] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary" href="#">Inventory</a>
+<a class="text-primary-dark dark:text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1" href="#">Gold Schemes</a>
+<a class="text-[#1a1610] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary" href="#">Customers</a>
+<a class="text-[#1a1610] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6">
+<label class="flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-primary-dark flex border-none bg-[#f8f4e6] dark:bg-[#2a2418] items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#1a1610] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#f8f4e6] dark:bg-[#2a2418] h-full placeholder:text-primary-dark/60 px-4 rounded-l-none pl-2 text-sm font-normal" placeholder="Quick Search (Ctrl+K)" value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-[#f8f4e6] dark:bg-[#2a2418] text-primary-dark dark:text-primary-light">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-[#f8f4e6] dark:bg-[#2a2418] text-primary-dark dark:text-primary-light">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/40 shadow-sm" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBi4-XPF1SqIvukJkht8G1xCzEpmhXkw3e9UUXnFjaL81YpxN1BuBVKT4UCJJjCcSyhVNVLlR0TMcHQAKsIs97EVWdP5v3vRwUrWl7WydRsCirHxZVbZQMYb5QwsseXkimaFnKaVhELBoZc_x1U6sbf7sJ-0piJ9RHqwJImFTcGK2TH04-IWIAuiUJ-jfrcLJm3TYq-ASaCV_q-yTa8qywwNqER6xD4h5S8-wO6V9x7xTPfeq8bZRiLvmA-oaROvC624hN_8pue-tE");'></div>
+</div>
+</header>
+<main class="flex-1 flex flex-col px-10 py-6 max-w-[1440px] mx-auto w-full">
+<div class="mb-6">
+<div class="flex items-center gap-2 text-sm font-medium text-primary-dark dark:text-primary-light/70 mb-2">
+<a href="#">Dashboard</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a href="#">Gold Schemes</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-[#1a1610] dark:text-white">Scheme Enrollment</span>
+</div>
+<h1 class="text-3xl font-black text-[#1a1610] dark:text-white tracking-tight">Scheme Enrollment</h1>
+<p class="text-primary-dark/80 dark:text-primary-light/60 text-sm mt-1">Onboard customers to weight-locked or value-based JEMS savings plans.</p>
+</div>
+<div class="flex flex-col lg:flex-row gap-8">
+<div class="flex-grow flex flex-col gap-6">
+<div class="bg-white dark:bg-[#12100b] p-6 rounded-xl border border-[#e5dcc3] dark:border-[#3a321e] shadow-sm">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-2xl">person_search</span>
+<h3 class="text-lg font-bold">Customer Information</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Customer ID / Name</span>
+<div class="relative group">
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-background-light dark:bg-[#1a1610] focus:border-primary focus:ring-primary h-12 pl-10" placeholder="Search CID (e.g. JEMS-1024)"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary-dark/50">search</span>
+</div>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Customer Name (Auto-filled)</span>
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-gray-50 dark:bg-gray-900/50 h-12 text-gray-500" readonly="" value="Johnathon Doe"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Registered Mobile</span>
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-gray-50 dark:bg-gray-900/50 h-12 text-gray-500" readonly="" value="+91 98765 43210"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">PAN Number</span>
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-gray-50 dark:bg-gray-900/50 h-12 text-gray-500" readonly="" value="ABCDE1234F"/>
+</label>
+</div>
+</div>
+<div class="bg-white dark:bg-[#12100b] p-6 rounded-xl border border-[#e5dcc3] dark:border-[#3a321e] shadow-sm">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-2xl">diamond</span>
+<h3 class="text-lg font-bold">Enrollment Details</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Select Scheme ID</span>
+<select class="form-select w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-background-light dark:bg-[#1a1610] focus:border-primary focus:ring-primary h-12">
+<option>JEMS-VANTAGE-11 (11 Months Weight Lock)</option>
+<option>SAVER-PLUS-06 (6 Months Direct Purchase)</option>
+<option>FESTIVAL-GOLD (12 Months Flexi)</option>
+</select>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Enrollment Date</span>
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-background-light dark:bg-[#1a1610] focus:border-primary focus:ring-primary h-12" type="date" value="2023-10-24"/>
+</label>
+<div class="col-span-1 md:col-span-2 bg-primary/5 dark:bg-primary/10 border border-primary/30 rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="gold-gradient text-white p-2 rounded-lg shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<p class="text-xs font-bold text-primary-dark dark:text-primary uppercase tracking-wider">Locked Gold Rate</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-black text-[#1a1610] dark:text-white">₹ 6,124.50</span>
+<span class="text-sm text-gray-500">/ gram</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-gray-400 mb-1">Last Update: 10:45 AM Today</p>
+<button class="flex items-center gap-1 text-xs font-bold text-primary-dark bg-white dark:bg-[#1a1610] px-4 py-1.5 rounded-full border border-primary/40 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                                    Fetch Live Rate
+                                </button>
+</div>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Monthly Installment (₹)</span>
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-background-light dark:bg-[#1a1610] focus:border-primary focus:ring-primary h-12 font-bold" type="number" value="5000"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Installments (Months)</span>
+<input class="form-input w-full rounded-lg border-[#e5dcc3] dark:border-[#3a321e] bg-background-light dark:bg-[#1a1610] focus:border-primary focus:ring-primary h-12 font-bold" type="number" value="11"/>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-end gap-4 pb-10">
+<button class="px-8 py-3 rounded-lg border border-[#e5dcc3] dark:border-[#3a321e] font-bold text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        Reset Form
+                    </button>
+<button class="px-12 py-3 gold-gradient text-[#1a1610] rounded-lg font-bold shadow-lg shadow-primary/20 hover:brightness-105 flex items-center gap-2 border border-primary-dark/20">
+<span class="material-symbols-outlined">how_to_reg</span>
+                        Confirm Enrollment
+                    </button>
+</div>
+</div>
+<div class="w-full lg:w-[400px] shrink-0">
+<div class="sticky top-6 flex flex-col gap-6">
+<div class="bg-white dark:bg-[#12100b] rounded-xl border-2 border-primary/30 shadow-xl overflow-hidden">
+<div class="bg-primary/10 dark:bg-primary/20 p-5 border-b border-primary/20">
+<h3 class="font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-dark dark:text-primary">trending_up</span>
+                                Maturity Projections
+                            </h3>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<div class="text-center py-4 bg-background-light dark:bg-[#1a1610] rounded-xl border border-[#e5dcc3] dark:border-[#3a321e]">
+<p class="text-xs font-bold text-primary-dark/70 dark:text-primary-light/50 uppercase tracking-widest mb-1">Total Weight at Maturity</p>
+<div class="flex items-center justify-center gap-2">
+<span class="text-4xl font-black text-primary-dark dark:text-primary">8.98</span>
+<span class="text-xl font-bold text-gray-400">Grams</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Total Investment</span>
+<span class="font-bold">₹ 55,000.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Lock-in Rate</span>
+<span class="font-bold">₹ 6,124.50 / gm</span>
+</div>
+<div class="flex justify-between items-center text-sm border-t border-dashed border-[#e5dcc3] dark:border-[#3a321e] pt-4">
+<span class="text-gray-500">Scheme Bonus</span>
+<span class="font-bold text-primary-dark dark:text-primary">+ ₹ 2,500.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Maturity Date</span>
+<span class="font-bold">Oct 24, 2024</span>
+</div>
+</div>
+<div class="mt-2 p-3 bg-amber-50 dark:bg-amber-900/10 text-amber-800 dark:text-amber-200 rounded-lg text-xs flex gap-3 border border-amber-200/50">
+<span class="material-symbols-outlined text-sm">verified</span>
+<p>This JEMS weight-lock plan guarantees the above weight regardless of market volatility.</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-[#12100b] p-5 rounded-xl border border-[#e5dcc3] dark:border-[#3a321e] shadow-sm">
+<h4 class="font-bold text-sm mb-4">Installment Timeline</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full gold-gradient text-[#1a1610] text-[10px] font-bold flex items-center justify-center shrink-0 border border-primary-dark/20">1</div>
+<div class="flex-grow">
+<p class="text-xs font-bold">Oct 2023</p>
+<p class="text-[10px] text-gray-500">Initial Deposit: ₹ 5,000</p>
+</div>
+<span class="material-symbols-outlined text-primary-dark dark:text-primary text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-400 text-[10px] font-bold flex items-center justify-center shrink-0">2</div>
+<div class="flex-grow">
+<p class="text-xs font-bold text-gray-600 dark:text-gray-400">Nov 2023</p>
+<p class="text-[10px] text-gray-400">Scheduled: ₹ 5,000</p>
+</div>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-700 text-sm">radio_button_unchecked</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-400 text-[10px] font-bold flex items-center justify-center shrink-0">3</div>
+<div class="flex-grow">
+<p class="text-xs font-bold text-gray-600 dark:text-gray-400">Dec 2023</p>
+<p class="text-[10px] text-gray-400">Scheduled: ₹ 5,000</p>
+</div>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-700 text-sm">radio_button_unchecked</span>
+</div>
+<button class="w-full mt-2 py-2 text-[10px] font-bold text-primary-dark dark:text-primary uppercase tracking-widest hover:bg-primary/10 rounded transition-colors">View Full Schedule</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

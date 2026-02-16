@@ -1,0 +1,29 @@
+=== QUICK DEPLOYMENT COMMANDS ===
+
+1. CONNECT TO SERVER:
+   ssh root@216.10.245.89
+   Password: hgHnjbhk@45#
+
+2. NAVIGATE TO FRONTEND:
+   cd /var/www/vhosts/cool-lamport.216-10-245-89.plesk.page/httpdocs/ecommerce-node-microservice/apps/frontend
+
+3. UPLOAD FILES (from your local machine in PowerShell):
+   cd C:\Users\HP\Documents\GitHub\JEMS-demo
+   scp -r * root@216.10.245.89:/var/www/vhosts/cool-lamport.216-10-245-89.plesk.page/httpdocs/ecommerce-node-microservice/apps/frontend
+
+4. ON SERVER - INSTALL DEPENDENCIES (if package.json exists):
+   npm install
+
+5. START DEVELOPMENT SERVER:
+   npm run dev
+
+=== ALTERNATIVE: ONE-LINE SSH COMMAND ===
+ssh root@216.10.245.89 "cd /var/www/vhosts/cool-lamport.216-10-245-89.plesk.page/httpdocs/ecommerce-node-microservice/apps/frontend && npm run dev"
+
+=== NOTES ===
+- If npm run dev doesn't work, check if package.json exists
+- For static HTML files, you might just need to copy files and serve with a web server
+- Use Ctrl+C to stop the dev server
+- Use 'exit' to disconnect from SSH
+
+

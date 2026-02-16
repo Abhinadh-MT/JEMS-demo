@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Import/Export - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="product-import-export" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Product Import/Export</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Download template, add data, and import products in bulk</p>
+      </header>
+
+      <!-- Download Template Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Download Template</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Download the Excel template to add your product data. Fill in the required fields and upload it back.</p>
+        <button type="button" id="download-template-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+          <span class="material-icons">download</span>
+          <span>Download Excel Template</span>
+        </button>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Upload Excel File</h2>
+        <div id="upload-area" class="border-2 border-dashed border-border-light dark:border-border-dark rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+          <input type="file" id="file-input" accept=".xlsx,.xls" class="hidden">
+          <div class="flex flex-col items-center justify-center">
+            <span class="material-icons text-5xl text-gray-400 dark:text-gray-500 mb-4">cloud_upload</span>
+            <p class="text-lg font-medium text-text-light dark:text-text-dark mb-2">Click to upload or drag and drop</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Excel files only (.xlsx, .xls)</p>
+            <p id="file-name" class="text-sm text-primary mt-4 hidden"></p>
+          </div>
+        </div>
+        <div id="upload-error" class="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 hidden"></div>
+      </div>
+
+      <!-- Preview Section -->
+      <div id="preview-section" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6 hidden">
+        <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Preview Data</h2>
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            <span id="preview-count">0</span> products found. Review the data below before importing.
+          </p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="border-b-2 border-border-light dark:border-border-dark">
+              <tr>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Design Number</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Product Name</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Category</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Status</th>
+                <th class="px-4 py-3 text-sm font-semibold text-text-light dark:text-text-dark">Validation</th>
+              </tr>
+            </thead>
+            <tbody id="preview-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Import Actions -->
+      <div id="import-actions" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Ready to import <span id="valid-count">0</span> valid products
+            </p>
+            <p id="error-count" class="text-sm text-red-600 dark:text-red-400 mt-1 hidden">
+              <span id="error-count-num">0</span> products have validation errors
+            </p>
+          </div>
+          <button type="button" id="import-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed">
+            <span class="material-icons">upload</span>
+            <span>Import Products</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div id="message-container" class="hidden"></div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let uploadedData = [];
+    let validationResults = [];
+
+    // Generate UUID
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // Download Template
+    document.getElementById('download-template-btn').addEventListener('click', () => {
+      const templateData = [
+        {
+          'Design Number': '',
+          'Product Name': 'Example Product',
+          'Category ID': '',
+          'Subcategory ID': '',
+          'Brand ID': '',
+          'Net Weight (g)': '10.5',
+          'HSN Code': '',
+          'Product Description': '',
+          'Status': 'Active',
+          'Metal Type': 'Gold',
+          'Metal Color': 'Yellow',
+          'Metal Purity ID': '',
+          'Metal Weight (g)': '8.5',
+          'Diamond Master ID': '',
+          'Diamond Clarity ID': '',
+          'Diamond Shape ID': '',
+          'Diamond Size ID': '',
+          'Diamond Cut': 'Excellent',
+          'Diamond Certificate': '',
+          'Diamond Pieces': '10',
+          'Diamond Total Carat': '1.5',
+          'Diamond Rate Per Carat': '5000',
+          'Diamond Total Value': '7500',
+          'Stone Master ID': '',
+          'Stone Type ID': '',
+          'Stone Shape ID': '',
+          'Stone Size ID': '',
+          'Stone Colour ID': '',
+          'Stone Quality ID': '',
+          'Stone Pieces': '5',
+          'Stone Total Carat': '2.0',
+          'Stone Rate Per Carat': '3000',
+          'Stone Total Value': '6000'
+        }
+      ];
+
+      const ws = XLSX.utils.json_to_sheet(templateData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Products');
+      
+      // Set column widths
+      const colWidths = [
+        { wch: 15 }, { wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 },
+        { wch: 12 }, { wch: 12 }, { wch: 20 }, { wch: 10 },
+        { wch: 12 }, { wch: 12 }, { wch: 15 }, { wch: 15 },
+        { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 },
+        { wch: 15 }, { wch: 20 }, { wch: 15 }, { wch: 18 },
+        { wch: 20 }, { wch: 20 },
+        { wch: 18 }, { wch: 15 }, { wch: 15 }, { wch: 15 },
+        { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 18 },
+        { wch: 20 }, { wch: 20 }
+      ];
+      ws['!cols'] = colWidths;
+
+      XLSX.writeFile(wb, 'product_import_template.xlsx');
+    });
+
+    // Upload Area Click
+    document.getElementById('upload-area').addEventListener('click', () => {
+      document.getElementById('file-input').click();
+    });
+
+    // Drag and Drop
+    const uploadArea = document.getElementById('upload-area');
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('border-primary');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('border-primary');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('border-primary');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFile(files[0]);
+      }
+    });
+
+    // File Input Change
+    document.getElementById('file-input').addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    // Handle File
+    function handleFile(file) {
+      if (!file.name.match(/\.(xlsx|xls)$/i)) {
+        showError('Please upload a valid Excel file (.xlsx or .xls)');
+        return;
+      }
+
+      document.getElementById('file-name').textContent = file.name;
+      document.getElementById('file-name').classList.remove('hidden');
+      document.getElementById('upload-error').classList.add('hidden');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+          
+          if (jsonData.length === 0) {
+            showError('The Excel file is empty. Please add product data.');
+            return;
+          }
+
+          uploadedData = jsonData;
+          validateAndPreview();
+        } catch (error) {
+          showError('Error reading Excel file: ' + error.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // Validate and Preview
+    function validateAndPreview() {
+      validationResults = uploadedData.map((row, index) => {
+        const errors = [];
+        
+        // Required fields
+        if (!row['Product Name'] || row['Product Name'].toString().trim() === '') {
+          errors.push('Product Name is required');
+        }
+
+        // Validate status
+        if (row['Status'] && !['Active', 'Inactive'].includes(row['Status'])) {
+          errors.push('Status must be "Active" or "Inactive"');
+        }
+
+        // Validate numeric fields
+        if (row['Net Weight (g)'] && isNaN(parseFloat(row['Net Weight (g)']))) {
+          errors.push('Net Weight must be a number');
+        }
+
+        if (row['Diamond Pieces'] && isNaN(parseInt(row['Diamond Pieces']))) {
+          errors.push('Diamond Pieces must be a number');
+        }
+
+        if (row['Stone Pieces'] && isNaN(parseInt(row['Stone Pieces']))) {
+          errors.push('Stone Pieces must be a number');
+        }
+
+        return {
+          index: index + 1,
+          data: row,
+          errors: errors,
+          isValid: errors.length === 0
+        };
+      });
+
+      renderPreview();
+      document.getElementById('preview-section').classList.remove('hidden');
+      document.getElementById('import-actions').classList.remove('hidden');
+    }
+
+    // Render Preview
+    function renderPreview() {
+      const tbody = document.getElementById('preview-table-body');
+      tbody.innerHTML = '';
+
+      const validCount = validationResults.filter(r => r.isValid).length;
+      const errorCount = validationResults.filter(r => !r.isValid).length;
+
+      document.getElementById('preview-count').textContent = validationResults.length;
+      document.getElementById('valid-count').textContent = validCount;
+      
+      if (errorCount > 0) {
+        document.getElementById('error-count').classList.remove('hidden');
+        document.getElementById('error-count-num').textContent = errorCount;
+        document.getElementById('import-btn').disabled = true;
+      } else {
+        document.getElementById('error-count').classList.add('hidden');
+        document.getElementById('import-btn').disabled = false;
+      }
+
+      validationResults.forEach(result => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const statusBadge = result.isValid 
+          ? '<span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-xs">Valid</span>'
+          : '<span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded text-xs">Error</span>';
+
+        const validationText = result.errors.length > 0 
+          ? '<span class="text-red-600 dark:text-red-400 text-xs">' + result.errors.join(', ') + '</span>'
+          : '<span class="text-green-600 dark:text-green-400 text-xs">✓ Valid</span>';
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-sm">${result.data['Design Number'] || '-'}</td>
+          <td class="px-4 py-3 text-sm">${result.data['Product Name'] || '-'}</td>
+          <td class="px-4 py-3 text-sm">${result.data['Category ID'] || '-'}</td>
+          <td class="px-4 py-3 text-sm">${statusBadge}</td>
+          <td class="px-4 py-3 text-sm">${validationText}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Import Products
+    document.getElementById('import-btn').addEventListener('click', () => {
+      const validProducts = validationResults.filter(r => r.isValid);
+      
+      if (validProducts.length === 0) {
+        showError('No valid products to import');
+        return;
+      }
+
+      // Load existing products
+      const existingProducts = JSON.parse(localStorage.getItem('productMaster') || '[]');
+
+      // Convert Excel data to product format
+      const newProducts = validProducts.map(result => {
+        const row = result.data;
+        
+        // Build metals array
+        const metals = [];
+        if (row['Metal Type'] || row['Metal Weight (g)']) {
+          metals.push({
+            metal_type: row['Metal Type'] || null,
+            metal_color: row['Metal Color'] || null,
+            metal_purity_id: row['Metal Purity ID'] || null,
+            metal_weight: row['Metal Weight (g)'] ? parseFloat(row['Metal Weight (g)']) : null
+          });
+        }
+
+        // Build diamonds array
+        const diamonds = [];
+        if (row['Diamond Master ID'] || row['Diamond Pieces']) {
+          diamonds.push({
+            diamond_master_id: row['Diamond Master ID'] || null,
+            clarity_id: row['Diamond Clarity ID'] || null,
+            shape_id: row['Diamond Shape ID'] || null,
+            size_id: row['Diamond Size ID'] || null,
+            cut_grade: row['Diamond Cut'] || null,
+            certificate_number: row['Diamond Certificate'] || null,
+            pcs: row['Diamond Pieces'] ? parseInt(row['Diamond Pieces']) : null,
+            total_carat: row['Diamond Total Carat'] ? parseFloat(row['Diamond Total Carat']) : null,
+            rate_per_carat: row['Diamond Rate Per Carat'] ? parseFloat(row['Diamond Rate Per Carat']) : null,
+            total_value: row['Diamond Total Value'] ? parseFloat(row['Diamond Total Value']) : null
+          });
+        }
+
+        // Build stones array
+        const stones = [];
+        if (row['Stone Master ID'] || row['Stone Pieces']) {
+          stones.push({
+            stone_master_id: row['Stone Master ID'] || null,
+            stone_type_id: row['Stone Type ID'] || null,
+            shape_id: row['Stone Shape ID'] || null,
+            size_id: row['Stone Size ID'] || null,
+            colour_id: row['Stone Colour ID'] || null,
+            quality_id: row['Stone Quality ID'] || null,
+            pcs: row['Stone Pieces'] ? parseInt(row['Stone Pieces']) : null,
+            total_carat: row['Stone Total Carat'] ? parseFloat(row['Stone Total Carat']) : null,
+            rate_per_carat: row['Stone Rate Per Carat'] ? parseFloat(row['Stone Rate Per Carat']) : null,
+            total_value: row['Stone Total Value'] ? parseFloat(row['Stone Total Value']) : null
+          });
+        }
+
+        const firstMetal = metals[0] || {};
+        const firstDiamond = diamonds[0] || {};
+        const firstStone = stones[0] || {};
+
+        return {
+          product_id: generateUUID(),
+          design_number: row['Design Number'] ? row['Design Number'].toString().trim() : null,
+          product_name: row['Product Name'].toString().trim(),
+          category_id: row['Category ID'] || null,
+          subcategory_id: row['Subcategory ID'] || null,
+          brand_id: row['Brand ID'] || null,
+          net_weight: row['Net Weight (g)'] ? parseFloat(row['Net Weight (g)']) : null,
+          product_description: row['Product Description'] ? row['Product Description'].toString().trim() : null,
+          hsn_code: row['HSN Code'] ? row['HSN Code'].toString().trim() : null,
+          is_active: row['Status'] === 'Active' || row['Status'] === 'active' || row['Status'] === 'true' || row['Status'] === true,
+          metals: metals,
+          metal_type: firstMetal.metal_type || null,
+          metal_color: firstMetal.metal_color || null,
+          metal_purity_id: firstMetal.metal_purity_id || null,
+          metal_weight: firstMetal.metal_weight || null,
+          diamonds: diamonds,
+          diamond_count: firstDiamond.pcs || null,
+          diamond_weight: firstDiamond.total_carat || null,
+          diamond_master_id: firstDiamond.diamond_master_id || null,
+          stones: stones,
+          stone_count: firstStone.pcs || null,
+          stone_weight: firstStone.total_carat || null,
+          stone_master_id: firstStone.stone_master_id || null
+        };
+      });
+
+      // Add new products to existing
+      existingProducts.push(...newProducts);
+      localStorage.setItem('productMaster', JSON.stringify(existingProducts));
+
+      showSuccess(`Successfully imported ${newProducts.length} product(s)!`);
+      
+      // Reset form
+      setTimeout(() => {
+        document.getElementById('file-input').value = '';
+        document.getElementById('file-name').classList.add('hidden');
+        document.getElementById('preview-section').classList.add('hidden');
+        document.getElementById('import-actions').classList.add('hidden');
+        uploadedData = [];
+        validationResults = [];
+      }, 2000);
+    });
+
+    // Show Error
+    function showError(message) {
+      const errorDiv = document.getElementById('upload-error');
+      errorDiv.textContent = message;
+      errorDiv.classList.remove('hidden');
+    }
+
+    // Show Success
+    function showSuccess(message) {
+      const messageDiv = document.getElementById('message-container');
+      messageDiv.className = 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 text-green-600 dark:text-green-400 mb-6';
+      messageDiv.textContent = message;
+      messageDiv.classList.remove('hidden');
+      
+      setTimeout(() => {
+        messageDiv.classList.add('hidden');
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
+

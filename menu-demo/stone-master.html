@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stone Master - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="stone-master" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Stone Master</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage stone master data</p>
+      </header>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Stone</h2>
+        
+        <form id="stone-form" class="space-y-6">
+          <input type="hidden" id="stone-master-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="stone-master-id-display" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Stone Master ID
+              </label>
+              <input type="text" id="stone-master-id-display" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                     placeholder="Auto-generated on save">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Unique identifier (CHAR(36) PK)</p>
+            </div>
+
+            <div>
+              <label for="stone-code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Stone Code
+              </label>
+              <input type="text" id="stone-code" name="stoneCode" maxlength="100"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., STN-RUBY-RND-5MM-RED-AAA">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Stone code (VARCHAR(100))</p>
+            </div>
+
+            <div>
+              <label for="stone-type-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Stone Type <span class="text-red-500">*</span>
+              </label>
+              <select id="stone-type-id" name="stoneTypeId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select stone type</option>
+                <option value="550e8400-e29b-41d4-a716-446655440300">Ruby</option>
+                <option value="660e8400-e29b-41d4-a716-446655440301">Sapphire</option>
+                <option value="770e8400-e29b-41d4-a716-446655440302">Emerald</option>
+                <option value="880e8400-e29b-41d4-a716-446655440303">Topaz</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to stone_types (CHAR(36) FK)</p>
+            </div>
+
+            <div>
+              <label for="shape-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Shape <span class="text-red-500">*</span>
+              </label>
+              <select id="shape-id" name="shapeId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select shape</option>
+                <option value="550e8400-e29b-41d4-a716-446655440400">Round</option>
+                <option value="660e8400-e29b-41d4-a716-446655440401">Oval</option>
+                <option value="770e8400-e29b-41d4-a716-446655440402">Cushion</option>
+                <option value="880e8400-e29b-41d4-a716-446655440403">Princess</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to stone_shapes (CHAR(36) FK)</p>
+            </div>
+
+            <div>
+              <label for="size-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Size <span class="text-red-500">*</span>
+              </label>
+              <select id="size-id" name="sizeId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select size</option>
+                <option value="550e8400-e29b-41d4-a716-446655440700">5.00 mm</option>
+                <option value="660e8400-e29b-41d4-a716-446655440701">6.00 mm</option>
+                <option value="770e8400-e29b-41d4-a716-446655440702">7.00 mm</option>
+                <option value="880e8400-e29b-41d4-a716-446655440703">8.00 mm</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to stone_sizes (CHAR(36) FK)</p>
+            </div>
+
+            <div>
+              <label for="colour-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Colour <span class="text-red-500">*</span>
+              </label>
+              <select id="colour-id" name="colourId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select colour</option>
+                <option value="550e8400-e29b-41d4-a716-446655440500">Red</option>
+                <option value="660e8400-e29b-41d4-a716-446655440501">Blue</option>
+                <option value="770e8400-e29b-41d4-a716-446655440502">Green</option>
+                <option value="880e8400-e29b-41d4-a716-446655440503">Yellow</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to stone_colours (CHAR(36) FK)</p>
+            </div>
+
+            <div>
+              <label for="quality-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Quality <span class="text-red-500">*</span>
+              </label>
+              <select id="quality-id" name="qualityId" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select quality</option>
+                <option value="550e8400-e29b-41d4-a716-446655440600">AAA (Premium)</option>
+                <option value="660e8400-e29b-41d4-a716-446655440601">AA (Standard)</option>
+                <option value="770e8400-e29b-41d4-a716-446655440602">A (Commercial)</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to stone_qualities (CHAR(36) FK)</p>
+            </div>
+
+            <div>
+              <label for="carat-per-stone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Carat Per Stone
+              </label>
+              <input type="number" id="carat-per-stone" name="caratPerStone" step="0.0001" min="0"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., 1.5000">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Carat per stone (DECIMAL(10,4))</p>
+            </div>
+
+            <div>
+              <label for="rate-per-carat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Rate Per Carat
+              </label>
+              <input type="number" id="rate-per-carat" name="ratePerCarat" step="0.01" min="0"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="0.00">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Rate per carat (DECIMAL(12,2))</p>
+            </div>
+
+            <div>
+              <label for="rate-per-piece" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Rate Per Piece
+              </label>
+              <input type="number" id="rate-per-piece" name="ratePerPiece" step="0.01" min="0"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="0.00">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Rate per piece (DECIMAL(12,2))</p>
+            </div>
+
+            <div>
+              <label for="is-precious" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Is Precious <span class="text-red-500">*</span>
+              </label>
+              <select id="is-precious" name="isPrecious" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="true">Precious</option>
+                <option value="false">Semi-Precious</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Is precious stone (BOOLEAN)</p>
+            </div>
+
+            <div>
+              <label for="is-active" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Status <span class="text-red-500">*</span>
+              </label>
+              <select id="is-active" name="isActive" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Stone
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by code, type, shape, size, colour, or quality..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Stone Master List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Stone ID</th>
+                <th class="px-6 py-3" scope="col">Code</th>
+                <th class="px-6 py-3" scope="col">Type</th>
+                <th class="px-6 py-3" scope="col">Shape</th>
+                <th class="px-6 py-3" scope="col">Size</th>
+                <th class="px-6 py-3" scope="col">Colour</th>
+                <th class="px-6 py-3" scope="col">Quality</th>
+                <th class="px-6 py-3" scope="col">Carat/Stone</th>
+                <th class="px-6 py-3" scope="col">Rate/Carat</th>
+                <th class="px-6 py-3" scope="col">Rate/Piece</th>
+                <th class="px-6 py-3" scope="col">Precious</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="stones-table-body"></tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No stones submitted yet. Fill out the form above to add your first stone.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    const demoData = [
+      {
+        stone_master_id: '550e8400-e29b-41d4-a716-446655440800',
+        stone_code: 'STN-RUBY-RND-5MM-RED-AAA',
+        stone_type_id: '550e8400-e29b-41d4-a716-446655440300',
+        shape_id: '550e8400-e29b-41d4-a716-446655440400',
+        size_id: '550e8400-e29b-41d4-a716-446655440700',
+        colour_id: '550e8400-e29b-41d4-a716-446655440500',
+        quality_id: '550e8400-e29b-41d4-a716-446655440600',
+        carat_per_stone: 1.5000,
+        rate_per_carat: 3000.00,
+        rate_per_piece: 4500.00,
+        is_precious: true,
+        is_active: true
+      }
+    ];
+
+    const tenantMap = {
+      '550e8400-e29b-41d4-a716-446655440000': 'J&J Pvt Ltd',
+      '660e8400-e29b-41d4-a716-446655440001': 'ABC Jewelers',
+      '770e8400-e29b-41d4-a716-446655440002': 'XYZ Gems'
+    };
+
+    const typeMap = {
+      '550e8400-e29b-41d4-a716-446655440300': 'Ruby',
+      '660e8400-e29b-41d4-a716-446655440301': 'Sapphire',
+      '770e8400-e29b-41d4-a716-446655440302': 'Emerald',
+      '880e8400-e29b-41d4-a716-446655440303': 'Topaz'
+    };
+
+    const shapeMap = {
+      '550e8400-e29b-41d4-a716-446655440400': 'Round',
+      '660e8400-e29b-41d4-a716-446655440401': 'Oval',
+      '770e8400-e29b-41d4-a716-446655440402': 'Cushion',
+      '880e8400-e29b-41d4-a716-446655440403': 'Princess'
+    };
+
+    const sizeMap = {
+      '550e8400-e29b-41d4-a716-446655440700': '5.00 mm',
+      '660e8400-e29b-41d4-a716-446655440701': '6.00 mm',
+      '770e8400-e29b-41d4-a716-446655440702': '7.00 mm',
+      '880e8400-e29b-41d4-a716-446655440703': '8.00 mm'
+    };
+
+    const colourMap = {
+      '550e8400-e29b-41d4-a716-446655440500': 'Red',
+      '660e8400-e29b-41d4-a716-446655440501': 'Blue',
+      '770e8400-e29b-41d4-a716-446655440502': 'Green',
+      '880e8400-e29b-41d4-a716-446655440503': 'Yellow'
+    };
+
+    const qualityMap = {
+      '550e8400-e29b-41d4-a716-446655440600': 'AAA',
+      '660e8400-e29b-41d4-a716-446655440601': 'AA',
+      '770e8400-e29b-41d4-a716-446655440602': 'A'
+    };
+
+    let storedData = localStorage.getItem('stoneMaster');
+    let stones = storedData ? JSON.parse(storedData) : demoData;
+    if (!storedData) localStorage.setItem('stoneMaster', JSON.stringify(demoData));
+    
+    let editingId = null;
+    const form = document.getElementById('stone-form');
+    const tableBody = document.getElementById('stones-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function formatCurrency(amount) {
+      if (amount === null || amount === undefined) return '-';
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+      }).format(amount);
+    }
+
+    function renderTable() {
+      if (stones.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = stones.map(stone => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-mono">${stone.stone_master_id.substring(0, 8)}...</td>
+          <td class="px-6 py-4 font-medium">${stone.stone_code || '-'}</td>
+          <td class="px-6 py-4">${typeMap[stone.stone_type_id] || stone.stone_type_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${shapeMap[stone.shape_id] || stone.shape_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${sizeMap[stone.size_id] || stone.size_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${colourMap[stone.colour_id] || stone.colour_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${qualityMap[stone.quality_id] || stone.quality_id.substring(0, 8)}</td>
+          <td class="px-6 py-4">${stone.carat_per_stone !== null && stone.carat_per_stone !== undefined ? stone.carat_per_stone.toFixed(4) + ' ct' : '-'}</td>
+          <td class="px-6 py-4">${formatCurrency(stone.rate_per_carat)}</td>
+          <td class="px-6 py-4">${formatCurrency(stone.rate_per_piece)}</td>
+          <td class="px-6 py-4">
+            <span class="${stone.is_precious ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${stone.is_precious ? 'Precious' : 'Semi-Precious'}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <span class="${stone.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${stone.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${stone.stone_master_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${stone.stone_master_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      attachEventListeners();
+      filterTable();
+    }
+
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const stone = stones.find(s => s.stone_master_id === id);
+          if (stone) {
+            editingId = id;
+            document.getElementById('stone-master-id').value = id;
+            document.getElementById('stone-master-id-display').value = id;
+            document.getElementById('stone-code').value = stone.stone_code || '';
+            document.getElementById('stone-type-id').value = stone.stone_type_id;
+            document.getElementById('shape-id').value = stone.shape_id;
+            document.getElementById('size-id').value = stone.size_id;
+            document.getElementById('colour-id').value = stone.colour_id;
+            document.getElementById('quality-id').value = stone.quality_id;
+            document.getElementById('carat-per-stone').value = stone.carat_per_stone || '';
+            document.getElementById('rate-per-carat').value = stone.rate_per_carat || '';
+            document.getElementById('rate-per-piece').value = stone.rate_per_piece || '';
+            document.getElementById('is-precious').value = stone.is_precious.toString();
+            document.getElementById('is-active').value = stone.is_active.toString();
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this stone?')) {
+            stones = stones.filter(s => s.stone_master_id !== id);
+            localStorage.setItem('stoneMaster', JSON.stringify(stones));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        stone_master_id: editingId || generateUUID(),
+        stone_code: document.getElementById('stone-code').value.trim() || null,
+        stone_type_id: document.getElementById('stone-type-id').value,
+        shape_id: document.getElementById('shape-id').value,
+        size_id: document.getElementById('size-id').value,
+        colour_id: document.getElementById('colour-id').value,
+        quality_id: document.getElementById('quality-id').value,
+        carat_per_stone: document.getElementById('carat-per-stone').value ? parseFloat(document.getElementById('carat-per-stone').value) : null,
+        rate_per_carat: document.getElementById('rate-per-carat').value ? parseFloat(document.getElementById('rate-per-carat').value) : null,
+        rate_per_piece: document.getElementById('rate-per-piece').value ? parseFloat(document.getElementById('rate-per-piece').value) : null,
+        is_precious: document.getElementById('is-precious').value === 'true',
+        is_active: document.getElementById('is-active').value === 'true'
+      };
+
+      if (editingId) {
+        const index = stones.findIndex(s => s.stone_master_id === editingId);
+        if (index !== -1) stones[index] = formData;
+      } else {
+        stones.push(formData);
+      }
+
+      localStorage.setItem('stoneMaster', JSON.stringify(stones));
+      form.reset();
+      document.getElementById('stone-master-id').value = '';
+      document.getElementById('stone-master-id-display').value = '';
+      document.getElementById('is-precious').value = 'true';
+      document.getElementById('is-active').value = 'true';
+      editingId = null;
+      renderTable();
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#stones-table-body tr');
+      rows.forEach(row => {
+        const code = row.cells[1].textContent.toLowerCase();
+        const type = row.cells[2].textContent.toLowerCase();
+        const shape = row.cells[3].textContent.toLowerCase();
+        const size = row.cells[4].textContent.toLowerCase();
+        const colour = row.cells[5].textContent.toLowerCase();
+        const quality = row.cells[6].textContent.toLowerCase();
+        const status = row.cells[11].querySelector('span').textContent.toLowerCase();
+        const isActive = status === 'active';
+        const matchesSearch = !searchTerm || code.includes(searchTerm) || type.includes(searchTerm) || 
+                             shape.includes(searchTerm) || size.includes(searchTerm) || 
+                             colour.includes(searchTerm) || quality.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || 
+          (statusFilter === 'true' && isActive) || 
+          (statusFilter === 'false' && !isActive);
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Category - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="category" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Category</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage categories with hierarchical structure</p>
+      </header>
+
+      <!-- Category Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Category</h2>
+        
+        <form id="category-form" class="space-y-6">
+          <input type="hidden" id="category-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Category Name <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="name" name="name" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., Necklace" maxlength="255">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Category name (max 255 characters)</p>
+            </div>
+
+            <div>
+              <label for="parent-category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Parent Category
+              </label>
+              <select id="parent-category" name="parent_category_id"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">None (Top Level)</option>
+              </select>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Select parent category for hierarchical structure</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea id="description" name="description" rows="4"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter description for this category..."></textarea>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Optional description or notes</p>
+          </div>
+
+          <div class="flex items-center">
+            <input type="checkbox" id="is-active" name="is_active" checked
+                   class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2">
+            <label for="is-active" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Active
+            </label>
+            <p class="ml-4 text-xs text-gray-500 dark:text-gray-400">Uncheck to deactivate this category</p>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Category
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by name or description..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="active">Active Only</option>
+              <option value="inactive">Inactive Only</option>
+            </select>
+            <select id="parent-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Categories</option>
+              <option value="top-level">Top Level Only</option>
+              <option value="sub-category">Sub Categories Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submitted Categories List -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Categories List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Name</th>
+                <th class="px-6 py-3" scope="col">Parent Category</th>
+                <th class="px-6 py-3" scope="col">Description</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3" scope="col">Created At</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categories-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No categories submitted yet. Fill out the form above to add your first category.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Demo data
+    const demoData = [
+      {
+        category_id: 'demo-cat-1',
+        name: 'Necklace',
+        parent_category_id: null,
+        description: 'Jewelry worn around the neck',
+        is_active: true,
+        created_at: '2024-01-15T10:30:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-2',
+        name: 'Ring',
+        parent_category_id: null,
+        description: 'Jewelry worn on fingers',
+        is_active: true,
+        created_at: '2024-01-16T14:20:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-3',
+        name: 'Earrings',
+        parent_category_id: null,
+        description: 'Jewelry worn on ears',
+        is_active: true,
+        created_at: '2024-01-17T09:15:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-4',
+        name: 'Pendant',
+        parent_category_id: 'demo-cat-1',
+        description: 'Hanging ornament for necklaces',
+        is_active: true,
+        created_at: '2024-01-18T11:45:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-5',
+        name: 'Chain',
+        parent_category_id: 'demo-cat-1',
+        description: 'Chain link necklaces',
+        is_active: true,
+        created_at: '2024-01-19T16:20:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-6',
+        name: 'Choker',
+        parent_category_id: 'demo-cat-1',
+        description: 'Short, tight-fitting necklaces',
+        is_active: false,
+        created_at: '2024-01-20T08:30:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-7',
+        name: 'Bracelet',
+        parent_category_id: null,
+        description: 'Jewelry worn around the wrist',
+        is_active: true,
+        created_at: '2024-01-21T12:00:00.000Z'
+      },
+      {
+        category_id: 'demo-cat-8',
+        name: 'Engagement Ring',
+        parent_category_id: 'demo-cat-2',
+        description: 'Rings for engagement purposes',
+        is_active: true,
+        created_at: '2024-01-22T15:30:00.000Z'
+      }
+    ];
+
+    // Store categories in localStorage for persistence
+    // Initialize with demo data if localStorage is empty
+    let storedData = localStorage.getItem('categories');
+    let categories = storedData ? JSON.parse(storedData) : demoData;
+    
+    // If localStorage was empty, save demo data
+    if (!storedData) {
+      localStorage.setItem('categories', JSON.stringify(demoData));
+    }
+    
+    let editingId = null;
+
+    const form = document.getElementById('category-form');
+    const tableBody = document.getElementById('categories-table-body');
+    const emptyState = document.getElementById('empty-state');
+    const parentCategorySelect = document.getElementById('parent-category');
+
+    // Generate unique ID
+    function generateId() {
+      return 'category-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Get category name by ID
+    function getCategoryName(categoryId) {
+      if (!categoryId) return '-';
+      const category = categories.find(c => c.category_id === categoryId);
+      return category ? category.name : '-';
+    }
+
+    // Populate parent category dropdown
+    function populateParentCategoryDropdown(excludeId = null) {
+      parentCategorySelect.innerHTML = '<option value="">None (Top Level)</option>';
+      
+      categories
+        .filter(cat => cat.category_id !== excludeId && cat.is_active)
+        .forEach(category => {
+          const option = document.createElement('option');
+          option.value = category.category_id;
+          option.textContent = category.name;
+          parentCategorySelect.appendChild(option);
+        });
+    }
+
+    // Render table
+    function renderTable() {
+      if (categories.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = categories.map(category => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 font-medium">${category.name}</td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400">${getCategoryName(category.parent_category_id)}</td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400">${category.description || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="${category.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${category.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400">${formatDate(category.created_at)}</td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${category.category_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${category.category_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      // Re-attach event listeners
+      attachEventListeners();
+      filterTable();
+      populateParentCategoryDropdown();
+    }
+
+    // Attach event listeners to edit/delete buttons
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const category = categories.find(c => c.category_id === id);
+          
+          if (category) {
+            editingId = id;
+            document.getElementById('category-id').value = id;
+            document.getElementById('name').value = category.name;
+            document.getElementById('parent-category').value = category.parent_category_id || '';
+            document.getElementById('description').value = category.description || '';
+            document.getElementById('is-active').checked = category.is_active;
+            
+            // Update parent dropdown excluding current category
+            populateParentCategoryDropdown(id);
+            document.getElementById('parent-category').value = category.parent_category_id || '';
+            
+            // Scroll to form
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          
+          // Check if category has children
+          const hasChildren = categories.some(c => c.parent_category_id === id);
+          if (hasChildren) {
+            alert('Cannot delete category. It has sub-categories. Please delete or reassign sub-categories first.');
+            return;
+          }
+          
+          if (confirm('Are you sure you want to delete this category?')) {
+            categories = categories.filter(c => c.category_id !== id);
+            localStorage.setItem('categories', JSON.stringify(categories));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    // Form submission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const parentCategoryId = document.getElementById('parent-category').value || null;
+      
+      // Prevent self-reference
+      if (editingId && parentCategoryId === editingId) {
+        alert('A category cannot be its own parent.');
+        return;
+      }
+      
+      const formData = {
+        category_id: editingId || generateId(),
+        name: document.getElementById('name').value.trim(),
+        parent_category_id: parentCategoryId,
+        description: document.getElementById('description').value.trim(),
+        is_active: document.getElementById('is-active').checked,
+        created_at: editingId 
+          ? categories.find(c => c.category_id === editingId).created_at 
+          : new Date().toISOString()
+      };
+
+      if (editingId) {
+        // Update existing
+        const index = categories.findIndex(c => c.category_id === editingId);
+        if (index !== -1) {
+          categories[index] = formData;
+        }
+      } else {
+        // Add new
+        categories.push(formData);
+      }
+
+      localStorage.setItem('categories', JSON.stringify(categories));
+      form.reset();
+      document.getElementById('category-id').value = '';
+      document.getElementById('parent-category').value = '';
+      document.getElementById('is-active').checked = true;
+      editingId = null;
+      renderTable();
+    });
+
+    // Search functionality
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    // Status filter
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    // Parent filter
+    document.getElementById('parent-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), document.getElementById('status-filter').value, e.target.value);
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      document.getElementById('parent-filter').value = 'all';
+      filterTable('', 'all', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all', parentFilter = 'all') {
+      const rows = document.querySelectorAll('#categories-table-body tr');
+      rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const description = row.cells[2].textContent.toLowerCase();
+        const status = row.cells[3].querySelector('span').textContent.toLowerCase();
+        const parent = row.cells[1].textContent.toLowerCase();
+        const isTopLevel = parent === '-';
+        
+        const matchesSearch = !searchTerm || name.includes(searchTerm) || description.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || 
+                            (statusFilter === 'active' && status === 'active') ||
+                            (statusFilter === 'inactive' && status === 'inactive');
+        const matchesParent = parentFilter === 'all' ||
+                             (parentFilter === 'top-level' && isTopLevel) ||
+                             (parentFilter === 'sub-category' && !isTopLevel);
+        
+        row.style.display = matchesSearch && matchesStatus && matchesParent ? '' : 'none';
+      });
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>
+

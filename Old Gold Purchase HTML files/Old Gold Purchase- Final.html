@@ -1,0 +1,398 @@
+<html lang="en"><head><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="flex flex-col relative">```html
+
+
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Old Gold POS with Invoice Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary-gold: #C5A059;
+            --deep-navy: #0F172A;
+            --ios-bg: #F1F5F9;
+            --surface: #FFFFFF;
+            --border: #E2E8F0;
+            --accent-red: #EF4444;
+            --highlight-gold: #C5A059;
+            --success-green: #10B981;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--ios-bg);
+            color: var(--deep-navy);
+            overflow: hidden;
+            height: 100vh;
+            font-size: 14px;
+        }
+        .desktop-card {
+            @apply bg-white rounded-lg border border-slate-300 shadow-sm overflow-hidden flex flex-col;
+        }
+        .section-header {
+            @apply px-4 py-2 bg-slate-100 border-b border-slate-300 flex items-center justify-between flex-shrink-0;
+        }
+        .section-title {
+            @apply text-[12px] font-bold uppercase tracking-widest text-slate-700;
+        }
+        .input-row {
+            @apply flex flex-col gap-1 px-4 py-2 border-b border-slate-100 last:border-b-0;
+        }
+        .input-label {
+            @apply text-[11px] font-bold text-slate-500 uppercase tracking-tight;
+        }
+        .input-field {
+            @apply w-full text-[14px] border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--primary-gold)] focus:border-[var(--primary-gold)] p-2 text-slate-900 placeholder-slate-400 bg-white transition-all;
+        }
+        .readonly-field {
+            @apply bg-slate-50 border-slate-200 text-slate-600 cursor-not-allowed;
+        }
+        .btn-gold {
+            background-color: var(--primary-gold);
+            @apply text-white font-bold py-3 px-6 rounded-lg transition-all hover:brightness-110 active:scale-[0.98] shadow-md text-[15px];
+        }
+        .btn-outline {
+            @apply text-[var(--primary-gold)] font-bold py-3 px-6 rounded-lg border-2 border-[var(--primary-gold)] transition-all hover:bg-white active:scale-[0.98] text-[15px];
+        }
+        .scroll-area {
+            @apply overflow-y-auto flex-1;
+        }
+        .scroll-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scroll-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        .settlement-table {
+            @apply w-full border-collapse;
+        }
+        .settlement-table td {
+            @apply p-3 text-[15px] border-b border-slate-200;
+        }
+        .balance-highlight-row {
+            @apply bg-slate-50;
+        }
+        .summary-label {
+            @apply text-black uppercase tracking-tight text-[12px] font-bold;
+        }
+        .summary-value {
+            @apply text-black font-bold;
+        }
+        .kyc-dropzone {
+            @apply border-2 border-dashed border-slate-300 rounded-md p-3 flex flex-col items-center justify-center gap-1 hover:border-[var(--primary-gold)] transition-colors cursor-pointer bg-slate-50/50;
+        }
+        .success-toast {
+            @apply fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border border-white/20;
+            background-color: var(--success-green);
+        }
+    </style>
+
+
+<div class="success-toast">
+<div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white font-bold">check</span>
+</div>
+<div class="flex flex-col">
+<span class="text-white font-bold text-[15px]">Payment details updated successfully!</span>
+<span class="text-white/80 text-[11px] uppercase tracking-wider font-medium">Transaction OG-TXN-2024-9912 Sync Complete</span>
+</div>
+<button class="ml-4 text-white/60 hover:text-white transition-colors" onclick="this.parentElement.style.display='none'">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<header class="h-14 flex-shrink-0 bg-[var(--deep-navy)] text-white px-6 flex items-center justify-between border-b border-white/10">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 bg-[var(--primary-gold)] rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">diamond</span>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight">JEMS POS <span class="text-[var(--primary-gold)] font-medium">| Old Gold Management</span></h1>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full border border-white/10">
+<span class="material-symbols-outlined text-sm text-[var(--primary-gold)]">person</span>
+<span class="text-[12px] font-semibold uppercase tracking-wider">Store Manager</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors relative">
+<span class="material-symbols-outlined text-xl">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+</button>
+</div>
+</header>
+<main class="flex-1 p-3 grid grid-cols-12 gap-3 overflow-hidden max-w-[1920px] mx-auto w-full">
+<section class="col-span-3 flex flex-col gap-3 overflow-hidden">
+<div class="desktop-card flex-1">
+<div class="section-header">
+<span class="section-title">Customer Details</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">person_search</span>
+</div>
+<div class="scroll-area">
+<div class="input-row">
+<label class="input-label">Customer Name</label>
+<div class="relative">
+<input class="input-field pl-9" placeholder="Search customer..." type="text" value="Robert Fox"/>
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+</div>
+</div>
+<div class="input-row">
+<label class="input-label">Address</label>
+<textarea class="input-field resize-none h-16" placeholder="Enter full address">123 Jewel Lane, Gold District, NY 10001</textarea>
+</div>
+<div class="grid grid-cols-2 gap-0 border-b border-slate-100">
+<div class="input-row border-b-0 border-r border-slate-100">
+<label class="input-label">Mobile</label>
+<input class="input-field" type="tel" value="+1 202-555-0198"/>
+</div>
+<div class="input-row border-b-0">
+<label class="input-label">Customer ID</label>
+<input class="input-field readonly-field" readonly="" type="text" value="GUEST-8829"/>
+</div>
+</div>
+<div class="input-row bg-slate-50/50">
+<label class="input-label">KYC Compliance Documents</label>
+<div class="kyc-dropzone">
+<span class="material-symbols-outlined text-[var(--primary-gold)]">file_upload</span>
+<span class="text-[11px] font-bold text-slate-600">UPLOAD KYC IMAGE</span>
+<span class="text-[10px] text-slate-400">PAN / Aadhaar / Passport</span>
+</div>
+</div>
+<div class="section-header border-t">
+<span class="section-title">Bank Account Details</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">account_balance</span>
+</div>
+<div class="input-row">
+<label class="input-label">Bank Name</label>
+<input class="input-field" placeholder="Enter bank name" type="text" value="Global Jewelry Bank"/>
+</div>
+<div class="input-row">
+<label class="input-label">Account Number</label>
+<input class="input-field" placeholder="0000..." type="text" value="4455889922"/>
+</div>
+<div class="grid grid-cols-2 gap-0">
+<div class="input-row border-r border-slate-100">
+<label class="input-label">Branch Name</label>
+<input class="input-field" placeholder="Branch location" type="text" value="Main Street Plaza"/>
+</div>
+<div class="input-row">
+<label class="input-label">IFSC Code</label>
+<input class="input-field" placeholder="GJB100..." type="text" value="GJB100092"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="col-span-5 flex flex-col gap-3 overflow-hidden">
+<div class="desktop-card flex-1">
+<div class="section-header">
+<span class="section-title">Old Gold Item Specification</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">inventory_2</span>
+</div>
+<div class="scroll-area">
+<div class="grid grid-cols-2">
+<div class="col-span-2 px-4 py-3 border-b border-slate-100 bg-slate-50/30">
+<div class="flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors group p-3 rounded-lg border-2 border-dashed border-slate-300">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500 text-2xl group-hover:text-[var(--primary-gold)]">add_a_photo</span>
+<span class="text-[13px] font-bold text-slate-700">UPLOAD ITEM PHOTO</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight group-hover:text-[var(--primary-gold)]">Scan or attach</span>
+</div>
+</div>
+<div class="input-row col-span-2">
+<label class="input-label">Item Description</label>
+<textarea class="input-field resize-none h-16" placeholder="e.g., 22K Gold Handcrafted Bangle"></textarea>
+</div>
+<div class="input-row border-r border-slate-100">
+<label class="input-label">Gross Weight (g)</label>
+<input class="input-field font-bold text-lg" placeholder="0.000" type="number" value="12.500"/>
+</div>
+<div class="input-row">
+<label class="input-label">Stone/Waste Wt (g)</label>
+<input class="input-field font-bold text-lg" placeholder="0.000" type="number" value="0.250"/>
+</div>
+<div class="input-row col-span-2 bg-slate-50 border-y border-slate-200 py-3">
+<label class="input-label text-[var(--primary-gold)]">Net Gold Weight Calculation</label>
+<div class="flex items-center justify-between">
+<input class="input-field flex-1 font-bold text-3xl border-none bg-transparent p-0 text-[var(--deep-navy)]" type="number" value="12.250"/>
+<span class="text-slate-500 font-bold text-xs bg-white px-3 py-1 rounded-md border border-slate-200">GRAMS</span>
+</div>
+</div>
+</div>
+<div class="section-header border-t mt-2">
+<div class="flex items-center gap-2">
+<span class="section-title">Purchase Adjustment</span>
+<span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700 font-bold">MULTI-INV</span>
+</div>
+<button class="w-8 h-8 flex items-center justify-center bg-[var(--primary-gold)] text-white rounded shadow-sm hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<div class="flex-1">
+<div class="bg-slate-50 border-b border-slate-200 flex text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 py-2">
+<div class="flex-1">Invoice Reference</div>
+<div class="w-32 text-right">Offset ($)</div>
+</div>
+<table class="w-full text-left border-collapse">
+<tbody>
+<tr class="border-b border-slate-100 hover:bg-slate-50">
+<td class="px-4 py-2">
+<input class="w-full bg-transparent border-none focus:ring-0 text-[14px] font-medium p-0" type="text" value="INV-2024-8891"/>
+</td>
+<td class="px-4 py-2 text-right">
+<input class="w-full bg-transparent border-none focus:ring-0 text-right font-bold text-[14px] p-0" type="number" value="1250.00"/>
+</td>
+<td class="w-10 px-2 py-2 text-center">
+<button class="text-slate-300 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section class="col-span-4 flex flex-col gap-3 overflow-hidden">
+<div class="desktop-card flex-shrink-0">
+<div class="section-header">
+<span class="section-title">Quick Invoice Search</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">find_in_page</span>
+</div>
+<div class="p-3">
+<div class="relative">
+<input class="input-field pl-9 pr-4 py-2.5 font-semibold text-[14px] border-slate-300 bg-slate-50/50" placeholder="Enter Sales Invoice # (e.g. SINV-1029)" type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--primary-gold)]">search</span>
+</div>
+</div>
+</div>
+<div class="desktop-card flex-shrink-0">
+<div class="section-header">
+<span class="section-title">Valuation</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">calculate</span>
+</div>
+<div class="grid grid-cols-2">
+<div class="input-row border-r border-slate-100">
+<label class="input-label">Market Rate</label>
+<div class="relative">
+<span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
+<input class="input-field pl-7 font-bold" type="number" value="5500.00"/>
+</div>
+</div>
+<div class="input-row">
+<label class="input-label">Adjustment</label>
+<div class="flex gap-2">
+<input class="input-field flex-1 font-bold" type="number" value="0.00"/>
+<div class="flex bg-slate-100 rounded-md p-0.5 border border-slate-300">
+<button class="px-2 text-[10px] font-bold bg-white rounded shadow-sm">%</button>
+<button class="px-2 text-[10px] font-bold text-slate-400">VAL</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="desktop-card flex-1">
+<div class="section-header">
+<span class="section-title">Final Settlement Summary</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">receipt_long</span>
+</div>
+<div class="p-3 flex flex-col h-full overflow-hidden">
+<div class="flex-1">
+<table class="settlement-table">
+<tbody>
+<tr>
+<td class="summary-label">Gross Invoice Value</td>
+<td class="text-right summary-value">120,550.00</td>
+</tr>
+<tr>
+<td class="summary-label">Old Gold Value</td>
+<td class="text-right summary-value">80,000.00</td>
+</tr>
+<tr class="balance-highlight-row">
+<td class="summary-label !text-black border-t-2 border-slate-900">Balance Amount</td>
+<td class="text-right summary-value !text-black border-t-2 border-slate-900">40,550.00</td>
+</tr>
+</tbody>
+</table>
+<div class="mt-4 pt-4 border-t border-slate-200 flex justify-between items-end">
+<div class="flex flex-col">
+<p class="text-[var(--primary-gold)] text-[11px] font-bold uppercase tracking-widest mb-1">Total Payable</p>
+<p class="text-[var(--deep-navy)] text-3xl font-bold leading-none">$ 40,550.00</p>
+</div>
+<span class="material-symbols-outlined text-slate-200 text-5xl">payments</span>
+</div>
+</div>
+</div>
+</div>
+<div class="desktop-card flex-shrink-0">
+<div class="section-header">
+<span class="section-title">Payment Mode</span>
+<span class="material-symbols-outlined text-slate-400 text-lg">credit_card</span>
+</div>
+<div class="grid grid-cols-1">
+<div class="input-row">
+<label class="input-label">Mode of Payment</label>
+<select class="input-field font-bold">
+<option>Bank Transfer / Wire</option>
+<option>Cash Disbursement</option>
+<option>Cheque</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-0 border-t border-slate-100">
+<div class="input-row border-b-0 border-r border-slate-100">
+<label class="input-label">Reference ID</label>
+<input class="input-field" placeholder="REF123456" type="text"/>
+</div>
+<div class="input-row border-b-0">
+<label class="input-label">Date</label>
+<input class="input-field" type="date" value="2024-05-20"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="h-20 flex-shrink-0 bg-white border-t border-slate-300 px-6 flex items-center justify-between shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="material-symbols-outlined text-2xl">info</span>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-slate-400 uppercase">TXN ID</span>
+<span class="text-[13px] font-semibold text-slate-700">OG-TXN-2024-9912</span>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="btn-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">drafts</span>
+                Save Draft
+            </button>
+<button class="btn-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">print</span>
+                Print Receipt
+            </button>
+<button class="btn-gold flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">verified</span>
+                Finalize &amp; Process Transaction
+            </button>
+<button class="btn-gold flex items-center gap-2" onclick="document.querySelector('.success-toast').style.display='flex'">
+<span class="material-symbols-outlined text-xl">update</span>
+                Update Payment Details
+            </button>
+</div>
+</footer>
+
+</body></html>

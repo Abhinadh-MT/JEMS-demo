@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS: Scheme Redemption | Professional ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4AF37", // Gold
+                        "secondary": "#C5A028", // Darker Gold
+                        "navy": "#0A192F", // Deep Navy
+                        "navy-light": "#112240",
+                        "background-light": "#F8F9FA",
+                        "accent-gold": "#FFD700",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Manrope', sans-serif;
+            }
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+        }
+        :root {
+            --brand-gold: #D4AF37;
+            --brand-navy: #0A192F;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-navy text-navy dark:text-gray-100 transition-colors duration-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-navy-light bg-white dark:bg-navy-light px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-navy dark:text-primary">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+<h2 class="text-2xl font-black leading-tight tracking-tight dark:text-white">JEMS</h2>
+</div>
+<label class="flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-gray-400 flex border-none bg-gray-100 dark:bg-navy items-center justify-center pl-4 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-gray-100 dark:bg-navy text-navy dark:text-white focus:ring-1 focus:ring-primary h-full placeholder:text-gray-400 px-4 rounded-r-lg text-sm font-normal" placeholder="Search Scheme ID or Phone..."/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary leading-normal" href="#">Schemes</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Inventory</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Sales</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 bg-gray-100 dark:bg-navy text-navy dark:text-white px-3 hover:bg-gray-200 dark:hover:bg-navy-light transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 bg-gray-100 dark:bg-navy text-navy dark:text-white px-3 hover:bg-gray-200 dark:hover:bg-navy-light transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="User profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDyd-pMvLZhxWbbpD7mxbVSXJWRZxOcW-skf71Byn7JvLvmKzbkGJuCQ_RcYtq8cFQudT6xU0KVbkgfkmNf70dn-M1A5MATzPDSuGv-EKn1Jd4cp1jNHI0tPSeyCnziVifc56IshPfalvz5NfPmgOtZlyZmUaTyXiYuYOyoAasVXlcHr_A9nqI2SvGGKqQdVF3vJJNbAH-1tAoeJXtrclp9b5BX4fMYQj9c2dn6SLIMRPYYQtug7UKHDdqC4kjJCDJaTnR_boLsrVI");'></div>
+</div>
+</header>
+<main class="flex-1 flex justify-center py-8">
+<div class="max-w-[1200px] w-full px-6 flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-sm text-gray-500">
+<a class="hover:text-primary" href="#">Schemes</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-navy dark:text-white font-semibold">Redemption</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-navy dark:text-white">Scheme Redemption</h1>
+<p class="text-gray-500 text-sm mt-1">Settle matured gold savings schemes against new inventory purchases.</p>
+</div>
+<div class="flex flex-col items-end gap-1 bg-white dark:bg-navy-light p-3 rounded-lg border border-primary/20 shadow-sm">
+<span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Live Market Rate (24K)</span>
+<div class="flex items-center gap-2 text-xl font-bold text-primary">
+<span class="material-symbols-outlined">trending_up</span>
+                                ₹7,250.00 / 1g
+                            </div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-navy-light p-6 rounded-xl border border-gray-200 dark:border-navy-light shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Gold Accumulated</p>
+<span class="material-symbols-outlined text-primary">savings</span>
+</div>
+<p class="text-3xl font-bold leading-none text-navy dark:text-white">45.500 <span class="text-lg font-normal">g</span></p>
+<p class="text-xs text-gray-400 mt-2">Locked Rate Benefit: <span class="text-secondary font-bold">+₹12,400</span></p>
+</div>
+<div class="bg-white dark:bg-navy-light p-6 rounded-xl border border-gray-200 dark:border-navy-light shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Current Invoice</p>
+<span class="material-symbols-outlined text-primary">receipt_long</span>
+</div>
+<p class="text-3xl font-bold leading-none text-navy dark:text-white">₹3,45,280</p>
+<p class="text-xs text-gray-400 mt-2">Ref: #INV-2024-8891</p>
+</div>
+<div class="bg-navy dark:bg-primary/10 p-6 rounded-xl border border-primary/30 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-sm font-medium text-primary uppercase tracking-wide">Redemption Credit</p>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<p class="text-3xl font-bold leading-none text-primary">₹3,29,875</p>
+<p class="text-xs text-gray-400 mt-2">Valuation at current rate</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 flex flex-col gap-4">
+<div class="bg-white dark:bg-navy-light rounded-xl border border-gray-200 dark:border-navy-light overflow-hidden shadow-sm">
+<div class="p-4 border-b border-gray-200 dark:border-navy-light flex justify-between items-center bg-gray-50 dark:bg-navy/50">
+<h3 class="font-bold text-navy dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">inventory_2</span> Selected Jewellery Invoice
+                                </h3>
+<button class="text-primary hover:text-secondary text-xs font-bold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">edit</span> EDIT INVOICE
+                                </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-100 dark:bg-navy/40 text-gray-500 text-xs font-bold uppercase">
+<th class="px-4 py-3">Item Description</th>
+<th class="px-4 py-3">Purity</th>
+<th class="px-4 py-3 text-right">Gross Wt.</th>
+<th class="px-4 py-3 text-right">Making Charges</th>
+<th class="px-4 py-3 text-right">Total Price</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-navy text-sm">
+<tr class="hover:bg-gray-50 dark:hover:bg-navy transition-colors">
+<td class="px-4 py-4 text-navy dark:text-gray-200">Antique Gold Necklace - Lotus Motif</td>
+<td class="px-4 py-4"><span class="px-2 py-0.5 rounded bg-primary/20 text-secondary text-[10px] font-bold">22K</span></td>
+<td class="px-4 py-4 text-right font-medium">32.400 g</td>
+<td class="px-4 py-4 text-right text-gray-500">₹18,500</td>
+<td class="px-4 py-4 text-right font-bold">₹2,34,500</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-navy transition-colors">
+<td class="px-4 py-4 text-navy dark:text-gray-200">Matching Lotus Stud Earrings</td>
+<td class="px-4 py-4"><span class="px-2 py-0.5 rounded bg-primary/20 text-secondary text-[10px] font-bold">22K</span></td>
+<td class="px-4 py-4 text-right font-medium">15.100 g</td>
+<td class="px-4 py-4 text-right text-gray-500">₹8,200</td>
+<td class="px-4 py-4 text-right font-bold">₹1,10,780</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-gray-50 dark:bg-navy/50 flex justify-end gap-10">
+<div class="text-right">
+<p class="text-[10px] text-gray-400 uppercase font-bold">Total Weight</p>
+<p class="text-lg font-bold text-navy dark:text-white">47.500 g</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-gray-400 uppercase font-bold">Net Purchase</p>
+<p class="text-lg font-bold text-primary">₹3,45,280</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-navy-light rounded-xl border border-gray-200 dark:border-navy-light p-6 shadow-sm">
+<h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person_check</span>
+                                Customer &amp; Scheme Information
+                            </h3>
+<div class="grid grid-cols-2 gap-y-4 gap-x-8">
+<div>
+<p class="text-[10px] uppercase font-bold text-gray-400">Customer Name</p>
+<p class="font-semibold text-lg text-navy dark:text-white">Rajesh Kumar</p>
+<p class="text-xs text-gray-500">+91 98765 43210</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-gray-400">Scheme ID</p>
+<div class="flex items-center gap-2">
+<p class="font-semibold text-lg text-primary">GSS-88291</p>
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded border border-primary/30 uppercase">Matured</span>
+</div>
+</div>
+<div class="col-span-2 h-[1px] bg-gray-100 dark:bg-navy"></div>
+<div>
+<p class="text-[10px] uppercase font-bold text-gray-400">Tenure Status</p>
+<p class="font-semibold text-navy dark:text-gray-200">11 Months (Completed)</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-gray-400">Maturity Date</p>
+<p class="font-semibold text-navy dark:text-gray-200">Oct 24, 2023</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<div class="bg-white dark:bg-navy-light rounded-xl border-t-4 border-primary p-6 shadow-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+<h3 class="font-bold mb-6 text-xl text-navy dark:text-white">Redemption Calculator</h3>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Invoice Gold Weight</span>
+<span class="font-bold">47.500 g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Scheme Gold Available</span>
+<span class="font-bold text-secondary">- 45.500 g</span>
+</div>
+<div class="h-px bg-gray-100 dark:bg-navy"></div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-navy dark:text-gray-200 font-bold">Gold Used from Scheme</span>
+<span class="px-3 py-1 bg-navy dark:bg-primary text-white dark:text-navy text-xs font-black rounded-full">45.500 g</span>
+</div>
+</div>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Invoice Value</span>
+<span class="font-bold">₹3,45,280</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Scheme Credit Value</span>
+<span class="font-bold">₹3,29,875</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Waiver / Discount</span>
+<span class="font-bold text-primary">₹2,500</span>
+</div>
+</div>
+<div class="bg-navy dark:bg-navy p-4 rounded-lg border border-primary/40 mb-8 shadow-inner">
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs uppercase font-bold tracking-wider text-primary">Balance Payable</span>
+<span class="material-symbols-outlined text-sm text-primary">info</span>
+</div>
+<p class="text-4xl font-black text-white tracking-tight">₹12,905</p>
+<p class="text-[10px] text-gray-400 mt-2 uppercase tracking-tight">All taxes &amp; making charges adjusted.</p>
+</div>
+<div class="space-y-3">
+<button class="w-full bg-primary hover:bg-secondary text-navy font-black py-4 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all uppercase tracking-wide">
+<span class="material-symbols-outlined">verified</span>
+                                    FINALIZE REDEMPTION
+                                </button>
+<button class="w-full bg-gray-100 dark:bg-navy text-navy dark:text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 text-sm transition-all hover:bg-gray-200 dark:hover:bg-navy-light">
+<span class="material-symbols-outlined text-lg">print</span>
+                                    PRINT SUMMARY
+                                </button>
+</div>
+</div>
+<div class="bg-white dark:bg-navy-light p-4 rounded-xl border border-gray-200 dark:border-navy-light">
+<p class="text-xs font-bold uppercase text-gray-400 mb-2">Redemption Notes</p>
+<textarea class="w-full bg-gray-50 dark:bg-navy border-none focus:ring-1 focus:ring-primary rounded text-sm p-3 text-navy dark:text-gray-200 placeholder:text-gray-400 min-h-[80px] resize-none" placeholder="Add any special adjustment notes here..."></textarea>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 dark:bg-primary/5 border border-primary/20 rounded-xl p-5 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">info_i</span>
+<div>
+<p class="text-sm font-bold text-navy dark:text-primary uppercase tracking-wide">Excess Adjustment Policy</p>
+<p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">Remaining gold weight after this redemption will be automatically carried forward to a 'Legacy' account or settled via store credit. Partial refunds are subject to current market rate deduction as per JEMS Terms &amp; Conditions.</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="border-t border-gray-200 dark:border-navy-light bg-white dark:bg-navy-light px-10 py-5 flex justify-between items-center text-[10px] text-gray-400 uppercase font-bold tracking-widest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">diamond</span>
+                JEMS PROFESSIONAL ERP v4.2.0
+            </div>
+<div class="flex gap-8">
+<a class="hover:text-primary transition-colors" href="#">System Logs</a>
+<a class="hover:text-primary transition-colors" href="#">Compliance</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+</div>
+<div>STATION: MUM-POS-07</div>
+</footer>
+</div>
+</div>
+
+</body></html>

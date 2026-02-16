@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Details - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="product-detail" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+      <div class="p-8">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-2 mb-8 text-sm text-text-light/70 dark:text-text-dark/70">
+          <a class="hover:text-primary transition-colors" href="products.html">Catalogue</a>
+          <span class="material-icons text-base">chevron_right</span>
+          <a class="hover:text-primary transition-colors" href="products.html">Products</a>
+          <span class="material-icons text-base">chevron_right</span>
+          <span class="font-semibold text-text-light dark:text-text-dark" id="product-name-breadcrumb">Product Details</span>
+        </div>
+
+        <!-- Product Details Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- Product Images -->
+          <div class="flex flex-col gap-6">
+            <!-- Main Image -->
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl border border-border-light/30 dark:border-border-dark/50 bg-card-light dark:bg-card-dark" id="main-product-image">
+              <!-- Main image will be set dynamically -->
+            </div>
+            
+            <!-- Thumbnail Images -->
+            <div class="grid grid-cols-5 gap-4" id="thumbnail-images">
+              <!-- Thumbnails will be dynamically generated -->
+            </div>
+          </div>
+
+          <!-- Product Information -->
+          <div class="flex flex-col gap-8">
+            <!-- Title and Description -->
+            <div>
+              <h1 class="text-text-light dark:text-text-dark text-4xl lg:text-5xl font-black leading-tight tracking-[-0.033em]" id="product-title">Product Name</h1>
+              <p class="text-text-light/70 dark:text-text-dark/70 text-base font-normal leading-normal mt-2" id="product-description">Product description will appear here.</p>
+            </div>
+
+            <!-- Tags -->
+            <div class="flex gap-2" id="product-tags">
+              <!-- Tags will be dynamically generated -->
+            </div>
+
+            <!-- Specifications -->
+            <div class="border-t border-border-light/30 dark:border-border-dark/50 pt-6">
+              <h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-normal mb-4">Specifications</h2>
+              <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-text-light dark:text-text-dark" id="product-specs">
+                <!-- Specifications will be dynamically generated -->
+              </div>
+            </div>
+
+            <!-- Inventory & Pricing -->
+            <div class="border-t border-border-light/30 dark:border-border-dark/50 pt-6">
+              <h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-normal mb-4">Inventory & Pricing</h2>
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="material-icons text-green-600 dark:text-green-400">check_circle</span>
+                  <p class="text-text-light dark:text-text-dark font-semibold" id="stock-status">In Stock</p>
+                </div>
+                <p class="text-text-light/70 dark:text-text-dark/70" id="stock-quantity">(5 units available)</p>
+              </div>
+              <p class="text-3xl font-bold text-primary" id="product-price">$0.00</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4 mt-4">
+              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] flex-1 hover:opacity-90 transition-opacity" id="add-to-order-btn">
+                <span class="truncate">Add to Order</span>
+              </button>
+              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 border border-primary text-primary text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/10 transition-colors duration-200">
+                <span class="truncate">Edit Design</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Sample product data - in real app, this would come from URL params or API
+    const products = {
+      1: {
+        id: 1,
+        name: "Elegant Diamond Solitaire Ring",
+        description: "A timeless piece featuring a brilliant-cut diamond, perfect for engagements or special occasions. Its classic design highlights the stone's fire and brilliance.",
+        image: "https://images.unsplash.com/photo-1621438872240-d30f55aaa59c?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRpYW1vbmQlMjByaW5nfGVufDB8fDB8fHww",
+        images: [
+          "https://images.unsplash.com/photo-1621438872240-d30f55aaa59c?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRpYW1vbmQlMjByaW5nfGVufDB8fDB8fHww",
+          "https://plus.unsplash.com/premium_photo-1670537037688-94a5428256b7?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZGlhbW9uZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1589674668791-4889d2bba4c6?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGlhbW9uZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1613945407943-59cd755fd69e?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZGlhbW9uZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1518370265276-f22b706aeac8?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGRpYW1vbmQlMjByaW5nfGVufDB8fDB8fHww"
+        ],
+        type: "rings",
+        goldType: "White Gold",
+        purity: "22 CT",
+        goldWeight: "5.2g",
+        stone: "Diamond",
+        stoneWeight: "0.50ct",
+        price: 2500,
+        productId: "R-10234",
+        diamondClarity: "VVS1",
+        diamondColor: "G",
+        ringSize: "6 (US)",
+        stock: 5
+      },
+      2: {
+        id: 2,
+        name: "Classic Gold Bangle",
+        description: "A classic and versatile gold bangle that complements any outfit. Crafted with precision and attention to detail.",
+        image: "https://images.unsplash.com/photo-1679156271456-d6068c543ee7?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8R29sZCUyMEJhbmdsZXxlbnwwfHwwfHx8MA%3D%3D",
+        images: [
+          "https://images.unsplash.com/photo-1679156271456-d6068c543ee7?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8R29sZCUyMEJhbmdsZXxlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1740567177735-b3a751eb3891?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8R29sZCUyMEJhbmdsZXxlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1741071520904-37ef3c0fea09?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fEdvbGQlMjBCYW5nbGV8ZW58MHx8MHx8fDA%3D",
+          "https://plus.unsplash.com/premium_photo-1740158248951-abc2f34ad4be?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fEdvbGQlMjBCYW5nbGV8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1586878341574-72183eb184d0?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fEdvbGQlMjBCYW5nbGV8ZW58MHx8MHx8fDA%3D"
+        ],
+        type: "bracelets",
+        goldType: "Yellow Gold",
+        purity: "916",
+        goldWeight: "10g",
+        stone: "N/A",
+        stoneWeight: "N/A",
+        price: 800,
+        productId: "B-20456",
+        stock: 3
+      },
+      3: {
+        id: 3,
+        name: "Sapphire Drop Earrings",
+        description: "Stunning sapphire earrings perfect for any occasion. The elegant drop design adds sophistication to your look.",
+        image: "https://images.unsplash.com/photo-1723802205505-2f88b2227718?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZWFyaW5nc3xlbnwwfHwwfHx8MA%3D%3D",
+        images: [
+          "https://images.unsplash.com/photo-1723802205505-2f88b2227718?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZWFyaW5nc3xlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1652766540048-de0a878a3266?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZWFyaW5nc3xlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGVhcmluZ3N8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1621939745912-aad97fd3a34d?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZWFyaW5nc3xlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZWFycmluZ3N8ZW58MHx8MHx8fDA%3D"
+        ],
+        type: "earrings",
+        goldType: "White Gold",
+        purity: "18 CT",
+        goldWeight: "3.5g",
+        stone: "Sapphire",
+        stoneWeight: "1.20ct",
+        price: 3200,
+        productId: "E-30567",
+        stock: 8
+      },
+      4: {
+        id: 4,
+        name: "Pearl Strand Necklace",
+        description: "An elegant pearl necklace for a classic look. Perfect for formal occasions and timeless elegance.",
+        image: "https://plus.unsplash.com/premium_photo-1681276170092-446cd1b5b32d?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8TmVja2xhY2V8ZW58MHx8MHx8fDA%3D",
+        images: [
+          "https://plus.unsplash.com/premium_photo-1681276170092-446cd1b5b32d?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8TmVja2xhY2V8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1610694955371-d4a3e0ce4b52?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8TmVja2xhY2V8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1685970731194-e27b477e87ba?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fE5lY2tsYWNlfGVufDB8fDB8fHww",
+          "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fE5lY2tsYWNlfGVufDB8fDB8fHww",
+          "https://images.unsplash.com/photo-1601821765780-754fa98637c1?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fE5lY2tsYWNlfGVufDB8fDB8fHww"
+        ],
+        type: "necklaces",
+        goldType: "Rose Gold",
+        purity: "22 CT",
+        goldWeight: "7g",
+        stone: "Pearl",
+        stoneWeight: "Various",
+        price: 1500,
+        productId: "N-40890",
+        stock: 12
+      },
+      5: {
+        id: 5,
+        name: "Emerald Cut Ring",
+        description: "A breathtaking emerald cut diamond ring. The geometric elegance of the emerald cut showcases the diamond's clarity and brilliance.",
+        image: "https://images.unsplash.com/photo-1677466891119-2baa2f2ba447?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8RW1hcmFsZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+        images: [
+          "https://images.unsplash.com/photo-1677466891119-2baa2f2ba447?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8RW1hcmFsZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1691439262095-d55b96c6e9df?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8RW1hcmFsZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+          "https://images.unsplash.com/photo-1670954951598-897120f83f10?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fEVtYXJhbGQlMjByaW5nfGVufDB8fDB8fHww",
+          "https://images.unsplash.com/photo-1697860122650-23d748af804c?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fEVtYXJhbGQlMjByaW5nfGVufDB8fDB8fHww",
+          "https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHJpbmd8ZW58MHx8MHx8fDA%3D"
+        ],
+        type: "rings",
+        goldType: "White Gold",
+        purity: "18 CT",
+        goldWeight: "6g",
+        stone: "Diamond",
+        stoneWeight: "2.00ct",
+        price: 7500,
+        productId: "R-51234",
+        diamondClarity: "VS1",
+        diamondColor: "F",
+        ringSize: "7 (US)",
+        stock: 2
+      },
+      6: {
+        id: 6,
+        name: "Men's Gold Chain",
+        description: "A stylish gold chain for men. Bold and masculine design that makes a statement.",
+        image: "https://plus.unsplash.com/premium_photo-1709033404514-c3953af680b4?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z29sZCUyMGNoYWlufGVufDB8fDB8fHww",
+        images: [
+          "https://plus.unsplash.com/premium_photo-1709033404514-c3953af680b4?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z29sZCUyMGNoYWlufGVufDB8fDB8fHww",
+          "https://images.unsplash.com/photo-1629360462215-c8ee87077c10?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdvbGQlMjBjaGFpbnxlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1659708701940-e60893ef03d0?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGdvbGQlMjBjaGFpbnxlbnwwfHwwfHx8MA%3D%3D"
+        ],
+        type: "necklaces",
+        goldType: "Yellow Gold",
+        purity: "916",
+        goldWeight: "20g",
+        stone: "N/A",
+        stoneWeight: "N/A",
+        price: 1600,
+        productId: "N-61567",
+        stock: 7
+      }
+    };
+
+    // Get product ID from URL
+    function getProductIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return parseInt(urlParams.get('id')) || 1;
+    }
+
+    // Load product data
+    function loadProduct() {
+      const productId = getProductIdFromUrl();
+      const product = products[productId] || products[1];
+
+      // Update breadcrumb
+      document.getElementById('product-name-breadcrumb').textContent = product.name;
+
+      // Update title
+      document.getElementById('product-title').textContent = product.name;
+      document.getElementById('product-description').textContent = product.description;
+
+      // Update tags
+      const tagsContainer = document.getElementById('product-tags');
+      tagsContainer.innerHTML = `
+        <span class="text-xs font-semibold px-3 py-1.5 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">${product.goldType}</span>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">${product.purity}</span>
+      `;
+
+      // Update main image
+      const mainImage = document.getElementById('main-product-image');
+      mainImage.style.backgroundImage = `url("${product.image}")`;
+
+      // Update thumbnails
+      const thumbnailsContainer = document.getElementById('thumbnail-images');
+      thumbnailsContainer.innerHTML = '';
+      product.images.forEach((img, index) => {
+        const thumbnail = document.createElement('div');
+        thumbnail.className = `w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg border ${index === 0 ? 'border-2 border-primary' : 'border-border-light/30 dark:border-border-dark/50 opacity-70 hover:opacity-100 hover:border-primary'} transition-all duration-200 cursor-pointer`;
+        thumbnail.style.backgroundImage = `url("${img}")`;
+        thumbnail.addEventListener('click', function() {
+          // Update main image
+          mainImage.style.backgroundImage = `url("${img}")`;
+          // Update active thumbnail
+          thumbnailsContainer.querySelectorAll('div').forEach((t, i) => {
+            if (i === index) {
+              t.classList.add('border-2', 'border-primary', 'opacity-100');
+              t.classList.remove('border-border-light/30', 'dark:border-border-dark/50', 'opacity-70');
+            } else {
+              t.classList.remove('border-2', 'border-primary', 'opacity-100');
+              t.classList.add('border-border-light/30', 'dark:border-border-dark/50', 'opacity-70');
+            }
+          });
+        });
+        thumbnailsContainer.appendChild(thumbnail);
+      });
+
+      // Update specifications
+      const specsContainer = document.getElementById('product-specs');
+      let specsHtml = `
+        <p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">Product ID:</span> ${product.productId}</p>
+        <p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">Gold Weight:</span> ${product.goldWeight}</p>
+      `;
+      
+      if (product.stone !== 'N/A') {
+        specsHtml += `
+          <p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">${product.stone} Weight:</span> ${product.stoneWeight}</p>
+        `;
+        if (product.diamondClarity) {
+          specsHtml += `
+            <p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">Diamond Clarity:</span> ${product.diamondClarity}</p>
+            <p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">Diamond Color:</span> ${product.diamondColor}</p>
+          `;
+        }
+      } else {
+        specsHtml += `<p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">Stone:</span> N/A</p>`;
+      }
+      
+      if (product.ringSize) {
+        specsHtml += `<p><span class="font-semibold text-text-light/70 dark:text-text-dark/70">Ring Size:</span> ${product.ringSize}</p>`;
+      }
+      
+      specsContainer.innerHTML = specsHtml;
+
+      // Update inventory and pricing
+      document.getElementById('stock-status').textContent = product.stock > 0 ? 'In Stock' : 'Out of Stock';
+      document.getElementById('stock-quantity').textContent = `(${product.stock} units available)`;
+      document.getElementById('product-price').textContent = `$${product.price.toLocaleString()}.00`;
+    }
+
+    // Add to Order button handler
+    document.getElementById('add-to-order-btn').addEventListener('click', function() {
+      const productId = getProductIdFromUrl();
+      const product = products[productId] || products[1];
+      alert(`Added "${product.name}" to order!`);
+      // In real app, this would add to cart/order
+    });
+
+    // Initialize
+    loadProduct();
+  </script>
+</body>
+</html>

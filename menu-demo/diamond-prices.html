@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diamond Prices - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="diamond-prices" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Diamond Price Update</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Select an item, view its current price, and update. Add more rows as needed.</p>
+      </header>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-primary">Diamond Prices</h2>
+          <button id="add-row-btn" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+            <span class="material-icons text-base">add_circle_outline</span>
+            <span>Add Row</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3">Item</th>
+                <th class="px-6 py-3">Current Price</th>
+                <th class="px-6 py-3">New Price</th>
+                <th class="px-6 py-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="price-rows-body"></tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400 hidden">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No rows. Click “Add Row” to begin.</p>
+          </div>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button id="update-all-btn" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">Submit All Updates</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    const demoData = [
+      { id: 'dia-1', code: 'DIA-RND-0.5', name: 'Round 0.50ct G VS1', current_price: 50000 },
+      { id: 'dia-2', code: 'DIA-PRN-1.0', name: 'Princess 1.00ct F VVS1', current_price: 120000 }
+    ];
+
+    let stored = localStorage.getItem('diamondPrices');
+    let prices = stored ? JSON.parse(stored) : demoData;
+    if (!stored) localStorage.setItem('diamondPrices', JSON.stringify(demoData));
+
+    const priceRowsBody = document.getElementById('price-rows-body');
+    const emptyState = document.getElementById('empty-state');
+    const addRowBtn = document.getElementById('add-row-btn');
+
+    let rows = [
+      { rowId: generateUUID(), selectedId: '', newPrice: '' }
+    ];
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function formatCurrency(val) {
+      if (val === null || val === undefined || val === '') return '-';
+      return Number(val).toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2 });
+    }
+
+    function renderRows() {
+      if (rows.length === 0) {
+        priceRowsBody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      const options = prices.map(p => `<option value="${p.id}">${p.code} - ${p.name}</option>`).join('');
+
+      priceRowsBody.innerHTML = rows.map(r => {
+        const price = prices.find(p => p.id === r.selectedId);
+        return `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4">
+            <select data-row="${r.rowId}" class="item-select w-full px-3 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">Select item</option>
+              ${options}
+            </select>
+          </td>
+          <td class="px-6 py-4 text-sm">${price ? formatCurrency(price.current_price) : '-'}</td>
+          <td class="px-6 py-4">
+            <input type="number" data-row="${r.rowId}" class="new-price-input w-full px-3 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" step="0.01" min="0" value="${r.newPrice ?? ''}" placeholder="Enter new price">
+          </td>
+          <td class="px-6 py-4 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button class="update-btn text-primary hover:underline" data-row="${r.rowId}">
+                <span class="material-icons text-base">save</span>
+              </button>
+              <button class="delete-row-btn text-red-500 hover:underline" data-row="${r.rowId}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        `;
+      }).join('');
+
+      // set selects to current values
+      rows.forEach(r => {
+        const sel = document.querySelector(`.item-select[data-row="${r.rowId}"]`);
+        if (sel) sel.value = r.selectedId || '';
+      });
+
+      attachRowHandlers();
+    }
+
+    function attachRowHandlers() {
+      document.querySelectorAll('.item-select').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const rowId = sel.getAttribute('data-row');
+          const row = rows.find(r => r.rowId === rowId);
+          if (row) {
+            row.selectedId = sel.value;
+            renderRows();
+          }
+        });
+      });
+
+      document.querySelectorAll('.new-price-input').forEach(input => {
+        input.addEventListener('input', () => {
+          const rowId = input.getAttribute('data-row');
+          const row = rows.find(r => r.rowId === rowId);
+          if (row) row.newPrice = input.value;
+        });
+      });
+
+      document.querySelectorAll('.update-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const rowId = btn.getAttribute('data-row');
+          const row = rows.find(r => r.rowId === rowId);
+          if (!row || !row.selectedId) {
+            alert('Select an item first.');
+            return;
+          }
+          if (row.newPrice === null || row.newPrice === '') {
+            alert('Enter a new price.');
+            return;
+          }
+          const price = prices.find(p => p.id === row.selectedId);
+          if (price) {
+            price.current_price = parseFloat(row.newPrice);
+            row.newPrice = '';
+            savePrices();
+            renderRows();
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-row-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const rowId = btn.getAttribute('data-row');
+          rows = rows.filter(r => r.rowId !== rowId);
+          if (rows.length === 0) {
+            rows.push({ rowId: generateUUID(), selectedId: '', newPrice: '' });
+          }
+          renderRows();
+        });
+      });
+    }
+
+    function savePrices() {
+      localStorage.setItem('diamondPrices', JSON.stringify(prices));
+    }
+
+    addRowBtn.addEventListener('click', () => {
+      rows.push({ rowId: generateUUID(), selectedId: '', newPrice: '' });
+      renderRows();
+    });
+
+    document.getElementById('update-all-btn').addEventListener('click', () => {
+      let updated = 0;
+      rows.forEach(r => {
+        if (r.selectedId && r.newPrice !== null && r.newPrice !== '') {
+          const price = prices.find(p => p.id === r.selectedId);
+          if (price) {
+            price.current_price = parseFloat(r.newPrice);
+            r.newPrice = '';
+            updated++;
+          }
+        }
+      });
+      if (updated === 0) {
+        alert('No rows with new prices to update.');
+        return;
+      }
+      savePrices();
+      renderRows();
+      alert('Updated prices for ' + updated + ' item(s).');
+    });
+
+    renderRows();
+  </script>
+</body>
+</html>
+

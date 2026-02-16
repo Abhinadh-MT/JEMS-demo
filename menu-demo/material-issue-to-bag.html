@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Material Issue to Bag - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="material-issue-to-bag" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Material Issue to Bag</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Put stock into a bag</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="workflow-status" class="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg text-sm font-medium">
+              Issue
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Bag Selection -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4">Select Bag</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="bag-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Bag <span class="text-red-500">*</span>
+            </label>
+            <select id="bag-select" required
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">Select a bag</option>
+            </select>
+          </div>
+          <div id="bag-info" class="hidden">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Bag Information
+            </label>
+            <div class="px-4 py-2 bg-background-light dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark">
+              <div class="text-sm">
+                <div><span class="font-medium">Status:</span> <span id="bag-status"></span></div>
+                <div><span class="font-medium">Department:</span> <span id="bag-department"></span></div>
+                <div><span class="font-medium">Reference:</span> <span id="bag-reference"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Items Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Add Items</h2>
+          <button type="button" id="add-item-btn" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm">
+            <span class="material-icons text-base">add</span>
+            <span>Add Item</span>
+          </button>
+        </div>
+
+        <!-- Items Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-4 py-3" scope="col">Item Type</th>
+                <th class="px-4 py-3" scope="col">Item</th>
+                <th class="px-4 py-3" scope="col">Lot No</th>
+                <th class="px-4 py-3" scope="col">Available Weight</th>
+                <th class="px-4 py-3" scope="col">Available Pieces</th>
+                <th class="px-4 py-3" scope="col">Required Weight</th>
+                <th class="px-4 py-3" scope="col">Required Pieces</th>
+                <th class="px-4 py-3" scope="col">Status</th>
+                <th class="px-4 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="items-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-items-state" class="text-center py-8 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inventory_2</span>
+            <p>No items added yet. Click "Add Item" to add materials to the bag.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4">Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Items</div>
+            <div id="total-items" class="text-2xl font-bold text-primary">0</div>
+          </div>
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Weight (g)</div>
+            <div id="total-weight" class="text-2xl font-bold text-primary">0.000</div>
+          </div>
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Pieces</div>
+            <div id="total-pieces" class="text-2xl font-bold text-primary">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workflow Actions -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-semibold mb-2">Workflow</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Issue → Verify → Approve</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button type="button" id="verify-btn" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:opacity-90 transition-opacity hidden">
+              Verify
+            </button>
+            <button type="button" id="approve-btn" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:opacity-90 transition-opacity hidden">
+              Approve
+            </button>
+            <button type="button" id="issue-btn" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Issue
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let issueItems = [];
+    let selectedBag = null;
+    let workflowStatus = 'ISSUE'; // ISSUE, VERIFY, APPROVE
+    let allBags = [];
+    let allLots = [];
+    let allDiamonds = [];
+    let allStones = [];
+    let allRawMaterials = [];
+    let allAlloys = [];
+    let allRecipes = [];
+
+    // Load all data
+    function loadAllData() {
+      allBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      allLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      allDiamonds = JSON.parse(localStorage.getItem('diamondMaster') || '[]');
+      allStones = JSON.parse(localStorage.getItem('stoneMaster') || '[]');
+      allRawMaterials = JSON.parse(localStorage.getItem('rawMaterials') || '[]');
+      allAlloys = JSON.parse(localStorage.getItem('alloyCreations') || '[]');
+      allRecipes = JSON.parse(localStorage.getItem('jems-alloy-recipes') || '[]');
+      
+      populateBagSelect();
+    }
+
+    // Populate bag select
+    function populateBagSelect() {
+      const bagSelect = document.getElementById('bag-select');
+      bagSelect.innerHTML = '<option value="">Select a bag</option>';
+      
+      allBags.forEach(bag => {
+        const option = document.createElement('option');
+        option.value = bag.bag_id;
+        option.textContent = `${bag.bag_no} - ${bag.status}`;
+        bagSelect.appendChild(option);
+      });
+    }
+
+    // Bag selection handler
+    document.getElementById('bag-select').addEventListener('change', function() {
+      const bagId = this.value;
+      if (bagId) {
+        selectedBag = allBags.find(b => b.bag_id === bagId);
+        if (selectedBag) {
+          document.getElementById('bag-info').classList.remove('hidden');
+          document.getElementById('bag-status').textContent = selectedBag.status || '-';
+          document.getElementById('bag-department').textContent = selectedBag.current_department || '-';
+          document.getElementById('bag-reference').textContent = 
+            `${selectedBag.reference_type || '-'} - ${selectedBag.reference_id || '-'}`;
+        }
+      } else {
+        document.getElementById('bag-info').classList.add('hidden');
+        selectedBag = null;
+      }
+    });
+
+    // Add item row
+    function addItemRow() {
+      if (!selectedBag) {
+        alert('Please select a bag first');
+        return;
+      }
+
+      const item = {
+        id: Date.now(),
+        item_type: '',
+        item_id: '',
+        lot_id: '',
+        lot_no: '',
+        available_weight: 0,
+        available_pieces: 0,
+        required_weight: 0,
+        required_pieces: 0,
+        status: 'PENDING'
+      };
+      
+      issueItems.push(item);
+      renderItemsTable();
+    }
+
+    // Render items table
+    function renderItemsTable() {
+      const tbody = document.getElementById('items-table-body');
+      const emptyState = document.getElementById('empty-items-state');
+      
+      if (issueItems.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        updateSummary();
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = '';
+
+      issueItems.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark';
+        
+        // Item Type Select
+        const itemTypeSelect = document.createElement('select');
+        itemTypeSelect.className = 'w-full px-2 py-1 border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark text-sm';
+        itemTypeSelect.value = item.item_type;
+        itemTypeSelect.innerHTML = `
+          <option value="">Select Type</option>
+          <option value="METAL">Metal</option>
+          <option value="ALLOY">Alloy</option>
+          <option value="DIAMOND">Diamond</option>
+          <option value="STONE">Stone</option>
+        `;
+        itemTypeSelect.addEventListener('change', function() {
+          item.item_type = this.value;
+          item.item_id = '';
+          item.lot_id = '';
+          item.lot_no = '';
+          item.available_weight = 0;
+          item.available_pieces = 0;
+          updateItemRow(tr, item, index);
+        });
+
+        // Item Select
+        const itemSelect = document.createElement('select');
+        itemSelect.className = 'w-full px-2 py-1 border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark text-sm';
+        itemSelect.disabled = !item.item_type;
+        itemSelect.addEventListener('change', function() {
+          item.item_id = this.value;
+          item.lot_id = '';
+          item.lot_no = '';
+          item.available_weight = 0;
+          item.available_pieces = 0;
+          updateItemRow(tr, item, index);
+        });
+
+        // Lot Select
+        const lotSelect = document.createElement('select');
+        lotSelect.className = 'w-full px-2 py-1 border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark text-sm';
+        lotSelect.disabled = !item.item_id;
+        lotSelect.addEventListener('change', function() {
+          const selectedLot = allLots.find(l => l.lot_id === this.value);
+          if (selectedLot) {
+            item.lot_id = selectedLot.lot_id;
+            item.lot_no = selectedLot.lot_no || '';
+            item.available_weight = parseFloat(selectedLot.current_weight) || 0;
+            item.available_pieces = parseInt(selectedLot.current_pieces) || 0;
+            updateItemRow(tr, item, index);
+          }
+        });
+
+        // Required Weight Input
+        const weightInput = document.createElement('input');
+        weightInput.type = 'number';
+        weightInput.step = '0.001';
+        weightInput.min = '0';
+        weightInput.className = 'w-full px-2 py-1 border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark text-sm';
+        weightInput.value = item.required_weight || '';
+        weightInput.addEventListener('input', function() {
+          item.required_weight = parseFloat(this.value) || 0;
+          validateItem(item, index);
+          updateItemRow(tr, item, index);
+          updateSummary();
+        });
+
+        // Required Pieces Input
+        const piecesInput = document.createElement('input');
+        piecesInput.type = 'number';
+        piecesInput.min = '0';
+        piecesInput.className = 'w-full px-2 py-1 border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark text-sm';
+        piecesInput.value = item.required_pieces || '';
+        piecesInput.addEventListener('input', function() {
+          item.required_pieces = parseInt(this.value) || 0;
+          validateItem(item, index);
+          updateItemRow(tr, item, index);
+          updateSummary();
+        });
+
+        tr.innerHTML = `
+          <td class="px-4 py-3"></td>
+          <td class="px-4 py-3"></td>
+          <td class="px-4 py-3"></td>
+          <td class="px-4 py-3 text-right">-</td>
+          <td class="px-4 py-3 text-right">-</td>
+          <td class="px-4 py-3"></td>
+          <td class="px-4 py-3"></td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-1 text-xs rounded font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">Pending</span>
+          </td>
+          <td class="px-4 py-3 text-center">
+            <button type="button" class="delete-item-btn text-red-600 dark:text-red-400 hover:opacity-80" data-index="${index}">
+              <span class="material-icons text-base">delete</span>
+            </button>
+          </td>
+        `;
+
+        tr.querySelector('td:first-child').appendChild(itemTypeSelect);
+        tr.querySelector('td:nth-child(2)').appendChild(itemSelect);
+        tr.querySelector('td:nth-child(3)').appendChild(lotSelect);
+        tr.querySelector('td:nth-child(6)').appendChild(weightInput);
+        tr.querySelector('td:nth-child(7)').appendChild(piecesInput);
+
+        tbody.appendChild(tr);
+        updateItemRow(tr, item, index);
+      });
+
+      // Delete button handlers
+      document.querySelectorAll('.delete-item-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const index = parseInt(this.dataset.index);
+          issueItems.splice(index, 1);
+          renderItemsTable();
+        });
+      });
+
+      updateSummary();
+    }
+
+    // Update item row
+    function updateItemRow(tr, item, index) {
+      // Populate item select based on type
+      const itemSelect = tr.querySelector('td:nth-child(2) select');
+      itemSelect.innerHTML = '<option value="">Select Item</option>';
+      itemSelect.disabled = !item.item_type;
+
+      if (item.item_type === 'METAL') {
+        allRawMaterials.filter(m => m.is_active !== false).forEach(material => {
+          const option = document.createElement('option');
+          option.value = material.material_id;
+          option.textContent = material.name || material.code;
+          if (item.item_id === material.material_id) option.selected = true;
+          itemSelect.appendChild(option);
+        });
+      } else if (item.item_type === 'ALLOY') {
+        allRecipes.forEach(recipe => {
+          const option = document.createElement('option');
+          option.value = recipe.id || recipe.recipeCode;
+          option.textContent = recipe.recipeName || recipe.recipeCode;
+          if (item.item_id === (recipe.id || recipe.recipeCode)) option.selected = true;
+          itemSelect.appendChild(option);
+        });
+      } else if (item.item_type === 'DIAMOND') {
+        allDiamonds.forEach(diamond => {
+          const option = document.createElement('option');
+          option.value = diamond.diamond_master_id || diamond.diamondMasterID;
+          option.textContent = diamond.diamond_code || diamond.diamond_master_id || 'Diamond';
+          if (item.item_id === (diamond.diamond_master_id || diamond.diamondMasterID)) option.selected = true;
+          itemSelect.appendChild(option);
+        });
+      } else if (item.item_type === 'STONE') {
+        allStones.forEach(stone => {
+          const option = document.createElement('option');
+          option.value = stone.stone_master_id || stone.stoneMasterID;
+          option.textContent = stone.stone_code || stone.stone_master_id || 'Stone';
+          if (item.item_id === (stone.stone_master_id || stone.stoneMasterID)) option.selected = true;
+          itemSelect.appendChild(option);
+        });
+      }
+
+      // Populate lot select based on item
+      const lotSelect = tr.querySelector('td:nth-child(3) select');
+      lotSelect.innerHTML = '<option value="">Select Lot</option>';
+      lotSelect.disabled = !item.item_id;
+
+      if (item.item_id) {
+        let filteredLots = [];
+        if (item.item_type === 'METAL') {
+          filteredLots = allLots.filter(l => l.raw_material_id === item.item_id && l.item_type === 'METAL');
+        } else if (item.item_type === 'ALLOY') {
+          filteredLots = allLots.filter(l => l.item_type === 'ALLOY');
+        } else if (item.item_type === 'DIAMOND') {
+          filteredLots = allLots.filter(l => l.diamond_master_id === item.item_id && l.item_type === 'DIAMOND');
+        } else if (item.item_type === 'STONE') {
+          filteredLots = allLots.filter(l => l.stone_master_id === item.item_id && l.item_type === 'STONE');
+        }
+
+        filteredLots.forEach(lot => {
+          const option = document.createElement('option');
+          option.value = lot.lot_id;
+          option.textContent = lot.lot_no || lot.lot_id;
+          if (item.lot_id === lot.lot_id) option.selected = true;
+          lotSelect.appendChild(option);
+        });
+      }
+
+      // Update available weight and pieces
+      const availableWeightCell = tr.querySelector('td:nth-child(4)');
+      const availablePiecesCell = tr.querySelector('td:nth-child(5)');
+      availableWeightCell.textContent = item.available_weight > 0 ? item.available_weight.toFixed(3) : '-';
+      availablePiecesCell.textContent = item.available_pieces > 0 ? item.available_pieces : '-';
+
+      // Update status
+      const statusCell = tr.querySelector('td:nth-child(8)');
+      if (item.status === 'VALID') {
+        statusCell.innerHTML = '<span class="px-2 py-1 text-xs rounded font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Valid</span>';
+      } else if (item.status === 'INVALID') {
+        statusCell.innerHTML = '<span class="px-2 py-1 text-xs rounded font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">Invalid</span>';
+      } else {
+        statusCell.innerHTML = '<span class="px-2 py-1 text-xs rounded font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">Pending</span>';
+      }
+    }
+
+    // Validate item
+    function validateItem(item, index) {
+      if (item.required_weight > item.available_weight || item.required_pieces > item.available_pieces) {
+        item.status = 'INVALID';
+      } else if (item.required_weight > 0 || item.required_pieces > 0) {
+        item.status = 'VALID';
+      } else {
+        item.status = 'PENDING';
+      }
+    }
+
+    // Update summary
+    function updateSummary() {
+      const totalItems = issueItems.length;
+      const totalWeight = issueItems.reduce((sum, item) => sum + (item.required_weight || 0), 0);
+      const totalPieces = issueItems.reduce((sum, item) => sum + (item.required_pieces || 0), 0);
+
+      document.getElementById('total-items').textContent = totalItems;
+      document.getElementById('total-weight').textContent = totalWeight.toFixed(3);
+      document.getElementById('total-pieces').textContent = totalPieces;
+    }
+
+    // Workflow handlers
+    document.getElementById('add-item-btn').addEventListener('click', addItemRow);
+
+    document.getElementById('issue-btn').addEventListener('click', function() {
+      if (!selectedBag) {
+        alert('Please select a bag');
+        return;
+      }
+      if (issueItems.length === 0) {
+        alert('Please add at least one item');
+        return;
+      }
+      if (issueItems.some(item => item.status === 'INVALID')) {
+        alert('Please fix invalid items before issuing');
+        return;
+      }
+
+      // Save issue
+      const issue = {
+        issue_id: 'issue-' + Date.now(),
+        bag_id: selectedBag.bag_id,
+        bag_no: selectedBag.bag_no,
+        items: issueItems.map(item => ({
+          item_type: item.item_type,
+          item_id: item.item_id,
+          lot_id: item.lot_id,
+          lot_no: item.lot_no,
+          required_weight: item.required_weight,
+          required_pieces: item.required_pieces
+        })),
+        status: 'VERIFY',
+        created_at: new Date().toISOString()
+      };
+
+      let issues = JSON.parse(localStorage.getItem('bagIssues') || '[]');
+      issues.push(issue);
+      localStorage.setItem('bagIssues', JSON.stringify(issues));
+
+      workflowStatus = 'VERIFY';
+      updateWorkflowStatus();
+      alert('Materials issued successfully! Please verify.');
+    });
+
+    document.getElementById('verify-btn').addEventListener('click', function() {
+      workflowStatus = 'APPROVE';
+      updateWorkflowStatus();
+      alert('Verified! Ready for approval.');
+    });
+
+    document.getElementById('approve-btn').addEventListener('click', function() {
+      // Update bag with issued materials
+      if (selectedBag) {
+        const totalWeight = issueItems.reduce((sum, item) => sum + (item.required_weight || 0), 0);
+        const totalPieces = issueItems.reduce((sum, item) => sum + (item.required_pieces || 0), 0);
+
+        selectedBag.total_weight = (parseFloat(selectedBag.total_weight || 0) + totalWeight).toFixed(3);
+        selectedBag.total_pieces = (parseInt(selectedBag.total_pieces || 0) + totalPieces);
+        selectedBag.last_updated = new Date().toISOString();
+
+        const bags = JSON.parse(localStorage.getItem('bags') || '[]');
+        const bagIndex = bags.findIndex(b => b.bag_id === selectedBag.bag_id);
+        if (bagIndex !== -1) {
+          bags[bagIndex] = selectedBag;
+          localStorage.setItem('bags', JSON.stringify(bags));
+        }
+
+        // Update stock lots (reduce available quantities)
+        issueItems.forEach(item => {
+          const lot = allLots.find(l => l.lot_id === item.lot_id);
+          if (lot) {
+            lot.current_weight = (parseFloat(lot.current_weight) - item.required_weight).toFixed(3);
+            lot.current_pieces = parseInt(lot.current_pieces) - item.required_pieces;
+            lot.updated_at = new Date().toISOString();
+          }
+        });
+        localStorage.setItem('stockLots', JSON.stringify(allLots));
+
+        alert('Materials approved and added to bag successfully!');
+        window.location.href = 'bag-management.html';
+      }
+    });
+
+    // Update workflow status
+    function updateWorkflowStatus() {
+      const statusElement = document.getElementById('workflow-status');
+      const issueBtn = document.getElementById('issue-btn');
+      const verifyBtn = document.getElementById('verify-btn');
+      const approveBtn = document.getElementById('approve-btn');
+
+      if (workflowStatus === 'ISSUE') {
+        statusElement.textContent = 'Issue';
+        statusElement.className = 'px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg text-sm font-medium';
+        issueBtn.classList.remove('hidden');
+        verifyBtn.classList.add('hidden');
+        approveBtn.classList.add('hidden');
+      } else if (workflowStatus === 'VERIFY') {
+        statusElement.textContent = 'Verify';
+        statusElement.className = 'px-4 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-lg text-sm font-medium';
+        issueBtn.classList.add('hidden');
+        verifyBtn.classList.remove('hidden');
+        approveBtn.classList.add('hidden');
+      } else if (workflowStatus === 'APPROVE') {
+        statusElement.textContent = 'Approve';
+        statusElement.className = 'px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm font-medium';
+        issueBtn.classList.add('hidden');
+        verifyBtn.classList.add('hidden');
+        approveBtn.classList.remove('hidden');
+      }
+    }
+
+    // Initialize
+    loadAllData();
+    updateWorkflowStatus();
+  </script>
+</body>
+</html>
+

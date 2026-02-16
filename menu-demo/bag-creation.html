@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Bag - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="bag-creation" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Create Bag</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create a new physical bag</p>
+      </header>
+
+      <!-- Create Bag Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Bag Details</h2>
+        
+        <form id="bag-creation-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bag No -->
+            <div>
+              <label for="bag-no" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Bag No <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="bag-no" name="bagNo" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 cursor-not-allowed"
+                     placeholder="Auto-generated">
+            </div>
+
+            <!-- Order Type -->
+            <div>
+              <label for="reference-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Order Type <span class="text-red-500">*</span>
+              </label>
+              <select id="reference-type" name="referenceType" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select order type</option>
+                <option value="NEW_CUSTOMER_ORDER">New Customer Order</option>
+                <option value="REPAIR_ORDER">Repair Order</option>
+                <option value="COMPANY_ORDER">Company Order</option>
+              </select>
+            </div>
+
+            <!-- Order ID -->
+            <div>
+              <label for="reference-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Order ID <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input type="text" id="reference-id" name="referenceId" required
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="Enter order ID">
+                <button type="button" id="search-reference-btn" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-primary transition-colors" title="Search Order">
+                  <span class="material-icons text-base">search</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Initial Department -->
+            <div>
+              <label for="initial-department" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Initial Department <span class="text-red-500">*</span>
+              </label>
+              <select id="initial-department" name="initialDepartment" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select department</option>
+                <option value="CASTING">Casting</option>
+                <option value="POLISHING">Polishing</option>
+                <option value="SETTING">Setting</option>
+                <option value="QC">QC</option>
+                <option value="FINISHING">Finishing</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Remarks -->
+          <div>
+            <label for="remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Remarks
+            </label>
+            <textarea id="remarks" name="remarks" rows="4"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter any additional notes or remarks"></textarea>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex items-center justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="button" id="cancel-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Cancel
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Create Bag
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Created Bags List -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold">Created Bags</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors select-none" scope="col" data-sort="bag_no">
+                  <div class="flex items-center gap-2">
+                    <span>Bag No</span>
+                    <span class="sort-icon material-icons text-sm opacity-0 text-primary">arrow_upward</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors select-none" scope="col" data-sort="reference">
+                  <div class="flex items-center gap-2">
+                    <span>Reference</span>
+                    <span class="sort-icon material-icons text-sm opacity-0 text-primary">arrow_upward</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors select-none" scope="col" data-sort="department">
+                  <div class="flex items-center gap-2">
+                    <span>Department</span>
+                    <span class="sort-icon material-icons text-sm opacity-0 text-primary">arrow_upward</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors select-none" scope="col" data-sort="status">
+                  <div class="flex items-center gap-2">
+                    <span>Status</span>
+                    <span class="sort-icon material-icons text-sm opacity-0 text-primary">arrow_upward</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors select-none" scope="col" data-sort="created_by">
+                  <div class="flex items-center gap-2">
+                    <span>Created By</span>
+                    <span class="sort-icon material-icons text-sm opacity-0 text-primary">arrow_upward</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors select-none" scope="col" data-sort="created_at">
+                  <div class="flex items-center gap-2">
+                    <span>Created At</span>
+                    <span class="sort-icon material-icons text-sm opacity-0 text-primary">arrow_upward</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="created-bags-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="no-bags-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inventory_2</span>
+            <p>No bags created yet.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Sort state
+    let currentSortColumn = 'created_at';
+    let currentSortDirection = 'desc'; // 'asc' or 'desc'
+
+    // Get current user
+    function getCurrentUser() {
+      // Try to get from localStorage, or use default
+      const currentUser = localStorage.getItem('currentUser') || 'John Doe (CEO)';
+      return currentUser;
+    }
+
+    // Generate bag number
+    function generateBagNumber() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      
+      // Get existing bags to determine next sequence
+      const existingBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      const todayBags = existingBags.filter(bag => {
+        if (!bag.bag_no) return false;
+        const bagDate = bag.bag_no.match(/\d{4}-\d{2}-\d{2}/);
+        return bagDate && bagDate[0] === `${year}-${month}-${day}`;
+      });
+      
+      const sequence = String(todayBags.length + 1).padStart(3, '0');
+      return `BAG-${year}-${month}${day}-${sequence}`;
+    }
+
+    // Sort bags based on current sort column and direction
+    function sortBags(bags) {
+      return [...bags].sort((a, b) => {
+        let aValue, bValue;
+
+        switch (currentSortColumn) {
+          case 'bag_no':
+            aValue = (a.bag_no || '').toLowerCase();
+            bValue = (b.bag_no || '').toLowerCase();
+            break;
+          case 'reference':
+            const aRef = a.reference_type && a.reference_id ? `${a.reference_type} - ${a.reference_id}` : '';
+            const bRef = b.reference_type && b.reference_id ? `${b.reference_type} - ${b.reference_id}` : '';
+            aValue = aRef.toLowerCase();
+            bValue = bRef.toLowerCase();
+            break;
+          case 'department':
+            aValue = (a.current_department || a.initial_department || '').toLowerCase();
+            bValue = (b.current_department || b.initial_department || '').toLowerCase();
+            break;
+          case 'status':
+            aValue = (a.status || '').toLowerCase();
+            bValue = (b.status || '').toLowerCase();
+            break;
+          case 'created_by':
+            aValue = (a.created_by || '').toLowerCase();
+            bValue = (b.created_by || '').toLowerCase();
+            break;
+          case 'created_at':
+            aValue = new Date(a.created_at || 0).getTime();
+            bValue = new Date(b.created_at || 0).getTime();
+            break;
+          default:
+            aValue = new Date(a.created_at || 0).getTime();
+            bValue = new Date(b.created_at || 0).getTime();
+        }
+
+        if (currentSortColumn === 'created_at') {
+          return currentSortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+        } else {
+          if (aValue < bValue) return currentSortDirection === 'asc' ? -1 : 1;
+          if (aValue > bValue) return currentSortDirection === 'asc' ? 1 : -1;
+          return 0;
+        }
+      });
+    }
+
+    // Update sort icons
+    function updateSortIcons() {
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        const icon = th.querySelector('.sort-icon');
+        const sortColumn = th.getAttribute('data-sort');
+        
+        if (sortColumn === currentSortColumn) {
+          icon.classList.remove('opacity-0');
+          icon.textContent = currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward';
+        } else {
+          icon.classList.add('opacity-0');
+        }
+      });
+    }
+
+    // Load and display created bags
+    function loadCreatedBags() {
+      const tbody = document.getElementById('created-bags-table-body');
+      const noBagsState = document.getElementById('no-bags-state');
+      const allBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      
+      if (allBags.length === 0) {
+        tbody.innerHTML = '';
+        noBagsState.classList.remove('hidden');
+        updateSortIcons();
+        return;
+      }
+
+      noBagsState.classList.add('hidden');
+      tbody.innerHTML = '';
+
+      // Sort bags
+      const sortedBags = sortBags(allBags);
+
+      sortedBags.forEach(bag => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const createdDate = bag.created_at ? new Date(bag.created_at) : new Date();
+        const formattedDate = createdDate.toLocaleDateString() + ' ' + createdDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const statusClass = {
+          'CREATED': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+          'QC_PENDING': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400',
+          'QC_APPROVED': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+          'QC_HOLD': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+          'QC_REJECTED': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
+          'SPLIT': 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400',
+          'MERGED': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+        };
+
+        const statusText = {
+          'CREATED': 'Created',
+          'QC_PENDING': 'Pending QC',
+          'QC_APPROVED': 'Passed',
+          'QC_HOLD': 'On Hold',
+          'QC_REJECTED': 'Failed',
+          'SPLIT': 'Split',
+          'MERGED': 'Merged'
+        };
+
+        const reference = bag.reference_type && bag.reference_id 
+          ? `${bag.reference_type} - ${bag.reference_id}` 
+          : '-';
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium">${bag.bag_no || '-'}</td>
+          <td class="px-6 py-4">${reference}</td>
+          <td class="px-6 py-4">${bag.current_department || bag.initial_department || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 text-xs rounded font-medium ${statusClass[bag.status] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'}">${statusText[bag.status] || bag.status || 'Unknown'}</span>
+          </td>
+          <td class="px-6 py-4">${bag.created_by || 'Unknown User'}</td>
+          <td class="px-6 py-4">${formattedDate}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      
+      // Update sort icons after rendering
+      updateSortIcons();
+    }
+
+    // Auto-generate bag number on page load
+    function initializeBagNumber() {
+      const bagNoInput = document.getElementById('bag-no');
+      bagNoInput.value = generateBagNumber();
+    }
+
+    // Search order button
+    document.getElementById('search-reference-btn').addEventListener('click', function() {
+      const referenceType = document.getElementById('reference-type').value;
+      const referenceId = document.getElementById('reference-id').value;
+      
+      if (!referenceType) {
+        alert('Please select an order type first');
+        return;
+      }
+      
+      // TODO: Implement reference search functionality
+      alert(`Search for ${referenceType}: ${referenceId || 'Enter ID to search'}`);
+    });
+
+    // Form submission
+    document.getElementById('bag-creation-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        bag_no: document.getElementById('bag-no').value.trim() || generateBagNumber(),
+        reference_type: document.getElementById('reference-type').value,
+        reference_id: document.getElementById('reference-id').value.trim(),
+        initial_department: document.getElementById('initial-department').value,
+        remarks: document.getElementById('remarks').value.trim(),
+        status: 'CREATED',
+        current_department: document.getElementById('initial-department').value,
+        total_weight: 0,
+        total_pieces: 0,
+        created_at: new Date().toISOString(),
+        last_updated: new Date().toISOString(),
+        created_by: getCurrentUser()
+      };
+
+      // Validate order ID exists (basic validation)
+      if (!formData.reference_id) {
+        alert('Please enter an order ID');
+        return;
+      }
+
+      // Generate unique bag ID
+      formData.bag_id = 'bag-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+
+      // Save to localStorage
+      const existingBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      existingBags.push(formData);
+      localStorage.setItem('bags', JSON.stringify(existingBags));
+
+      // Show success message
+      alert(`Bag ${formData.bag_no} created successfully!`);
+      
+      // Refresh the bags list
+      loadCreatedBags();
+      
+      // Reset form
+      document.getElementById('bag-creation-form').reset();
+      
+      // Generate new bag number for next bag
+      initializeBagNumber();
+    });
+
+    // Cancel button
+    document.getElementById('cancel-btn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+        window.location.href = 'bag-management.html';
+      }
+    });
+
+    // Order type change handler
+    document.getElementById('reference-type').addEventListener('change', function() {
+      const referenceIdInput = document.getElementById('reference-id');
+      referenceIdInput.value = ''; // Clear order ID when type changes
+      
+      // Set appropriate placeholder based on order type
+      const placeholders = {
+        'NEW_CUSTOMER_ORDER': 'Enter new customer order ID',
+        'REPAIR_ORDER': 'Enter repair order ID',
+        'COMPANY_ORDER': 'Enter company order ID'
+      };
+      referenceIdInput.placeholder = placeholders[this.value] || 'Enter order ID';
+    });
+
+    // Table header click handlers for sorting
+    document.querySelectorAll('th[data-sort]').forEach(th => {
+      th.addEventListener('click', function() {
+        const sortColumn = this.getAttribute('data-sort');
+        
+        // If clicking the same column, toggle direction
+        if (currentSortColumn === sortColumn) {
+          currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          // New column, default to ascending
+          currentSortColumn = sortColumn;
+          currentSortDirection = 'asc';
+        }
+        
+        // Update icons and reload
+        updateSortIcons();
+        loadCreatedBags();
+      });
+    });
+
+    // Initialize - load bags list and generate bag number on page load
+    initializeBagNumber();
+    loadCreatedBags();
+  </script>
+</body>
+</html>
+

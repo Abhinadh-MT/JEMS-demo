@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS Desktop Stock Adjustment Entry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eead2b",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#1b170d",
+                        "border-color": "#e7dfcf",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #e7dfcf;
+                border-radius: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
+        }
+        body {
+            height: 100vh;
+            overflow: hidden;
+        }#adjustment-reason:has(option[value="other"]:checked) + #specify-reason-container {
+            display: flex;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1b170d] dark:text-[#fcfaf8] antialiased">
+<div class="flex h-full w-full">
+<aside class="w-64 border-r border-border-color dark:border-[#3d3421] bg-white dark:bg-[#221c10] flex flex-col h-full shrink-0">
+<div class="p-6 border-b border-border-color dark:border-[#3d3421]">
+<h2 class="text-xl font-bold text-primary">JEMS Jewelry</h2>
+<p class="text-[10px] uppercase tracking-widest text-[#9a804c] font-bold">Inventory System</p>
+</div>
+<nav class="flex-1 p-4 flex flex-col gap-1 overflow-y-auto">
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-background-light dark:hover:bg-[#2a2419] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary">dashboard</span>
+<span class="font-bold text-sm">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-background-light dark:hover:bg-[#2a2419] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary">inventory_2</span>
+<span class="font-bold text-sm">Inventory</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-primary/10 text-primary border border-primary/20 cursor-default">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-bold text-sm">Stock Adjustment</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-background-light dark:hover:bg-[#2a2419] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary">sell</span>
+<span class="font-bold text-sm">Sales</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-background-light dark:hover:bg-[#2a2419] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary">bar_chart</span>
+<span class="font-bold text-sm">Reports</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-background-light dark:hover:bg-[#2a2419] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary">settings</span>
+<span class="font-bold text-sm">Settings</span>
+</div>
+</nav>
+<div class="p-4 border-t border-border-color dark:border-[#3d3421]">
+<div class="flex items-center gap-3 p-3 rounded-lg text-red-500 hover:bg-red-50 cursor-pointer">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-bold text-sm">Logout</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-[#1b170d]">
+<header class="h-16 border-b border-border-color dark:border-[#3d3421] flex items-center justify-between px-8 bg-white dark:bg-[#1b170d] z-10">
+<div class="flex items-center gap-6">
+<h1 class="text-xl font-extrabold tracking-tight">Stock Adjustment Entry</h1>
+<div class="px-3 py-1 bg-background-light dark:bg-[#2a2419] rounded border border-border-color dark:border-[#3d3421]">
+<span class="text-[10px] font-bold text-gray-400 uppercase mr-2">Ref No:</span>
+<span class="text-sm font-mono font-bold">ADJ-2023-1124-001</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">save</span>
+                    Save Adjustment
+                </button>
+</div>
+</header>
+<div class="flex-1 overflow-hidden flex flex-col p-6 gap-6">
+<div class="flex gap-6 items-stretch">
+<div class="flex-1 bg-background-light dark:bg-[#221c10] rounded-xl border border-border-color dark:border-[#3d3421] p-5">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold uppercase tracking-wider text-[#9a804c]">General Info</h3>
+</div>
+<div class="grid grid-cols-4 gap-6 items-start">
+<div class="flex flex-col gap-1.5">
+<label class="text-[11px] font-bold text-gray-500 uppercase ml-1">Adjustment Date</label>
+<input class="form-input rounded-lg border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm focus:ring-primary h-11 w-full" type="date" value="2023-11-24"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[11px] font-bold text-gray-500 uppercase ml-1">Warehouse / Branch</label>
+<select class="form-select rounded-lg border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm focus:ring-primary h-11 w-full">
+<option>Main Showroom - London</option>
+<option>Storage Unit B</option>
+<option>Exhibition Vault</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[11px] font-bold text-gray-500 uppercase ml-1">Adjustment Reason</label>
+<select class="form-select rounded-lg border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm focus:ring-primary h-11 w-full" id="adjustment-reason">
+<option value="audit">Audit Correction</option>
+<option value="damaged">Damaged Item</option>
+<option value="retagging">Re-tagging</option>
+<option value="promo">Promotional Sample</option>
+<option value="other">Other</option>
+</select>
+<div class="hidden flex-col gap-1.5 mt-2" id="specify-reason-container">
+<label class="text-[11px] font-bold text-gray-500 uppercase ml-1">Specify Reason</label>
+<input class="form-input rounded-lg border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm focus:ring-primary h-11 w-full" placeholder="Enter reason here..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+<div class="w-80 flex flex-col gap-3">
+<div class="flex-1 bg-white dark:bg-[#221c10] border border-border-color dark:border-[#3d3421] rounded-xl p-4 flex flex-col justify-center">
+<span class="text-[11px] font-bold text-[#9a804c] uppercase">Net Weight Change</span>
+<p class="text-2xl font-black text-green-600">+12.45g</p>
+</div>
+<div class="flex-1 bg-white dark:bg-[#221c10] border border-border-color dark:border-[#3d3421] rounded-xl p-4 flex flex-col justify-center">
+<span class="text-[11px] font-bold text-[#9a804c] uppercase">Total Adj. Value</span>
+<p class="text-2xl font-black text-primary">$3,420.00</p>
+</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col bg-white dark:bg-[#221c10] rounded-xl border border-border-color dark:border-[#3d3421] overflow-hidden">
+<div class="p-4 border-b border-border-color dark:border-[#3d3421] bg-background-light/30 flex items-center justify-between">
+<div class="relative w-1/3">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">barcode_scanner</span>
+<input class="form-input w-full pl-11 pr-4 rounded-lg border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm focus:ring-primary h-11" placeholder="Search Barcode or SKU to add item..." type="text"/>
+</div>
+<div class="text-xs font-bold text-gray-400">
+                        ITEMS IN LIST: <span class="text-[#1b170d] dark:text-white">2</span>
+</div>
+</div>
+<div class="flex-1 overflow-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1200px]">
+<thead class="sticky top-0 bg-white dark:bg-[#221c10] z-10">
+<tr class="border-b border-border-color dark:border-[#3d3421]">
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase w-48">Barcode/SKU</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase">Product Name</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase w-40">Batch No</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase w-32">Current Stock</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase w-40">Adj. Type</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase w-32 text-center">Adj. Qty</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase w-32 text-center">Final Stock</th>
+<th class="p-4 text-[11px] font-bold text-[#9a804c] uppercase">Remarks</th>
+<th class="p-4 w-12"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-color dark:divide-[#3d3421]">
+<tr class="hover:bg-background-light/50 dark:hover:bg-[#1b170d]/50 transition-colors">
+<td class="p-4">
+<span class="text-xs font-bold text-primary block">GLD-BNG-001</span>
+<span class="text-[10px] text-gray-400">5012399201</span>
+</td>
+<td class="p-4 text-sm font-semibold">22K Gold Filigree Bangle</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium px-2 py-1 bg-gray-100 dark:bg-[#1b170d] rounded">B-2023-09</span>
+<button class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+</td>
+<td class="p-4 text-sm font-bold">12 Units</td>
+<td class="p-4">
+<div class="inline-flex p-1 bg-gray-100 dark:bg-[#1b170d] rounded-lg">
+<button class="px-3 py-1 text-[10px] font-black rounded-md bg-primary text-white shadow-sm">INC</button>
+<button class="px-3 py-1 text-[10px] font-black rounded-md text-gray-400 hover:text-gray-700">DEC</button>
+</div>
+</td>
+<td class="p-4">
+<input class="w-20 mx-auto block text-center h-9 rounded border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm font-bold focus:ring-primary" type="number" value="1"/>
+</td>
+<td class="p-4 text-center">
+<span class="text-sm font-bold text-green-600">13 Units</span>
+</td>
+<td class="p-4">
+<input class="w-full bg-transparent border-0 border-b border-transparent focus:border-primary focus:ring-0 text-xs italic text-gray-500" placeholder="Add remark..." type="text" value="Damaged packaging replacement"/>
+</td>
+<td class="p-4">
+<button class="text-gray-300 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-background-light/50 dark:hover:bg-[#1b170d]/50 transition-colors">
+<td class="p-4">
+<span class="text-xs font-bold text-primary block">DIA-RNG-402</span>
+<span class="text-[10px] text-gray-400">8823100223</span>
+</td>
+<td class="p-4 text-sm font-semibold">Solitaire Diamond Ring 1ct</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium px-2 py-1 bg-gray-100 dark:bg-[#1b170d] rounded">B-2023-11</span>
+<button class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+</td>
+<td class="p-4 text-sm font-bold">3 Units</td>
+<td class="p-4">
+<div class="inline-flex p-1 bg-gray-100 dark:bg-[#1b170d] rounded-lg">
+<button class="px-3 py-1 text-[10px] font-black rounded-md text-gray-400 hover:text-gray-700">INC</button>
+<button class="px-3 py-1 text-[10px] font-black rounded-md bg-red-500 text-white shadow-sm">DEC</button>
+</div>
+</td>
+<td class="p-4">
+<input class="w-20 mx-auto block text-center h-9 rounded border-border-color dark:border-[#3d3421] bg-white dark:bg-[#1b170d] text-sm font-bold focus:ring-primary" type="number" value="1"/>
+</td>
+<td class="p-4 text-center">
+<span class="text-sm font-bold text-red-500">2 Units</span>
+</td>
+<td class="p-4">
+<input class="w-full bg-transparent border-0 border-b border-transparent focus:border-primary focus:ring-0 text-xs italic text-gray-500" placeholder="Add remark..." type="text" value="Transfer mismatch"/>
+</td>
+<td class="p-4">
+<button class="text-gray-300 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-8 text-center text-gray-300 pointer-events-none">
+<span class="material-symbols-outlined text-4xl block mb-2">inventory</span>
+<p class="text-xs font-bold uppercase tracking-widest">Row End</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

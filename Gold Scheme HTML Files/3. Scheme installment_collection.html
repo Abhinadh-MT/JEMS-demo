@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS: Installment Collection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4AF37","primary-dark": "#B8860B","background-light": "#faf9f6",
+                        "background-dark": "#1a1814",
+                        "gold-accent": "#f3e5ab",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+    @layer base {
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+    }
+    .receipt-shadow {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="size-9 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-md">
+<span class="material-symbols-outlined text-[24px] fill-1">diamond</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-black tracking-tighter uppercase italic">JEMS</h2>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-semibold border-b-2 border-primary pb-1 transition-colors" href="#">Schemes</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Customers</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Inventory</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary" placeholder="Global Search..." type="text"/>
+</div>
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden md:block">
+<p class="text-xs font-bold text-slate-900 dark:text-white leading-none">Admin User</p>
+<p class="text-[10px] text-slate-500 dark:text-slate-400">Headquarters</p>
+</div>
+<div class="size-9 bg-slate-200 rounded-full flex items-center justify-center overflow-hidden border border-slate-200">
+<img class="object-cover size-full" data-alt="User avatar profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD6YfrTzFU7ddvsctpUQ30oqGw7Z-QRAynhAwleRhW-GPKzsvXkrrHZsL9o4YgXzng9Zs9H4O_hLZuhdMWRx03mEUZT3Z4cWnId0WM-UobKiKWnYxD_XMiOZgJqCbe28QFCLmU1ykWvZOutBsRs8ImAW8eDhZiSuNKsM08IFQ37NQ_xX02U1Av3aatY3i7dVkB_aOkYQJyfWZCyUe7A9jpCZCGQM_mlcrsptIesh0KnkQfjzr8jbjQGrOGPL0EYHydka4hUmQ82BA"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col max-w-[1600px] mx-auto w-full px-8 py-6 gap-6">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-xs text-slate-500 font-medium uppercase tracking-wider">
+<span>Gold Schemes</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Installment Collection</span>
+</div>
+<h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">Monthly Collection</h1>
+</div>
+<div class="flex-1 grid grid-cols-12 gap-6 min-h-0">
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">person_search</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-900 focus:ring-primary focus:border-primary text-sm transition-all shadow-sm" placeholder="Search by Mobile, ID, or Name" type="text"/>
+</div>
+<div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar">
+<span class="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full cursor-pointer">ALL</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded-full cursor-pointer hover:bg-slate-200 transition-colors uppercase">Due Today</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded-full cursor-pointer hover:bg-slate-200 transition-colors uppercase">Overdue</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded-full cursor-pointer hover:bg-slate-200 transition-colors uppercase">Recent</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
+<div class="p-4 rounded-lg border-2 border-primary bg-primary/5 dark:bg-primary/10 relative cursor-pointer shadow-[0_0_15px_-3px_rgba(212,175,55,0.1)]">
+<div class="absolute top-4 right-4 bg-primary text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">Active</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">RK</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-white">Rajesh Kumar</h4>
+<p class="text-xs text-slate-500">SCH-2024-0891</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 text-xs">
+<div>
+<p class="text-slate-500 mb-0.5">Mobile</p>
+<p class="font-semibold text-slate-900 dark:text-slate-200">+91 98765 43210</p>
+</div>
+<div>
+<p class="text-slate-500 mb-0.5">Scheme</p>
+<p class="font-semibold text-slate-900 dark:text-slate-200">Golden Harvest 11</p>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all cursor-pointer">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 font-bold">AS</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-white">Ananya Sharma</h4>
+<p class="text-xs text-slate-500">SCH-2024-1042</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 text-xs">
+<div>
+<p class="text-slate-500 mb-0.5">Mobile</p>
+<p class="font-semibold text-slate-900 dark:text-slate-200">+91 99001 12233</p>
+</div>
+<div>
+<p class="text-slate-500 mb-0.5">Scheme</p>
+<p class="font-semibold text-slate-900 dark:text-slate-200">Diamond Saver</p>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 font-bold">MP</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-white">Meera Patel</h4>
+<p class="text-xs text-slate-500">SCH-2024-0755</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 text-xs">
+<div>
+<p class="text-slate-500 mb-0.5">Mobile</p>
+<p class="font-semibold text-slate-900 dark:text-slate-200">+91 88776 65544</p>
+</div>
+<div>
+<p class="text-slate-500 mb-0.5">Scheme</p>
+<p class="font-semibold text-slate-900 dark:text-slate-200">Golden Harvest 11</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">payments</span>
+                        Collection Details
+                    </h3>
+<div class="text-right">
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Locked Rate</p>
+<p class="text-xl font-black text-slate-900 dark:text-white">₹ 6,245.00 <span class="text-xs font-normal text-slate-400">/g</span></p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase">Installment No</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary bg-slate-50 cursor-not-allowed" readonly="" type="number" value="5"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase">Payment Mode</label>
+<select class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary">
+<option>UPI (PhonePe/GPay)</option>
+<option>Cash</option>
+<option>Credit Card</option>
+<option>Bank Transfer</option>
+</select>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase">Paid Amount (₹)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">₹</span>
+<input class="w-full pl-8 py-4 rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-2xl font-black text-slate-900 dark:text-white" type="text" value="5,000.00"/>
+</div>
+<p class="text-[11px] text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                        Minimum installment for this scheme is ₹ 5,000.00
+                    </p>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-5 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
+<span class="material-symbols-outlined text-[120px] text-primary">diamond</span>
+</div>
+<p class="text-xs font-bold text-primary-dark dark:text-primary uppercase tracking-widest mb-1">Equivalent Gold Credited</p>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-black text-slate-900 dark:text-white">0.8006</span>
+<span class="text-lg font-bold text-slate-500">grams</span>
+</div>
+<div class="mt-2 text-[10px] text-slate-500 font-medium">
+                        Based on locked rate of ₹ 6,245.00/g
+                    </div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase">Transaction ID / Remarks</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary" placeholder="Enter reference or notes..." type="text"/>
+</div>
+<div class="flex gap-4 pt-4">
+<button class="flex-1 bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">print</span>
+                        Confirm &amp; Print Receipt
+                    </button>
+<button class="px-6 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold transition-colors">
+                        Clear
+                    </button>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-4">
+<div class="bg-white dark:bg-slate-900 p-4 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between">
+<h3 class="text-xs font-bold text-slate-500 uppercase">Live Receipt Preview</h3>
+<div class="flex gap-2">
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800"><span class="material-symbols-outlined text-[18px]">download</span></button>
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800"><span class="material-symbols-outlined text-[18px]">share</span></button>
+</div>
+</div>
+<div class="bg-white text-slate-800 rounded-lg receipt-shadow overflow-hidden relative" style="background-image: radial-gradient(circle at 2px 2px, #f8f1e5 1px, transparent 0); background-size: 24px 24px;">
+<div class="h-2 w-full flex justify-around items-start -mt-1">
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+</div>
+<div class="p-8 flex flex-col gap-6">
+<div class="text-center border-b border-slate-100 pb-4">
+<div class="flex justify-center mb-1">
+<span class="material-symbols-outlined text-primary text-[24px] fill-1">diamond</span>
+</div>
+<h2 class="text-lg font-black uppercase tracking-tighter">JEMS Jewelers</h2>
+<p class="text-[10px] text-slate-500 leading-tight">Elite Plaza, Diamond District<br/>GSTIN: 29JEMS0021X1</p>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between text-[11px]">
+<span class="text-slate-500">Receipt No:</span>
+<span class="font-bold">JM-RCP-24-0012</span>
+</div>
+<div class="flex justify-between text-[11px]">
+<span class="text-slate-500">Date/Time:</span>
+<span class="font-bold">24 Oct 2024, 14:35</span>
+</div>
+<div class="flex justify-between text-[11px] border-t border-slate-50 pt-3">
+<span class="text-slate-500">Customer:</span>
+<span class="font-bold">Rajesh Kumar</span>
+</div>
+<div class="flex justify-between text-[11px]">
+<span class="text-slate-500">Scheme ID:</span>
+<span class="font-bold">SCH-2024-0891</span>
+</div>
+<div class="flex justify-between text-[11px]">
+<span class="text-slate-500">Installment No:</span>
+<span class="font-bold">05 / 11</span>
+</div>
+</div>
+<div class="border-y border-dashed border-slate-200 py-4 flex flex-col gap-4">
+<div class="flex justify-between">
+<span class="text-[11px] font-bold">Amount Paid</span>
+<span class="text-sm font-black">₹ 5,000.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-[11px] text-slate-500">Locked Rate</span>
+<span class="text-[11px] font-bold">₹ 6,245.00/g</span>
+</div>
+<div class="flex justify-between pt-2 border-t border-slate-100">
+<span class="text-[11px] font-bold">Gold Grams</span>
+<span class="text-sm font-black text-primary-dark">0.8006 g</span>
+</div>
+</div>
+<div class="bg-slate-50 p-3 rounded text-[10px] text-slate-500">
+<strong>Note:</strong> Gold weight credited to your JEMS digital passbook at the locked scheme rate.
+                    </div>
+<div class="text-center mt-4">
+<img class="size-20 mx-auto opacity-70 grayscale" data-alt="Receipt validation QR code" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCahJTlS6BKCYciddBX6CH-0MUZDDZhXN8rnX4_SqI0p0KuSyWTsOMPPiZPwrG1q2JIgLnXyp6xHwbtGpS0blmvAqXJPAKL_QQm3R9LhX4M3CgHQC5klpfik-aboEn0NMN9BYbNK2ySNKATl0ABdht9ZiG8YGhmKJ5irQsA3GlDD7wFRa3CnxapLfgQ-e-W8h9h4cqs_GiEvFn0Ww22rJxci-sbq03L0TWORZxlBRGssmR5BSe_Rvd_ha2uYkPCKP7ps82aw4Oer6Q"/>
+<p class="text-[8px] mt-2 uppercase text-slate-400 font-bold">Secure JEMS Transaction</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 border border-primary/20 p-4 rounded-xl text-[11px] text-slate-600 dark:text-slate-400 italic">
+<p class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary not-italic">verified_user</span>
+                    Rates are locked as per JEMS enrollment contract. Market fluctuations do not affect this collection.
+                </p>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-8 py-2 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<div class="flex gap-6">
+<div class="flex items-center gap-1.5"><span class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">Enter</span> Confirm Collection</div>
+<div class="flex items-center gap-1.5"><span class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">Esc</span> Clear Selection</div>
+<div class="flex items-center gap-1.5"><span class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">Ctrl + P</span> Quick Print</div>
+</div>
+<div>JEMS ERP v3.1.0</div>
+</footer>
+
+</body></html>

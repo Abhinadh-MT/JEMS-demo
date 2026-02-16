@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Products - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="products" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+      <!-- Main Content -->
+      <div class="p-8">
+          <div class="flex flex-wrap justify-between gap-3 mb-8">
+            <div class="flex min-w-72 flex-col gap-3">
+              <h1 class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em]">Jewellery Design Catalogue</h1>
+              <p class="text-text-light/70 dark:text-text-dark/70 text-base font-normal leading-normal">Browse our exquisite collection</p>
+            </div>
+          </div>
+
+          <!-- Filter and Sort Section (Collapsible) -->
+          <div class="bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-lg mb-6">
+            <button id="filter-sort-toggle" class="w-full flex items-center justify-between p-4 hover:bg-background-light dark:hover:bg-background-dark transition-colors rounded-lg">
+              <div class="flex items-center gap-3">
+                <span class="material-icons text-primary">tune</span>
+                <span class="text-text-light dark:text-text-dark font-semibold">Filter & Sort</span>
+              </div>
+              <span class="material-icons text-text-light dark:text-text-dark transition-transform" id="filter-sort-chevron">expand_more</span>
+            </button>
+            
+            <div id="filter-sort-content" class="hidden border-t border-border-light dark:border-border-dark">
+              <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <!-- Sort By -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Sort By
+                    </label>
+                    <select id="sort-by" class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="name-asc">Name (A-Z)</option>
+                      <option value="name-desc">Name (Z-A)</option>
+                      <option value="price-asc">Price (Low to High)</option>
+                      <option value="price-desc">Price (High to Low)</option>
+                      <option value="newest">Newest First</option>
+                    </select>
+                  </div>
+
+                  <!-- Filter by Product Type -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Product Type
+                    </label>
+                    <select id="filter-type" class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="all">All Types</option>
+                      <option value="rings">Rings</option>
+                      <option value="necklaces">Necklaces</option>
+                      <option value="earrings">Earrings</option>
+                      <option value="bracelets">Bracelets</option>
+                    </select>
+                  </div>
+
+                  <!-- Filter by Gold Purity -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Gold Purity
+                    </label>
+                    <select id="filter-purity" class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="all">All Purity</option>
+                      <option value="22 CT">22 CT</option>
+                      <option value="18 CT">18 CT</option>
+                      <option value="916">916</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Price Range -->
+                <div class="mt-6">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Price Range
+                  </label>
+                  <div class="flex items-center gap-4">
+                    <input type="number" id="price-min" placeholder="Min" min="0" class="flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                    <span class="text-text-light dark:text-text-dark">to</span>
+                    <input type="number" id="price-max" placeholder="Max" min="0" class="flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-end gap-4 mt-6 pt-4 border-t border-border-light dark:border-border-dark">
+                  <button id="clear-filters" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                    Clear Filters
+                  </button>
+                  <button id="apply-filters" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                    Apply Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Products Grid -->
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6" id="products-grid">
+            <!-- Product cards will be dynamically generated -->
+          </div>
+          
+          <!-- Pagination -->
+          <div class="flex items-center justify-center p-4 mt-8">
+            <a class="flex size-10 items-center justify-center text-text-light dark:text-text-dark hover:bg-primary/10 rounded-lg cursor-pointer" href="#" data-page="prev">
+              <span class="material-icons">chevron_left</span>
+            </a>
+            <a class="text-sm font-bold leading-normal tracking-[0.015em] flex size-10 items-center justify-center text-white rounded-full bg-primary cursor-pointer" href="#" data-page="1">1</a>
+            <a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20 cursor-pointer" href="#" data-page="2">2</a>
+            <a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20 cursor-pointer" href="#" data-page="3">3</a>
+            <a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20 cursor-pointer" href="#" data-page="4">4</a>
+            <a class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-text-light dark:text-text-dark rounded-full hover:bg-primary/20 cursor-pointer" href="#" data-page="5">5</a>
+            <a class="flex size-10 items-center justify-center text-text-light dark:text-text-dark hover:bg-primary/10 rounded-lg cursor-pointer" href="#" data-page="next">
+              <span class="material-icons">chevron_right</span>
+            </a>
+          </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Sample product data
+    const products = [
+      {
+        id: 1,
+        name: "Elegant Diamond Solitaire Ring",
+        description: "A timeless piece featuring a brilliant-cut diamond.",
+        image: "https://images.unsplash.com/photo-1621438872240-d30f55aaa59c?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRpYW1vbmQlMjByaW5nfGVufDB8fDB8fHww",
+        type: "rings",
+        goldType: "White Gold",
+        purity: "22 CT",
+        goldWeight: "5.2g",
+        stone: "Diamond",
+        stoneWeight: "0.50ct",
+        price: 2500
+      },
+      {
+        id: 2,
+        name: "Classic Gold Bangle",
+        description: "A classic and versatile gold bangle.",
+        image: "https://images.unsplash.com/photo-1679156271456-d6068c543ee7?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8R29sZCUyMEJhbmdsZXxlbnwwfHwwfHx8MA%3D%3D",
+        type: "bracelets",
+        goldType: "Yellow Gold",
+        purity: "916",
+        goldWeight: "10g",
+        stone: "N/A",
+        stoneWeight: "N/A",
+        price: 800
+      },
+      {
+        id: 3,
+        name: "Sapphire Drop Earrings",
+        description: "Stunning sapphire earrings perfect for any occasion.",
+        image: "https://images.unsplash.com/photo-1723802205505-2f88b2227718?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZWFyaW5nc3xlbnwwfHwwfHx8MA%3D%3D",
+        type: "earrings",
+        goldType: "White Gold",
+        purity: "18 CT",
+        goldWeight: "3.5g",
+        stone: "Sapphire",
+        stoneWeight: "1.20ct",
+        price: 3200
+      },
+      {
+        id: 4,
+        name: "Pearl Strand Necklace",
+        description: "An elegant pearl necklace for a classic look.",
+        image: "https://plus.unsplash.com/premium_photo-1681276170092-446cd1b5b32d?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8TmVja2xhY2V8ZW58MHx8MHx8fDA%3D",
+        type: "necklaces",
+        goldType: "Rose Gold",
+        purity: "22 CT",
+        goldWeight: "7g",
+        stone: "Pearl",
+        stoneWeight: "Various",
+        price: 1500
+      },
+      {
+        id: 5,
+        name: "Emerald Cut Ring",
+        description: "A breathtaking emerald cut diamond ring.",
+        image: "https://images.unsplash.com/photo-1677466891119-2baa2f2ba447?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8RW1hcmFsZCUyMHJpbmd8ZW58MHx8MHx8fDA%3D",
+        type: "rings",
+        goldType: "White Gold",
+        purity: "18 CT",
+        goldWeight: "6g",
+        stone: "Diamond",
+        stoneWeight: "2.00ct",
+        price: 7500
+      },
+      {
+        id: 6,
+        name: "Men's Gold Chain",
+        description: "A stylish gold chain for men.",
+        image: "https://plus.unsplash.com/premium_photo-1709033404514-c3953af680b4?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z29sZCUyMGNoYWlufGVufDB8fDB8fHww",
+        type: "necklaces",
+        goldType: "Yellow Gold",
+        purity: "916",
+        goldWeight: "20g",
+        stone: "N/A",
+        stoneWeight: "N/A",
+        price: 1600
+      }
+    ];
+
+    // Render products
+    function renderProducts(productsToRender = products) {
+      const grid = document.getElementById('products-grid');
+      grid.innerHTML = '';
+
+      productsToRender.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'flex flex-col gap-3 pb-3 border border-border-light/30 dark:border-border-dark/50 rounded-xl overflow-hidden group hover:shadow-lg hover:border-primary/50 transition-all duration-300 bg-card-light dark:bg-card-dark';
+        
+        card.innerHTML = `
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover" style='background-image: url("${product.image}")'></div>
+          <div class="p-4 flex flex-col gap-3">
+            <p class="text-text-light dark:text-text-dark text-xl font-bold leading-normal">${product.name}</p>
+            <p class="text-text-light/70 dark:text-text-dark/70 text-sm font-normal leading-normal">${product.description}</p>
+            <div class="flex gap-2">
+              <span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">${product.goldType}</span>
+              <span class="text-xs font-semibold px-2 py-1 bg-primary/20 dark:bg-primary/30 text-primary rounded-full">${product.purity}</span>
+            </div>
+            <div class="text-sm text-text-light dark:text-text-dark space-y-1 mt-2">
+              <p><span class="font-semibold">Gold:</span> ${product.goldWeight}</p>
+              <p><span class="font-semibold">${product.stone === 'N/A' ? 'Stone' : product.stone}:</span> ${product.stoneWeight}</p>
+              <p class="text-lg font-bold text-primary">$${product.price.toLocaleString()}</p>
+            </div>
+            <a href="product-detail.html?id=${product.id}" class="w-full mt-2 h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">View Details</a>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Collapsible Filter/Sort Toggle
+    const filterSortToggle = document.getElementById('filter-sort-toggle');
+    const filterSortContent = document.getElementById('filter-sort-content');
+    const filterSortChevron = document.getElementById('filter-sort-chevron');
+
+    if (filterSortToggle) {
+      filterSortToggle.addEventListener('click', function() {
+        const isHidden = filterSortContent.classList.contains('hidden');
+        filterSortContent.classList.toggle('hidden');
+        filterSortChevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    }
+
+    // Filter and Sort functionality
+    let currentFilter = 'all';
+    let currentPurity = null;
+    let currentSort = 'name-asc';
+    let priceMin = null;
+    let priceMax = null;
+
+    // Sort functionality
+    function sortProducts(productsToSort) {
+      const sorted = [...productsToSort];
+      
+      switch(currentSort) {
+        case 'name-asc':
+          sorted.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'name-desc':
+          sorted.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'price-asc':
+          sorted.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-desc':
+          sorted.sort((a, b) => b.price - a.price);
+          break;
+        case 'newest':
+          // Assuming newer products have higher IDs
+          sorted.sort((a, b) => b.id - a.id);
+          break;
+      }
+      
+      return sorted;
+    }
+
+    // Update sort dropdown
+    const sortBySelect = document.getElementById('sort-by');
+    if (sortBySelect) {
+      sortBySelect.addEventListener('change', function() {
+        currentSort = this.value;
+        applyFilters();
+      });
+    }
+
+    // Update filter type dropdown
+    const filterTypeSelect = document.getElementById('filter-type');
+    if (filterTypeSelect) {
+      filterTypeSelect.addEventListener('change', function() {
+        currentFilter = this.value;
+        applyFilters();
+      });
+    }
+
+    // Update filter purity dropdown
+    const filterPuritySelect = document.getElementById('filter-purity');
+    if (filterPuritySelect) {
+      filterPuritySelect.addEventListener('change', function() {
+        currentPurity = this.value === 'all' ? null : this.value;
+        applyFilters();
+      });
+    }
+
+    // Price range inputs
+    const priceMinInput = document.getElementById('price-min');
+    const priceMaxInput = document.getElementById('price-max');
+    
+    if (priceMinInput) {
+      priceMinInput.addEventListener('change', function() {
+        priceMin = this.value ? parseFloat(this.value) : null;
+        applyFilters();
+      });
+    }
+    
+    if (priceMaxInput) {
+      priceMaxInput.addEventListener('change', function() {
+        priceMax = this.value ? parseFloat(this.value) : null;
+        applyFilters();
+      });
+    }
+
+    // Clear filters button
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    if (clearFiltersBtn) {
+      clearFiltersBtn.addEventListener('click', function() {
+        currentFilter = 'all';
+        currentPurity = null;
+        currentSort = 'name-asc';
+        priceMin = null;
+        priceMax = null;
+        
+        if (filterTypeSelect) filterTypeSelect.value = 'all';
+        if (filterPuritySelect) filterPuritySelect.value = 'all';
+        if (sortBySelect) sortBySelect.value = 'name-asc';
+        if (priceMinInput) priceMinInput.value = '';
+        if (priceMaxInput) priceMaxInput.value = '';
+        
+        applyFilters();
+      });
+    }
+
+    // Apply filters button
+    const applyFiltersBtn = document.getElementById('apply-filters');
+    if (applyFiltersBtn) {
+      applyFiltersBtn.addEventListener('click', function() {
+        applyFilters();
+      });
+    }
+
+
+    function applyFilters() {
+      let filtered = products;
+      
+      // Filter by type
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(p => p.type === currentFilter);
+      }
+      
+      // Filter by purity
+      if (currentPurity) {
+        filtered = filtered.filter(p => p.purity === currentPurity);
+      }
+      
+      // Filter by price range
+      if (priceMin !== null) {
+        filtered = filtered.filter(p => p.price >= priceMin);
+      }
+      if (priceMax !== null) {
+        filtered = filtered.filter(p => p.price <= priceMax);
+      }
+      
+      // Sort products
+      filtered = sortProducts(filtered);
+      
+      renderProducts(filtered);
+    }
+
+    // Initialize
+    renderProducts();
+  </script>
+</body>
+</html>

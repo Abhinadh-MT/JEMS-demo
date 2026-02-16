@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loss / Damage Report - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="loss-damage-report" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Loss / Damage Report</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Reporting & audit</p>
+          </div>
+          <button type="button" id="export-btn" class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+            <span class="material-icons">download</span>
+            <span>Export</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Filters Section -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Filters</h2>
+          <button type="button" id="clear-filters-btn" class="text-sm text-primary hover:opacity-80">
+            Clear All
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Date From -->
+          <div>
+            <label for="date-from" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date From
+            </label>
+            <input type="date" id="date-from"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Date To -->
+          <div>
+            <label for="date-to" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date To
+            </label>
+            <input type="date" id="date-to"
+                   class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+
+          <!-- Department Filter -->
+          <div>
+            <label for="department-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Department
+            </label>
+            <select id="department-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Departments</option>
+              <option value="CASTING">Casting</option>
+              <option value="POLISHING">Polishing</option>
+              <option value="SETTING">Setting</option>
+              <option value="QC">QC</option>
+              <option value="FINISHING">Finishing</option>
+            </select>
+          </div>
+
+          <!-- Reason Filter -->
+          <div>
+            <label for="reason-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Reason
+            </label>
+            <select id="reason-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Reasons</option>
+              <option value="LOSS">Loss</option>
+              <option value="DAMAGE">Damage</option>
+              <option value="CORRECTION">Correction</option>
+              <option value="WASTAGE">Wastage</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+
+          <!-- Item Type Filter -->
+          <div>
+            <label for="item-type-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Item Type
+            </label>
+            <select id="item-type-filter"
+                    class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">All Types</option>
+              <option value="METAL">Metal</option>
+              <option value="ALLOY">Alloy</option>
+              <option value="DIAMOND">Diamond</option>
+              <option value="STONE">Stone</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Summary -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4">Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Adjustments</div>
+            <div id="total-adjustments" class="text-2xl font-bold text-primary">0</div>
+          </div>
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Weight Loss (g)</div>
+            <div id="total-weight-loss" class="text-2xl font-bold text-red-600 dark:text-red-400">0.000</div>
+          </div>
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Pieces Loss</div>
+            <div id="total-pieces-loss" class="text-2xl font-bold text-red-600 dark:text-red-400">0</div>
+          </div>
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Value Impact</div>
+            <div id="total-value-impact" class="text-2xl font-bold text-primary">₹0.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Table -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Adjustment Records</h2>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Total Records:</span>
+            <span id="total-count" class="text-sm font-semibold text-primary">0</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left" id="report-table">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="created_at">
+                  <div class="flex items-center gap-2">
+                    <span>Date</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="bag_no">
+                  <div class="flex items-center gap-2">
+                    <span>Bag No</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="department">
+                  <div class="flex items-center gap-2">
+                    <span>Department</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3 cursor-pointer hover:bg-background-light dark:hover:bg-background-dark" data-sort="adjustment_type">
+                  <div class="flex items-center gap-2">
+                    <span>Type</span>
+                    <span class="material-icons text-xs sort-icon">unfold_more</span>
+                  </div>
+                </th>
+                <th class="px-6 py-3">Before Weight</th>
+                <th class="px-6 py-3">After Weight</th>
+                <th class="px-6 py-3">Weight Diff</th>
+                <th class="px-6 py-3">Before Pieces</th>
+                <th class="px-6 py-3">After Pieces</th>
+                <th class="px-6 py-3">Pieces Diff</th>
+                <th class="px-6 py-3">Reason</th>
+                <th class="px-6 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="report-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">assessment</span>
+            <p>No adjustment records found. Adjust your filters or create adjustments.</p>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-border-light dark:border-border-dark">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span id="showing-from">0</span> to <span id="showing-to">0</span> of <span id="showing-total">0</span> entries
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="prev-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Previous
+            </button>
+            <span class="px-4 py-2 text-sm">
+              Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+            </span>
+            <button type="button" id="next-page" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allAdjustments = [];
+    let filteredData = [];
+    let sortedData = [];
+    let currentPage = 1;
+    const itemsPerPage = 20;
+    let sortColumn = '';
+    let sortDirection = 'asc';
+
+    // Load adjustments
+    function loadAdjustments() {
+      allAdjustments = JSON.parse(localStorage.getItem('bagAdjustments') || '[]');
+      applyFilters();
+    }
+
+    // Apply filters
+    function applyFilters() {
+      filteredData = [...allAdjustments];
+
+      // Date filters
+      const dateFrom = document.getElementById('date-from').value;
+      const dateTo = document.getElementById('date-to').value;
+      if (dateFrom) {
+        filteredData = filteredData.filter(adj => {
+          const adjDate = new Date(adj.created_at);
+          return adjDate >= new Date(dateFrom);
+        });
+      }
+      if (dateTo) {
+        filteredData = filteredData.filter(adj => {
+          const adjDate = new Date(adj.created_at);
+          const toDate = new Date(dateTo);
+          toDate.setHours(23, 59, 59, 999);
+          return adjDate <= toDate;
+        });
+      }
+
+      // Department filter
+      const department = document.getElementById('department-filter').value;
+      if (department) {
+        filteredData = filteredData.filter(adj => adj.department === department);
+      }
+
+      // Reason filter
+      const reason = document.getElementById('reason-filter').value;
+      if (reason) {
+        filteredData = filteredData.filter(adj => adj.adjustment_type === reason);
+      }
+
+      // Item type filter (would need to be added to adjustment records)
+      // For now, we'll skip this as adjustments are at bag level
+
+      applySorting();
+    }
+
+    // Apply sorting
+    function applySorting() {
+      sortedData = [...filteredData];
+      
+      if (sortColumn) {
+        sortedData.sort((a, b) => {
+          let aVal = a[sortColumn];
+          let bVal = b[sortColumn];
+          
+          if (typeof aVal === 'string') {
+            aVal = aVal.toLowerCase();
+            bVal = bVal.toLowerCase();
+          }
+          
+          if (sortDirection === 'asc') {
+            return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+          } else {
+            return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+          }
+        });
+      }
+      
+      renderTable();
+      updateSummary();
+    }
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('report-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (sortedData.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        updatePagination(0);
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      
+      // Pagination
+      const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, sortedData.length);
+      const pageData = sortedData.slice(startIndex, endIndex);
+
+      tbody.innerHTML = '';
+      pageData.forEach(adj => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const date = new Date(adj.created_at);
+        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const typeClass = {
+          'LOSS': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
+          'DAMAGE': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400',
+          'CORRECTION': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+          'WASTAGE': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+          'OTHER': 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'
+        };
+
+        const statusClass = {
+          'PENDING_APPROVAL': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+          'APPROVED': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+          'REJECTED': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+        };
+
+        const weightDiff = adj.weight_difference || 0;
+        const piecesDiff = adj.pieces_difference || 0;
+
+        tr.innerHTML = `
+          <td class="px-6 py-4">${formattedDate}</td>
+          <td class="px-6 py-4 font-medium">${adj.bag_no || '-'}</td>
+          <td class="px-6 py-4">${adj.department || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 text-xs rounded font-medium ${typeClass[adj.adjustment_type] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'}">${adj.adjustment_type || '-'}</span>
+          </td>
+          <td class="px-6 py-4">${adj.before_weight.toFixed(3)} g</td>
+          <td class="px-6 py-4">${adj.after_weight.toFixed(3)} g</td>
+          <td class="px-6 py-4 ${weightDiff < 0 ? 'text-red-600 dark:text-red-400' : weightDiff > 0 ? 'text-green-600 dark:text-green-400' : ''}">
+            ${weightDiff > 0 ? '+' : ''}${weightDiff.toFixed(3)} g
+          </td>
+          <td class="px-6 py-4">${adj.before_pieces}</td>
+          <td class="px-6 py-4">${adj.after_pieces}</td>
+          <td class="px-6 py-4 ${piecesDiff < 0 ? 'text-red-600 dark:text-red-400' : piecesDiff > 0 ? 'text-green-600 dark:text-green-400' : ''}">
+            ${piecesDiff > 0 ? '+' : ''}${piecesDiff}
+          </td>
+          <td class="px-6 py-4">
+            <div class="max-w-xs truncate" title="${adj.reason || '-'}">${adj.reason || '-'}</div>
+          </td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 text-xs rounded font-medium ${statusClass[adj.status] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'}">${adj.status || '-'}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updatePagination(sortedData.length, totalPages);
+      updateSortIcons();
+    }
+
+    // Update summary
+    function updateSummary() {
+      const totalAdjustments = sortedData.length;
+      const totalWeightLoss = sortedData
+        .filter(adj => adj.weight_difference < 0)
+        .reduce((sum, adj) => sum + Math.abs(adj.weight_difference), 0);
+      const totalPiecesLoss = sortedData
+        .filter(adj => adj.pieces_difference < 0)
+        .reduce((sum, adj) => sum + Math.abs(adj.pieces_difference), 0);
+
+      document.getElementById('total-adjustments').textContent = totalAdjustments;
+      document.getElementById('total-weight-loss').textContent = totalWeightLoss.toFixed(3);
+      document.getElementById('total-pieces-loss').textContent = totalPiecesLoss;
+      document.getElementById('total-value-impact').textContent = '₹0.00'; // TODO: Calculate based on rates
+    }
+
+    // Update pagination
+    function updatePagination(total, totalPages = 1) {
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('showing-total').textContent = total;
+      document.getElementById('total-pages').textContent = totalPages;
+      document.getElementById('current-page').textContent = currentPage;
+      
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, total);
+      document.getElementById('showing-from').textContent = total > 0 ? startIndex + 1 : 0;
+      document.getElementById('showing-to').textContent = endIndex;
+      
+      document.getElementById('prev-page').disabled = currentPage === 1;
+      document.getElementById('next-page').disabled = currentPage >= totalPages;
+    }
+
+    // Update sort icons
+    function updateSortIcons() {
+      document.querySelectorAll('.sort-icon').forEach(icon => {
+        icon.textContent = 'unfold_more';
+      });
+      
+      if (sortColumn) {
+        const header = document.querySelector(`th[data-sort="${sortColumn}"]`);
+        if (header) {
+          const icon = header.querySelector('.sort-icon');
+          icon.textContent = sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward';
+        }
+      }
+    }
+
+    // Sort handler
+    document.querySelectorAll('th[data-sort]').forEach(header => {
+      header.addEventListener('click', function() {
+        const column = this.dataset.sort;
+        if (sortColumn === column) {
+          sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortColumn = column;
+          sortDirection = 'asc';
+        }
+        applySorting();
+      });
+    });
+
+    // Filter event listeners
+    document.getElementById('date-from').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('date-to').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('department-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('reason-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    document.getElementById('item-type-filter').addEventListener('change', function() {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    // Clear filters
+    document.getElementById('clear-filters-btn').addEventListener('click', function() {
+      document.getElementById('date-from').value = '';
+      document.getElementById('date-to').value = '';
+      document.getElementById('department-filter').value = '';
+      document.getElementById('reason-filter').value = '';
+      document.getElementById('item-type-filter').value = '';
+      currentPage = 1;
+      sortColumn = '';
+      sortDirection = 'asc';
+      applyFilters();
+    });
+
+    // Pagination
+    document.getElementById('prev-page').addEventListener('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    document.getElementById('next-page').addEventListener('click', function() {
+      const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    // Export
+    document.getElementById('export-btn').addEventListener('click', function() {
+      const headers = ['Date', 'Bag No', 'Department', 'Type', 'Before Weight', 'After Weight', 'Weight Diff', 'Before Pieces', 'After Pieces', 'Pieces Diff', 'Reason', 'Status'];
+      const rows = sortedData.map(adj => {
+        const date = new Date(adj.created_at);
+        return [
+          date.toLocaleDateString(),
+          adj.bag_no || '',
+          adj.department || '',
+          adj.adjustment_type || '',
+          adj.before_weight.toFixed(3),
+          adj.after_weight.toFixed(3),
+          adj.weight_difference.toFixed(3),
+          adj.before_pieces,
+          adj.after_pieces,
+          adj.pieces_difference,
+          adj.reason || '',
+          adj.status || ''
+        ];
+      });
+      
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `loss-damage-report-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+
+    // Initialize
+    loadAdjustments();
+  </script>
+</body>
+</html>
+

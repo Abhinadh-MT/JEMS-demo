@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS: Gold Scheme Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1a1810",
+                        "card-dark": "#232015",
+                        "border-gold": "#494222",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #232015 0%, #2d2919 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex flex-col min-h-screen">
+<header class="sticky top-0 z-50 bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-border-gold px-6 py-3">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-background-dark font-bold text-2xl">diamond</span>
+</div>
+<div>
+<h1 class="text-xl font-extrabold tracking-tight dark:text-white uppercase leading-none">JEMS</h1>
+<span class="text-[10px] font-bold text-primary tracking-[0.2em] uppercase">Enterprise ERP</span>
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-semibold text-primary border-b-2 border-primary pb-1" href="#">Schemes</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors text-slate-500 dark:text-slate-400" href="#">Customers</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors text-slate-500 dark:text-slate-400" href="#">Inventory</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors text-slate-500 dark:text-slate-400" href="#">Ledger</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-slate-100 dark:bg-card-dark border border-slate-200 dark:border-border-gold rounded-lg px-3 py-1.5 w-64">
+<span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-slate-500" placeholder="Search accounts..." type="text"/>
+</div>
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-card-dark text-slate-500 dark:text-slate-400 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-background-dark"></span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-border-gold mx-1"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold leading-none mb-1">Aditi Sharma</p>
+<p class="text-[10px] text-slate-500 font-medium">Finance Manager</p>
+</div>
+<img alt="User profile" class="w-10 h-10 rounded-full border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClhNtSSGv4sGrmryBdLOSpTY8Z4odVs5oiXp3S8X0NhcNhsHmNaVPWDog6Tc-qtoyX6GtJHXylVBXuCvur8PQM-4jKrF-PenuswQaP_DpbxEsCCkuSOiIJmx3RX3QHmzGYmSjJ2d1KJAgAJryRciEqLnIjYYH2WpkfUj6UACGVfJ448Ipydn2lNS9bkjqne3fCU64MToWS08fPnM3Z5NZduNqmr4rObsbJpod5aLCm---4MQf4Uja8z19A0CcwyCHK-Ubur4-GPmU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1440px] mx-auto w-full p-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2 uppercase font-bold tracking-wider">
+<span>Reports</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary">Gold Liability Report</span>
+</nav>
+<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Gold Scheme</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Real-time liability tracking across active gold savings schemes.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 dark:border-border-gold font-bold text-sm hover:bg-slate-50 dark:hover:bg-card-dark transition-all">
+<span class="material-symbols-outlined text-sm">refresh</span>
+<span>Refresh Rates</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary text-background-dark font-bold text-sm hover:shadow-lg hover:shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+<span>Export Report</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="gold-gradient-bg border border-slate-200 dark:border-border-gold p-6 rounded-xl shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-6xl text-primary">analytics</span>
+</div>
+<p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Total Gold Liability</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">4,250.50 <span class="text-lg font-medium text-primary">gms</span></h3>
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide">
+<span class="flex items-center text-emerald-500">
+<span class="material-symbols-outlined text-xs">trending_up</span> 1.2%
+                        </span>
+<span class="text-slate-400">vs last month</span>
+</div>
+</div>
+<div class="gold-gradient-bg border border-slate-200 dark:border-border-gold p-6 rounded-xl shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-6xl text-primary">payments</span>
+</div>
+<p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Financial Liability</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">₹ 2,45,60,000</h3>
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide">
+<span class="flex items-center text-emerald-500">
+<span class="material-symbols-outlined text-xs">trending_up</span> 0.8%
+                        </span>
+<span class="text-slate-400">Market Value</span>
+</div>
+</div>
+<div class="gold-gradient-bg border border-slate-200 dark:border-border-gold p-6 rounded-xl shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-6xl text-primary">lock</span>
+</div>
+<p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Avg. Locked Rate</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">₹ 5,780<span class="text-lg font-medium text-primary">/gm</span></h3>
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide">
+<span class="flex items-center text-rose-500">
+<span class="material-symbols-outlined text-xs">trending_down</span> 0.2%
+                        </span>
+<span class="text-slate-400">Purchase Mean</span>
+</div>
+</div>
+<div class="gold-gradient-bg border border-slate-200 dark:border-border-gold p-6 rounded-xl shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-6xl text-primary">group</span>
+</div>
+<p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Active Members</p>
+<h3 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">1,240</h3>
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide">
+<span class="flex items-center text-emerald-500">
+<span class="material-symbols-outlined text-xs">add</span> 56
+                        </span>
+<span class="text-slate-400">new this week</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-100 dark:bg-card-dark rounded-xl p-4 mb-8 border border-slate-200 dark:border-border-gold flex flex-wrap items-center justify-between gap-6">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">trending_up</span>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live 24K Gold Rate</p>
+<p class="text-base font-bold text-slate-900 dark:text-white leading-tight">₹ 6,240.00 <span class="text-xs font-medium text-emerald-500 ml-1">+₹ 45 (0.7%)</span></p>
+</div>
+</div>
+<div class="hidden sm:block h-8 w-[1px] bg-slate-300 dark:bg-border-gold"></div>
+<div class="hidden sm:flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">query_stats</span>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Market Exposure Index</p>
+<p class="text-base font-bold text-slate-900 dark:text-white leading-tight">MODERATE <span class="inline-block w-2 h-2 rounded-full bg-primary ml-1"></span></p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-1 h-6 items-end">
+<div class="w-1.5 h-[40%] bg-primary/40 rounded-t-sm"></div>
+<div class="w-1.5 h-[60%] bg-primary/40 rounded-t-sm"></div>
+<div class="w-1.5 h-[50%] bg-primary/40 rounded-t-sm"></div>
+<div class="w-1.5 h-[80%] bg-primary rounded-t-sm"></div>
+<div class="w-1.5 h-[70%] bg-primary rounded-t-sm"></div>
+<div class="w-1.5 h-[90%] bg-primary rounded-t-sm"></div>
+<div class="w-1.5 h-[100%] bg-primary rounded-t-sm"></div>
+</div>
+<p class="text-[10px] font-bold text-slate-500 uppercase">7 Day Trend</p>
+</div>
+</div>
+<div class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-border-gold shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-border-gold flex items-center justify-between">
+<h3 class="font-bold text-lg text-slate-900 dark:text-white">Detailed Liability Breakdown</h3>
+<div class="flex items-center gap-4">
+<div class="flex rounded-md overflow-hidden border border-slate-200 dark:border-border-gold text-xs font-bold">
+<button class="px-3 py-1.5 bg-primary text-background-dark">By Scheme</button>
+<button class="px-3 py-1.5 bg-transparent hover:bg-slate-50 dark:hover:bg-background-dark">By Branch</button>
+<button class="px-3 py-1.5 bg-transparent hover:bg-slate-50 dark:hover:bg-background-dark">By Period</button>
+</div>
+<button class="p-1.5 rounded-md border border-slate-200 dark:border-border-gold hover:bg-slate-50 dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-xl">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-background-dark/50 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+<th class="px-6 py-4">Scheme Name</th>
+<th class="px-6 py-4">Quantity (gms)</th>
+<th class="px-6 py-4">Current Market Value</th>
+<th class="px-6 py-4">Historical Locked Value</th>
+<th class="px-6 py-4 text-right">Value Difference (P/L)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-border-gold/30">
+<tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg">workspace_premium</span>
+</div>
+<div>
+<p class="font-bold text-sm text-slate-900 dark:text-white">Swarna 11 Month Plan</p>
+<p class="text-[10px] text-slate-500">Cumulative Savings</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-bold text-slate-900 dark:text-white">1,420.25 gms</p>
+<p class="text-[10px] text-slate-500">225 Active Acc</p>
+</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 88,62,360</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 82,09,045</td>
+<td class="px-6 py-5 text-right">
+<span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-500">
+<span class="material-symbols-outlined text-xs">arrow_upward</span>
+                                        -₹ 6,53,315
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-500 text-lg">calendar_month</span>
+</div>
+<div>
+<p class="font-bold text-sm text-slate-900 dark:text-white">Elite Fixed Gold Deposit</p>
+<p class="text-[10px] text-slate-500">24 Month Lock-in</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-bold text-slate-900 dark:text-white">2,100.50 gms</p>
+<p class="text-[10px] text-slate-500">142 Active Acc</p>
+</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 1,31,07,120</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 1,35,42,800</td>
+<td class="px-6 py-5 text-right">
+<span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500">
+<span class="material-symbols-outlined text-xs">arrow_downward</span>
+                                        +₹ 4,35,680
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-sky-500/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-sky-500 text-lg">savings</span>
+</div>
+<div>
+<p class="font-bold text-sm text-slate-900 dark:text-white">Dhan Varsha Savings</p>
+<p class="text-[10px] text-slate-500">Flexible Installment</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-bold text-slate-900 dark:text-white">729.75 gms</p>
+<p class="text-[10px] text-slate-500">873 Active Acc</p>
+</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 45,53,640</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 42,32,550</td>
+<td class="px-6 py-5 text-right">
+<span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-500">
+<span class="material-symbols-outlined text-xs">arrow_upward</span>
+                                        -₹ 3,21,090
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg">child_care</span>
+</div>
+<div>
+<p class="font-bold text-sm text-slate-900 dark:text-white">Junior Gold Plan</p>
+<p class="text-[10px] text-slate-500">Minor Focused Scheme</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-bold text-slate-900 dark:text-white">425.00 gms</p>
+<p class="text-[10px] text-slate-500">54 Active Acc</p>
+</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 26,52,000</td>
+<td class="px-6 py-5 font-bold text-sm text-slate-900 dark:text-white">₹ 24,15,000</td>
+<td class="px-6 py-5 text-right">
+<span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-500">
+<span class="material-symbols-outlined text-xs">arrow_upward</span>
+                                        -₹ 2,37,000
+                                    </span>
+</td>
+</tr>
+</tbody>
+<tfoot class="bg-slate-50 dark:bg-background-dark/80">
+<tr class="text-slate-900 dark:text-white font-bold">
+<td class="px-6 py-4">Total Liability</td>
+<td class="px-6 py-4 italic">4,675.50 gms</td>
+<td class="px-6 py-4">₹ 2,91,75,120</td>
+<td class="px-6 py-4">₹ 2,83,99,395</td>
+<td class="px-6 py-4 text-right">
+<span class="text-rose-500">-₹ 7,75,725 Net Liability</span>
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-slate-200 dark:border-border-gold flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+<p>Showing 1 to 4 of 4 schemes</p>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-md border border-slate-200 dark:border-border-gold opacity-50 cursor-not-allowed">Previous</button>
+<button class="px-3 py-1.5 rounded-md border border-slate-200 dark:border-border-gold hover:bg-slate-50 dark:hover:bg-background-dark">Next</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-border-gold px-6 py-4 mt-8">
+<div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+<div class="flex items-center gap-6">
+<p>© 2024 JEMS Jewellers Pvt. Ltd.</p>
+<a class="hover:text-primary" href="#">System Status: Optimal</a>
+</div>
+<div class="flex items-center gap-6">
+<span>Data as of: <span class="text-slate-900 dark:text-white">Oct 24, 2023, 11:34 AM IST</span></span>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+<span>Live Connection</span>
+</div>
+</div>
+</div>
+</footer>
+</div>
+
+</body></html>

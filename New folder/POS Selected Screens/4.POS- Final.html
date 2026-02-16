@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JEMS POS with Live Metal Rates</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D4AF37", // Gold
+                        "primary-dark": "#B8962E",
+                        "slate-bg": "#F1F5F9",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Playfair Display", "serif"],
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+                vertical-align: middle;
+                font-size: 18px;
+            }
+        }
+        .dense-table th {
+            @apply px-2 py-2 bg-slate-100 border border-slate-300 text-[10px] font-bold text-slate-600 uppercase tracking-wider whitespace-nowrap;
+        }
+        .dense-table td {
+            @apply px-2 py-1.5 border border-slate-200 text-[11px] text-slate-700;
+        }
+        .action-btn {
+            @apply flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded shadow-sm text-slate-700 text-[12px] font-semibold hover:bg-slate-50 transition-colors uppercase tracking-tight whitespace-nowrap shrink-0;
+        }
+        .summary-grid-cell {
+            @apply border border-slate-300 bg-white p-1 text-center;
+        }
+        .summary-label {
+            @apply text-[10px] font-bold text-slate-500 uppercase border-b border-slate-200 pb-0.5 mb-1;
+        }
+        .summary-value {
+            @apply text-sm font-bold text-slate-800;
+        }
+        .pos-action-btn {
+            @apply flex flex-col items-center justify-center p-2 rounded-lg border border-slate-300 bg-gradient-to-b from-white to-slate-100 shadow-sm hover:from-slate-50 hover:to-slate-200 active:shadow-inner transition-all min-h-[54px];
+        }
+        .pos-action-btn span:first-child {
+            @apply mb-0.5;
+        }
+        .pos-action-btn span:last-child {
+            @apply text-[10px] font-bold uppercase;
+        }
+        input:focus, select:focus {
+            @apply ring-1 ring-primary border-primary outline-none;
+        }
+        .action-bar-input {
+            @apply py-1.5 px-3 bg-white border border-slate-300 rounded text-xs placeholder:text-slate-400 focus:ring-1 focus:ring-primary focus:border-primary transition-all;
+        }
+        .bill-breakdown-row {
+            @apply flex justify-between py-1 border-b border-slate-100 last:border-0 items-center;
+        }
+        .bill-breakdown-label {
+            @apply text-[11px] text-slate-500 font-medium;
+        }
+        .bill-breakdown-value {
+            @apply text-[11px] text-slate-800 font-mono font-bold;
+        }
+        .rate-badge {
+            @apply flex flex-col px-2 border-r border-slate-200 last:border-0;
+        }
+        .rate-label {
+            @apply text-[8px] font-bold text-slate-500 uppercase leading-none mb-0.5;
+        }
+        .rate-price {
+            @apply text-[10px] font-bold text-slate-800 leading-none;
+        }
+    </style>
+<style>
+        body {
+            min-height: 100dvh;
+            overflow: hidden;
+            min-height: max(884px, 100dvh);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-slate-bg text-slate-800 font-sans antialiased h-screen flex flex-col">
+<header class="bg-white border-b border-slate-300 px-4 py-2 flex flex-col gap-2 shrink-0 shadow-sm">
+<div class="flex items-center gap-4">
+<h1 class="text-2xl font-display font-bold text-primary tracking-tighter shrink-0">JEMS</h1>
+<div class="flex flex-1 items-center gap-2 overflow-hidden">
+<div class="relative w-48 shrink-0">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">person</span>
+<select class="w-full pl-9 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs appearance-none cursor-pointer">
+<option>Search Customer...</option>
+<option selected="">Sumesh K. (+91 9999999999)</option>
+</select>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-white p-1.5 rounded flex items-center justify-center shadow-sm shrink-0">
+<span class="material-symbols-outlined">person_add</span>
+</button>
+<div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded text-xs text-slate-600 border border-slate-300 font-medium shrink-0">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span>+91 98765 43210</span>
+</div>
+<div class="flex gap-1.5 shrink-0">
+<span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-[9px] font-bold border border-amber-200 rounded uppercase tracking-wide">Loyalty: Gold</span>
+<span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[9px] font-bold border border-blue-200 rounded uppercase tracking-wide">GSTIN: 32AABCC</span>
+</div>
+<div class="flex items-center gap-1 ml-auto bg-slate-50 border border-slate-200 rounded px-2 py-1 shadow-inner overflow-hidden">
+<div class="flex items-center gap-1 mr-2 pr-2 border-r border-slate-300 shrink-0">
+<span class="material-symbols-outlined text-green-500 text-[14px]">trending_up</span>
+<span class="text-[9px] font-black text-slate-600 uppercase tracking-tighter">Live Rates</span>
+</div>
+<div class="flex items-center">
+<div class="rate-badge">
+<span class="rate-label">24K Gold</span>
+<span class="rate-price">₹14,900</span>
+</div>
+<div class="rate-badge">
+<span class="rate-label">22K Gold</span>
+<span class="rate-price">₹13,800</span>
+</div>
+<div class="rate-badge">
+<span class="rate-label">18K Gold</span>
+<span class="rate-price">₹11,100</span>
+</div>
+<div class="rate-badge">
+<span class="rate-label">Silver</span>
+<span class="rate-price">₹300.00</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button class="p-1.5 text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined">settings</span></button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined">help</span></button>
+<div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 overflow-hidden ml-1">
+<img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvohK2yOzkRJNPxipoVtP8aTHNbucBkXsp2Ri3DwOolG7Y472yspFdnJAZHLr4pRnBE66aYPrSIMu2Z6l25-TXZh6WZ878TAUUSJFDcUJgLfnhSEhsuKg7X3MJrG_FU0bMlBPV2JVy52JtArH6iXwc8nwD2Y3FwiA1_RtQKmQYMIGGECti-c8Z9JMu1pqntk57bQ4SUDe3k2w79h1rAigcEGETtKu8MJTrXu7Kcpasw__vvBV8gIJI0moZMSoNYBbweCR3PWAZSm8"/>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="flex-1 relative">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-9 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs placeholder:text-slate-400" placeholder="Search by HSN / SKU / Product Name" type="text"/>
+</div>
+</div>
+<div class="w-64 relative">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">barcode_scanner</span>
+<input class="w-full pl-9 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs placeholder:text-slate-400 font-mono" placeholder="Scan Barcode" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 py-1">
+<div class="flex items-center gap-2">
+<button class="action-btn"><span class="material-symbols-outlined text-slate-400">support_agent</span> Salesman</button>
+<input class="action-bar-input w-44" placeholder="Name of Salesman" type="text"/>
+<input class="action-bar-input w-36" placeholder="Mobile Number" type="tel"/>
+</div>
+<div class="h-6 w-[1px] bg-slate-300 mx-1"></div>
+<div class="flex items-center gap-2">
+<button class="action-btn"><span class="material-symbols-outlined text-slate-400">lock</span> Hold</button>
+<button class="action-btn"><span class="material-symbols-outlined text-slate-400">lock_open</span> Unhold</button>
+</div>
+<div class="flex-1"></div>
+<button class="flex items-center gap-1.5 px-4 py-1.5 bg-primary hover:bg-primary-dark text-white rounded shadow-sm text-[12px] font-bold uppercase transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            Add New Product
+        </button>
+</div>
+</header>
+<main class="flex-1 flex flex-col overflow-hidden px-4 py-3 gap-3">
+<div class="flex-1 flex flex-col bg-white border border-slate-300 rounded shadow-sm overflow-hidden">
+<div class="overflow-auto flex-1">
+<table class="w-full text-left border-collapse dense-table">
+<thead class="sticky top-0 z-10 shadow-sm">
+<tr>
+<th class="w-20">HSN Code</th>
+<th class="w-24 text-center">Barcode</th>
+<th>Product Name</th>
+<th class="w-16 text-center">Purity</th>
+<th class="w-24 text-center">HUID</th>
+<th class="w-12 text-center">Pcs</th>
+<th class="w-12 text-center">UOM</th>
+<th class="w-20 text-center">G.Wt</th>
+<th class="w-20 text-center">Stone Wt</th>
+<th class="w-20 text-center border-r border-slate-300">Net Weight</th>
+<th class="w-28 text-right">Rate/MRP</th>
+<th class="w-20 text-center">VA Type</th>
+<th class="w-24 text-right">VA Amnt</th>
+<th class="w-20 text-center">Disc Type</th>
+<th class="w-20 text-right">Disc Amt</th>
+<th class="w-28 text-right">Total</th>
+<th class="w-8"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50">
+<td class="font-mono text-slate-500">711319</td>
+<td class="font-mono text-center">AU-RNG-04</td>
+<td class="font-semibold text-slate-900">Antique Gold Ring (22K)</td>
+<td class="text-center">22K</td>
+<td class="text-center font-mono">H123456</td>
+<td class="text-center">1</td>
+<td class="text-center">GM</td>
+<td class="text-center font-medium">8.450</td>
+<td class="text-center font-medium">0.250</td>
+<td class="text-center font-bold text-primary bg-slate-50 border-r border-slate-200">8.200</td>
+<td class="text-right font-medium">32,450.00</td>
+<td class="text-center">Fixed</td>
+<td class="text-right">450.00</td>
+<td class="text-center">5.00 %</td>
+<td class="text-right">1,622.50</td>
+<td class="text-right font-bold text-slate-900">30,827.50</td>
+<td class="text-center">
+<button class="text-slate-300 hover:text-red-500"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50">
+<td class="font-mono text-slate-500">711319</td>
+<td class="font-mono text-center">AU-NKL-12</td>
+<td class="font-semibold text-slate-900">Floral Filigree Necklace</td>
+<td class="text-center">22K</td>
+<td class="text-center font-mono">N987654</td>
+<td class="text-center">1</td>
+<td class="text-center">GM</td>
+<td class="text-center font-medium">24.500</td>
+<td class="text-center font-medium">0.650</td>
+<td class="text-center font-bold text-primary bg-slate-50 border-r border-slate-200">23.850</td>
+<td class="text-right font-medium">84,200.00</td>
+<td class="text-center">Per Gram</td>
+<td class="text-right">1,200.00</td>
+<td class="text-center">Flat</td>
+<td class="text-right">1,500.00</td>
+<td class="text-right font-bold text-slate-900">82,700.00</td>
+<td class="text-center">
+<button class="text-slate-300 hover:text-red-500"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="flex gap-4 items-end shrink-0">
+<div class="flex-1 grid grid-cols-2 gap-4">
+<div class="bg-white border border-slate-300 rounded p-4 shadow-sm space-y-2">
+<div class="bill-breakdown-row">
+<span class="bill-breakdown-label">Gross Amount</span>
+<span class="bill-breakdown-value">₹116,650.00</span>
+</div>
+<div class="bill-breakdown-row">
+<span class="bill-breakdown-label">Total Discount</span>
+<span class="bill-breakdown-value text-red-500">₹3,122.50</span>
+</div>
+<div class="bill-breakdown-row bg-slate-50 -mx-1 px-2 py-2 rounded">
+<span class="text-[12px] font-bold text-slate-700 uppercase">TAXABLE VALUE</span>
+<span class="text-[12px] font-bold text-slate-900 font-mono">₹113,527.50</span>
+</div>
+</div>
+<div class="bg-white border border-slate-300 rounded p-4 shadow-sm space-y-2">
+<div class="bill-breakdown-row">
+<span class="bill-breakdown-label">CGST - 1.50%</span>
+<span class="bill-breakdown-value">₹1,702.91</span>
+</div>
+<div class="bill-breakdown-row">
+<span class="bill-breakdown-label">SGST - 1.50%</span>
+<span class="bill-breakdown-value">₹1,702.91</span>
+</div>
+<div class="bill-breakdown-row bg-primary/5 -mx-1 px-2 py-2 rounded border-primary/10">
+<span class="text-[12px] font-bold text-primary uppercase">Total Value</span>
+<span class="text-[12px] font-bold text-primary font-mono">₹116,933.32</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-5 gap-2 w-[480px]">
+<button class="pos-action-btn">
+<span class="material-symbols-outlined text-blue-500">add_box</span>
+<span>New</span>
+</button>
+<button class="pos-action-btn border-primary bg-primary/5">
+<span class="material-symbols-outlined text-primary">payments</span>
+<span>Pay</span>
+</button>
+<button class="pos-action-btn bg-green-50 border-green-200">
+<span class="material-symbols-outlined text-green-600 font-bold">check_circle</span>
+<span class="text-green-800 font-bold">Quick Pay</span>
+</button>
+<button class="pos-action-btn bg-red-50 border-red-200">
+<span class="material-symbols-outlined text-red-600">delete</span>
+<span class="text-red-700">Delete</span>
+</button>
+<button class="pos-action-btn">
+<span class="material-symbols-outlined text-slate-700">print</span>
+<span>Print</span>
+</button>
+</div>
+</div>
+</main>
+<footer class="bg-white border-t border-slate-300 px-4 py-2 flex items-center justify-between shrink-0">
+<div class="flex gap-6 items-center">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">System Online</span>
+</div>
+<div class="h-4 w-[1px] bg-slate-200"></div>
+<div class="text-[10px] text-slate-500">
+            Register: <span class="font-bold text-slate-700 uppercase">POS-01</span>
+</div>
+<div class="text-[10px] text-slate-500">
+            User: <span class="font-bold text-slate-700 uppercase">Admin</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<div class="text-[10px] font-bold text-slate-400 uppercase">Grand Total</div>
+<div class="text-xl font-display font-bold text-primary">₹1,16,933.32</div>
+</div>
+<button class="px-8 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold rounded shadow-md transition-all uppercase text-[12px] tracking-widest flex items-center gap-2">
+            Complete Sale
+            <span class="material-symbols-outlined text-white">double_arrow</span>
+</button>
+</div>
+</footer>
+
+</body></html>

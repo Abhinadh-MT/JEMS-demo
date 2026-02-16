@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diamond Certificates - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="diamond-certificates" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Diamond Certificates</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage diamond certificate data</p>
+      </header>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Diamond Certificate</h2>
+        
+        <form id="certificate-form" class="space-y-6">
+          <input type="hidden" id="certificate-id">
+          
+          <!-- Basic Information -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-primary">Basic Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="certificate-id-display" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Certificate ID
+                </label>
+                <input type="text" id="certificate-id-display" readonly
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                       placeholder="Auto-generated on save">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Unique identifier (CHAR(36) PK)</p>
+              </div>
+
+              <div>
+                <label for="certificate-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Certificate Number <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="certificate-number" name="certificateNumber" required maxlength="100"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., GIA-1234567890">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Certificate number (VARCHAR(100))</p>
+              </div>
+
+              <div>
+                <label for="certificate-authority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Certificate Authority <span class="text-red-500">*</span>
+                </label>
+                <select id="certificate-authority" name="certificateAuthority" required
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select authority</option>
+                  <option value="GIA">GIA</option>
+                  <option value="IGI">IGI</option>
+                  <option value="HRD">HRD</option>
+                </select>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Certificate authority (ENUM)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diamond Specifications -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-primary">Diamond Specifications</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="shape" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Shape
+                </label>
+                <input type="text" id="shape" name="shape" maxlength="50"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., Round">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Shape (VARCHAR(50))</p>
+              </div>
+
+              <div>
+                <label for="carat-weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Carat Weight
+                </label>
+                <input type="number" id="carat-weight" name="caratWeight" step="0.0001" min="0"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 1.5000">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Carat weight (DECIMAL(10,4))</p>
+              </div>
+
+              <div>
+                <label for="color-grade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Color Grade
+                </label>
+                <input type="text" id="color-grade" name="colorGrade" maxlength="10"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., D, E, F">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Color grade (VARCHAR(10))</p>
+              </div>
+
+              <div>
+                <label for="clarity-grade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Clarity Grade
+                </label>
+                <input type="text" id="clarity-grade" name="clarityGrade" maxlength="10"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., FL, IF, VVS1">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Clarity grade (VARCHAR(10))</p>
+              </div>
+
+              <div>
+                <label for="cut-grade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Cut Grade
+                </label>
+                <input type="text" id="cut-grade" name="cutGrade" maxlength="50"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., Excellent">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Cut grade (VARCHAR(50))</p>
+              </div>
+
+              <div>
+                <label for="fluorescence" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Fluorescence
+                </label>
+                <input type="text" id="fluorescence" name="fluorescence" maxlength="50"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., None, Faint, Medium">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Fluorescence (VARCHAR(50))</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Measurements -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-primary">Measurements</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label for="measurements-length" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Length (mm)
+                </label>
+                <input type="number" id="measurements-length" name="measurementsLength" step="0.001" min="0"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 6.500">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Length (DECIMAL(8,3))</p>
+              </div>
+
+              <div>
+                <label for="measurements-width" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Width (mm)
+                </label>
+                <input type="number" id="measurements-width" name="measurementsWidth" step="0.001" min="0"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 6.450">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Width (DECIMAL(8,3))</p>
+              </div>
+
+              <div>
+                <label for="measurements-depth" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Depth (mm)
+                </label>
+                <input type="number" id="measurements-depth" name="measurementsDepth" step="0.001" min="0"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 3.950">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Depth (DECIMAL(8,3))</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-primary">Certificate File</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="certificate-file-upload" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Upload Certificate File
+                </label>
+                <div class="flex items-center gap-2">
+                  <label for="certificate-file-upload" class="flex-1 cursor-pointer">
+                    <div class="flex items-center justify-center px-4 py-2 border-2 border-dashed border-border-light dark:border-border-dark rounded-lg hover:border-primary transition-colors bg-background-light dark:bg-background-dark">
+                      <span class="material-icons mr-2 text-primary">cloud_upload</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-400" id="file-upload-label">Choose file or drag and drop</span>
+                    </div>
+                    <input type="file" id="certificate-file-upload" name="certificateFile" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="hidden">
+                  </label>
+                </div>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Accepted formats: PDF, JPG, PNG, DOC, DOCX</p>
+                <div id="file-name-display" class="mt-2 text-sm text-primary hidden">
+                  <span class="material-icons text-base align-middle mr-1">description</span>
+                  <span id="file-name-text"></span>
+                  <button type="button" id="remove-file-btn" class="ml-2 text-red-500 hover:text-red-700">
+                    <span class="material-icons text-base">close</span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label for="certificate-file-url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Certificate File URL (Alternative)
+                </label>
+                <input type="url" id="certificate-file-url" name="certificateFileUrl" maxlength="500"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="https://example.com/certificates/file.pdf">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Or provide a URL to the certificate file</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="certificate-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Certificate Status <span class="text-red-500">*</span>
+              </label>
+              <select id="certificate-status" name="certificateStatus" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="Valid">Valid</option>
+                <option value="Hold">Hold</option>
+                <option value="Replaced">Replaced</option>
+              </select>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Certificate status (ENUM)</p>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Certificate
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by certificate number, authority, or shape..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="Valid">Valid Only</option>
+              <option value="Hold">Hold Only</option>
+              <option value="Replaced">Replaced Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Diamond Certificates List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Cert ID</th>
+                <th class="px-6 py-3" scope="col">Cert Number</th>
+                <th class="px-6 py-3" scope="col">Authority</th>
+                <th class="px-6 py-3" scope="col">Shape</th>
+                <th class="px-6 py-3" scope="col">Carat</th>
+                <th class="px-6 py-3" scope="col">Color</th>
+                <th class="px-6 py-3" scope="col">Clarity</th>
+                <th class="px-6 py-3" scope="col">Cut</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3" scope="col">Certificate</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="certificates-table-body"></tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No certificates submitted yet. Fill out the form above to add your first certificate.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    const demoData = [
+      {
+        certificate_id: '550e8400-e29b-41d4-a716-446655440070',
+        certificate_number: 'GIA-1234567890',
+        certificate_authority: 'GIA',
+        shape: 'Round',
+        carat_weight: 1.5000,
+        color_grade: 'D',
+        clarity_grade: 'FL',
+        cut_grade: 'Excellent',
+        fluorescence: 'None',
+        measurements_length: 6.500,
+        measurements_width: 6.450,
+        measurements_depth: 3.950,
+        certificate_file_url: 'https://example.com/certificates/gia-1234567890.pdf',
+        certificate_status: 'Valid'
+      },
+      {
+        certificate_id: '660e8400-e29b-41d4-a716-446655440071',
+        certificate_number: 'IGI-9876543210',
+        certificate_authority: 'IGI',
+        shape: 'Princess',
+        carat_weight: 2.0000,
+        color_grade: 'E',
+        clarity_grade: 'VVS1',
+        cut_grade: 'Very Good',
+        fluorescence: 'Faint',
+        measurements_length: 7.200,
+        measurements_width: 7.150,
+        measurements_depth: 4.500,
+        certificate_file_url: 'https://example.com/certificates/igi-9876543210.pdf',
+        certificate_status: 'Valid'
+      }
+    ];
+
+    let storedData = localStorage.getItem('diamondCertificates');
+    let certificates = storedData ? JSON.parse(storedData) : demoData;
+    if (!storedData) localStorage.setItem('diamondCertificates', JSON.stringify(demoData));
+    
+    let editingId = null;
+    const form = document.getElementById('certificate-form');
+    const tableBody = document.getElementById('certificates-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // File upload handling
+    const fileInput = document.getElementById('certificate-file-upload');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const fileNameText = document.getElementById('file-name-text');
+    const fileUploadLabel = document.getElementById('file-upload-label');
+    const removeFileBtn = document.getElementById('remove-file-btn');
+    let uploadedFile = null;
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        uploadedFile = file;
+        fileNameText.textContent = file.name;
+        fileNameDisplay.classList.remove('hidden');
+        fileUploadLabel.textContent = 'File selected';
+        
+        // Clear URL field if file is uploaded
+        document.getElementById('certificate-file-url').value = '';
+        
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File size exceeds 10MB. Please choose a smaller file.');
+          fileInput.value = '';
+          uploadedFile = null;
+          fileNameDisplay.classList.add('hidden');
+          fileUploadLabel.textContent = 'Choose file or drag and drop';
+          return;
+        }
+      }
+    });
+
+    removeFileBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      uploadedFile = null;
+      fileNameDisplay.classList.add('hidden');
+      fileUploadLabel.textContent = 'Choose file or drag and drop';
+    });
+
+    // Drag and drop functionality
+    const fileUploadContainer = fileInput.closest('label').querySelector('div');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      fileUploadContainer.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      fileUploadContainer.addEventListener(eventName, () => {
+        fileUploadContainer.classList.add('border-primary', 'bg-primary/5');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      fileUploadContainer.addEventListener(eventName, () => {
+        fileUploadContainer.classList.remove('border-primary', 'bg-primary/5');
+      }, false);
+    });
+
+    fileUploadContainer.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    function formatCarat(value) {
+      if (value === null || value === undefined) return '-';
+      return value.toFixed(4) + ' ct';
+    }
+
+    function renderTable() {
+      if (certificates.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = certificates.map(cert => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-mono">${cert.certificate_id.substring(0, 8)}...</td>
+          <td class="px-6 py-4 font-medium">${cert.certificate_number}</td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-primary/20 text-primary">
+              ${cert.certificate_authority}
+            </span>
+          </td>
+          <td class="px-6 py-4">${cert.shape || '-'}</td>
+          <td class="px-6 py-4">${formatCarat(cert.carat_weight)}</td>
+          <td class="px-6 py-4">${cert.color_grade || '-'}</td>
+          <td class="px-6 py-4">${cert.clarity_grade || '-'}</td>
+          <td class="px-6 py-4">${cert.cut_grade || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="${cert.certificate_status === 'Valid' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : cert.certificate_status === 'Hold' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${cert.certificate_status}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            ${cert.certificate_file_url || cert.certificate_file_name ? `
+              <a href="${cert.certificate_file_url || '#'}" target="_blank" class="inline-flex items-center text-primary hover:underline" title="${cert.certificate_file_name || 'View certificate'}">
+                <span class="material-icons text-base mr-1">description</span>
+                <span class="text-sm">${cert.certificate_file_name ? cert.certificate_file_name.substring(0, 15) + (cert.certificate_file_name.length > 15 ? '...' : '') : 'View'}</span>
+              </a>
+            ` : '<span class="text-gray-400 text-sm">-</span>'}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${cert.certificate_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${cert.certificate_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      attachEventListeners();
+      filterTable();
+    }
+
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const cert = certificates.find(c => c.certificate_id === id);
+          if (cert) {
+            editingId = id;
+            document.getElementById('certificate-id').value = id;
+            document.getElementById('certificate-id-display').value = id;
+            document.getElementById('certificate-number').value = cert.certificate_number;
+            document.getElementById('certificate-authority').value = cert.certificate_authority;
+            document.getElementById('shape').value = cert.shape || '';
+            document.getElementById('carat-weight').value = cert.carat_weight || '';
+            document.getElementById('color-grade').value = cert.color_grade || '';
+            document.getElementById('clarity-grade').value = cert.clarity_grade || '';
+            document.getElementById('cut-grade').value = cert.cut_grade || '';
+            document.getElementById('fluorescence').value = cert.fluorescence || '';
+            document.getElementById('measurements-length').value = cert.measurements_length || '';
+            document.getElementById('measurements-width').value = cert.measurements_width || '';
+            document.getElementById('measurements-depth').value = cert.measurements_depth || '';
+            document.getElementById('certificate-file-url').value = cert.certificate_file_url || '';
+            document.getElementById('certificate-status').value = cert.certificate_status;
+            
+            // Reset file upload when editing
+            fileInput.value = '';
+            uploadedFile = null;
+            fileNameDisplay.classList.add('hidden');
+            fileUploadLabel.textContent = 'Choose file or drag and drop';
+            
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this certificate?')) {
+            certificates = certificates.filter(c => c.certificate_id !== id);
+            localStorage.setItem('diamondCertificates', JSON.stringify(certificates));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Handle file upload - convert to base64 for storage (in production, upload to server)
+      let certificateFileUrl = document.getElementById('certificate-file-url').value.trim();
+      let certificateFileName = null;
+      
+      if (uploadedFile) {
+        try {
+          // Convert file to base64
+          const fileData = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event.target.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(uploadedFile);
+          });
+          
+          // Store as data URL (in production, upload to server and store URL)
+          certificateFileUrl = fileData;
+          certificateFileName = uploadedFile.name;
+        } catch (error) {
+          alert('Error reading file. Please try again.');
+          return;
+        }
+      }
+      
+      const formData = {
+        certificate_id: editingId || generateUUID(),
+        certificate_number: document.getElementById('certificate-number').value.trim(),
+        certificate_authority: document.getElementById('certificate-authority').value,
+        shape: document.getElementById('shape').value.trim() || null,
+        carat_weight: document.getElementById('carat-weight').value ? parseFloat(document.getElementById('carat-weight').value) : null,
+        color_grade: document.getElementById('color-grade').value.trim() || null,
+        clarity_grade: document.getElementById('clarity-grade').value.trim() || null,
+        cut_grade: document.getElementById('cut-grade').value.trim() || null,
+        fluorescence: document.getElementById('fluorescence').value.trim() || null,
+        measurements_length: document.getElementById('measurements-length').value ? parseFloat(document.getElementById('measurements-length').value) : null,
+        measurements_width: document.getElementById('measurements-width').value ? parseFloat(document.getElementById('measurements-width').value) : null,
+        measurements_depth: document.getElementById('measurements-depth').value ? parseFloat(document.getElementById('measurements-depth').value) : null,
+        certificate_file_url: certificateFileUrl || null,
+        certificate_file_name: certificateFileName || null,
+        certificate_status: document.getElementById('certificate-status').value
+      };
+
+      if (editingId) {
+        const index = certificates.findIndex(c => c.certificate_id === editingId);
+        if (index !== -1) certificates[index] = formData;
+      } else {
+        certificates.push(formData);
+      }
+
+      localStorage.setItem('diamondCertificates', JSON.stringify(certificates));
+      form.reset();
+      document.getElementById('certificate-id').value = '';
+      document.getElementById('certificate-id-display').value = '';
+      document.getElementById('certificate-status').value = 'Valid';
+      
+      // Reset file upload
+      fileInput.value = '';
+      uploadedFile = null;
+      fileNameDisplay.classList.add('hidden');
+      fileUploadLabel.textContent = 'Choose file or drag and drop';
+      
+      editingId = null;
+      renderTable();
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#certificates-table-body tr');
+      rows.forEach(row => {
+        const certNumber = row.cells[1].textContent.toLowerCase();
+        const authority = row.cells[2].textContent.toLowerCase();
+        const shape = row.cells[3].textContent.toLowerCase();
+        const status = row.cells[8].querySelector('span').textContent.toLowerCase();
+        const matchesSearch = !searchTerm || certNumber.includes(searchTerm) || authority.includes(searchTerm) || shape.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || status.toLowerCase() === statusFilter.toLowerCase();
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
+

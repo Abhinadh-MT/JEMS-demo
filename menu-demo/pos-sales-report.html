@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>JEMS Sales Report</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cbb280",
+                        "primary-dark": "#b0851d", // Added for consistency
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#1a1a1a",
+                        "border-light": "#e1ddd5", // Added for menu
+                        "border-dark": "#333333", // Added for menu
+                        "slate-bg": "#F1F5F9", // Added for menu wrapper
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"], // Added for consistency
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .table-container {
+            box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Ensure sidebar height matches */
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            /* Prevent body scroll, handle inside main */
+        }
+    </style>
+</head>
+
+<body data-page="pos-sales-report"
+    class="bg-background-light dark:bg-background-dark font-display text-[#181611] dark:text-[#f8f8f6] h-screen flex">
+
+    <div class="flex min-h-screen w-full">
+
+        <!-- 🔹 MENU BAR -->
+        <div id="menu-container"></div>
+
+        <!-- 🔹 MAIN CONTENT -->
+        <main class="flex-1 flex flex-col overflow-hidden h-screen bg-background-light dark:bg-background-dark">
+
+            <!-- Top App Bar from Template -->
+            <header
+                class="sticky top-0 z-50 bg-background-light dark:bg-background-dark border-b border-[#e1ddd5] dark:border-[#333] shrink-0">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center gap-3">
+                        <!-- Removed back arrow since we have sidebar -->
+                        <!-- <div class="p-2 rounded-lg bg-[#f0eeea] dark:bg-[#2a2a2a] text-[#181611] dark:text-[#f8f8f6]">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </div> -->
+                        <div>
+                            <h1 class="text-lg font-bold leading-tight">Sales Report</h1>
+                            <p class="text-xs text-[#86795f] font-medium">JEMS POS Standard</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 text-[#86795f] hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">picture_as_pdf</span>
+                        </button>
+                        <button class="p-2 text-[#86795f] hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">description</span>
+                        </button>
+                        <button class="p-2 text-primary" onclick="window.print()">
+                            <span class="material-symbols-outlined font-bold">print</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto no-scrollbar">
+                <div class="px-4 py-3 space-y-3">
+                    <div class="flex w-full h-12 rounded-lg bg-[#f0eeea] dark:bg-[#2a2a2a] items-center px-4 gap-2">
+                        <span class="material-symbols-outlined text-[#86795f]">search</span>
+                        <input
+                            class="w-full bg-transparent border-none focus:ring-0 text-base placeholder:text-[#86795f]"
+                            placeholder="Search Bill No. or Customer" />
+                    </div>
+                    <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
+                        <button
+                            class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0eeea] dark:bg-[#2a2a2a] px-4 border border-transparent hover:border-primary/50 transition-all">
+                            <span class="text-sm font-medium">Date: Aug 01 - 31</span>
+                            <span class="material-symbols-outlined text-sm">calendar_month</span>
+                        </button>
+                        <button
+                            class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0eeea] dark:bg-[#2a2a2a] px-4 border border-transparent">
+                            <span class="text-sm font-medium">Salesman</span>
+                            <span class="material-symbols-outlined text-sm text-primary">expand_more</span>
+                        </button>
+                        <button
+                            class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/10 border border-primary/30 px-4">
+                            <span class="text-sm font-medium">Gold &amp; Diamond</span>
+                            <span class="material-symbols-outlined text-sm text-primary">close</span>
+                        </button>
+                    </div>
+                    <button
+                        class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-xl shadow-md shadow-primary/20 transition-transform active:scale-[0.98]">
+                        Generate Report
+                    </button>
+                </div>
+
+                <!-- KPI Summary Grid -->
+                <div class="grid grid-cols-2 gap-3 px-4 py-2">
+                    <div class="bg-white dark:bg-[#222] p-4 rounded-xl border border-[#e1ddd5] dark:border-[#333]">
+                        <p class="text-[#86795f] text-[10px] uppercase tracking-wider font-bold mb-1">Total Sales</p>
+                        <p class="text-primary text-xl font-bold tabular-nums">$42,500.00</p>
+                        <div class="mt-2 flex items-center text-[10px] text-green-600 font-bold">
+                            <span class="material-symbols-outlined text-xs">trending_up</span> 12% vs last month
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-[#222] p-4 rounded-xl border border-[#e1ddd5] dark:border-[#333]">
+                        <p class="text-[#86795f] text-[10px] uppercase tracking-wider font-bold mb-1">Gold Weight</p>
+                        <p class="text-[#181611] dark:text-white text-xl font-bold tabular-nums">850.25g</p>
+                        <div class="mt-2 text-[10px] text-[#86795f]">Across 24 invoices</div>
+                    </div>
+                    <div class="bg-white dark:bg-[#222] p-4 rounded-xl border border-[#e1ddd5] dark:border-[#333]">
+                        <p class="text-[#86795f] text-[10px] uppercase tracking-wider font-bold mb-1">Making Charges
+                        </p>
+                        <p class="text-[#181611] dark:text-white text-xl font-bold tabular-nums">$4,200.00</p>
+                        <div class="mt-2 text-[10px] text-[#86795f]">Labor revenue</div>
+                    </div>
+                    <div class="bg-white dark:bg-[#222] p-4 rounded-xl border border-[#e1ddd5] dark:border-[#333]">
+                        <p class="text-[#86795f] text-[10px] uppercase tracking-wider font-bold mb-1">Total GST</p>
+                        <p class="text-[#181611] dark:text-white text-xl font-bold tabular-nums">$2,125.00</p>
+                        <div class="mt-2 text-[10px] text-[#86795f]">Metal 3% + Making 5%</div>
+                    </div>
+                </div>
+
+                <!-- Main Data Table Container -->
+                <div class="mt-6 mb-24">
+                    <div class="px-4 mb-3 flex justify-between items-end">
+                        <h3 class="font-bold text-sm uppercase tracking-widest text-[#86795f]">Detailed Records</h3>
+                        <span class="text-xs text-[#86795f]">Swipe horizontally to view all columns</span>
+                    </div>
+                    <div
+                        class="overflow-x-auto no-scrollbar table-container bg-white dark:bg-[#222] border-y border-[#e1ddd5] dark:border-[#333]">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-[#fcfaf7] dark:bg-[#2a2a2a] text-[11px] font-bold uppercase text-[#86795f] border-b border-[#e1ddd5] dark:border-[#444]">
+                                    <th
+                                        class="px-4 py-3 sticky left-0 bg-[#fcfaf7] dark:bg-[#2a2a2a] z-10 border-r border-[#f0eeea] dark:border-[#444]">
+                                        Bill No.</th>
+                                    <th class="px-4 py-3 min-w-[120px]">Date</th>
+                                    <th class="px-4 py-3 min-w-[150px]">Customer</th>
+                                    <th class="px-4 py-3 text-right">Gold Wt</th>
+                                    <th class="px-4 py-3 text-right">Net Wt</th>
+                                    <th class="px-4 py-3 text-right">Sub Total</th>
+                                    <th class="px-4 py-3 text-right">Metal Tax</th>
+                                    <th class="px-4 py-3 text-right">Making Chg</th>
+                                    <th class="px-4 py-3 text-right">GST</th>
+                                    <th class="px-4 py-3 text-right text-primary">Net Amt</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#f0eeea] dark:divide-[#333] text-sm tabular-nums">
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-[#fbfaf9] dark:hover:bg-[#2a2a2a] transition-colors">
+                                    <td
+                                        class="px-4 py-4 sticky left-0 bg-white dark:bg-[#222] font-bold border-r border-[#f0eeea] dark:border-[#444]">
+                                        #J-8291</td>
+                                    <td class="px-4 py-4 whitespace-nowrap">Aug 14, 2023</td>
+                                    <td class="px-4 py-4 font-medium whitespace-nowrap">Ananya Sharma</td>
+                                    <td class="px-4 py-4 text-right">24.50g</td>
+                                    <td class="px-4 py-4 text-right">23.80g</td>
+                                    <td class="px-4 py-4 text-right">$1,450.00</td>
+                                    <td class="px-4 py-4 text-right">$43.50</td>
+                                    <td class="px-4 py-4 text-right">$120.00</td>
+                                    <td class="px-4 py-4 text-right">$49.50</td>
+                                    <td class="px-4 py-4 text-right font-bold">$1,663.00</td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-[#fbfaf9] dark:hover:bg-[#2a2a2a] transition-colors">
+                                    <td
+                                        class="px-4 py-4 sticky left-0 bg-white dark:bg-[#222] font-bold border-r border-[#f0eeea] dark:border-[#444]">
+                                        #J-8292</td>
+                                    <td class="px-4 py-4 whitespace-nowrap">Aug 14, 2023</td>
+                                    <td class="px-4 py-4 font-medium whitespace-nowrap">Vikram Mehta</td>
+                                    <td class="px-4 py-4 text-right">10.20g</td>
+                                    <td class="px-4 py-4 text-right">10.20g</td>
+                                    <td class="px-4 py-4 text-right">$620.00</td>
+                                    <td class="px-4 py-4 text-right">$18.60</td>
+                                    <td class="px-4 py-4 text-right">$45.00</td>
+                                    <td class="px-4 py-4 text-right">$20.85</td>
+                                    <td class="px-4 py-4 text-right font-bold">$704.45</td>
+                                </tr>
+                                <!-- Row 3 -->
+                                <tr class="hover:bg-[#fbfaf9] dark:hover:bg-[#2a2a2a] transition-colors">
+                                    <td
+                                        class="px-4 py-4 sticky left-0 bg-white dark:bg-[#222] font-bold border-r border-[#f0eeea] dark:border-[#444]">
+                                        #J-8293</td>
+                                    <td class="px-4 py-4 whitespace-nowrap">Aug 15, 2023</td>
+                                    <td class="px-4 py-4 font-medium whitespace-nowrap">Sarah Jenkins</td>
+                                    <td class="px-4 py-4 text-right">45.00g</td>
+                                    <td class="px-4 py-4 text-right">44.10g</td>
+                                    <td class="px-4 py-4 text-right">$2,800.00</td>
+                                    <td class="px-4 py-4 text-right">$84.00</td>
+                                    <td class="px-4 py-4 text-right">$250.00</td>
+                                    <td class="px-4 py-4 text-right">$96.50</td>
+                                    <td class="px-4 py-4 text-right font-bold">$3,230.50</td>
+                                </tr>
+                                <!-- Row 4 -->
+                                <tr class="hover:bg-[#fbfaf9] dark:hover:bg-[#2a2a2a] transition-colors">
+                                    <td
+                                        class="px-4 py-4 sticky left-0 bg-white dark:bg-[#222] font-bold border-r border-[#f0eeea] dark:border-[#444]">
+                                        #J-8294</td>
+                                    <td class="px-4 py-4 whitespace-nowrap">Aug 15, 2023</td>
+                                    <td class="px-4 py-4 font-medium whitespace-nowrap">Rahul Kapoor</td>
+                                    <td class="px-4 py-4 text-right">8.50g</td>
+                                    <td class="px-4 py-4 text-right">8.50g</td>
+                                    <td class="px-4 py-4 text-right">$510.00</td>
+                                    <td class="px-4 py-4 text-right">$15.30</td>
+                                    <td class="px-4 py-4 text-right">$40.00</td>
+                                    <td class="px-4 py-4 text-right">$17.30</td>
+                                    <td class="px-4 py-4 text-right font-bold">$582.60</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-[#181611] text-white font-bold text-sm">
+                                    <td class="px-4 py-4 sticky left-0 bg-[#181611] border-r border-[#333]">TOTAL</td>
+                                    <td class="px-4 py-4">-</td>
+                                    <td class="px-4 py-4">-</td>
+                                    <td class="px-4 py-4 text-right">88.20g</td>
+                                    <td class="px-4 py-4 text-right">86.60g</td>
+                                    <td class="px-4 py-4 text-right">$5,380.00</td>
+                                    <td class="px-4 py-4 text-right">$161.40</td>
+                                    <td class="px-4 py-4 text-right">$455.00</td>
+                                    <td class="px-4 py-4 text-right">$184.15</td>
+                                    <td class="px-4 py-4 text-right text-primary">$6,180.55</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Footer Stats Mini-Card -->
+                <div
+                    class="mx-4 mb-4 p-4 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">analytics</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-[#86795f] tracking-tighter">Avg Transaction
+                                Value</p>
+                            <p class="text-sm font-bold">$1,545.14</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-primary/50">info</span>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- MENU SCRIPT -->
+    <script src="menu.js"></script>
+
+</body>
+
+</html>

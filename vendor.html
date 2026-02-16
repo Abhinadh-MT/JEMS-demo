@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JEMS - Dashboard</title>
+  <title>JEMS - Vendor Master</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
@@ -33,7 +33,7 @@
     .page { display: none; }
     .page.active { display: block; }
     .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    .submenu.open { max-height: 500px; } /* Adjust as needed */
+    .submenu.open { max-height: 500px; }
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
@@ -49,7 +49,7 @@
    
 
       <!-- Dashboard -->
-      <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg bg-primary/20 text-primary font-semibold">
+      <a href="#" data-page="dashboard" class="menu-link flex items-center p-3 rounded-lg hover:bg-primary/10 transition-colors">
         <span class="material-icons mr-3">dashboard</span>Dashboard
       </a>
 
@@ -71,9 +71,6 @@
          <a href="EditOrderForm.html" data-page="update-order" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Update Order
           </a>
-          <!-- <a href="#" data-page="update-design" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
-            Update with Design Details
-          </a> -->
           <a href="OrderSearch.html" data-page="search" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">
             Search
           </a>
@@ -300,7 +297,7 @@
   <!-- Submenu Items -->
  <div class="submenu" id="master-submenu">
     <a href="customer.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Customer</a>
-    <a href="vendor.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Vendor</a>
+    <a href="vendor.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors bg-primary/20 text-primary font-semibold">Vendor</a>
     <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Suppliers</a>
     <a href="#" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Departments</a>
     <a href="Role.html" class="menu-link block pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors">Roles & Access</a>
@@ -342,46 +339,124 @@
   <!-- ✅ FORM CARD -->
   <div class="bg-white rounded-2xl shadow p-10 w-full mb-10">
 
-    <h2 class="text-2xl font-semibold text-center mb-8">Create Customer Master</h2>
+    <h2 class="text-2xl font-semibold text-center mb-8">Create Vendor Master</h2>
 
-    <form class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8" id="vendorForm">
 
+      <!-- Vendor Code (Optional) -->
       <div>
-        <label class="block text-sm font-medium mb-2">Customer Code</label>
-        <input type="text" placeholder="Enter customer code"
+        <label class="block text-sm font-medium mb-2">Vendor Code <span class="text-gray-400">(Optional)</span></label>
+        <input type="text" name="vendorCode" placeholder="Enter vendor code" maxlength="50"
           class="w-full border rounded-lg px-4 py-3" />
       </div>
 
+      <!-- Vendor Name (Required) -->
       <div>
-        <label class="block text-sm font-medium mb-2">Customer Name</label>
-        <input type="text" placeholder="Enter customer name"
+        <label class="block text-sm font-medium mb-2">Vendor Name <span class="text-red-500">*</span></label>
+        <input type="text" name="vendorName" placeholder="Enter vendor business name" maxlength="255" required
           class="w-full border rounded-lg px-4 py-3" />
       </div>
 
+      <!-- Vendor Type -->
       <div>
-        <label class="block text-sm font-medium mb-2">Mobile Number</label>
-        <input type="text" placeholder="Enter mobile number"
+        <label class="block text-sm font-medium mb-2">Vendor Type <span class="text-red-500">*</span></label>
+        <select name="vendorType" required
+          class="w-full border rounded-lg px-4 py-3">
+          <option value="">Select vendor type</option>
+          <option value="METAL">METAL</option>
+          <option value="ALLOY">ALLOY</option>
+          <option value="DIAMOND">DIAMOND</option>
+          <option value="STONE">STONE</option>
+          <option value="COMPONENT">COMPONENT</option>
+          <option value="MIXED">MIXED</option>
+        </select>
+      </div>
+
+      <!-- Contact Person -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Contact Person</label>
+        <input type="text" name="contactPerson" placeholder="Enter main contact name" maxlength="150"
           class="w-full border rounded-lg px-4 py-3" />
       </div>
 
+      <!-- Phone -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Phone</label>
+        <input type="tel" name="phone" placeholder="Enter phone number" maxlength="30"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- Email -->
       <div>
         <label class="block text-sm font-medium mb-2">Email</label>
-        <input type="email" placeholder="Enter email ID"
+        <input type="email" name="email" placeholder="Enter email ID" maxlength="150"
           class="w-full border rounded-lg px-4 py-3" />
       </div>
 
+      <!-- GSTIN / TaxID -->
       <div>
-        <label class="block text-sm font-medium mb-2">Address</label>
-        <textarea placeholder="Enter address"
-          class="w-full border rounded-lg px-4 py-3 h-28"></textarea>
+        <label class="block text-sm font-medium mb-2">GSTIN / Tax ID</label>
+        <input type="text" name="gstin" placeholder="Enter GST / VAT / Tax registration number" maxlength="50"
+          class="w-full border rounded-lg px-4 py-3" />
       </div>
 
-      <div class="flex flex-col justify-center">
-        <label class="block text-sm font-medium mb-3">Status</label>
-        <label class="flex items-center gap-3">
-          <input type="checkbox" class="w-5 h-5" checked />
-          <span>Active</span>
-        </label>
+      <!-- Status -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Status <span class="text-red-500">*</span></label>
+        <select name="status" required
+          class="w-full border rounded-lg px-4 py-3">
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="INACTIVE">INACTIVE</option>
+        </select>
+      </div>
+
+      <!-- Address Line 1 -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Address Line 1</label>
+        <input type="text" name="addressLine1" placeholder="Enter address" maxlength="255"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- Address Line 2 (Optional) -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Address Line 2 <span class="text-gray-400">(Optional)</span></label>
+        <input type="text" name="addressLine2" placeholder="Enter additional address" maxlength="255"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- City -->
+      <div>
+        <label class="block text-sm font-medium mb-2">City</label>
+        <input type="text" name="city" placeholder="Enter city" maxlength="100"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- State -->
+      <div>
+        <label class="block text-sm font-medium mb-2">State</label>
+        <input type="text" name="state" placeholder="Enter state" maxlength="100"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- Country -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Country</label>
+        <input type="text" name="country" placeholder="Enter country" maxlength="100"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- Pincode -->
+      <div>
+        <label class="block text-sm font-medium mb-2">Pincode</label>
+        <input type="text" name="pincode" placeholder="Enter postal code" maxlength="20"
+          class="w-full border rounded-lg px-4 py-3" />
+      </div>
+
+      <!-- Remarks (Optional) -->
+      <div class="col-span-2">
+        <label class="block text-sm font-medium mb-2">Remarks <span class="text-gray-400">(Optional)</span></label>
+        <textarea name="remarks" placeholder="Enter any additional notes"
+          class="w-full border rounded-lg px-4 py-3 h-28"></textarea>
       </div>
 
       <!-- ✅ BUTTONS -->
@@ -400,8 +475,8 @@
     </form>
   </div>
 
-  <!-- ✅ CUSTOMER LIST TABLE -->
-  <h2 class="text-xl font-semibold mb-4">Customer List</h2>
+  <!-- ✅ VENDOR LIST TABLE -->
+  <h2 class="text-xl font-semibold mb-4">Vendor List</h2>
 
   <div class="bg-white rounded-xl shadow overflow-x-auto w-full">
 
@@ -409,12 +484,15 @@
 
       <thead class="bg-gray-50 border-b">
         <tr>
-          <th class="p-4 text-left">ID</th>
+          <th class="p-4 text-left">Vendor ID</th>
           <th class="p-4 text-left">Code</th>
           <th class="p-4 text-left">Name</th>
-          <th class="p-4 text-left">Mobile</th>
+          <th class="p-4 text-left">Type</th>
+          <th class="p-4 text-left">Contact Person</th>
+          <th class="p-4 text-left">Phone</th>
           <th class="p-4 text-left">Email</th>
-          <th class="p-4 text-left">Address</th>
+          <th class="p-4 text-left">GSTIN</th>
+          <th class="p-4 text-left">City</th>
           <th class="p-4 text-left">Status</th>
           <th class="p-4 text-left">Actions</th>
         </tr>
@@ -424,13 +502,16 @@
 
         <!-- ✅ DEMO DATA -->
         <tr class="border-b">
-          <td class="p-4">1</td>
-          <td class="p-4">CUST001</td>
-          <td class="p-4">Rahul Sharma</td>
+          <td class="p-4">550e8400-e29b-41d4-a716-446655440000</td>
+          <td class="p-4">VEND001</td>
+          <td class="p-4">Gold Suppliers Inc.</td>
+          <td class="p-4">METAL</td>
+          <td class="p-4">Rajesh Kumar</td>
           <td class="p-4">9876543210</td>
-          <td class="p-4">rahul@gmail.com</td>
-          <td class="p-4">Bangalore</td>
-          <td class="p-4 text-green-600 font-semibold">Active</td>
+          <td class="p-4">rajesh@goldsuppliers.com</td>
+          <td class="p-4">27ABCDE1234F1Z5</td>
+          <td class="p-4">Mumbai</td>
+          <td class="p-4 text-green-600 font-semibold">ACTIVE</td>
           <td class="p-4 flex gap-3">
             <button class="text-blue-600">Edit</button>
             <button class="text-red-600">Delete</button>
@@ -438,13 +519,16 @@
         </tr>
 
         <tr class="border-b">
-          <td class="p-4">2</td>
-          <td class="p-4">CUST002</td>
-          <td class="p-4">Anjali Verma</td>
+          <td class="p-4">660e8400-e29b-41d4-a716-446655440001</td>
+          <td class="p-4">VEND002</td>
+          <td class="p-4">Diamond Traders Ltd.</td>
+          <td class="p-4">DIAMOND</td>
+          <td class="p-4">Priya Sharma</td>
           <td class="p-4">9123456780</td>
-          <td class="p-4">anjali@yahoo.com</td>
-          <td class="p-4">Mumbai</td>
-          <td class="p-4 text-red-600 font-semibold">Inactive</td>
+          <td class="p-4">priya@diamondtraders.com</td>
+          <td class="p-4">29FGHIJ5678G2Z6</td>
+          <td class="p-4">Surat</td>
+          <td class="p-4 text-green-600 font-semibold">ACTIVE</td>
           <td class="p-4 flex gap-3">
             <button class="text-blue-600">Edit</button>
             <button class="text-red-600">Delete</button>
@@ -567,5 +651,19 @@
   });
 </script>
 
+<script>
+  // Form submission handler
+  document.getElementById('vendorForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Form data collection and API call would go here
+    const formData = new FormData(this);
+    const vendorData = Object.fromEntries(formData);
+    console.log('Vendor Data:', vendorData);
+    // TODO: Implement API call to save vendor
+    alert('Vendor saved successfully!');
+  });
+</script>
+
 </body>
 </html>
+

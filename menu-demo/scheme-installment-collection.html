@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>JEMS: Installment Collection</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D4AF37", // Gold
+                        "primary-dark": "#B8962E",
+                        "slate-bg": "#F1F5F9",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Playfair Display", "serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+                vertical-align: middle;
+                font-size: 18px;
+            }
+        }
+        .form-input {
+            @apply w-full px-3 py-2 bg-white border border-slate-300 rounded text-sm placeholder:text-slate-400 focus:ring-1 focus:ring-primary focus:border-primary transition-all;
+        }
+        .form-label {
+            @apply block text-xs font-bold text-slate-700 uppercase mb-1;
+        }
+        .btn-primary {
+            @apply px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded shadow-sm text-sm font-bold uppercase tracking-wide transition-colors;
+        }
+        .btn-secondary {
+            @apply px-4 py-2 bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 rounded shadow-sm text-sm font-bold uppercase tracking-wide transition-colors;
+        }
+        .card {
+            @apply bg-white border border-slate-300 rounded shadow-sm overflow-hidden;
+        }
+        .card-header {
+            @apply px-4 py-3 border-b border-slate-200 bg-slate-50 flex items-center justify-between;
+        }
+        .receipt-shadow {
+            @apply shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)];
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+         /* Sidebar styles compatibility */
+         .menu-nav-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .menu-nav-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .menu-nav-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.open {
+            max-height: 1000px; 
+            transition: max-height 0.5s ease-in;
+        }
+  </style>
+</head>
+
+<body data-page="scheme-installment-collection" class="bg-slate-bg text-slate-800 font-sans antialiased h-screen flex">
+
+    <div class="flex min-h-screen w-full">
+
+        <!-- 🔹 MENU BAR -->
+        <div id="menu-container"></div>
+
+        <!-- 🔹 MAIN CONTENT WRAPPER -->
+        <main class="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden relative">
+
+            <header class="bg-white border-b border-slate-300 px-6 py-3 sticky top-0 z-40 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <h1 class="text-2xl font-display font-bold text-primary tracking-tighter">JEMS</h1>
+                        <div class="h-6 w-[1px] bg-slate-200"></div>
+                        <nav class="flex items-center gap-6">
+                            <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                                href="#">Dashboard</a>
+                            <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                                href="#">Inventory</a>
+                            <a class="text-sm font-bold text-primary border-b-2 border-primary pb-0.5" href="#">Gold
+                                Schemes</a>
+                            <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                                href="#">Customers</a>
+                            <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                                href="#">Reports</a>
+                        </nav>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="relative w-64">
+                            <span
+                                class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <input
+                                class="w-full pl-9 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs placeholder:text-slate-400 focus:ring-1 focus:ring-primary focus:border-primary"
+                                placeholder="Global Search..." type="text">
+                        </div>
+                        <button class="p-1.5 text-slate-400 hover:text-slate-600">
+                            <span class="material-symbols-outlined">notifications</span>
+                        </button>
+                        <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 overflow-hidden">
+                            <img alt="User"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDanEhAFE2u0zez-Gkk0zG353aaVlUoaFuuFQYXqNyMMdfXslA8hp2k1RePaR2w9epeDatZ3awPHWJXkQNMiab38O0K0hub1UKXuEzF0rsp-WvbnDkd-HwRxtFmvblJjm_BPJKztO7UIAFkcqa0PRT8DXUsySdtgCOYfP1yJ1LQpAwaXVPdZ_lRGtbEfkd20Ch0DgYYVCXAuLotM5qHXgzWl2xGGNU4OEBOdxMJnUG3YIjOeNHp8LTX11a7IToTz47gxdEFempVRXw">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex-1 flex flex-col p-6 max-w-[1600px] mx-auto w-full gap-6 overflow-hidden">
+                <div class="shrink-0">
+                    <div class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-2">
+                        <span class="text-slate-500">Gold Schemes</span>
+                        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                        <span class="text-slate-800 font-bold">Installment Collection</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Monthly Collection</h2>
+                </div>
+
+                <div class="flex-1 grid grid-cols-12 gap-6 min-h-0">
+
+                    <!-- Left Panel: Customer List -->
+                    <div class="col-span-12 lg:col-span-4 flex flex-col gap-4 card h-full">
+                        <div class="p-4 border-b border-slate-200 bg-slate-50">
+                            <div class="relative group">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">person_search</span>
+                                <input
+                                    class="w-full pl-9 pr-4 py-2 rounded border border-slate-300 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
+                                    placeholder="Search by Mobile, ID, or Name" type="text" />
+                            </div>
+                            <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar">
+                                <button
+                                    class="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full shadow-sm">ALL</button>
+                                <button
+                                    class="px-3 py-1 bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 text-[10px] font-bold rounded-full">DUE
+                                    TODAY</button>
+                                <button
+                                    class="px-3 py-1 bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 text-[10px] font-bold rounded-full">OVERDUE</button>
+                                <button
+                                    class="px-3 py-1 bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 text-[10px] font-bold rounded-full">RECENT</button>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                            <!-- Active Card -->
+                            <div
+                                class="p-4 rounded border-l-4 border-l-primary bg-primary/5 border border-slate-200 relative cursor-pointer shadow-sm">
+                                <div
+                                    class="absolute top-3 right-3 bg-primary text-white text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide">
+                                    Selected</div>
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-white border border-primary/20 flex items-center justify-center text-primary font-bold shadow-sm">
+                                        RK</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-800">Rajesh Kumar</h4>
+                                        <p class="text-[11px] text-slate-500 font-mono">SCH-2024-0891</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div>
+                                        <p class="text-slate-400 mb-0.5 text-[10px] uppercase font-bold">Mobile</p>
+                                        <p class="font-semibold text-slate-800">+91 98765 43210</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 mb-0.5 text-[10px] uppercase font-bold">Scheme</p>
+                                        <p class="font-semibold text-slate-800">Golden Harvest 11</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Inactive Cards -->
+                            <div
+                                class="p-4 rounded border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold border border-slate-200">
+                                        AS</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-800">Ananya Sharma</h4>
+                                        <p class="text-[11px] text-slate-500 font-mono">SCH-2024-1042</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div>
+                                        <p class="text-slate-400 mb-0.5 text-[10px] uppercase font-bold">Mobile</p>
+                                        <p class="font-semibold text-slate-800">+91 99001 12233</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 mb-0.5 text-[10px] uppercase font-bold">Scheme</p>
+                                        <p class="font-semibold text-slate-800">Diamond Saver</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="p-4 rounded border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold border border-slate-200">
+                                        MP</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-800">Meera Patel</h4>
+                                        <p class="text-[11px] text-slate-500 font-mono">SCH-2024-0755</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div>
+                                        <p class="text-slate-400 mb-0.5 text-[10px] uppercase font-bold">Mobile</p>
+                                        <p class="font-semibold text-slate-800">+91 88776 65544</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 mb-0.5 text-[10px] uppercase font-bold">Scheme</p>
+                                        <p class="font-semibold text-slate-800">Golden Harvest 11</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Panel: Collection Form -->
+                    <div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+                        <div class="card p-6 flex flex-col gap-6 h-full overflow-y-auto custom-scrollbar">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                                <h3 class="font-bold text-lg flex items-center gap-2 text-slate-800">
+                                    <span class="material-symbols-outlined text-primary">payments</span> Collection
+                                    Details
+                                </h3>
+                                <div class="text-right">
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Locked
+                                        Rate</p>
+                                    <p class="text-lg font-black text-slate-800">₹ 6,245.00 <span
+                                            class="text-xs font-normal text-slate-400">/g</span></p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase">Installment No</label>
+                                    <input class="form-input bg-slate-50 text-slate-500 cursor-not-allowed font-bold"
+                                        readonly type="number" value="5" />
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase">Payment Mode</label>
+                                    <select class="form-input">
+                                        <option>UPI (PhonePe/GPay)</option>
+                                        <option>Cash</option>
+                                        <option>Credit Card</option>
+                                        <option>Bank Transfer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold text-slate-500 uppercase">Paid Amount (₹)</label>
+                                <div class="relative">
+                                    <span
+                                        class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400 text-lg">₹</span>
+                                    <input
+                                        class="w-full pl-8 py-3 rounded border border-slate-300 focus:ring-1 focus:ring-primary focus:border-primary text-2xl font-black text-slate-800"
+                                        type="text" value="5,000.00" />
+                                </div>
+                                <p class="text-[11px] text-slate-400 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">info</span> Minimum installment
+                                    for this scheme is ₹ 5,000.00
+                                </p>
+                            </div>
+
+                            <div
+                                class="bg-primary/5 border border-primary/20 rounded p-5 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                                <div class="absolute -right-4 -bottom-4 opacity-10 transform rotate-12">
+                                    <span class="material-symbols-outlined text-[100px] text-primary">diamond</span>
+                                </div>
+                                <p class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Equivalent
+                                    Gold Credited</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-3xl font-black text-slate-800">0.8006</span>
+                                    <span class="text-sm font-bold text-slate-500 uppercase">grams</span>
+                                </div>
+                                <div class="mt-2 text-[10px] text-slate-400">Based on locked rate of ₹ 6,245.00/g</div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold text-slate-500 uppercase">Transaction ID /
+                                    Remarks</label>
+                                <input class="form-input" placeholder="Enter reference or notes..." type="text" />
+                            </div>
+
+                            <div class="flex gap-3 pt-2 mt-auto">
+                                <button
+                                    class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded shadow-sm text-sm flex items-center justify-center gap-2 uppercase tracking-wide transition-colors">
+                                    <span class="material-symbols-outlined">print</span> Confirm & Print Receipt
+                                </button>
+                                <button
+                                    class="px-6 rounded border border-slate-300 hover:bg-slate-50 text-slate-600 font-bold text-sm uppercase tracking-wide transition-colors">Clear</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Receipt Preview -->
+                    <div class="col-span-12 lg:col-span-3 flex flex-col gap-4">
+                        <div
+                            class="bg-white p-3 border border-slate-200 rounded flex items-center justify-between shadow-sm">
+                            <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Live Receipt
+                                Preview</h3>
+                            <div class="flex gap-1">
+                                <button class="p-1 rounded hover:bg-slate-100 text-slate-500"><span
+                                        class="material-symbols-outlined text-[16px]">download</span></button>
+                                <button class="p-1 rounded hover:bg-slate-100 text-slate-500"><span
+                                        class="material-symbols-outlined text-[16px]">share</span></button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white text-slate-800 rounded receipt-shadow overflow-hidden relative border border-slate-200">
+                            <!-- Perforated top edge effect (simulated with CSS background or just simplified) -->
+                            <div class="h-2 w-full flex justify-around items-start -mt-1 opacity-50">
+                                <div class="w-3 h-3 rounded-full bg-slate-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-slate-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-slate-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-slate-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-slate-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-slate-100"></div>
+                            </div>
+
+                            <div class="p-6 flex flex-col gap-4 font-mono text-xs">
+                                <div class="text-center border-b border-dashed border-slate-300 pb-4">
+                                    <div class="flex justify-center mb-2">
+                                        <span class="material-symbols-outlined text-primary text-[24px]">diamond</span>
+                                    </div>
+                                    <h2 class="font-bold uppercase text-sm tracking-tight text-slate-900">JEMS Jewelers
+                                    </h2>
+                                    <p class="text-[9px] text-slate-500 mt-1">Elite Plaza, Diamond District<br />GSTIN:
+                                        29JEMS0021X1</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-500">Receipt No:</span>
+                                        <span class="font-bold text-slate-800">JM-RCP-24-0012</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-500">Date/Time:</span>
+                                        <span class="font-bold text-slate-800">24 Oct 2024, 14:35</span>
+                                    </div>
+                                    <div class="flex justify-between border-t border-dashed border-slate-200 pt-2 mt-2">
+                                        <span class="text-slate-500">Customer:</span>
+                                        <span class="font-bold text-slate-800">Rajesh Kumar</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-500">Scheme ID:</span>
+                                        <span class="font-bold text-slate-800">SCH-2024-0891</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-500">Inst. No:</span>
+                                        <span class="font-bold text-slate-800">05 / 11</span>
+                                    </div>
+                                </div>
+
+                                <div class="border-y border-dashed border-slate-300 py-3 space-y-2">
+                                    <div class="flex justify-between items-center bg-slate-50 p-1 rounded">
+                                        <span class="font-bold uppercase">Amount Paid</span>
+                                        <span class="text-sm font-bold">₹ 5,000.00</span>
+                                    </div>
+                                    <div class="flex justify-between px-1">
+                                        <span class="text-slate-500">Locked Rate</span>
+                                        <span class="font-bold">₹ 6,245.00/g</span>
+                                    </div>
+                                    <div class="flex justify-between items-center px-1">
+                                        <span class="font-bold">Gold Grams</span>
+                                        <span class="font-bold text-primary-dark border-b border-primary/30">0.8006
+                                            g</span>
+                                    </div>
+                                </div>
+
+                                <div class="text-[9px] text-slate-500 text-center leading-tight">
+                                    Gold weight credited to your JEMS digital passbook at the locked scheme rate.
+                                </div>
+
+                                <div class="text-center mt-2 pt-2 border-t border-dashed border-slate-200">
+                                    <div class="w-16 h-16 bg-slate-100 mx-auto flex items-center justify-center mb-1">
+                                        <span
+                                            class="material-symbols-outlined text-slate-300 text-[32px]">qr_code_2</span>
+                                    </div>
+                                    <p class="text-[8px] uppercase text-slate-400 font-bold">Secure JEMS Transaction</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-3 bg-slate-50 border border-slate-200 rounded text-[10px] text-slate-500 italic flex gap-2">
+                            <span
+                                class="material-symbols-outlined text-[14px] text-primary shrink-0">verified_user</span>
+                            <p>Rates are locked as per JEMS enrollment contract.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <footer
+                class="bg-white border-t border-slate-300 px-6 py-2 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest shrink-0">
+                <div class="flex gap-6">
+                    <div class="flex items-center gap-1.5"><span
+                            class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300 text-slate-600">Enter</span>
+                        Confirm Collection</div>
+                    <div class="flex items-center gap-1.5"><span
+                            class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300 text-slate-600">Esc</span>
+                        Clear Selection</div>
+                    <div class="flex items-center gap-1.5"><span
+                            class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300 text-slate-600">Ctrl +
+                            P</span> Quick Print</div>
+                </div>
+                <div>JEMS ERP v3.1.0</div>
+            </footer>
+
+        </main>
+    </div>
+    <script src="menu.js"></script>
+</body>
+
+</html>

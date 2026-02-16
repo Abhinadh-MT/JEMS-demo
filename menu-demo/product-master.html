@@ -1,0 +1,1588 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Master - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="product-master" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Product Master</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage product master data</p>
+      </header>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Product</h2>
+        
+        <form id="product-form" class="space-y-6">
+          <input type="hidden" id="product-id">
+          
+          <!-- Basic Information Section -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-primary">Basic Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="design-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Design Number
+                </label>
+                <input type="text" id="design-number" name="designNumber" maxlength="255"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., DES-2024-001">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Design number (VARCHAR(255))</p>
+              </div>
+
+              <div>
+                <label for="product-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Product Name <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="product-name" name="productName" required maxlength="255"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., Elegant Gold Necklace">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Product name (VARCHAR(255))</p>
+              </div>
+
+              <div>
+                <label for="category-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Category <span class="text-red-500">*</span>
+                </label>
+                <select id="category-id" name="categoryId" required
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select category</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440900">Necklace</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440901">Ring</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440902">Earrings</option>
+                  <option value="880e8400-e29b-41d4-a716-446655440903">Bracelet</option>
+                </select>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to categories (CHAR(36) FK)</p>
+              </div>
+
+              <div>
+                <label for="subcategory-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Subcategory
+                </label>
+                <select id="subcategory-id" name="subcategoryId"
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select subcategory</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440910">Pendant</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440911">Chain</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440912">Choker</option>
+                </select>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Links to categories (CHAR(36) FK)</p>
+              </div>
+
+              <div>
+                <label for="brand-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Brand
+                </label>
+                <select id="brand-id" name="brandId"
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select brand</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440920">J&J Collection</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440921">Premium Line</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440922">Classic Series</option>
+                </select>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Brand ID (CHAR(36))</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metal Information Section (Multiple Entries) -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-primary">Metal Information</h3>
+              <button type="button" id="add-metal-btn" class="flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80 transition-colors">
+                <span class="material-icons text-base">add_circle_outline</span>
+                <span>Add Metal</span>
+              </button>
+            </div>
+            <div id="metal-entries" class="space-y-4">
+              <div class="metal-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal</label>
+                    <select class="metal-type w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="">Select metal</option>
+                      <option value="Gold">Gold</option>
+                      <option value="Silver">Silver</option>
+                      <option value="Platinum">Platinum</option>
+                      <option value="Palladium">Palladium</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Color</label>
+                    <select class="metal-color w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="">Select metal color</option>
+                      <option value="Yellow">Yellow</option>
+                      <option value="White">White</option>
+                      <option value="Rose">Rose</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Purity</label>
+                    <select class="metal-purity-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="">Select purity</option>
+                      <option value="550e8400-e29b-41d4-a716-446655440930">22K (91.67%)</option>
+                      <option value="660e8400-e29b-41d4-a716-446655440931">18K (75%)</option>
+                      <option value="770e8400-e29b-41d4-a716-446655440932">14K (58.33%)</option>
+                      <option value="880e8400-e29b-41d4-a716-446655440933">24K (99.9%)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Weight (g)</label>
+                    <input class="metal-weight w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.001" min="0" placeholder="e.g., 12.500"/>
+                  </div>
+                </div>
+                <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-metal-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diamond Information Section (Multiple Entries) -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-primary">Diamond Information</h3>
+              <button type="button" id="add-diamond-btn" class="flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80 transition-colors">
+                <span class="material-icons text-base">add_circle_outline</span>
+                <span>Add Diamond</span>
+              </button>
+            </div>
+            <div id="diamond-entries" class="space-y-4">
+              <div class="diamond-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark">
+                <div class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Diamond Master</label>
+                      <select class="diamond-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select diamond master</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440200">DIA-RND-0.5-G-VS1</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440201">DIA-PRN-1.0-F-VVS2</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440202">DIA-OVL-0.75-H-SI1</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+                      <select class="diamond-shape w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select shape</option>
+                        <option value="Round">Round</option>
+                        <option value="Princess">Princess</option>
+                        <option value="Oval">Oval</option>
+                        <option value="Marquise">Marquise</option>
+                        <option value="Pear">Pear</option>
+                        <option value="Emerald">Emerald</option>
+                        <option value="Cushion">Cushion</option>
+                        <option value="Radiant">Radiant</option>
+                        <option value="Heart">Heart</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+                      <input class="diamond-size w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="text" placeholder="e.g., 5mm"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Clarity</label>
+                      <select class="diamond-clarity w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select clarity</option>
+                        <option value="FL">FL (Flawless)</option>
+                        <option value="IF">IF (Internally Flawless)</option>
+                        <option value="VVS1">VVS1</option>
+                        <option value="VVS2">VVS2</option>
+                        <option value="VS1">VS1</option>
+                        <option value="VS2">VS2</option>
+                        <option value="SI1">SI1</option>
+                        <option value="SI2">SI2</option>
+                        <option value="I1">I1</option>
+                        <option value="I2">I2</option>
+                        <option value="I3">I3</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cut</label>
+                      <select class="diamond-cut w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select cut</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Poor">Poor</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Certification</label>
+                      <select class="diamond-certification w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select certification</option>
+                        <option value="GIA">GIA</option>
+                        <option value="IGI">IGI</option>
+                        <option value="HRD">HRD</option>
+                        <option value="AGS">AGS</option>
+                        <option value="EGL">EGL</option>
+                        <option value="None">None</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+                      <input class="diamond-pieces w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+                      <input class="diamond-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+                      <input class="diamond-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+                      <input class="diamond-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-diamond-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stone Information Section (Multiple Entries) -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-primary">Stone Information</h3>
+              <button type="button" id="add-stone-btn" class="flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80 transition-colors">
+                <span class="material-icons text-base">add_circle_outline</span>
+                <span>Add Stone</span>
+              </button>
+            </div>
+            <div id="stone-entries" class="space-y-4">
+              <div class="stone-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark">
+                <div class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Master</label>
+                      <select class="stone-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select stone master</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440800">STN-RUBY-RND-5MM-RED-AAA</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440801">STN-SAPPHIRE-OVL-6MM-BLUE-AA</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Type</label>
+                      <select class="stone-type-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select stone type</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440810">Ruby</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440811">Sapphire</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440812">Emerald</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440813">Diamond</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+                      <select class="stone-shape-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select shape</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440820">Round</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440821">Oval</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440822">Princess</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440823">Cushion</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+                      <select class="stone-size-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select size</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440830">3mm</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440831">4mm</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440832">5mm</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440833">6mm</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Colour</label>
+                      <select class="stone-colour-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select colour</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440840">Red</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440841">Blue</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440842">Green</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440843">Yellow</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality</label>
+                      <select class="stone-quality-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select quality</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440850">AAA</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440851">AA</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440852">A</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440853">B</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+                      <input class="stone-pcs w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+                      <input class="stone-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+                      <input class="stone-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+                      <input class="stone-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-stone-btn">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Details Section -->
+          <div class="border-b border-border-light dark:border-border-dark pb-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-primary">Product Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="net-weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Net Weight (g)
+                </label>
+                <input type="number" id="net-weight" name="netWeight" step="0.001" min="0"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 15.250">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Net weight in grams (DECIMAL(12,3))</p>
+              </div>
+
+              <div>
+                <label for="hsn-code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  HSN Code
+                </label>
+                <input type="text" id="hsn-code" name="hsnCode" maxlength="50"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 7113">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">HSN code (VARCHAR(50))</p>
+              </div>
+
+              <div>
+                <label for="is-active" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Status <span class="text-red-500">*</span>
+                </label>
+                <select id="is-active" name="isActive" required
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <label for="product-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Product Description <span class="text-gray-400">(Optional)</span>
+              </label>
+              <textarea id="product-description" name="productDescription" rows="4"
+                        class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                        placeholder="Enter detailed product description"></textarea>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Product description (TEXT)</p>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Product
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by name, design number, category, or description..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Product Master List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Product ID</th>
+                <th class="px-6 py-3" scope="col">Design No.</th>
+                <th class="px-6 py-3" scope="col">Product Name</th>
+                <th class="px-6 py-3" scope="col">Category</th>
+                <th class="px-6 py-3" scope="col">Metal</th>
+                <th class="px-6 py-3" scope="col">Metal Wt.</th>
+                <th class="px-6 py-3" scope="col">Diamond</th>
+                <th class="px-6 py-3" scope="col">Stone</th>
+                <th class="px-6 py-3" scope="col">Net Wt.</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body"></tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No products submitted yet. Fill out the form above to add your first product.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    const demoData = [
+      {
+        product_id: '550e8400-e29b-41d4-a716-446655441000',
+        design_number: 'DES-2024-001',
+        product_name: 'Elegant Gold Necklace',
+        category_id: '550e8400-e29b-41d4-a716-446655440900',
+        subcategory_id: '550e8400-e29b-41d4-a716-446655440910',
+        brand_id: '550e8400-e29b-41d4-a716-446655440920',
+        metal_type: 'Gold',
+        metal_color: 'Yellow',
+        metal_purity_id: '550e8400-e29b-41d4-a716-446655440930',
+        metal_weight: 12.500,
+        diamond_count: 15,
+        diamond_weight: 0.7500,
+        diamond_color: 'G',
+        diamond_master_id: '550e8400-e29b-41d4-a716-446655440200',
+        stone_count: 0,
+        stone_weight: null,
+        stone_color: null,
+        stone_master_id: null,
+        net_weight: 13.250,
+        product_description: 'Beautiful elegant gold necklace with diamonds',
+        hsn_code: '7113',
+        is_active: true
+      }
+    ];
+
+
+    const categoryMap = {
+      '550e8400-e29b-41d4-a716-446655440900': 'Necklace',
+      '660e8400-e29b-41d4-a716-446655440901': 'Ring',
+      '770e8400-e29b-41d4-a716-446655440902': 'Earrings',
+      '880e8400-e29b-41d4-a716-446655440903': 'Bracelet'
+    };
+
+    const userMap = {
+      '550e8400-e29b-41d4-a716-446655440950': 'John Doe',
+      '660e8400-e29b-41d4-a716-446655440951': 'Jane Smith',
+      '770e8400-e29b-41d4-a716-446655440952': 'Admin User'
+    };
+
+    let storedData = localStorage.getItem('productMaster');
+    let products = storedData ? JSON.parse(storedData) : demoData;
+    if (!storedData) localStorage.setItem('productMaster', JSON.stringify(demoData));
+    
+    let editingId = null;
+    const form = document.getElementById('product-form');
+    const tableBody = document.getElementById('products-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    // Metal Entry Management
+    document.getElementById('add-metal-btn')?.addEventListener('click', function() {
+      const container = document.getElementById('metal-entries');
+      const newEntry = document.createElement('div');
+      newEntry.className = 'metal-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+      newEntry.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal</label>
+            <select class="metal-type w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">Select metal</option>
+              <option value="Gold">Gold</option>
+              <option value="Silver">Silver</option>
+              <option value="Platinum">Platinum</option>
+              <option value="Palladium">Palladium</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Color</label>
+            <select class="metal-color w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">Select metal color</option>
+              <option value="Yellow">Yellow</option>
+              <option value="White">White</option>
+              <option value="Rose">Rose</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Purity</label>
+            <select class="metal-purity-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="">Select purity</option>
+              <option value="550e8400-e29b-41d4-a716-446655440930">22K (91.67%)</option>
+              <option value="660e8400-e29b-41d4-a716-446655440931">18K (75%)</option>
+              <option value="770e8400-e29b-41d4-a716-446655440932">14K (58.33%)</option>
+              <option value="880e8400-e29b-41d4-a716-446655440933">24K (99.9%)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Weight (g)</label>
+            <input class="metal-weight w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.001" min="0" placeholder="e.g., 12.500"/>
+          </div>
+        </div>
+        <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-metal-btn">Remove</button>
+      `;
+      container.appendChild(newEntry);
+      attachMetalRemoveListener(newEntry);
+    });
+
+    function attachMetalRemoveListener(element) {
+      const removeBtn = element.querySelector('.remove-metal-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          element.remove();
+        });
+      }
+    }
+
+    // Attach remove listeners to existing metal entries
+    document.querySelectorAll('.metal-entry').forEach(entry => {
+      attachMetalRemoveListener(entry);
+    });
+
+    // Diamond Entry Management
+    document.getElementById('add-diamond-btn')?.addEventListener('click', function() {
+      const container = document.getElementById('diamond-entries');
+      const newEntry = document.createElement('div');
+      newEntry.className = 'diamond-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+      newEntry.innerHTML = `
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Diamond Master</label>
+              <select class="diamond-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select diamond master</option>
+                <option value="550e8400-e29b-41d4-a716-446655440200">DIA-RND-0.5-G-VS1</option>
+                <option value="660e8400-e29b-41d4-a716-446655440201">DIA-PRN-1.0-F-VVS2</option>
+                <option value="770e8400-e29b-41d4-a716-446655440202">DIA-OVL-0.75-H-SI1</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+              <select class="diamond-shape w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select shape</option>
+                <option value="Round">Round</option>
+                <option value="Princess">Princess</option>
+                <option value="Oval">Oval</option>
+                <option value="Marquise">Marquise</option>
+                <option value="Pear">Pear</option>
+                <option value="Emerald">Emerald</option>
+                <option value="Cushion">Cushion</option>
+                <option value="Radiant">Radiant</option>
+                <option value="Heart">Heart</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+              <input class="diamond-size w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="text" placeholder="e.g., 5mm"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Clarity</label>
+              <select class="diamond-clarity w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select clarity</option>
+                <option value="FL">FL (Flawless)</option>
+                <option value="IF">IF (Internally Flawless)</option>
+                <option value="VVS1">VVS1</option>
+                <option value="VVS2">VVS2</option>
+                <option value="VS1">VS1</option>
+                <option value="VS2">VS2</option>
+                <option value="SI1">SI1</option>
+                <option value="SI2">SI2</option>
+                <option value="I1">I1</option>
+                <option value="I2">I2</option>
+                <option value="I3">I3</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cut</label>
+              <select class="diamond-cut w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select cut</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Very Good">Very Good</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Certification</label>
+              <select class="diamond-certification w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select certification</option>
+                <option value="GIA">GIA</option>
+                <option value="IGI">IGI</option>
+                <option value="HRD">HRD</option>
+                <option value="AGS">AGS</option>
+                <option value="EGL">EGL</option>
+                <option value="None">None</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+              <input class="diamond-pieces w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+              <input class="diamond-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+              <input class="diamond-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+              <input class="diamond-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-diamond-btn">Remove</button>
+      `;
+      container.appendChild(newEntry);
+      attachDiamondRemoveListener(newEntry);
+      attachDiamondCalculationListener(newEntry);
+    });
+
+    function attachDiamondRemoveListener(element) {
+      const removeBtn = element.querySelector('.remove-diamond-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          element.remove();
+        });
+      }
+    }
+
+    function calculateDiamondTotal(entry) {
+      const totalCarat = parseFloat(entry.querySelector('.diamond-total-carat').value) || 0;
+      const ratePerCarat = parseFloat(entry.querySelector('.diamond-rate-per-carat').value) || 0;
+      const totalValue = totalCarat * ratePerCarat;
+      entry.querySelector('.diamond-total-value').value = totalValue.toFixed(2);
+    }
+
+    function attachDiamondCalculationListener(entry) {
+      const totalCaratInput = entry.querySelector('.diamond-total-carat');
+      const ratePerCaratInput = entry.querySelector('.diamond-rate-per-carat');
+      
+      [totalCaratInput, ratePerCaratInput].forEach(input => {
+        input.addEventListener('input', () => calculateDiamondTotal(entry));
+      });
+    }
+
+    // Attach listeners to existing diamond entries
+    document.querySelectorAll('.diamond-entry').forEach(entry => {
+      attachDiamondRemoveListener(entry);
+      attachDiamondCalculationListener(entry);
+    });
+
+    // Stone Entry Management
+    document.getElementById('add-stone-btn')?.addEventListener('click', function() {
+      const container = document.getElementById('stone-entries');
+      const newEntry = document.createElement('div');
+      newEntry.className = 'stone-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+      newEntry.innerHTML = `
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Master</label>
+              <select class="stone-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select stone master</option>
+                <option value="550e8400-e29b-41d4-a716-446655440800">STN-RUBY-RND-5MM-RED-AAA</option>
+                <option value="660e8400-e29b-41d4-a716-446655440801">STN-SAPPHIRE-OVL-6MM-BLUE-AA</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Type</label>
+              <select class="stone-type-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select stone type</option>
+                <option value="550e8400-e29b-41d4-a716-446655440810">Ruby</option>
+                <option value="660e8400-e29b-41d4-a716-446655440811">Sapphire</option>
+                <option value="770e8400-e29b-41d4-a716-446655440812">Emerald</option>
+                <option value="880e8400-e29b-41d4-a716-446655440813">Diamond</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+              <select class="stone-shape-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select shape</option>
+                <option value="550e8400-e29b-41d4-a716-446655440820">Round</option>
+                <option value="660e8400-e29b-41d4-a716-446655440821">Oval</option>
+                <option value="770e8400-e29b-41d4-a716-446655440822">Princess</option>
+                <option value="880e8400-e29b-41d4-a716-446655440823">Cushion</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+              <select class="stone-size-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select size</option>
+                <option value="550e8400-e29b-41d4-a716-446655440830">3mm</option>
+                <option value="660e8400-e29b-41d4-a716-446655440831">4mm</option>
+                <option value="770e8400-e29b-41d4-a716-446655440832">5mm</option>
+                <option value="880e8400-e29b-41d4-a716-446655440833">6mm</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Colour</label>
+              <select class="stone-colour-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select colour</option>
+                <option value="550e8400-e29b-41d4-a716-446655440840">Red</option>
+                <option value="660e8400-e29b-41d4-a716-446655440841">Blue</option>
+                <option value="770e8400-e29b-41d4-a716-446655440842">Green</option>
+                <option value="880e8400-e29b-41d4-a716-446655440843">Yellow</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality</label>
+              <select class="stone-quality-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select quality</option>
+                <option value="550e8400-e29b-41d4-a716-446655440850">AAA</option>
+                <option value="660e8400-e29b-41d4-a716-446655440851">AA</option>
+                <option value="770e8400-e29b-41d4-a716-446655440852">A</option>
+                <option value="880e8400-e29b-41d4-a716-446655440853">B</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+              <input class="stone-pcs w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+              <input class="stone-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+              <input class="stone-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+              <input class="stone-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-stone-btn">Remove</button>
+      `;
+      container.appendChild(newEntry);
+      attachStoneRemoveListener(newEntry);
+      attachStoneCalculationListener(newEntry);
+    });
+
+    function attachStoneRemoveListener(element) {
+      const removeBtn = element.querySelector('.remove-stone-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          element.remove();
+        });
+      }
+    }
+
+    function calculateStoneTotal(entry) {
+      const totalCarat = parseFloat(entry.querySelector('.stone-total-carat').value) || 0;
+      const ratePerCarat = parseFloat(entry.querySelector('.stone-rate-per-carat').value) || 0;
+      const totalValue = totalCarat * ratePerCarat;
+      entry.querySelector('.stone-total-value').value = totalValue.toFixed(2);
+    }
+
+    function attachStoneCalculationListener(entry) {
+      const totalCaratInput = entry.querySelector('.stone-total-carat');
+      const ratePerCaratInput = entry.querySelector('.stone-rate-per-carat');
+      
+      [totalCaratInput, ratePerCaratInput].forEach(input => {
+        input.addEventListener('input', () => calculateStoneTotal(entry));
+      });
+    }
+
+    // Attach listeners to existing stone entries
+    document.querySelectorAll('.stone-entry').forEach(entry => {
+      attachStoneRemoveListener(entry);
+      attachStoneCalculationListener(entry);
+    });
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function formatCurrency(amount) {
+      if (amount === null || amount === undefined) return '-';
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+      }).format(amount);
+    }
+
+    function renderTable() {
+      if (products.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = products.map(product => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-mono">${product.product_id.substring(0, 8)}...</td>
+          <td class="px-6 py-4 font-medium">${product.design_number || '-'}</td>
+          <td class="px-6 py-4 font-medium">${product.product_name}</td>
+          <td class="px-6 py-4">${categoryMap[product.category_id] || '-'}</td>
+          <td class="px-6 py-4">${product.metal_type || '-'} ${product.metal_color || ''}</td>
+          <td class="px-6 py-4">${product.metal_weight !== null && product.metal_weight !== undefined ? product.metal_weight.toFixed(3) + ' g' : '-'}</td>
+          <td class="px-6 py-4">${product.diamond_count || 0} (${product.diamond_weight ? product.diamond_weight.toFixed(4) + ' ct' : '0 ct'})</td>
+          <td class="px-6 py-4">${product.stone_count || 0} (${product.stone_weight ? product.stone_weight.toFixed(4) + ' ct' : '0 ct'})</td>
+          <td class="px-6 py-4">${product.net_weight !== null && product.net_weight !== undefined ? product.net_weight.toFixed(3) + ' g' : '-'}</td>
+          <td class="px-6 py-4">
+            <span class="${product.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${product.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${product.product_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${product.product_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      attachEventListeners();
+      filterTable();
+    }
+
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const product = products.find(p => p.product_id === id);
+          if (product) {
+            editingId = id;
+            document.getElementById('product-id').value = id;
+            document.getElementById('design-number').value = product.design_number || '';
+            document.getElementById('product-name').value = product.product_name;
+            document.getElementById('category-id').value = product.category_id || '';
+            document.getElementById('subcategory-id').value = product.subcategory_id || '';
+            document.getElementById('brand-id').value = product.brand_id || '';
+            // Clear existing metal entries
+            const metalContainer = document.getElementById('metal-entries');
+            metalContainer.innerHTML = '';
+            
+            // Populate metal entries (support both old single entry and new array format)
+            const metals = product.metals || (product.metal_type ? [{
+              metal_type: product.metal_type,
+              metal_color: product.metal_color,
+              metal_purity_id: product.metal_purity_id,
+              metal_weight: product.metal_weight
+            }] : [{}]);
+            
+            metals.forEach((metal, index) => {
+              const metalEntry = document.createElement('div');
+              metalEntry.className = 'metal-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+              metalEntry.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal</label>
+                    <select class="metal-type w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="">Select metal</option>
+                      <option value="Gold" ${metal.metal_type === 'Gold' ? 'selected' : ''}>Gold</option>
+                      <option value="Silver" ${metal.metal_type === 'Silver' ? 'selected' : ''}>Silver</option>
+                      <option value="Platinum" ${metal.metal_type === 'Platinum' ? 'selected' : ''}>Platinum</option>
+                      <option value="Palladium" ${metal.metal_type === 'Palladium' ? 'selected' : ''}>Palladium</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Color</label>
+                    <select class="metal-color w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="">Select metal color</option>
+                      <option value="Yellow" ${metal.metal_color === 'Yellow' ? 'selected' : ''}>Yellow</option>
+                      <option value="White" ${metal.metal_color === 'White' ? 'selected' : ''}>White</option>
+                      <option value="Rose" ${metal.metal_color === 'Rose' ? 'selected' : ''}>Rose</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Purity</label>
+                    <select class="metal-purity-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                      <option value="">Select purity</option>
+                      <option value="550e8400-e29b-41d4-a716-446655440930" ${metal.metal_purity_id === '550e8400-e29b-41d4-a716-446655440930' ? 'selected' : ''}>22K (91.67%)</option>
+                      <option value="660e8400-e29b-41d4-a716-446655440931" ${metal.metal_purity_id === '660e8400-e29b-41d4-a716-446655440931' ? 'selected' : ''}>18K (75%)</option>
+                      <option value="770e8400-e29b-41d4-a716-446655440932" ${metal.metal_purity_id === '770e8400-e29b-41d4-a716-446655440932' ? 'selected' : ''}>14K (58.33%)</option>
+                      <option value="880e8400-e29b-41d4-a716-446655440933" ${metal.metal_purity_id === '880e8400-e29b-41d4-a716-446655440933' ? 'selected' : ''}>24K (99.9%)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Weight (g)</label>
+                    <input class="metal-weight w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.001" min="0" placeholder="e.g., 12.500" value="${metal.metal_weight || ''}"/>
+                  </div>
+                </div>
+                <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-metal-btn">Remove</button>
+              `;
+              metalContainer.appendChild(metalEntry);
+              attachMetalRemoveListener(metalEntry);
+            });
+            // Clear existing diamond entries
+            const diamondContainer = document.getElementById('diamond-entries');
+            diamondContainer.innerHTML = '';
+            
+            // Populate diamond entries (support both old single entry and new array format)
+            const diamonds = product.diamonds || (product.diamond_master_id ? [{
+              diamond_master_id: product.diamond_master_id,
+              shape: product.diamond_shape || null,
+              size: product.diamond_size || null,
+              clarity: product.diamond_clarity || null,
+              cut: product.diamond_cut || null,
+              certification: product.diamond_certification || null,
+              pieces: product.diamond_count,
+              total_carat: product.diamond_weight,
+              rate_per_carat: null,
+              total_value: null
+            }] : [{}]);
+            
+            diamonds.forEach((diamond) => {
+              const diamondEntry = document.createElement('div');
+              diamondEntry.className = 'diamond-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+              diamondEntry.innerHTML = `
+                <div class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Diamond Master</label>
+                      <select class="diamond-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select diamond master</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440200" ${diamond.diamond_master_id === '550e8400-e29b-41d4-a716-446655440200' ? 'selected' : ''}>DIA-RND-0.5-G-VS1</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440201" ${diamond.diamond_master_id === '660e8400-e29b-41d4-a716-446655440201' ? 'selected' : ''}>DIA-PRN-1.0-F-VVS2</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440202" ${diamond.diamond_master_id === '770e8400-e29b-41d4-a716-446655440202' ? 'selected' : ''}>DIA-OVL-0.75-H-SI1</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+                      <select class="diamond-shape w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select shape</option>
+                        <option value="Round" ${diamond.shape === 'Round' ? 'selected' : ''}>Round</option>
+                        <option value="Princess" ${diamond.shape === 'Princess' ? 'selected' : ''}>Princess</option>
+                        <option value="Oval" ${diamond.shape === 'Oval' ? 'selected' : ''}>Oval</option>
+                        <option value="Marquise" ${diamond.shape === 'Marquise' ? 'selected' : ''}>Marquise</option>
+                        <option value="Pear" ${diamond.shape === 'Pear' ? 'selected' : ''}>Pear</option>
+                        <option value="Emerald" ${diamond.shape === 'Emerald' ? 'selected' : ''}>Emerald</option>
+                        <option value="Cushion" ${diamond.shape === 'Cushion' ? 'selected' : ''}>Cushion</option>
+                        <option value="Radiant" ${diamond.shape === 'Radiant' ? 'selected' : ''}>Radiant</option>
+                        <option value="Heart" ${diamond.shape === 'Heart' ? 'selected' : ''}>Heart</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+                      <input class="diamond-size w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="text" placeholder="e.g., 5mm" value="${diamond.size || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Clarity</label>
+                      <select class="diamond-clarity w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select clarity</option>
+                        <option value="FL" ${diamond.clarity === 'FL' ? 'selected' : ''}>FL (Flawless)</option>
+                        <option value="IF" ${diamond.clarity === 'IF' ? 'selected' : ''}>IF (Internally Flawless)</option>
+                        <option value="VVS1" ${diamond.clarity === 'VVS1' ? 'selected' : ''}>VVS1</option>
+                        <option value="VVS2" ${diamond.clarity === 'VVS2' ? 'selected' : ''}>VVS2</option>
+                        <option value="VS1" ${diamond.clarity === 'VS1' ? 'selected' : ''}>VS1</option>
+                        <option value="VS2" ${diamond.clarity === 'VS2' ? 'selected' : ''}>VS2</option>
+                        <option value="SI1" ${diamond.clarity === 'SI1' ? 'selected' : ''}>SI1</option>
+                        <option value="SI2" ${diamond.clarity === 'SI2' ? 'selected' : ''}>SI2</option>
+                        <option value="I1" ${diamond.clarity === 'I1' ? 'selected' : ''}>I1</option>
+                        <option value="I2" ${diamond.clarity === 'I2' ? 'selected' : ''}>I2</option>
+                        <option value="I3" ${diamond.clarity === 'I3' ? 'selected' : ''}>I3</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cut</label>
+                      <select class="diamond-cut w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select cut</option>
+                        <option value="Excellent" ${diamond.cut === 'Excellent' ? 'selected' : ''}>Excellent</option>
+                        <option value="Very Good" ${diamond.cut === 'Very Good' ? 'selected' : ''}>Very Good</option>
+                        <option value="Good" ${diamond.cut === 'Good' ? 'selected' : ''}>Good</option>
+                        <option value="Fair" ${diamond.cut === 'Fair' ? 'selected' : ''}>Fair</option>
+                        <option value="Poor" ${diamond.cut === 'Poor' ? 'selected' : ''}>Poor</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Certification</label>
+                      <select class="diamond-certification w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select certification</option>
+                        <option value="GIA" ${diamond.certification === 'GIA' ? 'selected' : ''}>GIA</option>
+                        <option value="IGI" ${diamond.certification === 'IGI' ? 'selected' : ''}>IGI</option>
+                        <option value="HRD" ${diamond.certification === 'HRD' ? 'selected' : ''}>HRD</option>
+                        <option value="AGS" ${diamond.certification === 'AGS' ? 'selected' : ''}>AGS</option>
+                        <option value="EGL" ${diamond.certification === 'EGL' ? 'selected' : ''}>EGL</option>
+                        <option value="None" ${diamond.certification === 'None' ? 'selected' : ''}>None</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+                      <input class="diamond-pieces w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0" value="${diamond.pieces || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+                      <input class="diamond-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000" value="${diamond.total_carat || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+                      <input class="diamond-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00" value="${diamond.rate_per_carat || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+                      <input class="diamond-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly value="${diamond.total_value || ''}"/>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-diamond-btn">Remove</button>
+              `;
+              diamondContainer.appendChild(diamondEntry);
+              attachDiamondRemoveListener(diamondEntry);
+              attachDiamondCalculationListener(diamondEntry);
+            });
+
+            // Clear existing stone entries
+            const stoneContainer = document.getElementById('stone-entries');
+            stoneContainer.innerHTML = '';
+            
+            // Populate stone entries (support both old single entry and new array format)
+            const stones = product.stones || (product.stone_master_id ? [{
+              stone_master_id: product.stone_master_id,
+              stone_type_id: product.stone_type_id || null,
+              shape_id: product.stone_shape_id || null,
+              size_id: product.stone_size_id || null,
+              colour_id: product.stone_colour_id || null,
+              quality_id: product.stone_quality_id || null,
+              pcs: product.stone_count,
+              total_carat: product.stone_weight,
+              rate_per_carat: null,
+              total_value: null
+            }] : [{}]);
+            
+            stones.forEach((stone) => {
+              const stoneEntry = document.createElement('div');
+              stoneEntry.className = 'stone-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark';
+              stoneEntry.innerHTML = `
+                <div class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Master</label>
+                      <select class="stone-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select stone master</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440800" ${stone.stone_master_id === '550e8400-e29b-41d4-a716-446655440800' ? 'selected' : ''}>STN-RUBY-RND-5MM-RED-AAA</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440801" ${stone.stone_master_id === '660e8400-e29b-41d4-a716-446655440801' ? 'selected' : ''}>STN-SAPPHIRE-OVL-6MM-BLUE-AA</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Type</label>
+                      <select class="stone-type-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select stone type</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440810" ${stone.stone_type_id === '550e8400-e29b-41d4-a716-446655440810' ? 'selected' : ''}>Ruby</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440811" ${stone.stone_type_id === '660e8400-e29b-41d4-a716-446655440811' ? 'selected' : ''}>Sapphire</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440812" ${stone.stone_type_id === '770e8400-e29b-41d4-a716-446655440812' ? 'selected' : ''}>Emerald</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440813" ${stone.stone_type_id === '880e8400-e29b-41d4-a716-446655440813' ? 'selected' : ''}>Diamond</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+                      <select class="stone-shape-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select shape</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440820" ${stone.shape_id === '550e8400-e29b-41d4-a716-446655440820' ? 'selected' : ''}>Round</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440821" ${stone.shape_id === '660e8400-e29b-41d4-a716-446655440821' ? 'selected' : ''}>Oval</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440822" ${stone.shape_id === '770e8400-e29b-41d4-a716-446655440822' ? 'selected' : ''}>Princess</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440823" ${stone.shape_id === '880e8400-e29b-41d4-a716-446655440823' ? 'selected' : ''}>Cushion</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+                      <select class="stone-size-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select size</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440830" ${stone.size_id === '550e8400-e29b-41d4-a716-446655440830' ? 'selected' : ''}>3mm</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440831" ${stone.size_id === '660e8400-e29b-41d4-a716-446655440831' ? 'selected' : ''}>4mm</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440832" ${stone.size_id === '770e8400-e29b-41d4-a716-446655440832' ? 'selected' : ''}>5mm</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440833" ${stone.size_id === '880e8400-e29b-41d4-a716-446655440833' ? 'selected' : ''}>6mm</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Colour</label>
+                      <select class="stone-colour-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select colour</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440840" ${stone.colour_id === '550e8400-e29b-41d4-a716-446655440840' ? 'selected' : ''}>Red</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440841" ${stone.colour_id === '660e8400-e29b-41d4-a716-446655440841' ? 'selected' : ''}>Blue</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440842" ${stone.colour_id === '770e8400-e29b-41d4-a716-446655440842' ? 'selected' : ''}>Green</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440843" ${stone.colour_id === '880e8400-e29b-41d4-a716-446655440843' ? 'selected' : ''}>Yellow</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality</label>
+                      <select class="stone-quality-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                        <option value="">Select quality</option>
+                        <option value="550e8400-e29b-41d4-a716-446655440850" ${stone.quality_id === '550e8400-e29b-41d4-a716-446655440850' ? 'selected' : ''}>AAA</option>
+                        <option value="660e8400-e29b-41d4-a716-446655440851" ${stone.quality_id === '660e8400-e29b-41d4-a716-446655440851' ? 'selected' : ''}>AA</option>
+                        <option value="770e8400-e29b-41d4-a716-446655440852" ${stone.quality_id === '770e8400-e29b-41d4-a716-446655440852' ? 'selected' : ''}>A</option>
+                        <option value="880e8400-e29b-41d4-a716-446655440853" ${stone.quality_id === '880e8400-e29b-41d4-a716-446655440853' ? 'selected' : ''}>B</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+                      <input class="stone-pcs w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0" value="${stone.pcs || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+                      <input class="stone-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000" value="${stone.total_carat || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+                      <input class="stone-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00" value="${stone.rate_per_carat || ''}"/>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+                      <input class="stone-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly value="${stone.total_value || ''}"/>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-stone-btn">Remove</button>
+              `;
+              stoneContainer.appendChild(stoneEntry);
+              attachStoneRemoveListener(stoneEntry);
+              attachStoneCalculationListener(stoneEntry);
+            });
+            document.getElementById('net-weight').value = product.net_weight || '';
+            document.getElementById('product-description').value = product.product_description || '';
+            document.getElementById('hsn-code').value = product.hsn_code || '';
+            document.getElementById('is-active').value = product.is_active.toString();
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this product?')) {
+            products = products.filter(p => p.product_id !== id);
+            localStorage.setItem('productMaster', JSON.stringify(products));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Collect all metal entries
+      const metals = Array.from(document.querySelectorAll('.metal-entry')).map(entry => ({
+        metal_type: entry.querySelector('.metal-type').value || null,
+        metal_color: entry.querySelector('.metal-color').value || null,
+        metal_purity_id: entry.querySelector('.metal-purity-id').value || null,
+        metal_weight: entry.querySelector('.metal-weight').value ? parseFloat(entry.querySelector('.metal-weight').value) : null
+      })).filter(metal => metal.metal_type || metal.metal_color || metal.metal_purity_id || metal.metal_weight);
+      
+      // Get first metal for backward compatibility
+      const firstMetal = metals[0] || {};
+      
+      const formData = {
+        product_id: editingId || generateUUID(),
+        design_number: document.getElementById('design-number').value.trim() || null,
+        product_name: document.getElementById('product-name').value.trim(),
+        category_id: document.getElementById('category-id').value || null,
+        subcategory_id: document.getElementById('subcategory-id').value || null,
+        brand_id: document.getElementById('brand-id').value || null,
+        // Store metals as array
+        metals: metals,
+        // Keep legacy fields for backward compatibility (first metal entry)
+        metal_type: firstMetal.metal_type || null,
+        metal_color: firstMetal.metal_color || null,
+        metal_purity_id: firstMetal.metal_purity_id || null,
+        metal_weight: firstMetal.metal_weight || null,
+        // Collect all diamond entries
+        diamonds: Array.from(document.querySelectorAll('.diamond-entry')).map(entry => ({
+          diamond_master_id: entry.querySelector('.diamond-master-id').value || null,
+          shape: entry.querySelector('.diamond-shape').value || null,
+          size: entry.querySelector('.diamond-size').value || null,
+          clarity: entry.querySelector('.diamond-clarity').value || null,
+          cut: entry.querySelector('.diamond-cut').value || null,
+          certification: entry.querySelector('.diamond-certification').value || null,
+          pieces: entry.querySelector('.diamond-pieces').value ? parseInt(entry.querySelector('.diamond-pieces').value) : null,
+          total_carat: entry.querySelector('.diamond-total-carat').value ? parseFloat(entry.querySelector('.diamond-total-carat').value) : null,
+          rate_per_carat: entry.querySelector('.diamond-rate-per-carat').value ? parseFloat(entry.querySelector('.diamond-rate-per-carat').value) : null,
+          total_value: entry.querySelector('.diamond-total-value').value ? parseFloat(entry.querySelector('.diamond-total-value').value) : null
+        })).filter(diamond => diamond.diamond_master_id || diamond.pieces || diamond.total_carat),
+        // Collect all stone entries
+        stones: Array.from(document.querySelectorAll('.stone-entry')).map(entry => ({
+          stone_master_id: entry.querySelector('.stone-master-id').value || null,
+          stone_type_id: entry.querySelector('.stone-type-id').value || null,
+          shape_id: entry.querySelector('.stone-shape-id').value || null,
+          size_id: entry.querySelector('.stone-size-id').value || null,
+          colour_id: entry.querySelector('.stone-colour-id').value || null,
+          quality_id: entry.querySelector('.stone-quality-id').value || null,
+          pcs: entry.querySelector('.stone-pcs').value ? parseInt(entry.querySelector('.stone-pcs').value) : null,
+          total_carat: entry.querySelector('.stone-total-carat').value ? parseFloat(entry.querySelector('.stone-total-carat').value) : null,
+          rate_per_carat: entry.querySelector('.stone-rate-per-carat').value ? parseFloat(entry.querySelector('.stone-rate-per-carat').value) : null,
+          total_value: entry.querySelector('.stone-total-value').value ? parseFloat(entry.querySelector('.stone-total-value').value) : null
+        })).filter(stone => stone.stone_master_id || stone.pcs || stone.total_carat),
+        // Keep legacy fields for backward compatibility (first entry)
+        diamond_count: document.querySelector('.diamond-entry .diamond-pieces')?.value ? parseInt(document.querySelector('.diamond-entry .diamond-pieces').value) : null,
+        diamond_weight: document.querySelector('.diamond-entry .diamond-total-carat')?.value ? parseFloat(document.querySelector('.diamond-entry .diamond-total-carat').value) : null,
+        diamond_master_id: document.querySelector('.diamond-entry .diamond-master-id')?.value || null,
+        stone_count: document.querySelector('.stone-entry .stone-pcs')?.value ? parseInt(document.querySelector('.stone-entry .stone-pcs').value) : null,
+        stone_weight: document.querySelector('.stone-entry .stone-total-carat')?.value ? parseFloat(document.querySelector('.stone-entry .stone-total-carat').value) : null,
+        stone_master_id: document.querySelector('.stone-entry .stone-master-id')?.value || null,
+        net_weight: document.getElementById('net-weight').value ? parseFloat(document.getElementById('net-weight').value) : null,
+        product_description: document.getElementById('product-description').value.trim() || null,
+        hsn_code: document.getElementById('hsn-code').value.trim() || null,
+        is_active: document.getElementById('is-active').value === 'true'
+      };
+
+      if (editingId) {
+        const index = products.findIndex(p => p.product_id === editingId);
+        if (index !== -1) products[index] = formData;
+      } else {
+        products.push(formData);
+      }
+
+      localStorage.setItem('productMaster', JSON.stringify(products));
+      form.reset();
+      document.getElementById('product-id').value = '';
+      document.getElementById('is-active').value = 'true';
+      
+      // Reset metal entries to single empty entry
+      const metalContainer = document.getElementById('metal-entries');
+      metalContainer.innerHTML = `
+        <div class="metal-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal</label>
+              <select class="metal-type w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select metal</option>
+                <option value="Gold">Gold</option>
+                <option value="Silver">Silver</option>
+                <option value="Platinum">Platinum</option>
+                <option value="Palladium">Palladium</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Color</label>
+              <select class="metal-color w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select metal color</option>
+                <option value="Yellow">Yellow</option>
+                <option value="White">White</option>
+                <option value="Rose">Rose</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Purity</label>
+              <select class="metal-purity-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select purity</option>
+                <option value="550e8400-e29b-41d4-a716-446655440930">22K (91.67%)</option>
+                <option value="660e8400-e29b-41d4-a716-446655440931">18K (75%)</option>
+                <option value="770e8400-e29b-41d4-a716-446655440932">14K (58.33%)</option>
+                <option value="880e8400-e29b-41d4-a716-446655440933">24K (99.9%)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metal Weight (g)</label>
+              <input class="metal-weight w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.001" min="0" placeholder="e.g., 12.500"/>
+            </div>
+          </div>
+          <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-metal-btn">Remove</button>
+        </div>
+      `;
+      attachMetalRemoveListener(metalContainer.querySelector('.metal-entry'));
+      
+      // Reset diamond entries to single empty entry
+      const diamondContainer = document.getElementById('diamond-entries');
+      diamondContainer.innerHTML = `
+        <div class="diamond-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark">
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Diamond Master</label>
+                <select class="diamond-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select diamond master</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440200">DIA-RND-0.5-G-VS1</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440201">DIA-PRN-1.0-F-VVS2</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440202">DIA-OVL-0.75-H-SI1</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+                <select class="diamond-shape w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select shape</option>
+                  <option value="Round">Round</option>
+                  <option value="Princess">Princess</option>
+                  <option value="Oval">Oval</option>
+                  <option value="Marquise">Marquise</option>
+                  <option value="Pear">Pear</option>
+                  <option value="Emerald">Emerald</option>
+                  <option value="Cushion">Cushion</option>
+                  <option value="Radiant">Radiant</option>
+                  <option value="Heart">Heart</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+                <input class="diamond-size w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="text" placeholder="e.g., 5mm"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Clarity</label>
+                <select class="diamond-clarity w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select clarity</option>
+                  <option value="FL">FL (Flawless)</option>
+                  <option value="IF">IF (Internally Flawless)</option>
+                  <option value="VVS1">VVS1</option>
+                  <option value="VVS2">VVS2</option>
+                  <option value="VS1">VS1</option>
+                  <option value="VS2">VS2</option>
+                  <option value="SI1">SI1</option>
+                  <option value="SI2">SI2</option>
+                  <option value="I1">I1</option>
+                  <option value="I2">I2</option>
+                  <option value="I3">I3</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cut</label>
+                <select class="diamond-cut w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select cut</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Very Good">Very Good</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Certification</label>
+                <select class="diamond-certification w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select certification</option>
+                  <option value="GIA">GIA</option>
+                  <option value="IGI">IGI</option>
+                  <option value="HRD">HRD</option>
+                  <option value="AGS">AGS</option>
+                  <option value="EGL">EGL</option>
+                  <option value="None">None</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+                <input class="diamond-pieces w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+                <input class="diamond-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+                <input class="diamond-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+                <input class="diamond-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-diamond-btn">Remove</button>
+        </div>
+      `;
+      attachDiamondRemoveListener(diamondContainer.querySelector('.diamond-entry'));
+      attachDiamondCalculationListener(diamondContainer.querySelector('.diamond-entry'));
+      
+      // Reset stone entries to single empty entry
+      const stoneContainer = document.getElementById('stone-entries');
+      stoneContainer.innerHTML = `
+        <div class="stone-entry border border-border-light dark:border-border-dark rounded-lg p-4 bg-background-light dark:bg-background-dark">
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Master</label>
+                <select class="stone-master-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select stone master</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440800">STN-RUBY-RND-5MM-RED-AAA</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440801">STN-SAPPHIRE-OVL-6MM-BLUE-AA</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stone Type</label>
+                <select class="stone-type-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select stone type</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440810">Ruby</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440811">Sapphire</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440812">Emerald</option>
+                  <option value="880e8400-e29b-41d4-a716-446655440813">Diamond</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</label>
+                <select class="stone-shape-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select shape</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440820">Round</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440821">Oval</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440822">Princess</option>
+                  <option value="880e8400-e29b-41d4-a716-446655440823">Cushion</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+                <select class="stone-size-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select size</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440830">3mm</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440831">4mm</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440832">5mm</option>
+                  <option value="880e8400-e29b-41d4-a716-446655440833">6mm</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Colour</label>
+                <select class="stone-colour-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select colour</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440840">Red</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440841">Blue</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440842">Green</option>
+                  <option value="880e8400-e29b-41d4-a716-446655440843">Yellow</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality</label>
+                <select class="stone-quality-id w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                  <option value="">Select quality</option>
+                  <option value="550e8400-e29b-41d4-a716-446655440850">AAA</option>
+                  <option value="660e8400-e29b-41d4-a716-446655440851">AA</option>
+                  <option value="770e8400-e29b-41d4-a716-446655440852">A</option>
+                  <option value="880e8400-e29b-41d4-a716-446655440853">B</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pieces</label>
+                <input class="stone-pcs w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" min="0" placeholder="0"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Carat</label>
+                <input class="stone-total-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.0001" min="0" placeholder="0.0000"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Per Carat</label>
+                <input class="stone-rate-per-carat w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" type="number" step="0.01" min="0" placeholder="0.00"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Value</label>
+                <input class="stone-total-value w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed" type="number" step="0.01" placeholder="Auto-calculated" readonly/>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="mt-3 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium remove-stone-btn">Remove</button>
+        </div>
+      `;
+      attachStoneRemoveListener(stoneContainer.querySelector('.stone-entry'));
+      attachStoneCalculationListener(stoneContainer.querySelector('.stone-entry'));
+      
+      editingId = null;
+      renderTable();
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#products-table-body tr');
+      rows.forEach(row => {
+        const designNo = row.cells[1].textContent.toLowerCase();
+        const name = row.cells[2].textContent.toLowerCase();
+        const category = row.cells[3].textContent.toLowerCase();
+        const status = row.cells[10].querySelector('span').textContent.toLowerCase();
+        const isActive = status === 'active';
+        const matchesSearch = !searchTerm || designNo.includes(searchTerm) || name.includes(searchTerm) || category.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || (statusFilter === 'true' && isActive) || (statusFilter === 'false' && !isActive);
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
+

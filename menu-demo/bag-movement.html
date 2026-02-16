@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Move Bag - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="bag-movement" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Move Bag</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Send bag to another department</p>
+      </header>
+
+      <!-- Move Bag Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Bag Movement Details</h2>
+        
+        <form id="bag-movement-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bag Selection -->
+            <div>
+              <label for="bag-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Bag <span class="text-red-500">*</span>
+              </label>
+              <select id="bag-select" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select a bag</option>
+              </select>
+            </div>
+
+            <!-- From Department (Auto) -->
+            <div>
+              <label for="from-department" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                From Department
+              </label>
+              <input type="text" id="from-department" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 cursor-not-allowed"
+                     placeholder="Will be auto-filled">
+            </div>
+
+            <!-- To Department -->
+            <div>
+              <label for="to-department" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                To Department <span class="text-red-500">*</span>
+              </label>
+              <select id="to-department" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select department</option>
+                <option value="CASTING">Casting</option>
+                <option value="POLISHING">Polishing</option>
+                <option value="SETTING">Setting</option>
+                <option value="QC">QC</option>
+                <option value="FINISHING">Finishing</option>
+              </select>
+            </div>
+
+            <!-- Moved By -->
+            <div>
+              <label for="moved-by" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Moved By <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="moved-by" name="movedBy" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="Enter name or user ID">
+            </div>
+          </div>
+
+          <!-- Bag Information -->
+          <div id="bag-info-section" class="hidden border-t border-border-light dark:border-border-dark pt-6">
+            <h3 class="text-lg font-semibold mb-4">Current Bag Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+                <div class="text-sm text-gray-600 dark:text-gray-400">Current Weight</div>
+                <div id="current-weight" class="text-xl font-bold text-primary">0.000 g</div>
+              </div>
+              <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+                <div class="text-sm text-gray-600 dark:text-gray-400">Current Pieces</div>
+                <div id="current-pieces" class="text-xl font-bold text-primary">0</div>
+              </div>
+              <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+                <div class="text-sm text-gray-600 dark:text-gray-400">Current Department</div>
+                <div id="current-dept" class="text-xl font-bold text-primary">-</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dispatch Details -->
+          <div class="border-t border-border-light dark:border-border-dark pt-6">
+            <h3 class="text-lg font-semibold mb-4">Dispatch Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Dispatch Weight -->
+              <div>
+                <label for="dispatch-weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Dispatch Weight (g) <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="dispatch-weight" name="dispatchWeight" step="0.001" min="0" required
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0.000">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Available: <span id="available-weight">0.000</span> g</p>
+              </div>
+
+              <!-- Dispatch Pieces -->
+              <div>
+                <label for="dispatch-pieces" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Dispatch Pieces <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="dispatch-pieces" name="dispatchPieces" min="0" required
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Available: <span id="available-pieces">0</span> pieces</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remarks -->
+          <div>
+            <label for="remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Remarks
+            </label>
+            <textarea id="remarks" name="remarks" rows="3"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter any additional notes"></textarea>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex items-center justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="button" id="cancel-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Cancel
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Move Bag
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allBags = [];
+    let selectedBag = null;
+
+    // Load bags
+    function loadBags() {
+      allBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      populateBagSelect();
+    }
+
+    // Populate bag select
+    function populateBagSelect() {
+      const bagSelect = document.getElementById('bag-select');
+      bagSelect.innerHTML = '<option value="">Select a bag</option>';
+      
+      allBags.forEach(bag => {
+        const option = document.createElement('option');
+        option.value = bag.bag_id;
+        option.textContent = `${bag.bag_no} - ${bag.status} (${bag.current_department || 'N/A'})`;
+        bagSelect.appendChild(option);
+      });
+    }
+
+    // Bag selection handler
+    document.getElementById('bag-select').addEventListener('change', function() {
+      const bagId = this.value;
+      if (bagId) {
+        selectedBag = allBags.find(b => b.bag_id === bagId);
+        if (selectedBag) {
+          // Auto-fill from department
+          document.getElementById('from-department').value = selectedBag.current_department || '';
+          
+          // Show bag information
+          document.getElementById('bag-info-section').classList.remove('hidden');
+          document.getElementById('current-weight').textContent = (parseFloat(selectedBag.total_weight) || 0).toFixed(3) + ' g';
+          document.getElementById('current-pieces').textContent = selectedBag.total_pieces || 0;
+          document.getElementById('current-dept').textContent = selectedBag.current_department || '-';
+          
+          // Set available values
+          document.getElementById('available-weight').textContent = (parseFloat(selectedBag.total_weight) || 0).toFixed(3);
+          document.getElementById('available-pieces').textContent = selectedBag.total_pieces || 0;
+          
+          // Set max values for inputs
+          document.getElementById('dispatch-weight').max = parseFloat(selectedBag.total_weight) || 0;
+          document.getElementById('dispatch-pieces').max = selectedBag.total_pieces || 0;
+        }
+      } else {
+        selectedBag = null;
+        document.getElementById('bag-info-section').classList.add('hidden');
+        document.getElementById('from-department').value = '';
+      }
+    });
+
+    // Validate dispatch values
+    function validateDispatch() {
+      const dispatchWeight = parseFloat(document.getElementById('dispatch-weight').value) || 0;
+      const dispatchPieces = parseInt(document.getElementById('dispatch-pieces').value) || 0;
+      const availableWeight = parseFloat(document.getElementById('available-weight').textContent) || 0;
+      const availablePieces = parseInt(document.getElementById('available-pieces').textContent) || 0;
+
+      if (dispatchWeight > availableWeight) {
+        alert(`Dispatch weight (${dispatchWeight.toFixed(3)} g) cannot exceed available weight (${availableWeight.toFixed(3)} g)`);
+        return false;
+      }
+      if (dispatchPieces > availablePieces) {
+        alert(`Dispatch pieces (${dispatchPieces}) cannot exceed available pieces (${availablePieces})`);
+        return false;
+      }
+      return true;
+    }
+
+    // Form submission
+    document.getElementById('bag-movement-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!selectedBag) {
+        alert('Please select a bag');
+        return;
+      }
+
+      if (!validateDispatch()) {
+        return;
+      }
+
+      const formData = {
+        movement_id: 'movement-' + Date.now(),
+        bag_id: selectedBag.bag_id,
+        bag_no: selectedBag.bag_no,
+        from_department: document.getElementById('from-department').value,
+        to_department: document.getElementById('to-department').value,
+        dispatch_weight: parseFloat(document.getElementById('dispatch-weight').value),
+        dispatch_pieces: parseInt(document.getElementById('dispatch-pieces').value),
+        moved_by: document.getElementById('moved-by').value,
+        remarks: document.getElementById('remarks').value,
+        status: 'PENDING_RECEIPT',
+        created_at: new Date().toISOString()
+      };
+
+      // Save movement record
+      let movements = JSON.parse(localStorage.getItem('bagMovements') || '[]');
+      movements.push(formData);
+      localStorage.setItem('bagMovements', JSON.stringify(movements));
+
+      // Update bag status to "IN_TRANSIT"
+      selectedBag.status = 'IN_TRANSIT';
+      selectedBag.last_updated = new Date().toISOString();
+      
+      const bags = JSON.parse(localStorage.getItem('bags') || '[]');
+      const bagIndex = bags.findIndex(b => b.bag_id === selectedBag.bag_id);
+      if (bagIndex !== -1) {
+        bags[bagIndex] = selectedBag;
+        localStorage.setItem('bags', JSON.stringify(bags));
+      }
+
+      alert(`Bag ${selectedBag.bag_no} moved successfully! Waiting for receipt confirmation.`);
+      window.location.href = 'bag-management.html';
+    });
+
+    // Cancel button
+    document.getElementById('cancel-btn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+        window.location.href = 'bag-management.html';
+      }
+    });
+
+    // Check for bag ID in URL
+    function checkUrlParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const bagId = urlParams.get('bag');
+      if (bagId) {
+        const bagSelect = document.getElementById('bag-select');
+        bagSelect.value = bagId;
+        bagSelect.dispatchEvent(new Event('change'));
+      }
+    }
+
+    // Initialize
+    loadBags();
+    checkUrlParams();
+  </script>
+</body>
+</html>
+

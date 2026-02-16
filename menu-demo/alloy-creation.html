@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alloy Creation - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="alloy-creation" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Alloy Creation</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create alloys using recipes and available metal batches</p>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Side Panel -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Recipe Selection -->
+          <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Recipe Selection</h2>
+            <div>
+              <label for="recipe-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Select Recipe <span class="text-red-500">*</span>
+              </label>
+              <select id="recipe-select" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="">Select a recipe</option>
+                <!-- Options will be populated from recipes -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Metal Requirements Table -->
+          <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-xl font-semibold text-text-light dark:text-text-dark">Metal Requirements</h2>
+              <button type="button" id="add-row-btn" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm">
+                <span class="material-icons text-base">add</span>
+                <span>Add Row</span>
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+                  <tr>
+                    <th class="px-4 py-3" scope="col">Metal</th>
+                    <th class="px-4 py-3" scope="col">Purity</th>
+                    <th class="px-4 py-3" scope="col">Batch</th>
+                    <th class="px-4 py-3" scope="col">Available Quantity</th>
+                    <th class="px-4 py-3" scope="col">Required Quantity</th>
+                    <th class="px-4 py-3 text-center" scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="requirements-table-body">
+                  <!-- Dynamic rows will be added here -->
+                </tbody>
+              </table>
+              <div id="empty-requirements-state" class="text-center py-8 text-gray-500 dark:text-gray-400">
+                <span class="material-icons text-4xl mb-2">inventory_2</span>
+                <p>Select a recipe to populate metal requirements, or add rows manually.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Panel -->
+        <div class="lg:col-span-1 space-y-6">
+          <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Alloy Details</h2>
+            
+            <div class="space-y-4">
+              <!-- Purity -->
+              <div>
+                <label for="purity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Purity
+                </label>
+                <input type="number" id="purity" step="0.001" min="0" max="1000"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="e.g., 916">
+              </div>
+
+              <!-- Input Weight -->
+              <div>
+                <label for="input-weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Input Weight (g)
+                </label>
+                <input type="number" id="input-weight" step="0.001" min="0"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0.000">
+              </div>
+
+              <!-- Wastage -->
+              <div>
+                <label for="wastage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Wastage (%)
+                </label>
+                <input type="number" id="wastage" step="0.01" min="0" max="100"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0.00">
+              </div>
+
+              <!-- Expected Yield -->
+              <div>
+                <label for="expected-yield" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Expected Yield (g)
+                </label>
+                <input type="number" id="expected-yield" step="0.001" min="0" readonly
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="0.000">
+              </div>
+
+              <!-- Metal Batches Used -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Metal Batches Used
+                </label>
+                <div id="metal-batches-display" class="min-h-[100px] p-3 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">No batches selected</p>
+                </div>
+              </div>
+
+              <!-- New Batch of Alloy -->
+              <div>
+                <label for="new-batch" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  New Batch of Alloy
+                </label>
+                <input type="text" id="new-batch"
+                       class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                       placeholder="Enter batch number">
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex gap-3 pt-4">
+                <button type="button" id="reserve-batch-btn" class="flex-1 px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                  Reserve the Batch
+                </button>
+                <button type="button" id="create-alloy-btn" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                  Create Alloy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Generate UUID
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    let requirements = [];
+    let allRecipes = [];
+    let allRawMaterials = [];
+    let allStockLots = [];
+
+    // Demo data
+    const demoRecipes = [
+      {
+        id: 'recipe-001',
+        recipeName: 'Standard Yellow Gold 22K',
+        recipeCode: 'YG22K-001',
+        colourType: 'yellow',
+        karatValue: '22',
+        targetPurity: '916',
+        expectedWastage: '2.5',
+        inputType: 'percentage',
+        composition: [
+          { metalName: 'Gold 24K', metalValue: '550e8400-e29b-41d4-a716-446655440100', inputType: 'percentage', percentage: 91.67, weight: null },
+          { metalName: 'Silver 925', metalValue: '660e8400-e29b-41d4-a716-446655440101', inputType: 'percentage', percentage: 5.0, weight: null },
+          { metalName: 'Copper', metalValue: '770e8400-e29b-41d4-a716-446655440102', inputType: 'percentage', percentage: 3.33, weight: null }
+        ],
+        totalPercentage: 100,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'recipe-002',
+        recipeName: 'White Gold 18K',
+        recipeCode: 'WG18K-001',
+        colourType: 'white',
+        karatValue: '18',
+        targetPurity: '750',
+        expectedWastage: '3.0',
+        inputType: 'percentage',
+        composition: [
+          { metalName: 'Gold 24K', metalValue: '550e8400-e29b-41d4-a716-446655440100', inputType: 'percentage', percentage: 75.0, weight: null },
+          { metalName: 'Silver 925', metalValue: '660e8400-e29b-41d4-a716-446655440101', inputType: 'percentage', percentage: 15.0, weight: null },
+          { metalName: 'Palladium', metalValue: '880e8400-e29b-41d4-a716-446655440103', inputType: 'percentage', percentage: 10.0, weight: null }
+        ],
+        totalPercentage: 100,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'recipe-003',
+        recipeName: 'Rose Gold 18K',
+        recipeCode: 'RG18K-001',
+        colourType: 'pink',
+        karatValue: '18',
+        targetPurity: '750',
+        expectedWastage: '2.8',
+        inputType: 'percentage',
+        composition: [
+          { metalName: 'Gold 24K', metalValue: '550e8400-e29b-41d4-a716-446655440100', inputType: 'percentage', percentage: 75.0, weight: null },
+          { metalName: 'Silver 925', metalValue: '660e8400-e29b-41d4-a716-446655440101', inputType: 'percentage', percentage: 5.0, weight: null },
+          { metalName: 'Copper', metalValue: '770e8400-e29b-41d4-a716-446655440102', inputType: 'percentage', percentage: 20.0, weight: null }
+        ],
+        totalPercentage: 100,
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    const demoRawMaterials = [
+      {
+        material_id: '550e8400-e29b-41d4-a716-446655440100',
+        name: 'Gold 24K',
+        code: 'GLD-24K-001',
+        description: 'Pure 24 karat gold, 99.9% purity',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-15T10:30:00.000Z'
+      },
+      {
+        material_id: '660e8400-e29b-41d4-a716-446655440101',
+        name: 'Silver 925',
+        code: 'SLV-925-001',
+        description: 'Sterling silver, 92.5% purity',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-16T14:20:00.000Z'
+      },
+      {
+        material_id: '770e8400-e29b-41d4-a716-446655440102',
+        name: 'Copper',
+        code: 'COP-001',
+        description: 'Pure copper',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-17T09:15:00.000Z'
+      },
+      {
+        material_id: '880e8400-e29b-41d4-a716-446655440103',
+        name: 'Palladium',
+        code: 'PAL-001',
+        description: 'Pure palladium',
+        unit_of_measure: '550e8400-e29b-41d4-a716-446655440010',
+        is_active: true,
+        created_at: '2024-01-18T11:00:00.000Z'
+      }
+    ];
+
+    const demoStockLots = [
+      {
+        lot_id: 'lot-001',
+        tenant_id: 'default-tenant-id',
+        lot_no: 'LOT-GLD-001',
+        item_type: 'METAL',
+        diamond_master_id: null,
+        stone_master_id: null,
+        raw_material_id: '550e8400-e29b-41d4-a716-446655440100',
+        current_weight: '150.500',
+        current_pieces: 1,
+        created_at: '2024-01-20T10:00:00.000Z',
+        updated_at: '2024-01-20T10:00:00.000Z'
+      },
+      {
+        lot_id: 'lot-002',
+        tenant_id: 'default-tenant-id',
+        lot_no: 'LOT-GLD-002',
+        item_type: 'METAL',
+        diamond_master_id: null,
+        stone_master_id: null,
+        raw_material_id: '550e8400-e29b-41d4-a716-446655440100',
+        current_weight: '200.750',
+        current_pieces: 1,
+        created_at: '2024-01-21T14:30:00.000Z',
+        updated_at: '2024-01-21T14:30:00.000Z'
+      },
+      {
+        lot_id: 'lot-003',
+        tenant_id: 'default-tenant-id',
+        lot_no: 'LOT-SLV-001',
+        item_type: 'METAL',
+        diamond_master_id: null,
+        stone_master_id: null,
+        raw_material_id: '660e8400-e29b-41d4-a716-446655440101',
+        current_weight: '75.250',
+        current_pieces: 1,
+        created_at: '2024-01-22T09:15:00.000Z',
+        updated_at: '2024-01-22T09:15:00.000Z'
+      },
+      {
+        lot_id: 'lot-004',
+        tenant_id: 'default-tenant-id',
+        lot_no: 'LOT-SLV-002',
+        item_type: 'METAL',
+        diamond_master_id: null,
+        stone_master_id: null,
+        raw_material_id: '660e8400-e29b-41d4-a716-446655440101',
+        current_weight: '120.000',
+        current_pieces: 1,
+        created_at: '2024-01-23T11:20:00.000Z',
+        updated_at: '2024-01-23T11:20:00.000Z'
+      },
+      {
+        lot_id: 'lot-005',
+        tenant_id: 'default-tenant-id',
+        lot_no: 'LOT-COP-001',
+        item_type: 'METAL',
+        diamond_master_id: null,
+        stone_master_id: null,
+        raw_material_id: '770e8400-e29b-41d4-a716-446655440102',
+        current_weight: '50.500',
+        current_pieces: 1,
+        created_at: '2024-01-24T08:45:00.000Z',
+        updated_at: '2024-01-24T08:45:00.000Z'
+      },
+      {
+        lot_id: 'lot-006',
+        tenant_id: 'default-tenant-id',
+        lot_no: 'LOT-PAL-001',
+        item_type: 'METAL',
+        diamond_master_id: null,
+        stone_master_id: null,
+        raw_material_id: '880e8400-e29b-41d4-a716-446655440103',
+        current_weight: '100.000',
+        current_pieces: 1,
+        created_at: '2024-01-25T13:00:00.000Z',
+        updated_at: '2024-01-25T13:00:00.000Z'
+      }
+    ];
+
+    // Load data
+    function loadData() {
+      // Load or initialize recipes
+      let storedRecipes = localStorage.getItem('jems-alloy-recipes');
+      if (!storedRecipes || JSON.parse(storedRecipes).length === 0) {
+        localStorage.setItem('jems-alloy-recipes', JSON.stringify(demoRecipes));
+        allRecipes = demoRecipes;
+      } else {
+        allRecipes = JSON.parse(storedRecipes);
+      }
+      
+      // Load or initialize raw materials
+      let storedMaterials = localStorage.getItem('rawMaterials');
+      if (!storedMaterials || JSON.parse(storedMaterials).length === 0) {
+        localStorage.setItem('rawMaterials', JSON.stringify(demoRawMaterials));
+        allRawMaterials = demoRawMaterials;
+      } else {
+        allRawMaterials = JSON.parse(storedMaterials);
+      }
+      
+      // Load or initialize stock lots
+      let storedLots = localStorage.getItem('stockLots');
+      if (!storedLots || JSON.parse(storedLots).length === 0) {
+        localStorage.setItem('stockLots', JSON.stringify(demoStockLots));
+        allStockLots = demoStockLots;
+      } else {
+        allStockLots = JSON.parse(storedLots);
+      }
+      
+      // Populate recipe dropdown
+      const recipeSelect = document.getElementById('recipe-select');
+      recipeSelect.innerHTML = '<option value="">Select a recipe</option>';
+      allRecipes.forEach(recipe => {
+        const option = document.createElement('option');
+        option.value = recipe.id || recipe.recipeCode;
+        option.textContent = `${recipe.recipeName} (${recipe.recipeCode})`;
+        option.dataset.recipe = JSON.stringify(recipe);
+        recipeSelect.appendChild(option);
+      });
+    }
+
+    // Get available quantity for a metal and purity
+    function getAvailableQuantity(metalId, purity) {
+      // Filter stock lots by metal and purity
+      const matchingLots = allStockLots.filter(lot => {
+        if (lot.item_type !== 'METAL') return false;
+        if (lot.raw_material_id !== metalId) return false;
+        // You may need to add purity matching logic based on your data structure
+        return true;
+      });
+      
+      // Sum up available quantities
+      return matchingLots.reduce((sum, lot) => {
+        return sum + (parseFloat(lot.current_weight) || 0);
+      }, 0);
+    }
+
+    // Get batches for a metal
+    function getBatchesForMetal(metalId) {
+      return allStockLots.filter(lot => 
+        lot.item_type === 'METAL' && lot.raw_material_id === metalId
+      );
+    }
+
+    // Create requirement row
+    function createRequirementRow(requirement = null, index = -1) {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-border-light dark:border-border-dark';
+      tr.dataset.index = index >= 0 ? index : requirements.length;
+      
+      const metalId = requirement ? requirement.metal_id : '';
+      const metalName = requirement ? requirement.metal_name : '';
+      const purity = requirement ? requirement.purity : '';
+      const batchId = requirement ? requirement.batch_id : '';
+      const batchNo = requirement ? requirement.batch_no : '';
+      const availableQty = requirement ? requirement.available_quantity : '';
+      const requiredQty = requirement ? requirement.required_quantity : '';
+      
+      // Create metal select
+      const metalSelect = document.createElement('select');
+      metalSelect.className = 'w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary metal-select';
+      metalSelect.innerHTML = '<option value="">Select Metal</option>';
+      allRawMaterials.forEach(material => {
+        const option = document.createElement('option');
+        option.value = material.material_id;
+        option.textContent = material.name || material.code;
+        if (option.value === metalId) option.selected = true;
+        metalSelect.appendChild(option);
+      });
+      
+      // Create batch select
+      const batchSelect = document.createElement('select');
+      batchSelect.className = 'w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary batch-select';
+      batchSelect.innerHTML = '<option value="">Select Batch</option>';
+      if (metalId) {
+        const batches = getBatchesForMetal(metalId);
+        batches.forEach(batch => {
+          const option = document.createElement('option');
+          option.value = batch.lot_id;
+          option.textContent = batch.lot_no;
+          if (option.value === batchId) option.selected = true;
+          batchSelect.appendChild(option);
+        });
+      }
+      
+      tr.innerHTML = `
+        <td class="px-4 py-2">
+          <div class="metal-cell"></div>
+        </td>
+        <td class="px-4 py-2">
+          <input type="number" step="0.001" min="0" value="${purity}" 
+                 class="w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary purity-input"
+                 placeholder="0.000">
+        </td>
+        <td class="px-4 py-2">
+          <div class="batch-cell"></div>
+        </td>
+        <td class="px-4 py-2">
+          <input type="number" step="0.001" min="0" value="${availableQty}" readonly
+                 class="w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark available-qty-input"
+                 placeholder="0.000">
+        </td>
+        <td class="px-4 py-2">
+          <input type="number" step="0.001" min="0" value="${requiredQty}" 
+                 class="w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary required-qty-input"
+                 placeholder="0.000">
+        </td>
+        <td class="px-4 py-2 text-center">
+          <button type="button" class="delete-row-btn text-red-500 hover:opacity-80">
+            <span class="material-icons text-base">delete</span>
+          </button>
+        </td>
+      `;
+      
+      // Insert selects
+      tr.querySelector('.metal-cell').appendChild(metalSelect);
+      tr.querySelector('.batch-cell').appendChild(batchSelect);
+      
+      // Event listeners
+      metalSelect.addEventListener('change', function() {
+        const selectedMetalId = this.value;
+        const rowBatchSelect = tr.querySelector('.batch-select');
+        const rowAvailableQty = tr.querySelector('.available-qty-input');
+        
+        // Update batch dropdown
+        rowBatchSelect.innerHTML = '<option value="">Select Batch</option>';
+        if (selectedMetalId) {
+          const batches = getBatchesForMetal(selectedMetalId);
+          batches.forEach(batch => {
+            const option = document.createElement('option');
+            option.value = batch.lot_id;
+            option.textContent = batch.lot_no;
+            rowBatchSelect.appendChild(option);
+          });
+          
+          // Update available quantity
+          const totalAvailable = getAvailableQuantity(selectedMetalId, '');
+          rowAvailableQty.value = totalAvailable.toFixed(3);
+          
+          // Auto-generate batch number if not set
+          if (!document.getElementById('new-batch').value) {
+            document.getElementById('new-batch').value = generateBatchNumber();
+          }
+        } else {
+          rowAvailableQty.value = '';
+        }
+        
+        updateMetalBatchesDisplay();
+      });
+      
+      batchSelect.addEventListener('change', function() {
+        const selectedMetalId = metalSelect.value;
+        const selectedBatchId = this.value;
+        const rowAvailableQty = tr.querySelector('.available-qty-input');
+        
+        if (selectedBatchId) {
+          const batch = allStockLots.find(lot => lot.lot_id === selectedBatchId);
+          if (batch) {
+            rowAvailableQty.value = (parseFloat(batch.current_weight) || 0).toFixed(3);
+          }
+        } else if (selectedMetalId) {
+          const totalAvailable = getAvailableQuantity(selectedMetalId, '');
+          rowAvailableQty.value = totalAvailable.toFixed(3);
+        }
+        
+        updateMetalBatchesDisplay();
+      });
+      
+      tr.querySelector('.delete-row-btn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this row?')) {
+          const rowIndex = parseInt(tr.dataset.index);
+          if (rowIndex >= 0 && rowIndex < requirements.length) {
+            requirements.splice(rowIndex, 1);
+          }
+          tr.remove();
+          updateMetalBatchesDisplay();
+        }
+      });
+      
+      return tr;
+    }
+
+    // Generate batch number
+    function generateBatchNumber() {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      return `ALY-${year}${month}${day}-${random}`;
+    }
+
+    // Populate requirements from recipe
+    function populateFromRecipe(recipe) {
+      const tbody = document.getElementById('requirements-table-body');
+      const emptyState = document.getElementById('empty-requirements-state');
+      
+      requirements = [];
+      tbody.innerHTML = '';
+      emptyState.classList.add('hidden');
+      
+      // Auto-generate batch number
+      if (!document.getElementById('new-batch').value) {
+        document.getElementById('new-batch').value = generateBatchNumber();
+      }
+      
+      if (recipe && recipe.composition) {
+        recipe.composition.forEach(comp => {
+          const metal = allRawMaterials.find(m => m.material_id === comp.metalValue || m.name === comp.metalName);
+          if (metal) {
+            const requirement = {
+              metal_id: metal.material_id,
+              metal_name: metal.name || metal.code,
+              purity: recipe.targetPurity || recipe.karatValue || '',
+              batch_id: '',
+              batch_no: '',
+              available_quantity: getAvailableQuantity(metal.material_id, ''),
+              required_quantity: comp.weight || ''
+            };
+            requirements.push(requirement);
+            
+            const row = createRequirementRow(requirement, requirements.length - 1);
+            tbody.appendChild(row);
+          }
+        });
+      }
+      
+      updateMetalBatchesDisplay();
+    }
+
+    // Update metal batches display
+    function updateMetalBatchesDisplay() {
+      const display = document.getElementById('metal-batches-display');
+      const rows = document.querySelectorAll('#requirements-table-body tr');
+      
+      if (rows.length === 0) {
+        display.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No batches selected</p>';
+        return;
+      }
+      
+      const batches = [];
+      rows.forEach(row => {
+        const batchSelect = row.querySelector('.batch-select');
+        const metalSelect = row.querySelector('.metal-select');
+        const metalName = metalSelect.options[metalSelect.selectedIndex]?.text || 'Unknown';
+        const batchNo = batchSelect.options[batchSelect.selectedIndex]?.text || 'Not selected';
+        
+        if (batchSelect.value) {
+          batches.push(`${metalName} - Batch: ${batchNo}`);
+        }
+      });
+      
+      if (batches.length === 0) {
+        display.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No batches selected</p>';
+      } else {
+        display.innerHTML = batches.map(batch => 
+          `<p class="text-sm text-text-light dark:text-text-dark mb-1">${batch}</p>`
+        ).join('');
+      }
+    }
+
+    // Calculate expected yield
+    function calculateExpectedYield() {
+      const inputWeight = parseFloat(document.getElementById('input-weight').value) || 0;
+      const wastage = parseFloat(document.getElementById('wastage').value) || 0;
+      
+      const expectedYield = inputWeight * (1 - wastage / 100);
+      document.getElementById('expected-yield').value = expectedYield.toFixed(3);
+    }
+
+    // Recipe selection handler
+    document.getElementById('recipe-select').addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      if (selectedOption.value && selectedOption.dataset.recipe) {
+        const recipe = JSON.parse(selectedOption.dataset.recipe);
+        populateFromRecipe(recipe);
+        
+        // Populate left side fields
+        if (recipe.targetPurity) {
+          document.getElementById('purity').value = recipe.targetPurity;
+        } else if (recipe.karatValue) {
+          document.getElementById('purity').value = recipe.karatValue;
+        }
+        if (recipe.expectedWastage) {
+          document.getElementById('wastage').value = recipe.expectedWastage;
+        }
+      } else {
+        // Clear table
+        document.getElementById('requirements-table-body').innerHTML = '';
+        document.getElementById('empty-requirements-state').classList.remove('hidden');
+        requirements = [];
+        updateMetalBatchesDisplay();
+      }
+    });
+
+    // Add row button
+    document.getElementById('add-row-btn').addEventListener('click', function() {
+      const tbody = document.getElementById('requirements-table-body');
+      const emptyState = document.getElementById('empty-requirements-state');
+      emptyState.classList.add('hidden');
+      
+      // Auto-generate batch number if not set
+      if (!document.getElementById('new-batch').value) {
+        document.getElementById('new-batch').value = generateBatchNumber();
+      }
+      
+      const row = createRequirementRow();
+      tbody.appendChild(row);
+    });
+
+    // Calculate expected yield on input change
+    document.getElementById('input-weight').addEventListener('input', calculateExpectedYield);
+    document.getElementById('wastage').addEventListener('input', calculateExpectedYield);
+
+    // Reserve batch button
+    document.getElementById('reserve-batch-btn').addEventListener('click', function() {
+      // Implementation for reserving batches
+      alert('Batch reservation functionality to be implemented');
+    });
+
+    // Create alloy button
+    document.getElementById('create-alloy-btn').addEventListener('click', function() {
+      // Validate form
+      const recipeSelect = document.getElementById('recipe-select').value;
+      if (!recipeSelect) {
+        alert('Please select a recipe');
+        return;
+      }
+      
+      const inputWeight = document.getElementById('input-weight').value;
+      if (!inputWeight || parseFloat(inputWeight) <= 0) {
+        alert('Please enter a valid input weight');
+        return;
+      }
+      
+      const newBatch = document.getElementById('new-batch').value;
+      if (!newBatch) {
+        alert('Please enter a new batch number');
+        return;
+      }
+      
+      // Collect requirements
+      const rows = document.querySelectorAll('#requirements-table-body tr');
+      const collectedRequirements = [];
+      rows.forEach(row => {
+        const metalSelect = row.querySelector('.metal-select');
+        const batchSelect = row.querySelector('.batch-select');
+        const purityInput = row.querySelector('.purity-input');
+        const requiredQtyInput = row.querySelector('.required-qty-input');
+        
+        if (metalSelect.value && batchSelect.value && requiredQtyInput.value) {
+          collectedRequirements.push({
+            metal_id: metalSelect.value,
+            metal_name: metalSelect.options[metalSelect.selectedIndex].text,
+            batch_id: batchSelect.value,
+            batch_no: batchSelect.options[batchSelect.selectedIndex].text,
+            purity: purityInput.value || '',
+            required_quantity: parseFloat(requiredQtyInput.value)
+          });
+        }
+      });
+      
+      if (collectedRequirements.length === 0) {
+        alert('Please add at least one metal requirement with batch selected');
+        return;
+      }
+      
+      // Create alloy entry
+      const alloyEntry = {
+        alloy_creation_id: generateUUID(),
+        recipe_id: recipeSelect,
+        recipe_name: allRecipes.find(r => (r.id || r.recipeCode) === recipeSelect)?.recipeName || '',
+        purity: document.getElementById('purity').value || '',
+        input_weight: parseFloat(inputWeight),
+        wastage: parseFloat(document.getElementById('wastage').value) || 0,
+        expected_yield: parseFloat(document.getElementById('expected-yield').value) || 0,
+        new_batch: newBatch,
+        requirements: collectedRequirements,
+        created_at: new Date().toISOString()
+      };
+      
+      // Save to localStorage
+      const alloyCreations = JSON.parse(localStorage.getItem('alloyCreations') || '[]');
+      alloyCreations.push(alloyEntry);
+      localStorage.setItem('alloyCreations', JSON.stringify(alloyCreations));
+      
+      alert('Alloy created successfully!');
+      
+      // Reset form
+      document.getElementById('recipe-select').value = '';
+      document.getElementById('requirements-table-body').innerHTML = '';
+      document.getElementById('empty-requirements-state').classList.remove('hidden');
+      document.getElementById('purity').value = '';
+      document.getElementById('input-weight').value = '';
+      document.getElementById('wastage').value = '';
+      document.getElementById('expected-yield').value = '';
+      document.getElementById('new-batch').value = '';
+      requirements = [];
+      updateMetalBatchesDisplay();
+    });
+
+    // Initialize
+    loadData();
+    calculateExpectedYield();
+  </script>
+</body>
+</html>
+

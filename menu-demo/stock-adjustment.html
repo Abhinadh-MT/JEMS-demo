@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stock Adjustment - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="stock-adjustment" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Stock Adjustment</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Adjust stock quantities for raw materials, alloys, diamonds, and stones</p>
+      </header>
+
+      <!-- Stock Adjustment Form -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">New Stock Adjustment</h2>
+        
+        <form id="stock-adjustment-form" class="space-y-6">
+          <input type="hidden" id="adjustment-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Adjustment Date -->
+            <div>
+              <label for="adjustment-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Adjustment Date <span class="text-red-500">*</span>
+              </label>
+              <input type="date" id="adjustment-date" name="adjustmentDate" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+            </div>
+
+            <!-- Reason -->
+            <div class="md:col-span-2">
+              <label for="reason" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Reason
+              </label>
+              <input type="text" id="reason" name="reason" maxlength="255"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., Physical count correction, Damage, Found stock">
+            </div>
+          </div>
+
+          <!-- Adjustment Items Section -->
+          <div class="border-t border-border-light dark:border-border-dark pt-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-text-light dark:text-text-dark">Adjustment Items</h3>
+              <button type="button" id="add-item-btn" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm">
+                <span class="material-icons text-base">add</span>
+                <span>Add Item</span>
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+                  <tr>
+                    <th class="px-4 py-3" scope="col">Item Type</th>
+                    <th class="px-4 py-3" scope="col">Item</th>
+                    <th class="px-4 py-3" scope="col">Lot No</th>
+                    <th class="px-4 py-3" scope="col">Current Weight</th>
+                    <th class="px-4 py-3" scope="col">Current Pieces</th>
+                    <th class="px-4 py-3" scope="col">Adjustment Weight</th>
+                    <th class="px-4 py-3" scope="col">Adjustment Pieces</th>
+                    <th class="px-4 py-3" scope="col">New Weight</th>
+                    <th class="px-4 py-3" scope="col">New Pieces</th>
+                    <th class="px-4 py-3 text-center" scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adjustment-items-body">
+                  <!-- Dynamic rows will be added here -->
+                </tbody>
+              </table>
+              <div id="empty-items-state" class="text-center py-8 text-gray-500 dark:text-gray-400">
+                <span class="material-icons text-4xl mb-2">inventory_2</span>
+                <p>No items added yet. Click "Add Item" to add adjustment items.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remarks -->
+          <div>
+            <label for="remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Remarks
+            </label>
+            <textarea id="remarks" name="remarks" rows="4"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter any additional notes about this adjustment"></textarea>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" id="reset-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Adjustment
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Adjustment History -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Adjustment History</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Date</th>
+                <th class="px-6 py-3" scope="col">Reason</th>
+                <th class="px-6 py-3" scope="col">Items Count</th>
+                <th class="px-6 py-3" scope="col">Created By</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adjustments-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No adjustments submitted yet. Fill out the form above to add your first adjustment.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    // Generate UUID
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    let adjustmentItems = [];
+    let allLots = [];
+    let allRawMaterials = [];
+    let allDiamonds = [];
+    let allStones = [];
+    let allAlloys = [];
+    let allRecipes = [];
+
+    // Load all data
+    function loadAllData() {
+      allLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      allRawMaterials = JSON.parse(localStorage.getItem('rawMaterials') || '[]');
+      allDiamonds = JSON.parse(localStorage.getItem('diamondMaster') || '[]');
+      allStones = JSON.parse(localStorage.getItem('stoneMaster') || '[]');
+      allAlloys = JSON.parse(localStorage.getItem('alloyCreations') || []);
+      allRecipes = JSON.parse(localStorage.getItem('jems-alloy-recipes') || '[]');
+    }
+
+    // Get lots by item type and item id
+    function getLotsByItem(itemType, itemId) {
+      if (!itemType || !itemId) return [];
+      
+      if (itemType === 'METAL') {
+        return allLots.filter(lot => lot.item_type === 'METAL' && lot.raw_material_id === itemId);
+      } else if (itemType === 'DIAMOND') {
+        return allLots.filter(lot => lot.item_type === 'DIAMOND' && lot.diamond_master_id === itemId);
+      } else if (itemType === 'STONE') {
+        return allLots.filter(lot => lot.item_type === 'STONE' && lot.stone_master_id === itemId);
+      } else if (itemType === 'ALLOY') {
+        // For alloys, match by recipe_id in alloy creations
+        return allAlloys
+          .filter(alloy => alloy.recipe_id === itemId)
+          .map(alloy => ({
+            lot_id: alloy.alloy_creation_id,
+            lot_no: alloy.new_batch,
+            item_type: 'ALLOY',
+            current_weight: alloy.expected_yield || 0,
+            current_pieces: 1
+          }));
+      }
+      return [];
+    }
+
+    // Get item name by type and id
+    function getItemName(itemType, itemId) {
+      if (itemType === 'METAL') {
+        const material = allRawMaterials.find(m => m.material_id === itemId);
+        return material ? (material.name || material.code) : 'Unknown Metal';
+      } else if (itemType === 'DIAMOND') {
+        const diamond = allDiamonds.find(d => (d.diamond_master_id || d.diamondMasterID) === itemId);
+        return diamond ? (diamond.diamond_code || diamond.diamond_master_id) : 'Unknown Diamond';
+      } else if (itemType === 'STONE') {
+        const stone = allStones.find(s => (s.stone_master_id || s.stoneMasterID) === itemId);
+        return stone ? (stone.stone_code || stone.stone_master_id) : 'Unknown Stone';
+      } else if (itemType === 'ALLOY') {
+        const recipe = allRecipes.find(r => (r.id || r.recipeCode) === itemId);
+        return recipe ? recipe.recipeName : 'Unknown Alloy';
+      }
+      return 'Unknown';
+    }
+
+    // Create adjustment item row
+    function createAdjustmentRow(item = null, index = -1) {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-border-light dark:border-border-dark';
+      tr.dataset.index = index >= 0 ? index : adjustmentItems.length;
+      
+      const itemType = item ? item.item_type : '';
+      const itemId = item ? item.item_id : '';
+      const lotId = item ? item.lot_id : '';
+      const lotNo = item ? item.lot_no : '';
+      const currentWeight = item ? item.current_weight : '';
+      const currentPieces = item ? item.current_pieces : '';
+      const adjWeight = item ? item.adjustment_weight : '';
+      const adjPieces = item ? item.adjustment_pieces : '';
+      const newWeight = item ? item.new_weight : '';
+      const newPieces = item ? item.new_pieces : '';
+      
+      // Create item type select
+      const itemTypeSelect = document.createElement('select');
+      itemTypeSelect.className = 'w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary item-type-select';
+      itemTypeSelect.innerHTML = `
+        <option value="">Select Type</option>
+        <option value="METAL" ${itemType === 'METAL' ? 'selected' : ''}>Raw Material</option>
+        <option value="ALLOY" ${itemType === 'ALLOY' ? 'selected' : ''}>Alloy</option>
+        <option value="DIAMOND" ${itemType === 'DIAMOND' ? 'selected' : ''}>Diamond</option>
+        <option value="STONE" ${itemType === 'STONE' ? 'selected' : ''}>Stone</option>
+      `;
+      
+      // Create item select
+      const itemSelect = document.createElement('select');
+      itemSelect.className = 'w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary item-select';
+      itemSelect.innerHTML = '<option value="">Select Item</option>';
+      
+      // Create lot select
+      const lotSelect = document.createElement('select');
+      lotSelect.className = 'w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary lot-select';
+      lotSelect.innerHTML = '<option value="">Select Lot</option>';
+      
+      // Populate item select based on type
+      function populateItemSelect(select, type, selectedId = '') {
+        select.innerHTML = '<option value="">Select Item</option>';
+        if (type === 'METAL') {
+          allRawMaterials.filter(m => m.is_active !== false).forEach(material => {
+            const option = document.createElement('option');
+            option.value = material.material_id;
+            option.textContent = material.name || material.code;
+            if (option.value === selectedId) option.selected = true;
+            select.appendChild(option);
+          });
+        } else if (type === 'DIAMOND') {
+          allDiamonds.forEach(diamond => {
+            const option = document.createElement('option');
+            option.value = diamond.diamond_master_id || diamond.diamondMasterID;
+            option.textContent = diamond.diamond_code || option.value;
+            if (option.value === selectedId) option.selected = true;
+            select.appendChild(option);
+          });
+        } else if (type === 'STONE') {
+          allStones.forEach(stone => {
+            const option = document.createElement('option');
+            option.value = stone.stone_master_id || stone.stoneMasterID;
+            option.textContent = stone.stone_code || option.value;
+            if (option.value === selectedId) option.selected = true;
+            select.appendChild(option);
+          });
+        } else if (type === 'ALLOY') {
+          allRecipes.forEach(recipe => {
+            const option = document.createElement('option');
+            option.value = recipe.id || recipe.recipeCode;
+            option.textContent = recipe.recipeName || recipe.recipeCode;
+            if (option.value === selectedId) option.selected = true;
+            select.appendChild(option);
+          });
+        }
+      }
+      
+      // Populate if item exists
+      if (itemType && itemId) {
+        populateItemSelect(itemSelect, itemType, itemId);
+        const lots = getLotsByItem(itemType, itemId);
+        lots.forEach(lot => {
+          const option = document.createElement('option');
+          option.value = lot.lot_id;
+          option.textContent = lot.lot_no;
+          if (option.value === lotId) option.selected = true;
+          lotSelect.appendChild(option);
+        });
+      }
+      
+      tr.innerHTML = `
+        <td class="px-4 py-2">
+          <div class="item-type-cell"></div>
+        </td>
+        <td class="px-4 py-2">
+          <div class="item-cell"></div>
+        </td>
+        <td class="px-4 py-2">
+          <div class="lot-cell"></div>
+        </td>
+        <td class="px-4 py-2 current-weight-cell">${currentWeight || '0.000'}</td>
+        <td class="px-4 py-2 current-pieces-cell">${currentPieces || '0'}</td>
+        <td class="px-4 py-2">
+          <input type="number" step="0.001" min="0" value="${adjWeight}" 
+                 class="w-full px-2 py-1 text-sm border border-border-light dark:border-border-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary adj-weight-input"
+                 placeholder="0.000">
+        </td>
+        <td class="px-4 py-2">
+          <input type="number" min="0" value="${adjPieces}" 
+                 class="w-full px-2 py-1 text-sm border border-border-light dark:bg-background-dark rounded bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary adj-pieces-input"
+                 placeholder="0">
+        </td>
+        <td class="px-4 py-2 font-semibold new-weight-cell">${newWeight || '0.000'}</td>
+        <td class="px-4 py-2 font-semibold new-pieces-cell">${newPieces || '0'}</td>
+        <td class="px-4 py-2 text-center">
+          <button type="button" class="delete-item-btn text-red-500 hover:opacity-80">
+            <span class="material-icons text-base">delete</span>
+          </button>
+        </td>
+      `;
+      
+      // Insert selects
+      tr.querySelector('.item-type-cell').appendChild(itemTypeSelect);
+      tr.querySelector('.item-cell').appendChild(itemSelect);
+      tr.querySelector('.lot-cell').appendChild(lotSelect);
+      
+      // Event listeners
+      itemTypeSelect.addEventListener('change', function() {
+        const selectedType = this.value;
+        const rowItemSelect = tr.querySelector('.item-select');
+        const rowLotSelect = tr.querySelector('.lot-select');
+        const rowCurrentWeight = tr.querySelector('.current-weight-cell');
+        const rowCurrentPieces = tr.querySelector('.current-pieces-cell');
+        
+        populateItemSelect(rowItemSelect, selectedType);
+        rowLotSelect.innerHTML = '<option value="">Select Lot</option>';
+        rowCurrentWeight.textContent = '0.000';
+        rowCurrentPieces.textContent = '0';
+        updateNewValues(tr);
+      });
+      
+      itemSelect.addEventListener('change', function() {
+        const selectedType = itemTypeSelect.value;
+        const selectedItemId = this.value;
+        const rowLotSelect = tr.querySelector('.lot-select');
+        
+        rowLotSelect.innerHTML = '<option value="">Select Lot</option>';
+        if (selectedType && selectedItemId) {
+          const lots = getLotsByItem(selectedType, selectedItemId);
+          lots.forEach(lot => {
+            const option = document.createElement('option');
+            option.value = lot.lot_id;
+            option.textContent = lot.lot_no;
+            rowLotSelect.appendChild(option);
+          });
+        }
+        updateNewValues(tr);
+      });
+      
+      lotSelect.addEventListener('change', function() {
+        const selectedLotId = this.value;
+        const rowCurrentWeight = tr.querySelector('.current-weight-cell');
+        const rowCurrentPieces = tr.querySelector('.current-pieces-cell');
+        
+        if (selectedLotId) {
+          const selectedType = itemTypeSelect.value;
+          let lot;
+          
+          if (selectedType === 'ALLOY') {
+            lot = allAlloys.find(a => a.alloy_creation_id === selectedLotId);
+            if (lot) {
+              rowCurrentWeight.textContent = (parseFloat(lot.expected_yield) || 0).toFixed(3);
+              rowCurrentPieces.textContent = '1';
+            }
+          } else {
+            lot = allLots.find(l => l.lot_id === selectedLotId);
+            if (lot) {
+              rowCurrentWeight.textContent = (parseFloat(lot.current_weight) || 0).toFixed(3);
+              rowCurrentPieces.textContent = (parseInt(lot.current_pieces) || 0).toString();
+            }
+          }
+        } else {
+          rowCurrentWeight.textContent = '0.000';
+          rowCurrentPieces.textContent = '0';
+        }
+        updateNewValues(tr);
+      });
+      
+      // Calculate new values on adjustment input change
+      tr.querySelectorAll('.adj-weight-input, .adj-pieces-input').forEach(input => {
+        input.addEventListener('input', function() {
+          updateNewValues(tr);
+        });
+      });
+      
+      // Delete button
+      tr.querySelector('.delete-item-btn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this item?')) {
+          const rowIndex = parseInt(tr.dataset.index);
+          if (rowIndex >= 0 && rowIndex < adjustmentItems.length) {
+            adjustmentItems.splice(rowIndex, 1);
+          }
+          tr.remove();
+          renderItemsTable();
+        }
+      });
+      
+      return tr;
+    }
+
+    // Update new weight and pieces - adjustment values directly set new values
+    function updateNewValues(row) {
+      const currentWeight = parseFloat(row.querySelector('.current-weight-cell').textContent) || 0;
+      const currentPieces = parseInt(row.querySelector('.current-pieces-cell').textContent) || 0;
+      const adjWeightInput = row.querySelector('.adj-weight-input');
+      const adjPiecesInput = row.querySelector('.adj-pieces-input');
+      
+      // If adjustment values are entered, use them as new values; otherwise keep current
+      const adjWeightValue = adjWeightInput.value.trim();
+      const adjPiecesValue = adjPiecesInput.value.trim();
+      
+      const newWeight = adjWeightValue !== '' ? parseFloat(adjWeightValue) || 0 : currentWeight;
+      const newPieces = adjPiecesValue !== '' ? parseInt(adjPiecesValue) || 0 : currentPieces;
+      
+      row.querySelector('.new-weight-cell').textContent = newWeight.toFixed(3);
+      row.querySelector('.new-pieces-cell').textContent = newPieces.toString();
+    }
+
+    // Render items table
+    function renderItemsTable() {
+      const tbody = document.getElementById('adjustment-items-body');
+      const emptyState = document.getElementById('empty-items-state');
+      
+      if (adjustmentItems.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = '';
+
+      adjustmentItems.forEach((item, index) => {
+        const row = createAdjustmentRow(item, index);
+        tbody.appendChild(row);
+      });
+    }
+
+    // Render adjustments history
+    function renderAdjustmentsHistory() {
+      const adjustments = JSON.parse(localStorage.getItem('stockAdjustments') || '[]');
+      const tbody = document.getElementById('adjustments-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (adjustments.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = '';
+
+      adjustments.reverse().forEach(adjustment => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const date = adjustment.adjustment_date ? new Date(adjustment.adjustment_date).toLocaleDateString() : '-';
+        tr.innerHTML = `
+          <td class="px-6 py-3">${date}</td>
+          <td class="px-6 py-3">${adjustment.reason || '-'}</td>
+          <td class="px-6 py-3">${adjustment.items ? adjustment.items.length : 0}</td>
+          <td class="px-6 py-3">${adjustment.created_by || 'System'}</td>
+          <td class="px-6 py-3 text-center">
+            <button type="button" class="view-adjustment-btn text-primary hover:opacity-80" data-id="${adjustment.adjustment_id}">
+              <span class="material-icons text-base">visibility</span>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Add item button
+    document.getElementById('add-item-btn').addEventListener('click', function() {
+      const tbody = document.getElementById('adjustment-items-body');
+      const emptyState = document.getElementById('empty-items-state');
+      emptyState.classList.add('hidden');
+      
+      const row = createAdjustmentRow();
+      tbody.appendChild(row);
+    });
+
+    // Form submission
+    document.getElementById('stock-adjustment-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const rows = document.querySelectorAll('#adjustment-items-body tr');
+      if (rows.length === 0) {
+        alert('Please add at least one adjustment item.');
+        return;
+      }
+      
+      const collectedItems = [];
+      rows.forEach(row => {
+        const itemTypeSelect = row.querySelector('.item-type-select');
+        const itemSelect = row.querySelector('.item-select');
+        const lotSelect = row.querySelector('.lot-select');
+        const adjWeightInput = row.querySelector('.adj-weight-input');
+        const adjPiecesInput = row.querySelector('.adj-pieces-input');
+        const currentWeight = parseFloat(row.querySelector('.current-weight-cell').textContent) || 0;
+        const currentPieces = parseInt(row.querySelector('.current-pieces-cell').textContent) || 0;
+        const newWeight = parseFloat(row.querySelector('.new-weight-cell').textContent) || 0;
+        const newPieces = parseInt(row.querySelector('.new-pieces-cell').textContent) || 0;
+        
+        if (itemTypeSelect.value && itemSelect.value && lotSelect.value) {
+          const itemType = itemTypeSelect.value;
+          const itemId = itemSelect.value;
+          const lotId = lotSelect.value;
+          const lotNo = lotSelect.options[lotSelect.selectedIndex].text;
+          const itemName = getItemName(itemType, itemId);
+          
+          collectedItems.push({
+            item_type: itemType,
+            item_id: itemId,
+            item_name: itemName,
+            lot_id: lotId,
+            lot_no: lotNo,
+            current_weight: currentWeight,
+            current_pieces: currentPieces,
+            adjustment_weight: parseFloat(adjWeightInput.value) || 0,
+            adjustment_pieces: parseInt(adjPiecesInput.value) || 0,
+            new_weight: newWeight,
+            new_pieces: newPieces
+          });
+        }
+      });
+      
+      if (collectedItems.length === 0) {
+        alert('Please fill in all required fields for at least one item.');
+        return;
+      }
+      
+      // Create adjustment record
+      const adjustment = {
+        adjustment_id: generateUUID(),
+        tenant_id: 'default-tenant-id',
+        adjustment_date: document.getElementById('adjustment-date').value,
+        adjustment_type: null, // No longer used
+        reason: document.getElementById('reason').value || null,
+        remarks: document.getElementById('remarks').value || null,
+        items: collectedItems,
+        created_by: 'current-user-id',
+        created_at: new Date().toISOString()
+      };
+      
+      // Save adjustment
+      const adjustments = JSON.parse(localStorage.getItem('stockAdjustments') || '[]');
+      adjustments.push(adjustment);
+      localStorage.setItem('stockAdjustments', JSON.stringify(adjustments));
+      
+      // Update stock lots
+      collectedItems.forEach(item => {
+        if (item.item_type === 'ALLOY') {
+          // Update alloy
+          const alloy = allAlloys.find(a => a.alloy_creation_id === item.lot_id);
+          if (alloy) {
+            alloy.expected_yield = item.new_weight;
+            localStorage.setItem('alloyCreations', JSON.stringify(allAlloys));
+          }
+        } else {
+          // Update stock lot
+          const lot = allLots.find(l => l.lot_id === item.lot_id);
+          if (lot) {
+            lot.current_weight = item.new_weight.toFixed(3);
+            lot.current_pieces = item.new_pieces;
+            lot.updated_at = new Date().toISOString();
+            localStorage.setItem('stockLots', JSON.stringify(allLots));
+          }
+        }
+      });
+      
+      alert('Stock adjustment submitted successfully!');
+      
+      // Reset form
+      document.getElementById('stock-adjustment-form').reset();
+      document.getElementById('adjustment-items-body').innerHTML = '';
+      document.getElementById('empty-items-state').classList.remove('hidden');
+      adjustmentItems = [];
+      renderAdjustmentsHistory();
+    });
+
+    // Reset form
+    document.getElementById('reset-btn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to clear the form? All entered data will be lost.')) {
+        document.getElementById('stock-adjustment-form').reset();
+        document.getElementById('adjustment-items-body').innerHTML = '';
+        document.getElementById('empty-items-state').classList.remove('hidden');
+        adjustmentItems = [];
+      }
+    });
+
+    // Initialize sample adjustment history if empty
+    function initializeSampleHistory() {
+      const adjustments = JSON.parse(localStorage.getItem('stockAdjustments') || '[]');
+      
+      if (adjustments.length === 0) {
+        const sampleAdjustments = [
+          {
+            adjustment_id: generateUUID(),
+            tenant_id: 'default-tenant-id',
+            adjustment_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 5 days ago
+            adjustment_type: null,
+            reason: 'Physical count correction',
+            remarks: 'Quarterly inventory audit - found discrepancies in raw material stock',
+            items: [
+              {
+                item_type: 'METAL',
+                item_id: 'sample-metal-1',
+                item_name: 'Gold 22Ct',
+                lot_id: 'lot-001',
+                lot_no: 'LOT-2024-001',
+                current_weight: 150.500,
+                current_pieces: 10,
+                adjustment_weight: 2.500,
+                adjustment_pieces: 0,
+                new_weight: 153.000,
+                new_pieces: 10
+              }
+            ],
+            created_by: 'John Doe',
+            created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            adjustment_id: generateUUID(),
+            tenant_id: 'default-tenant-id',
+            adjustment_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 3 days ago
+            adjustment_type: null,
+            reason: 'Damage',
+            remarks: 'Damaged diamond stock removed from inventory',
+            items: [
+              {
+                item_type: 'DIAMOND',
+                item_id: 'sample-diamond-1',
+                item_name: 'Diamond D-F VVS',
+                lot_id: 'lot-002',
+                lot_no: 'LOT-2024-002',
+                current_weight: 5.250,
+                current_pieces: 25,
+                adjustment_weight: -0.150,
+                adjustment_pieces: -1,
+                new_weight: 5.100,
+                new_pieces: 24
+              }
+            ],
+            created_by: 'Jane Smith',
+            created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            adjustment_id: generateUUID(),
+            tenant_id: 'default-tenant-id',
+            adjustment_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 1 day ago
+            adjustment_type: null,
+            reason: 'Found stock',
+            remarks: 'Discovered additional stone inventory in warehouse',
+            items: [
+              {
+                item_type: 'STONE',
+                item_id: 'sample-stone-1',
+                item_name: 'Ruby',
+                lot_id: 'lot-003',
+                lot_no: 'LOT-2024-003',
+                current_weight: 12.000,
+                current_pieces: 8,
+                adjustment_weight: 3.500,
+                adjustment_pieces: 2,
+                new_weight: 15.500,
+                new_pieces: 10
+              }
+            ],
+            created_by: 'Mike Johnson',
+            created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+        
+        localStorage.setItem('stockAdjustments', JSON.stringify(sampleAdjustments));
+      }
+    }
+
+    // Initialize sample data for form
+    function initializeFormDefaults() {
+      // Add a default item row with sample data
+      const tbody = document.getElementById('adjustment-items-body');
+      const emptyState = document.getElementById('empty-items-state');
+      
+      // Create sample raw materials and lots if they don't exist
+      let rawMaterials = JSON.parse(localStorage.getItem('rawMaterials') || '[]');
+      if (rawMaterials.length === 0) {
+        rawMaterials = [
+          {
+            material_id: 'sample-metal-1',
+            name: 'Gold 22Ct',
+            code: 'GOLD-22',
+            is_active: true
+          },
+          {
+            material_id: 'sample-metal-2',
+            name: 'Silver 925',
+            code: 'SILVER-925',
+            is_active: true
+          }
+        ];
+        localStorage.setItem('rawMaterials', JSON.stringify(rawMaterials));
+      }
+      
+      let stockLots = JSON.parse(localStorage.getItem('stockLots') || '[]');
+      if (stockLots.length === 0) {
+        stockLots = [
+          {
+            lot_id: 'lot-001',
+            lot_no: 'LOT-2024-001',
+            item_type: 'METAL',
+            raw_material_id: 'sample-metal-1',
+            current_weight: 100.000,
+            current_pieces: 5
+          },
+          {
+            lot_id: 'lot-002',
+            lot_no: 'LOT-2024-002',
+            item_type: 'METAL',
+            raw_material_id: 'sample-metal-2',
+            current_weight: 75.500,
+            current_pieces: 8
+          }
+        ];
+        localStorage.setItem('stockLots', JSON.stringify(stockLots));
+      }
+      
+      // Reload data after creating sample data
+      loadAllData();
+      
+      // Add a default item row
+      emptyState.classList.add('hidden');
+      const defaultItem = {
+        item_type: 'METAL',
+        item_id: 'sample-metal-1',
+        lot_id: 'lot-001',
+        lot_no: 'LOT-2024-001',
+        current_weight: 100.000,
+        current_pieces: 5,
+        adjustment_weight: 5.000,
+        adjustment_pieces: 0,
+        new_weight: 105.000,
+        new_pieces: 5
+      };
+      
+      const row = createAdjustmentRow(defaultItem, 0);
+      tbody.appendChild(row);
+      
+      // Set default reason
+      document.getElementById('reason').value = 'Physical count correction';
+    }
+
+    // Set default date to today
+    document.getElementById('adjustment-date').valueAsDate = new Date();
+
+    // Initialize
+    loadAllData();
+    initializeSampleHistory();
+    initializeFormDefaults();
+    renderAdjustmentsHistory();
+  </script>
+</body>
+</html>
+

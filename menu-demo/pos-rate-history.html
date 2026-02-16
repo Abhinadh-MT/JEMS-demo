@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>JEMS Gold Rate History Report</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cbb280",
+                        "primary-dark": "#b09a6a",
+                        "background-light": "#fcfaf7",
+                        "background-dark": "#1a1a1a",
+                        "sidebar-bg": "#181611",
+                        "border-light": "#e0e0e0", // Added for menu
+                        "border-dark": "#333333", // Added for menu
+                        "slate-bg": "#F1F5F9", // Standard app bg
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"], // Consistency
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-background-light text-[#181611] font-display antialiased;
+            }
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbb280;
+            border-radius: 10px;
+        }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+    </style>
+    <style>
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body data-page="pos-rate-history" class="flex h-screen overflow-hidden">
+
+    <div class="flex min-h-screen w-full">
+
+        <!-- 🔹 MENU BAR -->
+        <div id="menu-container"></div>
+
+        <!-- 🔹 MAIN CONTENT -->
+        <div class="flex-1 flex flex-col overflow-hidden bg-background-light dark:bg-background-dark">
+            <header class="h-20 bg-white border-b border-[#e1ddd5] flex items-center justify-between px-8 shrink-0">
+                <div>
+                    <h1 class="text-2xl font-bold text-[#181611]">Gold Rate History Report</h1>
+                    <p class="text-sm text-[#86795f]">Historical view of precious metal price fixings</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center bg-[#f0eeea] rounded-lg p-1">
+                        <button
+                            class="p-2 hover:bg-white hover:shadow-sm rounded-md transition-all text-[#86795f] flex items-center gap-2"
+                            title="Export to Excel">
+                            <span class="material-symbols-outlined text-xl">description</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Excel</span>
+                        </button>
+                        <button
+                            class="p-2 hover:bg-white hover:shadow-sm rounded-md transition-all text-[#86795f] flex items-center gap-2"
+                            title="Export to PDF">
+                            <span class="material-symbols-outlined text-xl text-red-600">picture_as_pdf</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">PDF</span>
+                        </button>
+                        <button
+                            class="p-2 hover:bg-white hover:shadow-sm rounded-md transition-all text-[#181611] flex items-center gap-2"
+                            title="Print Report">
+                            <span class="material-symbols-outlined text-xl">print</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Print</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <div class="px-8 py-6 bg-white border-b border-[#e1ddd5]">
+                <div class="flex flex-wrap items-end gap-6">
+                    <div class="flex-1 min-w-[240px]">
+                        <label class="block text-[10px] font-bold uppercase text-[#86795f] mb-2 tracking-widest">Date
+                            Range (From - To)</label>
+                        <div
+                            class="flex items-center bg-[#fcfaf7] border border-[#e1ddd5] rounded-lg px-3 py-2.5 focus-within:border-primary transition-colors">
+                            <span class="material-symbols-outlined text-[#86795f] mr-2 text-xl">calendar_month</span>
+                            <input class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full" type="date"
+                                value="2023-08-01" />
+                            <span class="mx-2 text-[#86795f]">to</span>
+                            <input class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full" type="date"
+                                value="2023-08-31" />
+                        </div>
+                    </div>
+                    <div class="w-48">
+                        <label class="block text-[10px] font-bold uppercase text-[#86795f] mb-2 tracking-widest">Metal
+                            Name</label>
+                        <select
+                            class="w-full bg-[#fcfaf7] border border-[#e1ddd5] rounded-lg px-3 py-2.5 text-sm focus:border-primary focus:ring-0">
+                            <option>Gold</option>
+                            <option>Silver</option>
+                            <option>Platinum</option>
+                        </select>
+                    </div>
+                    <div class="w-40">
+                        <label class="block text-[10px] font-bold uppercase text-[#86795f] mb-2 tracking-widest">Purity
+                            /
+                            Karat</label>
+                        <select
+                            class="w-full bg-[#fcfaf7] border border-[#e1ddd5] rounded-lg px-3 py-2.5 text-sm focus:border-primary focus:ring-0">
+                            <option>24K</option>
+                            <option>22K</option>
+                            <option>18K</option>
+                        </select>
+                    </div>
+                    <div class="w-40">
+                        <label class="block text-[10px] font-bold uppercase text-[#86795f] mb-2 tracking-widest">Price
+                            Fix Session</label>
+                        <select
+                            class="w-full bg-[#fcfaf7] border border-[#e1ddd5] rounded-lg px-3 py-2.5 text-sm focus:border-primary focus:ring-0">
+                            <option>All Sessions</option>
+                            <option>AM Fix</option>
+                            <option>PM Fix</option>
+                        </select>
+                    </div>
+                    <button
+                        class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center gap-2 mb-0.5">
+                        <span class="material-symbols-outlined">refresh</span>
+                        Generate Report
+                    </button>
+                </div>
+            </div>
+            <main class="flex-1 overflow-auto bg-[#f8f6f2] custom-scrollbar">
+                <div class="p-8">
+                    <div class="bg-white rounded-xl border border-[#e1ddd5] overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#fcfaf7] border-b border-[#e1ddd5]">
+                                    <th class="px-6 py-4 text-[11px] font-bold uppercase text-[#86795f] tracking-wider">
+                                        Metal Name</th>
+                                    <th class="px-6 py-4 text-[11px] font-bold uppercase text-[#86795f] tracking-wider">
+                                        Purity</th>
+                                    <th
+                                        class="px-6 py-4 text-[11px] font-bold uppercase text-[#86795f] tracking-wider text-right">
+                                        Rate (Per Gram)</th>
+                                    <th
+                                        class="px-6 py-4 text-[11px] font-bold uppercase text-[#86795f] tracking-wider text-center">
+                                        Price Fix Session</th>
+                                    <th class="px-6 py-4 text-[11px] font-bold uppercase text-[#86795f] tracking-wider">
+                                        Updated Date</th>
+                                    <th class="px-6 py-4 text-[11px] font-bold uppercase text-[#86795f] tracking-wider">
+                                        Updated Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#f0eeea] tabular-nums">
+                                <tr class="hover:bg-primary/5 transition-colors">
+                                    <td class="px-6 py-4 font-bold">Gold</td>
+                                    <td class="px-6 py-4 text-[#86795f]">24 Karat (99.9%)</td>
+                                    <td class="px-6 py-4 text-right font-bold text-lg">$62.45</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">AM
+                                            FIX</span>
+                                    </td>
+                                    <td class="px-6 py-4">Aug 31, 2023</td>
+                                    <td class="px-6 py-4 text-[#86795f]">09:00 AM</td>
+                                </tr>
+                                <tr class="hover:bg-primary/5 transition-colors">
+                                    <td class="px-6 py-4 font-bold">Gold</td>
+                                    <td class="px-6 py-4 text-[#86795f]">22 Karat (91.6%)</td>
+                                    <td class="px-6 py-4 text-right font-bold text-lg">$57.25</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">AM
+                                            FIX</span>
+                                    </td>
+                                    <td class="px-6 py-4">Aug 31, 2023</td>
+                                    <td class="px-6 py-4 text-[#86795f]">09:00 AM</td>
+                                </tr>
+                                <tr class="hover:bg-primary/5 transition-colors">
+                                    <td class="px-6 py-4 font-bold">Gold</td>
+                                    <td class="px-6 py-4 text-[#86795f]">24 Karat (99.9%)</td>
+                                    <td class="px-6 py-4 text-right font-bold text-lg">$62.30</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">PM
+                                            FIX</span>
+                                    </td>
+                                    <td class="px-6 py-4">Aug 30, 2023</td>
+                                    <td class="px-6 py-4 text-[#86795f]">04:00 PM</td>
+                                </tr>
+                                <tr class="hover:bg-primary/5 transition-colors">
+                                    <td class="px-6 py-4 font-bold">Gold</td>
+                                    <td class="px-6 py-4 text-[#86795f]">24 Karat (99.9%)</td>
+                                    <td class="px-6 py-4 text-right font-bold text-lg">$62.15</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">AM
+                                            FIX</span>
+                                    </td>
+                                    <td class="px-6 py-4">Aug 30, 2023</td>
+                                    <td class="px-6 py-4 text-[#86795f]">09:00 AM</td>
+                                </tr>
+                                <tr class="hover:bg-primary/5 transition-colors">
+                                    <td class="px-6 py-4 font-bold">Silver</td>
+                                    <td class="px-6 py-4 text-[#86795f]">99.9% Fine</td>
+                                    <td class="px-6 py-4 text-right font-bold text-lg">$0.82</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">AM
+                                            FIX</span>
+                                    </td>
+                                    <td class="px-6 py-4">Aug 30, 2023</td>
+                                    <td class="px-6 py-4 text-[#86795f]">09:00 AM</td>
+                                </tr>
+                                <tr class="hover:bg-primary/5 transition-colors">
+                                    <td class="px-6 py-4 font-bold">Gold</td>
+                                    <td class="px-6 py-4 text-[#86795f]">18 Karat (75.0%)</td>
+                                    <td class="px-6 py-4 text-right font-bold text-lg">$46.85</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">PM
+                                            FIX</span>
+                                    </td>
+                                    <td class="px-6 py-4">Aug 29, 2023</td>
+                                    <td class="px-6 py-4 text-[#86795f]">04:00 PM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+            <footer class="h-24 bg-white border-t border-[#e1ddd5] flex items-center justify-between px-10 shrink-0">
+                <div class="flex items-center gap-12">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 rounded-full bg-primary/10 text-primary">
+                            <span class="material-symbols-outlined text-2xl font-bold">trending_up</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-[#86795f] tracking-widest leading-none mb-1">
+                                Current Market Rate (24K)</p>
+                            <p class="text-2xl font-bold tabular-nums text-primary">$62.45 <span
+                                    class="text-xs font-medium text-[#86795f] ml-1">USD/gm</span></p>
+                        </div>
+                    </div>
+                    <div class="h-10 w-px bg-[#e1ddd5]"></div>
+                    <div class="flex items-center gap-4">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-[#86795f] tracking-widest leading-none mb-1">
+                                Percentage Change (24h)</p>
+                            <div class="flex items-center text-green-600">
+                                <span class="material-symbols-outlined text-xl">arrow_drop_up</span>
+                                <span class="text-xl font-bold tabular-nums">+0.24%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-bold uppercase text-[#86795f] tracking-widest mb-1">Last Updated</p>
+                    <p class="text-sm font-semibold">Today, 09:00 AM (System Time)</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- MENU SCRIPT -->
+    <script src="menu.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receive Bag - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="bag-receive" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Receive Bag</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Confirm receipt at department</p>
+      </header>
+
+      <!-- Pending Movements List -->
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-4">Pending Receipts</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Bag No</th>
+                <th class="px-6 py-3" scope="col">From Department</th>
+                <th class="px-6 py-3" scope="col">To Department</th>
+                <th class="px-6 py-3" scope="col">Dispatch Weight</th>
+                <th class="px-6 py-3" scope="col">Dispatch Pieces</th>
+                <th class="px-6 py-3" scope="col">Moved By</th>
+                <th class="px-6 py-3" scope="col">Dispatch Date</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="movements-table-body">
+              <!-- Dynamic rows will be added here -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No pending receipts found.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receive Bag Form (Modal-like) -->
+      <div id="receive-form-section" class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm hidden">
+        <h2 class="text-xl font-semibold mb-6">Receive Bag Details</h2>
+        
+        <form id="bag-receive-form" class="space-y-6">
+          <input type="hidden" id="movement-id">
+          <input type="hidden" id="bag-id">
+          
+          <!-- Bag Information -->
+          <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
+            <h3 class="text-lg font-semibold mb-3">Bag Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Bag No</div>
+                <div id="receive-bag-no" class="text-lg font-bold text-primary">-</div>
+              </div>
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">From Department</div>
+                <div id="receive-from-dept" class="text-lg font-bold text-primary">-</div>
+              </div>
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Dispatch Weight</div>
+                <div id="receive-dispatch-weight" class="text-lg font-bold text-primary">-</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Received Weight -->
+            <div>
+              <label for="received-weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Received Weight (g) <span class="text-red-500">*</span>
+              </label>
+              <input type="number" id="received-weight" name="receivedWeight" step="0.001" min="0" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="0.000">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Expected: <span id="expected-weight">0.000</span> g</p>
+            </div>
+
+            <!-- Received Pieces -->
+            <div>
+              <label for="received-pieces" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Received Pieces <span class="text-red-500">*</span>
+              </label>
+              <input type="number" id="received-pieces" name="receivedPieces" min="0" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="0">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Expected: <span id="expected-pieces">0</span> pieces</p>
+            </div>
+
+            <!-- Received By -->
+            <div class="md:col-span-2">
+              <label for="received-by" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Received By <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="received-by" name="receivedBy" required
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="Enter name or user ID">
+            </div>
+          </div>
+
+          <!-- Weight/Pieces Discrepancy Warning -->
+          <div id="discrepancy-warning" class="hidden bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div class="flex items-start">
+              <span class="material-icons text-yellow-600 dark:text-yellow-400 mr-2">warning</span>
+              <div>
+                <div class="font-medium text-yellow-800 dark:text-yellow-300">Discrepancy Detected</div>
+                <div class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">
+                  Received quantities differ from dispatched quantities. This will be flagged for review.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remarks -->
+          <div>
+            <label for="receive-remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Remarks
+            </label>
+            <textarea id="receive-remarks" name="remarks" rows="3"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter any additional notes"></textarea>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex items-center justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="button" id="cancel-receive-btn" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Cancel
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Confirm Receipt
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    let allMovements = [];
+    let allBags = [];
+    let currentMovement = null;
+
+    // Load data
+    function loadData() {
+      allMovements = JSON.parse(localStorage.getItem('bagMovements') || '[]');
+      allBags = JSON.parse(localStorage.getItem('bags') || '[]');
+      renderMovementsTable();
+    }
+
+    // Render movements table
+    function renderMovementsTable() {
+      const tbody = document.getElementById('movements-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      // Filter pending receipts
+      const pendingMovements = allMovements.filter(m => m.status === 'PENDING_RECEIPT');
+      
+      if (pendingMovements.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = '';
+
+      pendingMovements.forEach(movement => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark';
+        
+        const dispatchDate = new Date(movement.created_at);
+        const formattedDate = dispatchDate.toLocaleDateString() + ' ' + dispatchDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium">${movement.bag_no || '-'}</td>
+          <td class="px-6 py-4">${movement.from_department || '-'}</td>
+          <td class="px-6 py-4">${movement.to_department || '-'}</td>
+          <td class="px-6 py-4">${movement.dispatch_weight.toFixed(3)} g</td>
+          <td class="px-6 py-4">${movement.dispatch_pieces}</td>
+          <td class="px-6 py-4">${movement.moved_by || '-'}</td>
+          <td class="px-6 py-4">${formattedDate}</td>
+          <td class="px-6 py-4 text-center">
+            <button type="button" class="receive-btn px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm" data-movement-id="${movement.movement_id}">
+              Receive
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Add event listeners to receive buttons
+      document.querySelectorAll('.receive-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const movementId = this.dataset.movementId;
+          openReceiveForm(movementId);
+        });
+      });
+    }
+
+    // Open receive form
+    function openReceiveForm(movementId) {
+      currentMovement = allMovements.find(m => m.movement_id === movementId);
+      if (!currentMovement) return;
+
+      // Populate form
+      document.getElementById('movement-id').value = currentMovement.movement_id;
+      document.getElementById('bag-id').value = currentMovement.bag_id;
+      document.getElementById('receive-bag-no').textContent = currentMovement.bag_no || '-';
+      document.getElementById('receive-from-dept').textContent = currentMovement.from_department || '-';
+      document.getElementById('receive-dispatch-weight').textContent = currentMovement.dispatch_weight.toFixed(3) + ' g';
+      document.getElementById('expected-weight').textContent = currentMovement.dispatch_weight.toFixed(3);
+      document.getElementById('expected-pieces').textContent = currentMovement.dispatch_pieces;
+
+      // Show form
+      document.getElementById('receive-form-section').classList.remove('hidden');
+      document.getElementById('receive-form-section').scrollIntoView({ behavior: 'smooth' });
+
+      // Clear form
+      document.getElementById('received-weight').value = '';
+      document.getElementById('received-pieces').value = '';
+      document.getElementById('received-by').value = '';
+      document.getElementById('receive-remarks').value = '';
+      document.getElementById('discrepancy-warning').classList.add('hidden');
+    }
+
+    // Check for discrepancies
+    function checkDiscrepancy() {
+      const receivedWeight = parseFloat(document.getElementById('received-weight').value) || 0;
+      const receivedPieces = parseInt(document.getElementById('received-pieces').value) || 0;
+      const expectedWeight = parseFloat(document.getElementById('expected-weight').textContent) || 0;
+      const expectedPieces = parseInt(document.getElementById('expected-pieces').textContent) || 0;
+
+      const weightDiff = Math.abs(receivedWeight - expectedWeight);
+      const piecesDiff = Math.abs(receivedPieces - expectedPieces);
+      const tolerance = 0.001; // 0.001g tolerance for weight
+
+      if (weightDiff > tolerance || piecesDiff > 0) {
+        document.getElementById('discrepancy-warning').classList.remove('hidden');
+      } else {
+        document.getElementById('discrepancy-warning').classList.add('hidden');
+      }
+    }
+
+    // Add event listeners for discrepancy checking
+    document.getElementById('received-weight').addEventListener('input', checkDiscrepancy);
+    document.getElementById('received-pieces').addEventListener('input', checkDiscrepancy);
+
+    // Form submission
+    document.getElementById('bag-receive-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!currentMovement) {
+        alert('No movement selected');
+        return;
+      }
+
+      const receivedWeight = parseFloat(document.getElementById('received-weight').value);
+      const receivedPieces = parseInt(document.getElementById('received-pieces').value);
+      const receivedBy = document.getElementById('received-by').value;
+      const remarks = document.getElementById('receive-remarks').value;
+
+      // Update movement status
+      const movements = JSON.parse(localStorage.getItem('bagMovements') || '[]');
+      const movementIndex = movements.findIndex(m => m.movement_id === currentMovement.movement_id);
+      if (movementIndex !== -1) {
+        movements[movementIndex].status = 'RECEIVED';
+        movements[movementIndex].received_weight = receivedWeight;
+        movements[movementIndex].received_pieces = receivedPieces;
+        movements[movementIndex].received_by = receivedBy;
+        movements[movementIndex].receive_remarks = remarks;
+        movements[movementIndex].received_at = new Date().toISOString();
+        localStorage.setItem('bagMovements', JSON.stringify(movements));
+      }
+
+      // Update bag
+      const bag = allBags.find(b => b.bag_id === currentMovement.bag_id);
+      if (bag) {
+        bag.current_department = currentMovement.to_department;
+        bag.total_weight = receivedWeight.toFixed(3);
+        bag.total_pieces = receivedPieces;
+        bag.last_updated = new Date().toISOString();
+        
+        // Auto-trigger QC if moving to QC department
+        if (currentMovement.to_department === 'QC') {
+          bag.status = 'QC_PENDING';
+        } else {
+          bag.status = 'IN_PROGRESS';
+        }
+
+        const bags = JSON.parse(localStorage.getItem('bags') || '[]');
+        const bagIndex = bags.findIndex(b => b.bag_id === bag.bag_id);
+        if (bagIndex !== -1) {
+          bags[bagIndex] = bag;
+          localStorage.setItem('bags', JSON.stringify(bags));
+        }
+      }
+
+      alert(`Bag ${currentMovement.bag_no} received successfully!${currentMovement.to_department === 'QC' ? ' QC has been triggered.' : ''}`);
+      
+      // Reload data and hide form
+      loadData();
+      document.getElementById('receive-form-section').classList.add('hidden');
+      currentMovement = null;
+    });
+
+    // Cancel receive
+    document.getElementById('cancel-receive-btn').addEventListener('click', function() {
+      document.getElementById('receive-form-section').classList.add('hidden');
+      currentMovement = null;
+    });
+
+    // Initialize
+    loadData();
+  </script>
+</body>
+</html>
+

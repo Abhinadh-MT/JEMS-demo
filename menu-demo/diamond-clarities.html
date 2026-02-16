@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diamond Clarities - JEMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#d4af37",
+            "background-light": "#f5f5f5",
+            "background-dark": "#121212",
+            "card-light": "#ffffff",
+            "card-dark": "#1e1e1e",
+            "text-light": "#333333",
+            "text-dark": "#e0e0e0",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333333",
+          },
+          fontFamily: { display: ["Poppins", "sans-serif"] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="diamond-clarities" class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex h-screen">
+  <div class="flex min-h-screen w-full">
+    <div id="menu-container"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-text-light dark:text-text-dark">Diamond Clarities</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Create and manage diamond clarity master data</p>
+      </header>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <h2 class="text-xl font-semibold mb-6">Add New Diamond Clarity</h2>
+        
+        <form id="clarity-form" class="space-y-6">
+          <input type="hidden" id="clarity-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="clarity-id-display" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Clarity ID
+              </label>
+              <input type="text" id="clarity-id-display" readonly
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                     placeholder="Auto-generated on save">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Unique identifier (CHAR(36) PK)</p>
+            </div>
+
+            <div>
+              <label for="clarity-code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Clarity Code
+              </label>
+              <input type="text" id="clarity-code" name="clarityCode" maxlength="20"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., FL, IF, VVS1">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Clarity code (VARCHAR(20))</p>
+            </div>
+
+            <div>
+              <label for="clarity-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Clarity Name <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="clarity-name" name="clarityName" required maxlength="50"
+                     class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                     placeholder="e.g., Flawless, Internally Flawless">
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Clarity name (VARCHAR(50))</p>
+            </div>
+
+            <div>
+              <label for="is-active" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Status <span class="text-red-500">*</span>
+              </label>
+              <select id="is-active" name="isActive" required
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description <span class="text-gray-400">(Optional)</span>
+            </label>
+            <textarea id="description" name="description" rows="4"
+                      class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                      placeholder="Enter clarity description"></textarea>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Description (TEXT)</p>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+            <button type="reset" class="px-6 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+              Clear Form
+            </button>
+            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+              Submit Clarity
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input type="text" id="search-input" placeholder="Search by code, name, or description..." 
+                   class="w-full pl-10 pr-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="status-filter" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary">
+              <option value="all">All Status</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+            <button id="clear-filters" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-primary/10 transition-colors">
+              <span class="material-icons text-sm">clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Diamond Clarities List</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-background-dark">
+              <tr>
+                <th class="px-6 py-3" scope="col">Clarity ID</th>
+                <th class="px-6 py-3" scope="col">Code</th>
+                <th class="px-6 py-3" scope="col">Name</th>
+                <th class="px-6 py-3" scope="col">Description</th>
+                <th class="px-6 py-3" scope="col">Status</th>
+                <th class="px-6 py-3 text-center" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clarities-table-body"></tbody>
+          </table>
+          <div id="empty-state" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <span class="material-icons text-4xl mb-2">inbox</span>
+            <p>No clarities submitted yet. Fill out the form above to add your first clarity.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+    const demoData = [
+      {
+        clarity_id: '550e8400-e29b-41d4-a716-446655440050',
+        clarity_code: 'FL',
+        clarity_name: 'Flawless',
+        description: 'No inclusions or blemishes visible under 10x magnification',
+        is_active: true
+      },
+      {
+        clarity_id: '660e8400-e29b-41d4-a716-446655440051',
+        clarity_code: 'VVS1',
+        clarity_name: 'Very Very Slightly Included 1',
+        description: 'Minute inclusions difficult to see under 10x magnification',
+        is_active: true
+      }
+    ];
+
+    let storedData = localStorage.getItem('diamondClarities');
+    let clarities = storedData ? JSON.parse(storedData) : demoData;
+    if (!storedData) localStorage.setItem('diamondClarities', JSON.stringify(demoData));
+    
+    let editingId = null;
+    const form = document.getElementById('clarity-form');
+    const tableBody = document.getElementById('clarities-table-body');
+    const emptyState = document.getElementById('empty-state');
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function renderTable() {
+      if (clarities.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+      tableBody.innerHTML = clarities.map(clarity => `
+        <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-mono">${clarity.clarity_id.substring(0, 8)}...</td>
+          <td class="px-6 py-4 font-medium">${clarity.clarity_code || '-'}</td>
+          <td class="px-6 py-4 font-medium">${clarity.clarity_name}</td>
+          <td class="px-6 py-4 text-gray-500 dark:text-gray-400 max-w-xs truncate">${clarity.description || '-'}</td>
+          <td class="px-6 py-4">
+            <span class="${clarity.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'} text-xs font-medium px-2.5 py-0.5 rounded-full">
+              ${clarity.is_active ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2">
+              <button class="edit-btn text-primary hover:underline" data-id="${clarity.clarity_id}">
+                <span class="material-icons text-base">edit</span>
+              </button>
+              <button class="delete-btn text-red-500 hover:underline" data-id="${clarity.clarity_id}">
+                <span class="material-icons text-base">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      attachEventListeners();
+      filterTable();
+    }
+
+    function attachEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const clarity = clarities.find(c => c.clarity_id === id);
+          if (clarity) {
+            editingId = id;
+            document.getElementById('clarity-id').value = id;
+            document.getElementById('clarity-id-display').value = id;
+            document.getElementById('clarity-code').value = clarity.clarity_code || '';
+            document.getElementById('clarity-name').value = clarity.clarity_name;
+            document.getElementById('description').value = clarity.description || '';
+            document.getElementById('is-active').value = clarity.is_active.toString();
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this clarity?')) {
+            clarities = clarities.filter(c => c.clarity_id !== id);
+            localStorage.setItem('diamondClarities', JSON.stringify(clarities));
+            renderTable();
+          }
+        });
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        clarity_id: editingId || generateUUID(),
+        clarity_code: document.getElementById('clarity-code').value.trim() || null,
+        clarity_name: document.getElementById('clarity-name').value.trim(),
+        description: document.getElementById('description').value.trim() || null,
+        is_active: document.getElementById('is-active').value === 'true'
+      };
+
+      if (editingId) {
+        const index = clarities.findIndex(c => c.clarity_id === editingId);
+        if (index !== -1) clarities[index] = formData;
+      } else {
+        clarities.push(formData);
+      }
+
+      localStorage.setItem('diamondClarities', JSON.stringify(clarities));
+      form.reset();
+      document.getElementById('clarity-id').value = '';
+      document.getElementById('clarity-id-display').value = '';
+      document.getElementById('is-active').value = 'true';
+      editingId = null;
+      renderTable();
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      filterTable(e.target.value.toLowerCase());
+    });
+
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+      filterTable(document.getElementById('search-input').value.toLowerCase(), e.target.value);
+    });
+
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('status-filter').value = 'all';
+      filterTable('', 'all');
+    });
+
+    function filterTable(searchTerm = '', statusFilter = 'all') {
+      const rows = document.querySelectorAll('#clarities-table-body tr');
+      rows.forEach(row => {
+        const code = row.cells[1].textContent.toLowerCase();
+        const name = row.cells[2].textContent.toLowerCase();
+        const desc = row.cells[3].textContent.toLowerCase();
+        const status = row.cells[4].querySelector('span').textContent.toLowerCase();
+        const isActive = status === 'active';
+        const matchesSearch = !searchTerm || code.includes(searchTerm) || name.includes(searchTerm) || desc.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || (statusFilter === 'true' && isActive) || (statusFilter === 'false' && !isActive);
+        row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+      });
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
+
