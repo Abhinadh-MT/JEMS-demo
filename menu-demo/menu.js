@@ -311,9 +311,10 @@ document.addEventListener('DOMContentLoaded', function () {
               <span class="material-icons mr-2 text-base">shopping_cart</span>
               <span>Purchase Entry</span>
             </a>
+        </div>
             <!-- Gold Scheme - Nested Collapsible Menu -->
             <div class="space-y-1">
-              <button id="gold-scheme-toggle" class="w-full flex items-center justify-between pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors font-medium">
+              <button id="gold-scheme-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-left">
                 <div class="flex items-center">
                   <span class="material-icons mr-2 text-base">savings</span>
                   <span>Gold Scheme</span>
@@ -333,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <!-- Old Gold Purchase - Nested Collapsible Menu -->
             <div class="space-y-1">
-              <button id="old-gold-purchase-toggle" class="w-full flex items-center justify-between pl-12 pr-4 py-2.5 text-sm rounded-lg hover:bg-primary/10 transition-colors font-medium">
+              <button id="old-gold-purchase-toggle" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-left">
                 <div class="flex items-center">
                   <span class="material-icons mr-2 text-base">price_check</span>
                   <span>Old Gold Purchase</span>
@@ -350,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
 
           </div>
-        </div>
+        
       </nav>
     </aside>
   `;
