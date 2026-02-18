@@ -1,39 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>J&J JEMS Tax Invoice</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
+    <title>Purchase Invoice</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
 
-    <style type="text/tailwindcss">
-        :root {
-            --primary-color: #1e293b;
-            --gold-accent: #D4AF37;
-            --gold-dark: #B8962E;
-            --background-light: #f8fafc;
-            --background-dark: #0f172a;
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c8a95f", // Gold
+                        "primary-dark": "#b0851d",
+                        "slate-bg": "#F1F5F9", 
+                        "text-dark": "#111827",
+                        "text-muted": "#6b7280",
+                        "border-light": "#e0e0e0", 
+                        "border-dark": "#333333", 
+                    },
+                    fontFamily: {
+                        "sans": ["Noto Sans", "sans-serif"]
+                    },
+                },
+            },
         }
+    </script>
+    <style type="text/tailwindcss">
+        body { font-family: 'Noto Sans', sans-serif; }
         @media print {
             .no-print { display: none !important; }
-            body { background-color: white !important; }
-            .invoice-container { box-shadow: none !important; border: none !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; }
-             /* Hide sidebar during print */
-            #menu-container { display: none !important; }
-            main { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+            body { background: white !important; }
+            .print-area { box-shadow: none !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+            #menu-container { display: none !important; } /* Hide menu on print */
+            main { margin-left: 0 !important; padding: 0 !important; }
         }
-        input::placeholder { font-size: 0.8rem; opacity: 0.5; }
-        .invoice-table th, .invoice-table td { border: 1px solid #e2e8f0; padding: 0.5rem; }
-        .dark .invoice-table th, .dark .invoice-table td { border: 1px solid #334155; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         
+        /* Table Styles */
+        .invoice-table th {
+            @apply text-xs uppercase font-bold text-gray-500 bg-gray-50 py-3 px-2 text-left border-b border-gray-100;
+        }
+        .invoice-table td {
+            @apply text-xs text-gray-800 py-3 px-2 border-b border-gray-100;
+        }
+        .invoice-table th:last-child, .invoice-table td:last-child {
+            @apply text-right;
+        }
+
         /* Sidebar styles compatibility */
         .menu-nav-scroll::-webkit-scrollbar {
             width: 4px;
@@ -55,348 +74,152 @@
             transition: max-height 0.5s ease-in;
         }
     </style>
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#D4AF37", // Gold
-                        "primary-dark": "#B8962E",
-                        "slate-bg": "#F1F5F9",
-                        gold: {
-                            DEFAULT: "#D4AF37",
-                            dark: "#B8962E",
-                            light: "#F4E6B3"
-                        }
-                    },
-                    fontFamily: {
-                        display: ["Inter", "sans-serif"],
-                        sans: ["Inter", "sans-serif"],
-                    },
-                },
-            },
-        };
-    </script>
 </head>
 
-<body data-page="old-gold-invoice" class="font-display bg-slate-bg text-slate-800 flex h-screen">
+<body data-page="old-gold-invoice" class="bg-gray-100 min-h-screen flex">
 
     <div class="flex min-h-screen w-full">
         <!-- 🔹 MENU BAR -->
         <div id="menu-container" class="no-print"></div>
 
-        <!-- 🔹 MAIN CONTENT WRAPPER -->
-        <main class="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden relative">
+        <!-- 🔹 MAIN CONTENT -->
+        <main class="flex-1 flex flex-col items-center justify-start p-8 overflow-y-auto">
+            
+            <div class="print-area bg-white w-full max-w-[1000px] shadow-lg p-10 md:p-16 relative">
+                
+                <!-- Header -->
+                <div class="flex justify-between items-start mb-12">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 uppercase tracking-tight">PURCHASE INVOICE</h1>
+                        <p class="text-xs text-gray-500 mt-1">(Old Gold Purchase)</p>
+                    </div>
+                    
+                    <div class="flex flex-col items-end gap-3">
+                         <button onclick="window.print()" class="no-print bg-[#c1a058] hover:bg-[#b08f4b] text-white text-xs font-bold uppercase py-1.5 px-4 rounded flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-sm">print</span> Print Invoice
+                        </button>
+                        <div class="text-right">
+                            <p class="text-[10px] font-bold text-[#c88d3e] uppercase tracking-wider mb-2">ORIGINAL FOR RECIPIENT</p>
+                            <div class="flex flex-col gap-1 text-xs">
+                                <div class="flex justify-end gap-2">
+                                     <span class="text-gray-500 font-semibold uppercase">INVOICE NO:</span>
+                                     <span class="font-bold text-gray-800">OG-INV-2024-9912</span>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                     <span class="text-gray-500 font-semibold uppercase">DATE:</span>
+                                     <span class="font-bold text-gray-800">20/05/2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <header
-                class="no-print sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center shadow-sm">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-gold">diamond</span>
-                    <h1 class="font-bold text-lg tracking-tight">J&J JEMS <span
-                            class="text-slate-500 font-normal">Billing System</span></h1>
+                <!-- Addresses -->
+                <div class="grid grid-cols-2 gap-12 mb-10 text-xs">
+                    <!-- Billing Address -->
+                    <div>
+                        <h3 class="font-bold text-xs uppercase text-gray-500 mb-2">BILLING ADDRESS</h3>
+                        <p class="font-bold text-gray-900 text-sm mb-1">Robert Fox</p>
+                        <p class="text-gray-600 mb-2">123 Jewel Lane, Gold District, NY 10001</p>
+                        <p class="text-gray-600 uppercase font-semibold text-[11px]">MOBILE: <span class="text-gray-800">+1 202-555-0198</span></p>
+                    </div>
+                    
+                    <!-- Communication Address -->
+                    <div>
+                        <h3 class="font-bold text-xs uppercase text-gray-500 mb-2">ADDRESS FOR COMMUNICATION</h3>
+                        <p class="font-bold text-gray-900 text-sm mb-1">Robert Fox</p>
+                        <p class="text-gray-600 mb-2">123 Jewel Lane, Gold District, NY 10001</p>
+                        <p class="text-gray-600 uppercase font-semibold text-[11px]">MOBILE: <span class="text-gray-800">+1 202-555-0198</span></p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button
-                        class="flex items-center gap-2 bg-gold hover:bg-gold-dark text-white px-4 py-2 rounded-md transition-all font-medium shadow-sm"
-                        onclick="window.print()">
-                        <span class="material-symbols-outlined text-[18px]">print</span> Print Invoice
-                    </button>
-                    <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                        <span class="material-symbols-outlined">settings</span>
-                    </button>
-                </div>
-            </header>
 
-            <div class="max-w-[1200px] mx-auto p-6 md:p-10 w-full">
-                <div
-                    class="invoice-container bg-white dark:bg-slate-900 shadow-2xl rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                    <div class="p-8 border-b border-slate-200 dark:border-slate-800">
-                        <div class="flex justify-between items-start mb-8">
-                            <div>
-                                <h2
-                                    class="text-3xl font-black uppercase tracking-widest text-slate-800 dark:text-white border-l-4 border-gold pl-4">
-                                    Tax Invoice</h2>
-                                <p class="text-xs text-slate-500 mt-1 pl-4">(See Section 31 & Rule 46 of CGST ACT &
-                                    Rules, 2017)</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-xs font-semibold text-gold-dark uppercase tracking-tighter mb-2">
-                                    Original For Recipient</div>
-                                <div class="space-y-1">
-                                    <div class="flex justify-end gap-2 items-center">
-                                        <span class="text-xs uppercase font-bold text-slate-500">Invoice No:</span>
-                                        <input
-                                            class="text-right bg-transparent border-none p-0 focus:ring-0 font-mono text-sm text-slate-700 dark:text-slate-300"
-                                            type="text" value="JJ2026-IN0055801" />
-                                    </div>
-                                    <div class="flex justify-end gap-2 items-center">
-                                        <span class="text-xs uppercase font-bold text-slate-500">Date:</span>
-                                        <input
-                                            class="text-right bg-transparent border-none p-0 focus:ring-0 font-mono text-sm text-slate-700 dark:text-slate-300"
-                                            type="text" value="21/01/2026 10:30:00" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-                            <div class="space-y-2 border-r border-slate-100 dark:border-slate-800 pr-4">
-                                <h3
-                                    class="font-bold text-xs uppercase text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-1 mb-2">
-                                    Billed To</h3>
-                                <div>
-                                    <p class="font-bold">YASAR KHUTHUB</p>
-                                    <p class="text-slate-600 dark:text-slate-400">PARALI HOUSE TIRUR
-                                        Malappuram,<br />Malappuram - 676103 KL IND</p>
-                                </div>
-                                <div class="pt-2">
-                                    <p><span class="font-semibold text-xs text-slate-500 uppercase">GSTIN:</span>
-                                        <span>-</span></p>
-                                    <p><span class="font-semibold text-xs text-slate-500 uppercase">Mobile:</span>
-                                        <span>9886462588</span></p>
-                                    <p><span class="font-semibold text-xs text-slate-500 uppercase">State:</span>
-                                        <span>Kerala (32)</span></p>
-                                </div>
-                            </div>
-                            <div class="space-y-2 border-r border-slate-100 dark:border-slate-800 pr-4">
-                                <h3
-                                    class="font-bold text-xs uppercase text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-1 mb-2">
-                                    Shipped To</h3>
-                                <div>
-                                    <p class="font-bold text-slate-800 dark:text-slate-200 uppercase">J&J JEMS</p>
-                                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">4th Floor,
-                                        Indheevaram,<br />Infopark, Koratty,<br />Thrissur - 680308</p>
-                                </div>
-                                <div class="pt-2">
-                                    <p><span class="font-semibold text-xs text-slate-500 uppercase">State Code:</span>
-                                        <span>32</span></p>
-                                    <p><span class="font-semibold text-xs text-slate-500 uppercase">Place of
-                                            Supply:</span> <span>Kerala</span></p>
-                                </div>
-                            </div>
-                            <div
-                                class="space-y-1 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-t-2 border-gold">
-                                <h3
-                                    class="font-bold text-xs uppercase text-gold-dark border-b border-slate-200 dark:border-slate-700 pb-1 mb-2 flex justify-between">
-                                    Market Rates <span class="material-symbols-outlined text-[14px]">trending_up</span>
-                                </h3>
-                                <div class="grid grid-cols-2 gap-x-2 text-[11px]">
-                                    <span class="text-slate-500">24K Gold:</span><span
-                                        class="font-mono text-right font-bold">INR 14900.00</span>
-                                    <span class="text-slate-500">22K Gold:</span><span
-                                        class="font-mono text-right font-bold">INR 13800.00</span>
-                                    <span class="text-slate-500">18K Gold:</span><span
-                                        class="font-mono text-right font-bold">INR 11100.00</span>
-                                    <span class="text-slate-500">Silver:</span><span
-                                        class="font-mono text-right font-bold">INR 300.00</span>
-                                    <div class="col-span-2 border-t border-slate-200 dark:border-slate-700 my-1 pt-1">
-                                    </div>
-                                    <span class="text-slate-500 uppercase font-bold">Currency:</span><span
-                                        class="font-mono text-right">INR</span>
-                                    <span class="text-slate-500 uppercase font-bold">Supply Type:</span><span
-                                        class="font-mono text-right">B2C</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full invoice-table text-[11px] leading-tight text-left">
-                            <thead
-                                class="bg-slate-50 dark:bg-slate-800 font-bold uppercase text-slate-600 dark:text-slate-400">
-                                <tr>
-                                    <th class="w-8">S.No</th>
-                                    <th class="w-48">Description</th>
-                                    <th>HSN/SAC</th>
-                                    <th>Purity</th>
-                                    <th>HUID</th>
-                                    <th>Pcs</th>
-                                    <th>UOM</th>
-                                    <th>G.Wt</th>
-                                    <th>Stone Wt</th>
-                                    <th>N.Wt</th>
-                                    <th>Rate</th>
-                                    <th>VA %</th>
-                                    <th>Disc</th>
-                                    <th class="text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                                <tr class="align-top">
-                                    <td class="text-center">1</td>
-                                    <td>
-                                        <div class="font-bold">Gold Bars & Coins</div>
-                                        <div class="text-slate-500">Coin Gold</div>
-                                    </td>
-                                    <td>71189000</td>
-                                    <td class="text-center">22K / 91.6</td>
-                                    <td>-</td>
-                                    <td class="text-center">1</td>
-                                    <td>grms</td>
-                                    <td class="text-right">1.000</td>
-                                    <td class="text-right">0.000</td>
-                                    <td class="text-right">1.000</td>
-                                    <td class="text-right font-mono">13800.00</td>
-                                    <td class="text-right">4.00</td>
-                                    <td class="text-right">0.00</td>
-                                    <td class="text-right font-bold font-mono">14352.00</td>
-                                </tr>
-                                <tr class="align-top">
-                                    <td class="text-center">2</td>
-                                    <td>
-                                        <div class="font-bold">Gold Bars & Coins</div>
-                                        <div class="text-slate-500">Coin Gold</div>
-                                    </td>
-                                    <td>71189000</td>
-                                    <td class="text-center">22K / 91.6</td>
-                                    <td>-</td>
-                                    <td class="text-center">1</td>
-                                    <td>grms</td>
-                                    <td class="text-right">4.000</td>
-                                    <td class="text-right">0.000</td>
-                                    <td class="text-right">4.000</td>
-                                    <td class="text-right font-mono">13800.00</td>
-                                    <td class="text-right">2.00</td>
-                                    <td class="text-right">0.00</td>
-                                    <td class="text-right font-bold font-mono">56304.00</td>
-                                </tr>
-                                <tr class="bg-slate-50 dark:bg-slate-800/30 font-bold">
-                                    <td class="text-right uppercase" colspan="7">Item Totals in Grams:</td>
-                                    <td class="text-right">5.000</td>
-                                    <td class="text-right">0.000</td>
-                                    <td class="text-right">5.000</td>
-                                    <td colspan="3"></td>
-                                    <td class="text-right text-sm">70656.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 p-8 gap-12 bg-slate-50/50 dark:bg-transparent">
-                        <div class="space-y-6">
-                            <div>
-                                <h4 class="text-xs font-bold uppercase text-slate-400 mb-3 flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[16px]">account_balance_wallet</span>
-                                    Payment Details
-                                </h4>
-                                <div
-                                    class="border border-slate-200 dark:border-slate-800 rounded p-4 bg-white dark:bg-slate-900 border-l-4 border-gold">
-                                    <div class="flex justify-between items-center text-sm">
-                                        <span
-                                            class="font-medium text-slate-600 dark:text-slate-400 uppercase text-xs">SBI
-                                            (Credit Card)</span>
-                                        <span
-                                            class="font-mono font-bold text-lg text-slate-800 dark:text-white">72775.68</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Amount in Words</p>
-                                <p class="text-sm italic font-medium text-slate-700 dark:text-slate-300">Rupees Seventy
-                                    Two thousand Seven hundred Seventy Five and Sixty Eight paisa only</p>
-                            </div>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-500">Gross Amount</span>
-                                <span class="font-mono">70656.00</span>
-                            </div>
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-500">Total Discount</span>
-                                <span class="font-mono text-red-500">0.00</span>
-                            </div>
-                            <div
-                                class="flex justify-between text-xs font-bold border-t border-slate-200 dark:border-slate-800 pt-2">
-                                <span class="text-slate-800 dark:text-slate-200 uppercase">Taxable Value</span>
-                                <span class="font-mono">70656.00</span>
-                            </div>
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-500">CGST - 1.50%</span>
-                                <span class="font-mono">1059.84</span>
-                            </div>
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-500">SGST - 1.50%</span>
-                                <span class="font-mono">1059.84</span>
-                            </div>
-                            <div
-                                class="flex justify-between items-center bg-gold text-white p-4 rounded mt-4 shadow-lg">
-                                <span class="text-sm font-bold uppercase tracking-wider">Total Value</span>
-                                <span class="text-2xl font-black font-mono">72775.68</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t border-slate-200 dark:border-slate-800">
-                        <h4 class="text-[10px] font-bold uppercase text-slate-500 mb-2">Declaration</h4>
-                        <div class="text-[9px] text-slate-500 leading-relaxed space-y-1">
-                            <p>* Specified weight of stone or others (enamel, lacquer, steel, spring, code, paint, wax,
-                                plastic, wood, glass, pulp, paper, clay, leather, cloth, adhesive, powders etc..) are
-                                only indicative and the actual may vary marginally, the weight shown on the bill will be
-                                considered. Gold value calculated is based on net weight.</p>
-                            <p>* Hereby confirm this should be purity & weight have read, accepted all terms and
-                                conditions overleaf. I further acknowledge the amount stated is correct and accurate.
-                            </p>
-                            <p>* The consumer can get the purity of the hallmarked jewellery/artefacts verified from any
-                                of the BIS recognised A&H centre. The list of BIS recognised A&H centre along with
-                                address and contact details is available on the website www.bis.gov.in.</p>
-                            <p>* The amount shown above against each item is inclusive of hallmarking charges Rs.45/- in
-                                case of hallmarked Gold jewellery/articles and Rs.35/- in case of hallmarked silver
-                                jewellery/articles.</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 p-8 border-t border-slate-200 dark:border-slate-800 bg-slate-50/30">
-                        <div class="flex flex-col justify-end">
-                            <div
-                                class="w-48 border-t border-slate-300 dark:border-slate-700 pt-2 text-[10px] font-bold uppercase text-slate-500">
-                                Customer Signature
-                            </div>
-                            <div class="mt-8 text-[9px] text-slate-400">
-                                Generated by: Adersh S., Print date: 21/01/2026 10:30:15
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-end text-right relative">
-                            <div class="absolute -top-12 right-20 transform -rotate-12 pointer-events-none opacity-25">
-                                <div
-                                    class="border-4 border-gold-dark text-gold-dark font-black px-6 py-2 text-2xl uppercase rounded tracking-widest shadow-sm bg-white/50">
-                                    Delivered</div>
-                            </div>
-                            <div class="mb-8">
-                                <p class="text-[11px] font-bold text-gold-dark">FOR J&J JEMS PVT LTD</p>
-                                <p class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">KORATTY -
-                                    THRISSUR</p>
-                            </div>
-                            <div
-                                class="w-48 border-t border-slate-300 dark:border-slate-700 pt-2 text-[10px] font-bold uppercase text-slate-500">
-                                Authorised Signatory
-                            </div>
-                        </div>
-                    </div>
-                    <div class="no-print mt-10 flex flex-wrap gap-4 justify-center pb-8">
-                        <button
-                            class="flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-gold hover:text-gold transition-all text-sm font-semibold bg-white dark:bg-slate-900 shadow-sm">
-                            <span class="material-symbols-outlined text-blue-500">email</span> Email Invoice
-                        </button>
-                        <button
-                            class="flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-gold hover:text-gold transition-all text-sm font-semibold bg-white dark:bg-slate-900 shadow-sm">
-                            <span class="material-symbols-outlined text-green-500">download</span> Download PDF
-                        </button>
-                        <button
-                            class="flex items-center gap-2 px-6 py-3 rounded-lg border border-gold text-gold hover:bg-gold hover:text-white transition-all text-sm font-semibold bg-white dark:bg-slate-900 shadow-sm">
-                            <span class="material-symbols-outlined">edit</span> Edit Layout
-                        </button>
-                        <button
-                            class="flex items-center gap-2 px-6 py-3 rounded-lg bg-gold hover:bg-gold-dark text-white transition-all text-sm font-semibold shadow-md">
-                            <span class="material-symbols-outlined">save</span> Save Changes
-                        </button>
-                    </div>
+                <!-- Detailed Table -->
+                <div class="mb-10 w-full overflow-x-auto">
+                    <table class="w-full invoice-table border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="w-10">Sl No</th>
+                                <th class="w-48">DESCRIPTION</th>
+                                <th>Purity</th>
+                                <th>UOM</th>
+                                <th class="text-right">G.WT</th>
+                                <th class="text-right">Stone WT</th>
+                                <th class="text-right">VA</th>
+                                <th class="text-right text-[#c88d3e]">Net WT</th>
+                                <th class="text-right">Price</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td class="font-bold">Old Gold Ornament</td>
+                                <td class="text-gray-500">Standard</td>
+                                <td>GM</td>
+                                <td class="text-right font-medium">12.500</td>
+                                <td class="text-right text-gray-500">0.250</td>
+                                <td class="text-right text-gray-500">0.00</td>
+                                <td class="text-right font-bold">12.250</td>
+                                <td class="text-right font-medium">$5,500.00</td>
+                                <td class="text-right font-bold">$40,550.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                <!-- Footer / Bank Details / Total -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-10">
+                    
+                    <!-- Bank Details -->
+                    <div class="bg-gray-50 p-4 rounded border border-gray-100 text-xs">
+                        <h4 class="font-bold text-gray-500 uppercase mb-3">BANK DETAILS (RTGS/NEFT)</h4>
+                        <div class="grid grid-cols-[100px_1fr] gap-y-1.5 text-gray-600"> 
+                            <span>Bank Name:</span> <span class="font-bold text-gray-800 text-right">Global Jewelry Bank</span>
+                            <span>Account Number:</span> <span class="font-bold text-gray-800 text-right">4455889922</span>
+                            <span>IFSC Code:</span> <span class="font-bold text-gray-800 text-right">GJB100092</span>
+                            <span>Branch:</span> <span class="font-bold text-gray-800 text-right">Main Street Plaza</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Value Box -->
+                    <div class="bg-[#cba857] text-white p-4 rounded flex flex-col gap-2 shadow-md">
+                        <div class="flex justify-between items-center opacity-90 border-b border-white/20 pb-2 mb-1">
+                             <span class="text-[10px] font-bold uppercase tracking-wider">Gross Invoice Value</span>
+                             <span class="text-sm font-bold tracking-tight">$120,550.00</span>
+                        </div>
+                         <div class="flex justify-between items-center opacity-90 border-b border-white/20 pb-2 mb-1">
+                             <span class="text-[10px] font-bold uppercase tracking-wider">Old Gold Value</span>
+                             <span class="text-sm font-bold tracking-tight">$80,000.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold uppercase tracking-wider opacity-90">TOTAL PAYABLE</span>
+                            <span class="text-xl font-bold tracking-tight">$40,550.00</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Amount In Words -->
+                <div class="mb-10">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-1">AMOUNT IN WORDS</h4>
+                    <p class="text-sm text-gray-800 font-medium italic">Forty Thousand Five Hundred Fifty Dollars Only</p>
+                </div>
+
+                <!-- Declaration & Terms -->
+                <div class="text-[10px] text-gray-500 mt-auto border-t border-gray-100 pt-6">
+                    <h4 class="font-bold uppercase text-gray-600 mb-2">DECLARATION</h4>
+                    <p class="leading-relaxed mb-1">I hereby declare that the ornaments described above are my personal property and I have absolute title to dispose of the same.</p>
+                    <p class="leading-relaxed">The ornaments are not subject to any lien, charge, or encumbrance. I confirm that these items were not acquired through any unlawful means.</p>
+                </div>
+                
             </div>
-
-            <footer
-                class="no-print p-6 text-center text-slate-500 text-xs bg-white border-t border-slate-200 w-full mt-auto">
-                <p>© 2026 J&J JEMS Jewelry Management System. All rights reserved.</p>
-            </footer>
 
         </main>
     </div>
+
+    <!-- MENU SCRIPT -->
     <script src="menu.js"></script>
+
 </body>
 
 </html>
