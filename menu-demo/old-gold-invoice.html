@@ -32,7 +32,7 @@
             },
         }
     </script>
-    <style type="text/tailwindcss">
+    <style>
         body { font-family: 'Noto Sans', sans-serif; }
         @media print {
             .no-print { display: none !important; }
@@ -44,13 +44,25 @@
         
         /* Table Styles */
         .invoice-table th {
-            @apply text-xs uppercase font-bold text-gray-500 bg-gray-50 py-3 px-2 text-left border-b border-gray-100;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #6b7280;
+            background-color: #f9fafb;
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #f3f4f6;
         }
         .invoice-table td {
-            @apply text-xs text-gray-800 py-3 px-2 border-b border-gray-100;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            color: #1f2937;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #f3f4f6;
         }
         .invoice-table th:last-child, .invoice-table td:last-child {
-            @apply text-right;
+            text-align: right;
         }
 
         /* Sidebar styles compatibility */
