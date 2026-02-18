@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>JEMS: Old Gold Purchase Report</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D4AF37", // Gold
+                        "primary-dark": "#B8962E",
+                        "slate-bg": "#F1F5F9",
+                        "green-success": "#10B981", 
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Playfair Display", "serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+         /* Sidebar styles compatibility */
+         .menu-nav-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .menu-nav-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .menu-nav-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.open {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .table-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b; /* slate-500 */
+            background-color: #f8fafc; /* slate-50 */
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .data-cell {
+            padding: 1rem;
+            font-size: 0.875rem;
+            color: #1e293b; /* slate-800 */
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .status-finalized {
+            background-color: #d1fae5; /* green-100 */
+            color: #047857; /* green-700 */
+            border: 1px solid #a7f3d0;
+        }
+        
+        .status-draft {
+            background-color: #f3f4f6; /* gray-100 */
+            color: #4b5563; /* gray-600 */
+            border: 1px solid #e5e7eb;
+        }
+  </style>
+</head>
+
+<body data-page="old-gold-report" class="bg-slate-bg text-slate-800 font-sans antialiased h-screen flex">
+
+    <div class="flex min-h-screen w-full">
+
+        <!-- 🔹 MENU BAR -->
+        <div id="menu-container"></div>
+
+        <!-- 🔹 MAIN CONTENT WRAPPER -->
+        <main class="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden relative">
+
+            <header class="bg-white border-b border-slate-300 px-6 py-3 sticky top-0 z-40 shadow-sm">
+                <!-- Header content matching other pages (optional, can be simplified) -->
+                <div class="flex items-center justify-between">
+                     <div class="flex items-center gap-4">
+                        <button class="lg:hidden text-slate-500 hover:text-slate-700">
+                             <span class="material-symbols-outlined">menu</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-6 max-w-[1920px] mx-auto w-full space-y-6">
+
+                <!-- Page Header & Actions -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded border border-slate-200">
+                    <div class="flex items-center gap-3">
+                         <div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-500">
+                            <span class="material-symbols-outlined">bar_chart</span>
+                         </div>
+                        <h2 class="text-xl font-bold text-slate-800">Old Gold Purchase Report</h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 rounded shadow-sm text-xs font-bold uppercase flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">sim_card_download</span> Excel
+                        </button>
+                         <button class="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 rounded shadow-sm text-xs font-bold uppercase flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span> PDF
+                        </button>
+                         <button class="px-3 py-1.5 bg-[#c8a95f] hover:bg-[#b08f4b] text-white border border-[#b08f4b] rounded shadow-sm text-xs font-bold uppercase flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">print</span> Print Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+                        <!-- Date Filter -->
+                        <div class="col-span-12 md:col-span-4">
+                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Select Date</label>
+                             <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">calendar_today</span>
+                                <input type="text" placeholder="Pick a date" class="w-full pl-10 pr-4 py-2 bg-white border border-slate-300 rounded text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer">
+                             </div>
+                        </div>
+
+                         <!-- Customer Filter -->
+                        <div class="col-span-12 md:col-span-3">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Customer</label>
+                            <select class="w-full px-3 py-2 bg-white border border-slate-300 rounded text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all">
+                                <option>All Customers</option>
+                                <option>Rahul Menon</option>
+                                <option>Sneha Reddy</option>
+                                <option>Anoop Kumar</option>
+                            </select>
+                        </div>
+                        
+                         <!-- Search -->
+                        <div class="col-span-12 md:col-span-3">
+                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Search</label>
+                             <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                                <input type="text" placeholder="Draft ID or Customer" class="w-full pl-10 pr-4 py-2 bg-white border border-slate-300 rounded text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all">
+                             </div>
+                        </div>
+
+                        <!-- Clear Button -->
+                         <div class="col-span-12 md:col-span-2">
+                            <button class="w-full px-4 py-2 bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 rounded shadow-sm text-sm font-bold transition-colors">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Table -->
+                <div class="bg-white rounded border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="table-header">BILL NO.</th>
+                                    <th class="table-header">DATE</th>
+                                    <th class="table-header">CUSTOMER</th>
+                                    <th class="table-header">GROSS WEIGHT</th>
+                                    <th class="table-header">NET WEIGHT</th>
+                                    <th class="table-header">NET AMOUNT</th>
+                                    <th class="table-header">STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-2652</td>
+                                    <td class="data-cell text-slate-500">17 Feb 2026</td>
+                                    <td class="data-cell font-bold">Rahul Menon</td>
+                                    <td class="data-cell">200.000 g</td>
+                                    <td class="data-cell font-medium">200.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹13,60,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-2282</td>
+                                    <td class="data-cell text-slate-500">17 Feb 2026</td>
+                                    <td class="data-cell font-bold">Sneha Reddy</td>
+                                    <td class="data-cell">1234567.000 g</td>
+                                    <td class="data-cell font-medium">1234567.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹8,39,50,55,600.00</td>
+                                    <td class="data-cell"><span class="status-badge status-draft">DRAFT</span></td>
+                                </tr>
+                                 <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-1901</td>
+                                    <td class="data-cell text-slate-500">16 Feb 2026</td>
+                                    <td class="data-cell font-bold">Rahul Menon</td>
+                                    <td class="data-cell">2588.000 g</td>
+                                    <td class="data-cell font-medium">2581.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹1,75,50,800.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                                 <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-7223</td>
+                                    <td class="data-cell text-slate-500">16 Feb 2026</td>
+                                    <td class="data-cell font-bold">Sneha Reddy</td>
+                                    <td class="data-cell">200.000 g</td>
+                                    <td class="data-cell font-medium">200.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹13,60,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-draft">DRAFT</span></td>
+                                </tr>
+                                 <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-9167</td>
+                                    <td class="data-cell text-slate-500">16 Feb 2026</td>
+                                    <td class="data-cell font-bold">Anoop Kumar</td>
+                                    <td class="data-cell">11333.000 g</td>
+                                    <td class="data-cell font-medium">11333.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹7,70,64,400.00</td>
+                                    <td class="data-cell"><span class="status-badge status-draft">DRAFT</span></td>
+                                </tr>
+                                 <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-3392</td>
+                                    <td class="data-cell text-slate-500">12 Feb 2026</td>
+                                    <td class="data-cell font-bold">Rahul Menon</td>
+                                    <td class="data-cell">1000001.000 g</td>
+                                    <td class="data-cell font-medium">1000001.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹9,00,00,090.00</td>
+                                    <td class="data-cell"><span class="status-badge status-draft">DRAFT</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-4482</td>
+                                    <td class="data-cell text-slate-500">10 Feb 2026</td>
+                                    <td class="data-cell font-bold">Rahul Menon</td>
+                                    <td class="data-cell">199.000 g</td>
+                                    <td class="data-cell font-medium">199.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹1,99,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-1129</td>
+                                    <td class="data-cell text-slate-500">10 Feb 2026</td>
+                                    <td class="data-cell font-bold">Rahul Menon</td>
+                                    <td class="data-cell">20.000 g</td>
+                                    <td class="data-cell font-medium">20.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹20,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-9912</td>
+                                    <td class="data-cell text-slate-500">10 Feb 2026</td>
+                                    <td class="data-cell font-bold">Rahul Menon</td>
+                                    <td class="data-cell">20.000 g</td>
+                                    <td class="data-cell font-medium">20.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹20,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                                 <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-8821</td>
+                                    <td class="data-cell text-slate-500">10 Feb 2026</td>
+                                    <td class="data-cell font-bold">Jane Smith</td>
+                                    <td class="data-cell">1000.000 g</td>
+                                    <td class="data-cell font-medium">1000.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹1,00,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="data-cell font-medium text-slate-600">OG-DRAFT-2026-5511</td>
+                                    <td class="data-cell text-slate-500">10 Feb 2026</td>
+                                    <td class="data-cell font-bold">John Doe</td>
+                                    <td class="data-cell">11.000 g</td>
+                                    <td class="data-cell font-medium">11.000 g</td>
+                                    <td class="data-cell font-bold text-green-600">₹22,000.00</td>
+                                    <td class="data-cell"><span class="status-badge status-finalized">FINALIZED</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+    <script src="menu.js"></script>
+</body>
+
+</html>
