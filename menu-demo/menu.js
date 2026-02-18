@@ -324,11 +324,11 @@ document.addEventListener('DOMContentLoaded', function () {
               
               <!-- Gold Scheme Submenu -->
               <div class="submenu" id="gold-scheme-submenu">
+                <a href="scheme-reports-dashboard.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="scheme-reports-dashboard">Dashboard</a>
                 <a href="gold-scheme-master.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="gold-scheme-master">Gold Scheme Master</a>
                 <a href="scheme-enrollment.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="scheme-enrollment">Scheme Enrollment</a>
                 <a href="scheme-installment-collection.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="scheme-installment-collection">Installment Collection</a>
                 <a href="scheme-redemption.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="scheme-redemption">Scheme Redemption</a>
-                <a href="scheme-reports-dashboard.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="scheme-reports-dashboard">Reports Dashboard</a>
                 <a href="liability-report.html" class="menu-link block pl-16 pr-4 py-2 text-sm rounded-lg hover:bg-primary/10 transition-colors" data-page="liability-report">Liability Report</a>
               </div>
             </div>
